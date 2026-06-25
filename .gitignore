@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+
+# generated gallery raster output — regenerate with `npm run gallery`.
+# NOTE: tests/gallery/__svg__/ is intentionally NOT ignored — those are the
+# committed, approved geometry snapshots that tests/gallery.test.tsx asserts against.
+tests/gallery/png/
+tests/gallery/montage/
+
+# browser-automation scratch (Playwright MCP screenshots, rasterize temp)
+.playwright-mcp/
+
+# misc local/test noise
+coverage/
+*.log
+.DS_Store

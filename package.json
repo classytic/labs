@@ -1,0 +1,266 @@
+{
+  "name": "@classytic/labs",
+  "version": "0.1.0",
+  "description": "Interactive learning lab — authorable, domain-organized interactive lessons (math, physics, chemistry, circuits, geometry…) built on the @classytic/stage engine. Per-domain subpaths; lesson blocks + presets creators compose and sell.",
+  "author": "Classytic",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./core": {
+      "types": "./dist/core/index.d.mts",
+      "default": "./dist/core/index.mjs"
+    },
+    "./physics": {
+      "types": "./dist/physics/index.d.mts",
+      "default": "./dist/physics/index.mjs"
+    },
+    "./math": {
+      "types": "./dist/math/index.d.mts",
+      "default": "./dist/math/index.mjs"
+    },
+    "./chem": {
+      "types": "./dist/chem/index.d.mts",
+      "default": "./dist/chem/index.mjs"
+    },
+    "./circuits": {
+      "types": "./dist/circuits/index.d.mts",
+      "default": "./dist/circuits/index.mjs"
+    },
+    "./geometry": {
+      "types": "./dist/geometry/index.d.mts",
+      "default": "./dist/geometry/index.mjs"
+    },
+    "./language": {
+      "types": "./dist/language/index.d.mts",
+      "default": "./dist/language/index.mjs"
+    },
+    "./ict": {
+      "types": "./dist/ict/index.d.mts",
+      "default": "./dist/ict/index.mjs"
+    },
+    "./commerce": {
+      "types": "./dist/commerce/index.d.mts",
+      "default": "./dist/commerce/index.mjs"
+    },
+    "./biology": {
+      "types": "./dist/biology/index.d.mts",
+      "default": "./dist/biology/index.mjs"
+    },
+    "./geography": {
+      "types": "./dist/geography/index.d.mts",
+      "default": "./dist/geography/index.mjs"
+    },
+    "./discrete": {
+      "types": "./dist/discrete/index.d.mts",
+      "default": "./dist/discrete/index.mjs"
+    },
+    "./statistics": {
+      "types": "./dist/statistics/index.d.mts",
+      "default": "./dist/statistics/index.mjs"
+    },
+    "./ml": {
+      "types": "./dist/ml/index.d.mts",
+      "default": "./dist/ml/index.mjs"
+    },
+    "./catalog": {
+      "types": "./dist/catalog/index.d.mts",
+      "default": "./dist/catalog/index.mjs"
+    },
+    "./kit": {
+      "types": "./dist/kit/index.d.mts",
+      "default": "./dist/kit/index.mjs"
+    },
+    "./blocks": {
+      "types": "./dist/blocks/index.d.mts",
+      "default": "./dist/blocks/index.mjs"
+    },
+    "./blocks/lesson": {
+      "types": "./dist/blocks/lesson.d.mts",
+      "default": "./dist/blocks/lesson.mjs"
+    },
+    "./blocks/math": {
+      "types": "./dist/blocks/math.d.mts",
+      "default": "./dist/blocks/math.mjs"
+    },
+    "./blocks/physics": {
+      "types": "./dist/blocks/physics.d.mts",
+      "default": "./dist/blocks/physics.mjs"
+    },
+    "./blocks/chem": {
+      "types": "./dist/blocks/chem.d.mts",
+      "default": "./dist/blocks/chem.mjs"
+    },
+    "./blocks/circuits": {
+      "types": "./dist/blocks/circuits.d.mts",
+      "default": "./dist/blocks/circuits.mjs"
+    },
+    "./blocks/geometry": {
+      "types": "./dist/blocks/geometry.d.mts",
+      "default": "./dist/blocks/geometry.mjs"
+    },
+    "./blocks/ict": {
+      "types": "./dist/blocks/ict.d.mts",
+      "default": "./dist/blocks/ict.mjs"
+    },
+    "./blocks/language": {
+      "types": "./dist/blocks/language.d.mts",
+      "default": "./dist/blocks/language.mjs"
+    },
+    "./blocks/accounting": {
+      "types": "./dist/blocks/accounting.d.mts",
+      "default": "./dist/blocks/accounting.mjs"
+    },
+    "./blocks/economics": {
+      "types": "./dist/blocks/economics.d.mts",
+      "default": "./dist/blocks/economics.mjs"
+    },
+    "./blocks/biology": {
+      "types": "./dist/blocks/biology.d.mts",
+      "default": "./dist/blocks/biology.mjs"
+    },
+    "./blocks/geography": {
+      "types": "./dist/blocks/geography.d.mts",
+      "default": "./dist/blocks/geography.mjs"
+    },
+    "./blocks/ml": {
+      "types": "./dist/blocks/ml.d.mts",
+      "default": "./dist/blocks/ml.mjs"
+    },
+    "./blocks/discrete": {
+      "types": "./dist/blocks/discrete.d.mts",
+      "default": "./dist/blocks/discrete.mjs"
+    },
+    "./blocks/statistics": {
+      "types": "./dist/blocks/statistics.d.mts",
+      "default": "./dist/blocks/statistics.mjs"
+    },
+    "./schemas": {
+      "types": "./dist/schemas/index.d.mts",
+      "default": "./dist/schemas/index.mjs"
+    },
+    "./styles.css": "./styles.css",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist",
+    "styles.css",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/classytic/labs.git"
+  },
+  "homepage": "https://github.com/classytic/labs#readme",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run tests/core.test.ts tests/catalog.test.ts tests/stage-templates.test.ts",
+    "test:package": "vitest run tests/widgets.test.tsx",
+    "pretest": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "gallery": "npm run build && node tests/gallery/rasterize.mjs",
+    "gallery:svg": "vitest run tests/gallery.test.tsx",
+    "lint": "tsc --noEmit",
+    "verify": "npm run typecheck && npm test",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run build && changeset publish",
+    "push": "classytic-push",
+    "prepublishOnly": "npm run typecheck && npm run build && npm test"
+  },
+  "peerDependencies": {
+    "@classytic/cms": ">=0.2.1",
+    "@classytic/cms-ui": ">=0.3.1",
+    "@classytic/stage": ">=0.1.0",
+    "clsx": ">=2",
+    "katex": ">=0.16",
+    "lucide-react": ">=0.4",
+    "react": ">=19",
+    "react-dom": ">=19",
+    "tailwind-merge": ">=3",
+    "zod": ">=4"
+  },
+  "peerDependenciesMeta": {
+    "lucide-react": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    },
+    "katex": {
+      "optional": true
+    },
+    "@classytic/cms-ui": {
+      "optional": true
+    },
+    "@classytic/cms": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.9",
+    "@classytic/cms-ui": "^0.3.1",
+    "@classytic/dev-tools": "^0.2.0",
+    "@classytic/stage": "^0.1.0",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "clsx": "^2.1.1",
+    "happy-dom": "^20.0.0",
+    "lucide-react": "^0.563.0",
+    "mafs": "^0.21.0",
+    "playwright": "^1.61.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.5.0",
+    "tsdown": "^0.22.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.0",
+    "zod": "^4.1.0"
+  },
+  "keywords": [
+    "react",
+    "visualization",
+    "interactive",
+    "education",
+    "learning",
+    "math",
+    "calculus",
+    "derivative",
+    "integral",
+    "limit",
+    "gradient-descent",
+    "physics",
+    "chemistry",
+    "equation",
+    "graph",
+    "plot",
+    "symbolic-math",
+    "katex",
+    "canvas",
+    "manim",
+    "desmos",
+    "science"
+  ]
+}
