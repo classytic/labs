@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * WaterDensityLab — water's strange, life-saving anomaly. Almost everything gets
+ * WaterDensityLab, water's strange, life-saving anomaly. Almost everything gets
  * denser as it cools, but water is DENSEST at about 4 °C; cool it further toward 0
- * and it expands again, and ice is less dense still — so ice floats.
+ * and it expands again, and ice is less dense still, so ice floats.
  *
- *   • THE 4 °C ANOMALY — a density–temperature curve that peaks at 4 °C (zoomed in,
+ *   • THE 4 °C ANOMALY, a density–temperature curve that peaks at 4 °C (zoomed in,
  *     because the bump is tiny). Drag the temperature and watch the density rise to
  *     a maximum at 4 °C, then fall.
- *   • WHY LAKES FREEZE TOP-DOWN — a lake cross-section: the densest 4 °C water sinks
+ *   • WHY LAKES FREEZE TOP-DOWN, a lake cross-section: the densest 4 °C water sinks
  *     to the bottom, colder water sits above it, and ice forms on the surface. The
  *     ice blanket insulates the liquid water below, so fish survive the winter.
  *
@@ -50,11 +50,11 @@ function densityOf(t: number): number {
 
 export function WaterDensityLab({
   mode: mode0 = 'anomaly',
-  title = 'Water’s 4 °C anomaly — why ice floats',
-  prompt = 'Almost everything shrinks as it cools, but water is densest at 4 °C and expands again toward freezing — so ice floats and lakes freeze from the top down.',
+  title = 'Water’s 4 °C anomaly: why ice floats',
+  prompt = 'Almost everything shrinks as it cools, but water is densest at 4 °C and expands again toward freezing, so ice floats and lakes freeze from the top down.',
   objectives = [
     'See water reach maximum density at about 4 °C (not at 0 °C)',
-    'Explain why ice floats — it is LESS dense than liquid water',
+    'Explain why ice floats, it is LESS dense than liquid water',
     'Explain why a lake freezes top-down, leaving 4 °C water (and fish) below',
   ],
 }: WaterDensityProps = {}): ReactNode {
@@ -102,10 +102,10 @@ export function WaterDensityLab({
     const lx = 60, rx = 580, top = 60, bot = 300;
     const iceBot = top + 34;
     const bands = [
-      { y0: iceBot, y1: top + 90, t: 0, label: '0 °C — just above freezing' },
+      { y0: iceBot, y1: top + 90, t: 0, label: '0 °C: just above freezing' },
       { y0: top + 90, y1: top + 150, t: 2, label: '2 °C' },
       { y0: top + 150, y1: top + 210, t: 3, label: '3 °C' },
-      { y0: top + 210, y1: bot, t: 4, label: '4 °C — densest water sinks here' },
+      { y0: top + 210, y1: bot, t: 4, label: '4 °C: densest water sinks here' },
     ];
     figure = (
       <div style={fwrap}>
@@ -143,17 +143,17 @@ export function WaterDensityLab({
   const aside = mode === 'anomaly' ? (
     <>
       <Callout tone="result"><span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 800 }}>
-        <span style={{ fontSize: 16 }}>ρ = {rho.toFixed(2)} kg/m³</span><br />at {tC} °C{Math.abs(tC - 4) < 0.6 ? ' — maximum!' : ''}
+        <span style={{ fontSize: 16 }}>ρ = {rho.toFixed(2)} kg/m³</span><br />at {tC} °C{Math.abs(tC - 4) < 0.6 ? ', maximum!' : ''}
       </span></Callout>
       <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13, color: 'var(--stage-muted)' }}>
-        <span>As liquid water cools it gets denser — but only down to <strong style={{ color: 'var(--stage-fg)' }}>4 °C</strong>. Cool it further and the molecules begin lining up into the open hexagonal structure of ice, so it <strong style={{ color: 'var(--stage-fg)' }}>expands</strong>.</span>
-        <span>Ice itself is only <strong style={{ color: 'var(--stage-fg)' }}>{ICE_RHO} kg/m³</strong> — much less than water — which is why it floats.</span>
+        <span>As liquid water cools it gets denser, but only down to <strong style={{ color: 'var(--stage-fg)' }}>4 °C</strong>. Cool it further and the molecules begin lining up into the open hexagonal structure of ice, so it <strong style={{ color: 'var(--stage-fg)' }}>expands</strong>.</span>
+        <span>Ice itself is only <strong style={{ color: 'var(--stage-fg)' }}>{ICE_RHO} kg/m³</strong>, much less than water, which is why it floats.</span>
       </div>
     </>
   ) : (
     <div style={{ display: 'grid', gap: 8, padding: '2px 2px 0', fontSize: 13, color: 'var(--stage-muted)' }}>
       <Callout tone="info"><span>Because the densest water is at <strong style={{ color: 'var(--stage-fg)' }}>4 °C</strong>, it sinks to the bottom. Colder water (0–3 °C) is lighter and stays on top, where it finally freezes into floating ice.</span></Callout>
-      <span>The ice blanket <strong style={{ color: 'var(--stage-fg)' }}>insulates</strong> the water beneath, so the lake never freezes solid — and the fish survive at 4 °C. If water were "normal", lakes would freeze bottom-up and kill everything.</span>
+      <span>The ice blanket <strong style={{ color: 'var(--stage-fg)' }}>insulates</strong> the water beneath, so the lake never freezes solid, and the fish survive at 4 °C. If water were "normal", lakes would freeze bottom-up and kill everything.</span>
     </div>
   );
 

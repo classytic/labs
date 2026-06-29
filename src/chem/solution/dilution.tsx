@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * DilutionLab — C₁V₁ = C₂V₂ is just: the dots don't leave.
+ * DilutionLab, C₁V₁ = C₂V₂ is just: the dots don't leave.
  *
  * Take an aliquot of stock (V₁) and dilute it to a final volume (V₂). Two beakers
- * show the SAME solute dots — concentrated in the small aliquot on the left,
- * spread through the larger volume on the right — so the conserved quantity
+ * show the SAME solute dots, concentrated in the small aliquot on the left,
+ * spread through the larger volume on the right, so the conserved quantity
  * (moles = C·V) is SEEN, not memorized: same dots, bigger box, paler colour, lower
  * C. Composes the shared SolutionField (single source of truth for the dots).
  *
@@ -45,7 +45,7 @@ const DILUTION_CHALLENGE: ChallengeQuestion[] = [
       { value: 'volume', label: 'the volume' },
     ],
     answer: 'moles',
-    explain: 'Adding water never removes solute — n = C·V is conserved, which is exactly C₁V₁ = C₂V₂.',
+    explain: 'Adding water never removes solute, n = C·V is conserved, which is exactly C₁V₁ = C₂V₂.',
   },
   {
     id: 'doubleV',
@@ -56,20 +56,20 @@ const DILUTION_CHALLENGE: ChallengeQuestion[] = [
       { value: 'same', label: 'is unchanged' },
     ],
     answer: 'halves',
-    explain: 'C₂ = n/V₂ with n fixed — twice the volume means half the concentration.',
+    explain: 'C₂ = n/V₂ with n fixed, twice the volume means half the concentration.',
   },
 ];
 
 export function DilutionLab({
   stockConcentration = 2, aliquotVolume = 0.25, finalVolume = 1, maxMolarity = 4, hue = 200,
-  title = 'Dilution — the dots don’t leave',
+  title = 'Dilution: the dots don’t leave',
   prompt = 'Take an aliquot of stock, add water to the final volume. Same dots, bigger box → lower concentration.',
   height = 180, objectives,
 }: DilutionProps): ReactNode {
   const c1 = clamp(stockConcentration, 0.5, maxMolarity);
   const [v1, setV1] = useState(clamp(aliquotVolume, 0.1, 0.5));
   const [v2, setV2] = useState(clamp(finalVolume, 0.5, 1.5));
-  const n = c1 * v1;             // moles taken — conserved
+  const n = c1 * v1;             // moles taken, conserved
   const c2 = n / v2;
   const dots = Math.round(n * DOTS_PER_MOL);
   const challenge = useChallenge(DILUTION_CHALLENGE);

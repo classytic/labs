@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * balance-algebra asset — a GENERAL balance-scale for any linear equation
+ * balance-algebra asset, a GENERAL balance-scale for any linear equation
  * a·x + b = c, built on @classytic/stage. The resolver is the single source of
  * truth (beam tilted by the bound `tilt`, pedestal, hung flat trays, items);
  * the Component is a dumb renderer.
  *
- * Visual language: FLAT, thin, precise (Brilliant-grade) — a hairline beam on a
+ * Visual language: FLAT, thin, precise (Brilliant-grade), a hairline beam on a
  * small pedestal, two thin flat plates hung on cords, a labelled x-TILE +
  * (if b>0) a value COIN on the left, a single value coin on the right. The
- * unknown's value is NOT drawn as size — the beam tilt is the feedback.
+ * unknown's value is NOT drawn as size, the beam tilt is the feedback.
  */
 
 import type { ReactNode } from 'react';

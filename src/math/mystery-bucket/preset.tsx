@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * MysteryBucket — the essentials opener. A sealed bucket of hidden weight sits
+ * MysteryBucket, the essentials opener. A sealed bucket of hidden weight sits
  * on a balance; the learner adds 1-unit weights to the other pan until the beam
- * is level. When it balances, the bucket's weight is revealed — they've "weighed
+ * is level. When it balances, the bucket's weight is revealed, they've "weighed
  * the unknown" with no symbols at all. This is the concrete ground the letter x
  * (and coefficients, and equations) is built on in later lessons.
  *
@@ -55,7 +55,7 @@ export function MysteryBucketLab({
   maxWeights = 12,
   start = 0,
   title = 'The mystery bucket',
-  prompt = 'Add weights until the scale is level — then you’ve weighed the mystery.',
+  prompt = 'Add weights until the scale is level, then you’ve weighed the mystery.',
   height = 340,
 }: MysteryBucketProps = {}): ReactNode {
   const buckets = Math.max(1, Math.round(bucketCount));
@@ -70,13 +70,13 @@ export function MysteryBucketLab({
 
   useCheckpoint({ solved: balanced, activity: 'mystery-bucket' });
 
-  const reveal = buckets === 1 ? `The bucket weighs ${per}.` : `${buckets} buckets balance ${total} — so each bucket weighs ${per}.`;
+  const reveal = buckets === 1 ? `The bucket weighs ${per}.` : `${buckets} buckets balance ${total}, so each bucket weighs ${per}.`;
   const status = balanced
     ? `Level! ${reveal}`
-    : count < total ? 'The bucket side is heavier — add more weights.' : 'Too heavy now — take some off.';
+    : count < total ? 'The bucket side is heavier, add more weights.' : 'Too heavy now, take some off.';
 
   const figure = (
-    <Scene doc={doc} interactive={false} showGrid={false} showAxes={false} height={height} ariaLabel={`Balance: a mystery bucket against ${count} unit weights — ${balanced ? 'level' : 'tipping'}`} />
+    <Scene doc={doc} interactive={false} showGrid={false} showAxes={false} height={height} ariaLabel={`Balance: a mystery bucket against ${count} unit weights, ${balanced ? 'level' : 'tipping'}`} />
   );
 
   const controls = (

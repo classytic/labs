@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * StoichiometryLab — the limiting reagent, seen as a recipe. A balanced reaction is
+ * StoichiometryLab, the limiting reagent, seen as a recipe. A balanced reaction is
  * a recipe (2 H₂ + O₂ → 2 H₂O = "2 hydrogens and 1 oxygen make 2 waters"); given how
  * much of each reactant you have, the one that runs out first caps how much product
  * you can make, and the rest is left over.
  *
  * Each reactant is a tray of molecule tokens: the part CONSUMED is solid, the
- * LEFTOVER fades out — so the limiting reagent is the tray that empties completely
+ * LEFTOVER fades out, so the limiting reagent is the tray that empties completely
  * (highlighted), and the excess shows as faded tokens. The product tray fills with
  * what's formed. Backed by `solveStoichiometry` (@classytic/stage/chem): extent,
  * limiting reagent, product moles/grams and leftovers. Drag the amounts, pick a
@@ -56,13 +56,13 @@ const STOICH_CHALLENGE: ChallengeQuestion[] = [
       { value: 'smallcoeff', label: 'has the smallest coefficient' },
     ],
     answer: 'runsout',
-    explain: 'Compare moles ÷ coefficient for each reactant — the smallest is the limiting one. Raw moles or the coefficient alone can mislead.',
+    explain: 'Compare moles ÷ coefficient for each reactant, the smallest is the limiting one. Raw moles or the coefficient alone can mislead.',
   },
   {
     id: 'excess',
     prompt: 'Adding MORE of the reactant that is already in excess changes the product made by…',
     choices: [
-      { value: 'none', label: 'nothing — it just piles up as leftover' },
+      { value: 'none', label: 'nothing: it just piles up as leftover' },
       { value: 'more', label: 'making proportionally more product' },
       { value: 'less', label: 'making less product' },
     ],
@@ -79,8 +79,8 @@ export function StoichiometryLab({
   amounts: amounts0,
   reactants: customR,
   products: customP,
-  title = 'Stoichiometry — the limiting reagent',
-  prompt = 'A balanced equation is a recipe. Whichever reactant runs out first limits how much product you can make — the rest is left over. Drag the amounts and watch.',
+  title = 'Stoichiometry: the limiting reagent',
+  prompt = 'A balanced equation is a recipe. Whichever reactant runs out first limits how much product you can make, the rest is left over. Drag the amounts and watch.',
   objectives = [
     'Read a balanced equation as a mole ratio (a recipe)',
     'Find the limiting reagent: the one that runs out first (smallest moles ÷ coeff)',
@@ -161,7 +161,7 @@ export function StoichiometryLab({
     </>
   );
 
-  // The challenge goes FULL-WIDTH in the footer — in the narrow aside it forced the
+  // The challenge goes FULL-WIDTH in the footer, in the narrow aside it forced the
   // column tall and left the figure box mostly empty.
   const footer = <ChallengeCard questions={STOICH_CHALLENGE} state={challenge} title="Predict first" />;
 

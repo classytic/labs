@@ -1,0 +1,1 @@
+import { TriangleTrig, TriangleTrigProps } from "./preset.mjs";

@@ -1,0 +1,1 @@
+import { ReceiptLab, ReceiptProps } from "./preset.mjs";

@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * RespirationLab — photosynthesis ⇌ respiration: one runs the other backwards.
+ * RespirationLab, photosynthesis ⇌ respiration: one runs the other backwards.
  *
  * Two reaction flows, stacked, drawn with the SHARED MoleculeGlyph + ReactionFlow
  * engine: photosynthesis (6CO₂ + 6H₂O + light → glucose + 6O₂) and respiration
  * (glucose + 6O₂ → 6CO₂ + 6H₂O + ATP). The products of one are literally the
- * reactants of the other — the closed loop is impossible to forget. A day/night
+ * reactants of the other, the closed loop is impossible to forget. A day/night
  * toggle shows the NET gas exchange: by day photosynthesis outpaces respiration
  * (net O₂ out); at night only respiration runs (net CO₂ out).
  *
@@ -54,7 +54,7 @@ const RESP_CHALLENGE: ChallengeQuestion[] = [
 
 export function RespirationLab({
   mode = 'day',
-  title = 'Photosynthesis ⇌ Respiration — one runs the other backwards',
+  title = 'Photosynthesis ⇌ Respiration: one runs the other backwards',
   prompt = 'The products of one are the reactants of the other. Flip day/night to see the net gas exchange.',
   objectives,
 }: RespirationProps): ReactNode {
@@ -77,7 +77,7 @@ export function RespirationLab({
   const figure = (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       {flowCard('Photosynthesis', 'chloroplast (day)', PHOTO, photoActive, 'var(--stage-good)')}
-      <p style={{ textAlign: 'center', margin: 0, fontSize: 11, color: 'var(--stage-muted)', fontWeight: 600 }}>↑ products feed ↓ reactants — the same six molecules loop ↑</p>
+      <p style={{ textAlign: 'center', margin: 0, fontSize: 11, color: 'var(--stage-muted)', fontWeight: 600 }}>↑ products feed ↓ reactants, the same six molecules loop ↑</p>
       {flowCard('Respiration', 'mitochondrion (always)', RESP, true, 'var(--stage-accent-2)')}
     </div>
   );

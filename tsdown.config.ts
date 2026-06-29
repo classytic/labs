@@ -33,6 +33,8 @@ export default defineConfig({
     'ml/index': 'src/ml/index.ts',
     'catalog/index': 'src/catalog/index.ts',
     'kit/index': 'src/kit/index.ts',
+    'build/index': 'src/build/index.ts',
+    'logic/index': 'src/logic/index.ts',
     'blocks/index': 'src/blocks/index.tsx',
     'blocks/lesson': 'src/blocks/lesson.tsx',
     'blocks/math': 'src/blocks/math.tsx',

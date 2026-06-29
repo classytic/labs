@@ -1,5 +1,5 @@
 /**
- * Genetics core — a SERIALIZABLE cross model + the rule that turns a genotype into
+ * Genetics core, a SERIALIZABLE cross model + the rule that turns a genotype into
  * a phenotype. Authored as data (so agents can declare it via JSON), resolved into
  * pure functions for the lab. One model covers simple dominance, multiple alleles,
  * codominance and incomplete dominance:
@@ -10,7 +10,7 @@
  *  • an optional `blends` entry overrides a specific heterozygote
  *    (INCOMPLETE DOMINANCE → red × white = pink)
  *
- * No reinvented numerics — this is just the genetics rule; UI lives in the preset.
+ * No reinvented numerics, this is just the genetics rule; UI lives in the preset.
  */
 
 export interface AlleleSpec { symbol: string; rank: number; trait: string }
@@ -36,7 +36,7 @@ export interface ResolvedModel {
   phenotypeColor: (label: string) => string;
   /** every possible genotype as a normalised [a,b] pair (for parent pickers). */
   genotypes: [string, string][];
-  /** true if `a` masks `b` here — a dominant over a present lower-rank allele. */
+  /** true if `a` masks `b` here, a dominant over a present lower-rank allele. */
   masks: (a: string, b: string) => boolean;
 }
 
@@ -84,7 +84,7 @@ export function resolveModel(spec: CrossModelSpec): ResolvedModel {
 
 // ── canned models (creators pick one or author their own spec) ───────────────
 
-/** Simple dominant/recessive — the classic monohybrid (also backs PunnettCross). */
+/** Simple dominant/recessive, the classic monohybrid (also backs PunnettCross). */
 export const monohybridSpec = (letter = 'A', dominant = 'tall', recessive = 'short'): CrossModelSpec => ({
   trait: 'trait',
   alleles: [
@@ -94,7 +94,7 @@ export const monohybridSpec = (letter = 'A', dominant = 'tall', recessive = 'sho
   colors: { [dominant]: 'var(--stage-accent)', [recessive]: 'var(--stage-muted)' },
 });
 
-/** ABO blood groups — multiple alleles + codominance (Aᴬ Aᴮ → AB). */
+/** ABO blood groups, multiple alleles + codominance (Aᴬ Aᴮ → AB). */
 export const BLOOD_TYPE_SPEC: CrossModelSpec = {
   trait: 'blood type',
   alleles: [
@@ -105,7 +105,7 @@ export const BLOOD_TYPE_SPEC: CrossModelSpec = {
   colors: { A: 'var(--stage-accent)', B: 'var(--stage-accent-2)', AB: 'var(--stage-good)', O: 'var(--stage-muted)' },
 };
 
-/** Incomplete dominance — red × white = pink (a blended heterozygote). */
+/** Incomplete dominance, red × white = pink (a blended heterozygote). */
 export const INCOMPLETE_SPEC: CrossModelSpec = {
   trait: 'flower colour',
   alleles: [
@@ -119,7 +119,7 @@ export const INCOMPLETE_SPEC: CrossModelSpec = {
 export const CROSS_PRESETS = { monohybrid: monohybridSpec(), 'blood-type': BLOOD_TYPE_SPEC, incomplete: INCOMPLETE_SPEC } as const;
 export type CrossPresetKey = keyof typeof CROSS_PRESETS;
 
-/** Two independent genes — the classic dihybrid 9:3:3:1 (height × seed colour). */
+/** Two independent genes, the classic dihybrid 9:3:3:1 (height × seed colour). */
 export const DIHYBRID_LOCI: CrossModelSpec[] = [
   monohybridSpec('A', 'tall', 'short'),
   monohybridSpec('B', 'yellow', 'green'),

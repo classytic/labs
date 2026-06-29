@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * ArrangementsLab — arranging things in a row when some are IDENTICAL (the multiset
+ * ArrangementsLab, arranging things in a row when some are IDENTICAL (the multiset
  * permutation the slots/selection labs don't cover). The classic MISSISSIPPI, or a
  * row of coloured beads. The derivation, made concrete: if all n were distinct
  * there'd be n! orders; but swapping two identical letters gives the SAME word, so
- * each real arrangement is counted (count of that letter)! times — divide it out:
+ * each real arrangement is counted (count of that letter)! times, divide it out:
  *
  *   n! / (n₁! · n₂! · …)        (the multinomial coefficient)
  *
@@ -18,6 +18,7 @@ import { factorial, multinomial } from '../core/combinatorics.js';
 import { Stepper, CheckButton, StatusPill, Chip } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout } from '../../kit/frame.js';
 import { useHints, HintLadder, RevealSolution, useCheckpoint } from '../../kit/pedagogy.js';
+import { CATEGORICAL } from '../../kit/palette.js';
 import { useControlSurface } from '@classytic/stage';
 import { Tex } from '../../core/tex.js';
 
@@ -32,7 +33,7 @@ export interface ArrangementsProps {
   controlId?: string;
 }
 
-const PALETTE = ['#1c7ed6', '#e8590c', '#2f9e44', '#9c36b5', '#e03131', '#0ca678', '#f59f00', '#1098ad'];
+const PALETTE = CATEGORICAL;
 
 function fromWord(w: string): ArrangeItem[] {
   const order: string[] = [], m = new Map<string, number>();
@@ -71,7 +72,7 @@ export function ArrangementsLab({ word, items, title = 'Arrange with repeats', p
   const figure = (
     <div style={{ display: 'grid', gap: 16 }}>
       <div>
-        <p className="lab-field-label">{n} items in a row — identical ones share a colour</p>
+        <p className="lab-field-label">{n} items in a row, identical ones share a colour</p>
         <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
           {tiles.map((g, i) => {
             const isSwap = swapGroup && g.label === swapGroup.label;
@@ -88,7 +89,7 @@ export function ArrangementsLab({ word, items, title = 'Arrange with repeats', p
       {/* the overcount intuition */}
       {swapGroup && (
         <p className="lab-prompt">
-          Swap the two ringed <b style={{ color: swapGroup.color }}>{swapGroup.label}</b>'s ⇄ — it's the <b>same row</b>. So every arrangement is counted {swapGroup.count}! times over (once per ordering of the {swapGroup.count} {swapGroup.label}'s).
+          Swap the two ringed <b style={{ color: swapGroup.color }}>{swapGroup.label}</b>'s ⇄, it's the <b>same row</b>. So every arrangement is counted {swapGroup.count}! times over (once per ordering of the {swapGroup.count} {swapGroup.label}'s).
         </p>
       )}
 

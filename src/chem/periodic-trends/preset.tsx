@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * PeriodicTrendsLab — the periodic table as a heatmap, so a trend you usually have to
+ * PeriodicTrendsLab, the periodic table as a heatmap, so a trend you usually have to
  * memorise becomes a colour gradient you can read at a glance. Pick a property
  * (atomic radius, ionisation energy, electronegativity) and every tile recolours;
  * hover an element for its value. The gradients make the rules obvious: radius grows
  * DOWN and LEFT (toward caesium); ionisation energy and electronegativity grow UP and
- * RIGHT (toward fluorine). Periods 1–5 (H–Xe); a curated dataset, not a formula —
+ * RIGHT (toward fluorine). Periods 1–5 (H–Xe); a curated dataset, not a formula , 
  * which property is shown (and any highlighted element) is authorable, and a
  * predict-first question ships with it.
  */
@@ -54,7 +54,7 @@ const CHALLENGE: ChallengeQuestion[] = [
       { value: 'same', label: 'stays the same' },
     ],
     answer: 'down',
-    explain: 'More protons pull the same shell of electrons in tighter, so atoms shrink across a period — even as electrons are added.',
+    explain: 'More protons pull the same shell of electrons in tighter, so atoms shrink across a period, even as electrons are added.',
   },
   {
     id: 'ie',
@@ -72,7 +72,7 @@ const CHALLENGE: ChallengeQuestion[] = [
 export function PeriodicTrendsLab({
   property: prop0 = 'radius',
   highlight,
-  title = 'Periodic trends — read the table as a heatmap',
+  title = 'Periodic trends: read the table as a heatmap',
   prompt = 'Colour every element by a property and the trend appears as a gradient. Hover an element for its value; switch the property to see the pattern flip.',
   objectives = [
     'Read periodic trends as colour gradients across the table',
@@ -98,7 +98,7 @@ export function PeriodicTrendsLab({
     <div style={{ borderRadius: 14, overflow: 'hidden', background: 'var(--stage-bg)', border: '1px solid var(--stage-grid)' }}>
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={`Periodic table coloured by ${cfg.label}`}>
         {/* trend arrows */}
-        <text x={OX} y={18} fontSize={12} fontWeight={700} fill="var(--stage-fg)">{cfg.label}{cfg.unit ? ` (${cfg.unit})` : ''} — {cfg.trend}</text>
+        <text x={OX} y={18} fontSize={12} fontWeight={700} fill="var(--stage-fg)">{cfg.label}{cfg.unit ? ` (${cfg.unit})` : ''}, {cfg.trend}</text>
         {ELEMENTS.map((e) => {
           const z = e[0], sym = e[1], period = e[3], group = e[4];
           const v = e[cfg.idx] as number | null;
@@ -129,12 +129,12 @@ export function PeriodicTrendsLab({
         {sel
           ? <span style={{ display: 'grid', gap: 2, fontVariantNumeric: 'tabular-nums' }}>
             <span style={{ fontWeight: 800, fontSize: 15 }}>{sel[2]} ({sel[1]}) · Z={sel[0]}</span>
-            <span style={{ fontSize: 13, color: 'var(--stage-muted)' }}>{cfg.label}: {sel[cfg.idx] != null ? `${sel[cfg.idx]} ${cfg.unit}` : '—'}</span>
+            <span style={{ fontSize: 13, color: 'var(--stage-muted)' }}>{cfg.label}: {sel[cfg.idx] != null ? `${sel[cfg.idx]} ${cfg.unit}` : ', '}</span>
           </span>
           : <span style={{ fontSize: 13 }}>Hover any element to read its {cfg.label.toLowerCase()}.</span>}
       </Callout>
       <div style={{ display: 'grid', gap: 6, padding: '8px 2px 0', fontSize: 13 }}>
-        <span style={{ color: 'var(--stage-muted)' }}>{cfg.label} <strong style={{ color: 'var(--stage-fg)' }}>{cfg.trend}</strong> — {cfg.corner}. Switch the property and watch the gradient flip direction.</span>
+        <span style={{ color: 'var(--stage-muted)' }}>{cfg.label} <strong style={{ color: 'var(--stage-fg)' }}>{cfg.trend}</strong>, {cfg.corner}. Switch the property and watch the gradient flip direction.</span>
       </div>
     </>
   );

@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * IconRef — a durable visual-asset reference for language labs, replacing bare
+ * IconRef, a durable visual-asset reference for language labs, replacing bare
  * emoji strings. An item's picture can be an emoji, a registered inline SVG
- * (themeable, reusable), or an uploaded/external image — each carrying alt text
+ * (themeable, reusable), or an uploaded/external image, each carrying alt text
  * for accessibility.
  *
  * BACK-COMPAT: a plain string is still accepted everywhere (shorthand for an
- * emoji, or — for a preposition landmark — a backdrop key like 'water'). So all
+ * emoji, or, for a preposition landmark, a backdrop key like 'water'). So all
  * existing authored decks/scenes keep working; `IconRef` is the opt-in upgrade
  * for SVG/image assets and explicit alt text. Emoji + image render dependency-
  * free; `kind:'svg'` resolves an id through a small registry (consumers can

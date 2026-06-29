@@ -1,29 +1,29 @@
 'use client';
 
 /**
- * MoleculeGlyph — the shared, tokenized molecule-icon vocabulary (single source
+ * MoleculeGlyph, the shared, tokenized molecule-icon vocabulary (single source
  * of truth) for every reaction visual: photosynthesis, respiration, and the
  * chemistry reaction labs. A pure SVG <g> centred at (x, y) within `size` px, so
  * it drops into a plain <svg> (ReactionFlow) or any host. Atom colours follow the
  * conventional CPK scheme but routed through --stage-* tokens so they retheme.
  *
- * Add a molecule by extending MOLECULES below — every reaction lab gains it for free.
+ * Add a molecule by extending MOLECULES below, every reaction lab gains it for free.
  */
 
 import type { ReactNode } from 'react';
 
 export type MoleculeKind = 'co2' | 'h2o' | 'o2' | 'glucose' | 'atp' | 'light' | 'A' | 'B' | 'AB';
 
-const O = 'var(--stage-danger)';                                       // oxygen — red
-const C = 'color-mix(in oklab, var(--stage-fg) 44%, var(--stage-bg))'; // carbon — slate (visible on the dark canvas)
-const H = 'color-mix(in oklab, var(--stage-fg) 84%, var(--stage-bg))'; // hydrogen — pale
+const O = 'var(--stage-danger)';                                       // oxygen, red
+const C = 'color-mix(in oklab, var(--stage-fg) 44%, var(--stage-bg))'; // carbon, slate (visible on the dark canvas)
+const H = 'color-mix(in oklab, var(--stage-fg) 84%, var(--stage-bg))'; // hydrogen, pale
 const BOND = 'color-mix(in oklab, var(--stage-fg) 52%, transparent)';
 const LIGHT = 'var(--stage-fg)';   // symbol on dark atoms
 const DARK = 'var(--stage-bg)';    // symbol on pale atoms
 const HALO = 'var(--stage-bg)';    // outline that separates overlapping atoms
 
 // NOTE: every stroke uses vectorEffect="non-scaling-stroke" so the glyph's
-// `scale(size/2)` transform doesn't magnify line widths into blobs — widths stay
+// `scale(size/2)` transform doesn't magnify line widths into blobs, widths stay
 // in px regardless of molSize.
 function atom(cx: number, cy: number, r: number, fill: string, sym?: string, symColor: string = LIGHT): ReactNode {
   return (

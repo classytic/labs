@@ -1,4 +1,4 @@
-// @classytic/labs/commerce — business-studies labs (accounting, economics…).
+// @classytic/labs/commerce, business-studies labs (accounting, economics…).
 // Subpath groups the related commerce subjects; the simple double-entry core
 // lives in ./accounting/core (NOT the heavy @classytic/ledger engine).
 export {

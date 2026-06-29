@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * WordMatch — pair each word with its meaning (or picture).
+ * WordMatch, pair each word with its meaning (or picture).
  *
  * Tap a word on the left, then its match on the right; a correct pair locks
- * green, a wrong pair flashes. Right side shows the translation, or — for kids /
- * concrete vocab — the item's icon (emoji/SVG), which is where image-based
+ * green, a wrong pair flashes. Right side shows the translation, or, for kids /
+ * concrete vocab, the item's icon (emoji/SVG), which is where image-based
  * learning genuinely helps (dual coding). Reads its whole content from a `Deck`,
  * so a new language pair is just new data.
  */

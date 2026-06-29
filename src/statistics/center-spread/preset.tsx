@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * CenterSpreadLab — centre & spread you can FEEL. Data points sit on a number
+ * CenterSpreadLab, centre & spread you can FEEL. Data points sit on a number
  * line; drag them and the mean rides under the line as a BALANCE-POINT fulcrum
  * (the mean is literally where the data balances), the median holds its ground,
  * the mode stack lights up, and a shaded mean ± σ band breathes wider as the data
  * spreads. The punchline lives in the dragging: yank one point far out and the
- * mean chases it while the median barely moves — why we report the median for
+ * mean chases it while the median barely moves, why we report the median for
  * skewed data. Optional `challenge` turns it into "drag until the mean is 5".
  *
  * All numbers come from the descriptive-stats kernel; the lab only POINTS at them.
@@ -139,7 +139,7 @@ export function CenterSpreadLab({
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', margin: '12px 0', padding: '8px 0', borderTop: '1px solid var(--stage-grid)', borderBottom: '1px solid var(--stage-grid)' }}>
         {stat('mean', mu.toFixed(2), 'var(--stage-good)')}
         {stat('median', String(md), 'var(--stage-accent-2, #d6336c)')}
-        {stat('mode', mo.length ? mo.join(', ') : '—', 'var(--stage-warn)')}
+        {stat('mode', mo.length ? mo.join(', ') : ', ', 'var(--stage-warn)')}
         {stat('range', String(rg))}
         {stat('variance', variance(vals).toFixed(2))}
         {stat(<Tex tex="\\sigma" />, sd.toFixed(2), 'var(--stage-accent)')}

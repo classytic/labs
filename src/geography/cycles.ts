@@ -1,5 +1,5 @@
 /**
- * Canned cycles for CycleLab — the data a creator/agent picks (or replaces with
+ * Canned cycles for CycleLab, the data a creator/agent picks (or replaces with
  * their own nodes/edges). Each is just `{ nodes, edges }` for the shared
  * CycleDiagram, so a new cycle (nitrogen, carbon-in-ocean, food chain…) is DATA,
  * not a new component. Process labels on the ring edges are the assessment targets
@@ -10,7 +10,7 @@ import type { CycleNode, CycleEdge } from '../kit/cycle.js';
 
 export interface CycleSpec { nodes: CycleNode[]; edges: CycleEdge[] }
 
-/** Water cycle — a clean 5-stage ring; each edge is one distinct process. */
+/** Water cycle, a clean 5-stage ring; each edge is one distinct process. */
 export const WATER_CYCLE: CycleSpec = {
   nodes: [
     { id: 'ocean', label: 'Ocean', tone: 'var(--stage-accent-2)' },
@@ -28,7 +28,7 @@ export const WATER_CYCLE: CycleSpec = {
   ],
 };
 
-/** Rock cycle — a ring PLUS shortcuts: any rock can skip ahead (heat, re-weather). */
+/** Rock cycle, a ring PLUS shortcuts: any rock can skip ahead (heat, re-weather). */
 export const ROCK_CYCLE: CycleSpec = {
   nodes: [
     { id: 'magma', label: 'Magma', tone: 'var(--stage-danger)' },
@@ -43,13 +43,13 @@ export const ROCK_CYCLE: CycleSpec = {
     { from: 'sediment', to: 'sedimentary', label: 'compaction' },
     { from: 'sedimentary', to: 'metamorphic', label: 'heat & pressure' },
     { from: 'metamorphic', to: 'magma', label: 'melting' },
-    // shortcuts — the cycle is not one-way
+    // shortcuts, the cycle is not one-way
     { from: 'igneous', to: 'metamorphic', label: 'heat & pressure' },
     { from: 'sedimentary', to: 'sediment', label: 'weathering' },
   ],
 };
 
-/** Carbon cycle — branched (CO₂ in/out by several routes); ties to photo/respiration. */
+/** Carbon cycle, branched (CO₂ in/out by several routes); ties to photo/respiration. */
 export const CARBON_CYCLE: CycleSpec = {
   nodes: [
     { id: 'air', label: 'Atmospheric CO₂', tone: 'var(--stage-muted)' },

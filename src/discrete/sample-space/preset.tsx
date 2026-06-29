@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * SampleSpaceBoard — the GENERAL equally-likely-outcomes tool. Probability =
+ * SampleSpaceBoard, the GENERAL equally-likely-outcomes tool. Probability =
  * count the favourable slice of all equally-likely outcomes; this makes that
  * literal: every outcome is a cell, the learner SELECTS an event, and reads
  * favourable / total → P. The two-dice 6×6 grid is the star (you SEE P(sum=7)
  * as a diagonal of 6 cells = 1/6).
  *
  * Two authoring forms:
- *   • `dims` — a 1- or 2-D product space (one die [6], two dice [6,6], cards
+ *   • `dims`, a 1- or 2-D product space (one die [6], two dice [6,6], cards
  *     [4,13]); cells are coordinate pairs, events are reduce-based (sum/diff/
  *     max/min/product/doubles) so they stay DATA, not code.
- *   • `outcomes` — an explicit 1-D list (coins HHT…, custom); event = a named
+ *   • `outcomes`, an explicit 1-D list (coins HHT…, custom); event = a named
  *     favourable set.
  * Counts/P come from `@classytic/labs/discrete/core`; an agent narrates them.
  */
@@ -165,7 +165,7 @@ export function SampleSpaceBoardLab({
       {isTarget && (
         <>
           <CheckButton onClick={check} disabled={sel.size === 0}>Check</CheckButton>
-          {checked && <StatusPill ok={correct}>{correct ? '✓ Exactly the event' : 'Not quite — green outlines are the ones you missed'}</StatusPill>}
+          {checked && <StatusPill ok={correct}>{correct ? '✓ Exactly the event' : 'Not quite, green outlines are the ones you missed'}</StatusPill>}
         </>
       )}
       {!isTarget && sel.size > 0 && <Chip selected onClick={reset}>clear</Chip>}

@@ -1,5 +1,5 @@
 /**
- * Inclusion–exclusion — the "overcount, then correct" move made general. Returns
+ * Inclusion–exclusion, the "overcount, then correct" move made general. Returns
  * the |union| AND the signed term breakdown (+singles −pairs +triples …) so the
  * Venn lab can show each region settling to a net count of 1. Works for any n
  * (kept ≤ ~16 for the 2ⁿ subset walk; lessons use 2–3).

@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/statistics — descriptive statistics & sequences/series. The
+ * @classytic/labs/statistics, descriptive statistics & sequences/series. The
  * pure kernels (centre/spread, arithmetic/geometric) plus the GENERAL lab
  * families built on them. Probability lives next door in /discrete.
  */

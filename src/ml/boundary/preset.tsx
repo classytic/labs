@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * DecisionBoundaryLab — a linear classifier you can SEE think. Two classes of
+ * DecisionBoundaryLab, a linear classifier you can SEE think. Two classes of
  * points sit in the plane; a straight boundary splits it into two predicted
  * regions. Drag the boundary's two handles to separate the classes by hand
  * (misclassified points get a red ring, accuracy updates live), then hit "train"
  * and watch a PERCEPTRON nudge the same line into place on its own. The honest
- * twist: the XOR dataset can't be split by ANY straight line — accuracy stalls
+ * twist: the XOR dataset can't be split by ANY straight line, accuracy stalls
  * below 100%, the door to "why we need more than a line."
  *
  * Pure stage primitives (Stage + Polygon shading + MovableDot handles + frame-loop
@@ -18,7 +18,7 @@ import { Stage, Grid, Axes, Dot, Circle, Segment, Polygon, useFrameLoop, type Ve
 import { MovableDot } from '@classytic/stage';
 import { mulberry32, gaussian, type Rng } from '../../core/rng.js';
 import { Chip } from '../../kit/controls.js';
-import { useHints, HintLadder } from '../../kit/pedagogy.js';
+import { useHints, HintLadder, useCheckpoint } from '../../kit/pedagogy.js';
 import { LabFrame, ControlBar, Callout } from '../../kit/frame.js';
 import { useControlSurface } from '@classytic/stage';
 import { useInView } from '@classytic/stage';
@@ -78,6 +78,11 @@ export function DecisionBoundaryLab({ dataset = 'separable', seed = 11, title = 
     const wr = pts.filter((p) => (s * raw(weights, p) > 0 ? 1 : 0) !== p.cls);
     return { sign: s, acc: pts.length ? Math.max(sp, sn) / pts.length : 0, wrong: wr };
   }, [pts, weights]);
+
+  // solved when the boundary perfectly separates the classes (XOR can't reach 100%
+  // with any straight line, so this checkpoint only ever fires for separable data).
+  const solved = acc === 1;
+  useCheckpoint({ solved, activity: `boundary:${title}`, hintsUsed: hints.count });
 
   // split the plane square into the two predicted regions for shading
   const regions = useMemo(() => {

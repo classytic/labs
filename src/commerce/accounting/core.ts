@@ -1,5 +1,5 @@
 /**
- * The SIMPLE, CORRECT double-entry core — the single source of truth every
+ * The SIMPLE, CORRECT double-entry core, the single source of truth every
  * accounting lab shares. Deliberately NOT the industry @classytic/ledger engine
  * (events/repositories/FX/fiscal-close): a teaching lab needs only the rules,
  * which are these (verified against that production ledger):

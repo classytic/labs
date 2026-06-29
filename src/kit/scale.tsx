@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * ScaleFrame — the shared, polished two-pan balance apparatus. Used by math
+ * ScaleFrame, the shared, polished two-pan balance apparatus. Used by math
  * (`mystery-bucket`, `balance-algebra`) AND commerce (`equation-balance`), so it
- * lives in the shared `kit/` (single source of truth) — domains never import each
+ * lives in the shared `kit/` (single source of truth), domains never import each
  * other for it. A glossy metal beam on a tapered column + domed base, with shallow
  * bowl pans hung on rigid stirrups. Theme-aware: every tint derives from
- * `--stage-metal` / `--stage-sheen` / `--stage-good`. Pure renderer — the caller
+ * `--stage-metal` / `--stage-sheen` / `--stage-good`. Pure renderer, the caller
  * owns the tilt geometry + draws the pan contents (weights / coins / x-tiles).
  */
 
@@ -20,7 +20,7 @@ const SHEEN = 'color-mix(in oklab, var(--stage-sheen) 70%, transparent)';
 const SHADE = 'color-mix(in oklab, var(--stage-metal) 62%, black)';
 const GOOD = 'var(--stage-good)';
 
-/** A solid rectangular bar (metal rod) between two points — reads as a rigid
+/** A solid rectangular bar (metal rod) between two points, reads as a rigid
  *  strut, not a string. Returns an SVG path for a filled quad of width `w`. */
 function barPath(x1: number, y1: number, x2: number, y2: number, w: number): string {
   const dx = x2 - x1, dy = y2 - y1;
@@ -62,7 +62,7 @@ export function ScaleFrame({ pivot, beamA, beamB, trayLC, trayRC, baseY, panR, b
   const baseRx = Math.max(30, colBotHalf * 2.6);
 
   // a shallow bowl pan centred at (cx, cy), held from the beam end (ex, ey) by a
-  // RIGID stirrup yoke — two solid metal struts to the rim with pivot joints
+  // RIGID stirrup yoke, two solid metal struts to the rim with pivot joints
   // (a mechanical holder, not a hanging cord).
   const Pan = ({ cx, cy, ex, ey, k }: { cx: number; cy: number; ex: number; ey: number; k: string }): ReactNode => {
     const ry = rxPan * 0.24;       // rim ellipse half-height

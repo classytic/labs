@@ -1,0 +1,1 @@
+import { DiodeLab, DiodeProps } from "./preset.mjs";

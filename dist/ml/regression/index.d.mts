@@ -1,0 +1,1 @@
+import { RegressionLab, RegressionProps } from "./preset.mjs";

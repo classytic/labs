@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * FrequencyTree — a natural-frequency tree as an actual DIAGRAM (not a wall of
+ * FrequencyTree, a natural-frequency tree as an actual DIAGRAM (not a wall of
  * text): N splits into branches, each branch into sub-branches, with counts on
  * every node. Natural frequencies are the format research says makes conditional
  * probability click, so this is the shared readout under Bayes, conditional
- * probability, decision trees — authored as nested DATA.
+ * probability, decision trees, authored as nested DATA.
  *
  * Pure pixel-space SVG figure; layout is automatic (leaves spaced evenly, parents
  * centered on their children) for any depth. Colours are tokens; `lit` flags a

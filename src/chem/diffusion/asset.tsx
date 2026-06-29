@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * diffusion asset — renders the `particles` sim as two coloured gases in a box and
+ * diffusion asset, renders the `particles` sim as two coloured gases in a box and
  * a live "mixed" readout. Two populations start apart (a partition); set them
- * loose and they random-walk into a uniform mix — diffusion / the arrow of entropy.
+ * loose and they random-walk into a uniform mix, diffusion / the arrow of entropy.
  * Reads px/py/group/box/mixed straight from the sim (sim ≠ render).
  */
 

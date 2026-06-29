@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * GravitationLab — "Inverse-square", how gravity fades with distance.
+ * GravitationLab, "Inverse-square", how gravity fades with distance.
  *
  * Newton's law of universal gravitation: F = G·M·m / r². Drag the satellite and
- * the pull on it tracks 1/r² — DOUBLE the distance and the force drops to a
+ * the pull on it tracks 1/r², DOUBLE the distance and the force drops to a
  * QUARTER (not a half), the defining surprise of an inverse-square law. The same
  * rule is why weight shrinks with altitude (g = GM/r²). A live F-vs-r curve marks
  * where you are on the steep 1/r² fall-off.
  *
- * Interactive (drag the satellite) — no timed loop. Tokenized SVG.
+ * Interactive (drag the satellite), no timed loop. Tokenized SVG.
  */
 
 import { useState, type ReactNode } from 'react';
@@ -23,7 +23,7 @@ import { clamp } from '../../core/util.js';
 const GRAVITATION_CHALLENGE: ChallengeQuestion[] = [
   {
     id: 'double-r',
-    prompt: 'Double the distance between two masses — the gravitational force becomes…',
+    prompt: 'Double the distance between two masses, the gravitational force becomes…',
     choices: [
       { value: 'quarter', label: 'one-quarter' },
       { value: 'half', label: 'one-half' },
@@ -61,8 +61,8 @@ const K_BASE = 60;     // G in drawn units (F = K·M·m / r²)
 
 export function GravitationLab({
   planetMass = 5, satMass = 1,
-  title = 'Inverse-square gravity — double the distance, quarter the pull',
-  prompt = 'Newton’s law: F = G·M·m / r². Drag the satellite in and out — the pull follows 1/r², so moving twice as far drops the force to a quarter, not a half. It’s the same law that thins your weight with altitude (g = GM/r²).',
+  title = 'Inverse-square gravity: double the distance, quarter the pull',
+  prompt = 'Newton’s law: F = G·M·m / r². Drag the satellite in and out, the pull follows 1/r², so moving twice as far drops the force to a quarter, not a half. It’s the same law that thins your weight with altitude (g = GM/r²).',
   objectives,
   controlConfig,
 }: GravitationProps): ReactNode {
@@ -108,7 +108,7 @@ export function GravitationLab({
         <Label x={sat.x + dirToStar.x * arrowLen} y={sat.y + dirToStar.y * arrowLen} text="F" color="var(--stage-warn)" size={12} dy={-4} />
         {/* the satellite + its drag handle */}
         <SatelliteGlyph center={sat} size={0.5} />
-        <MovableDot value={sat} onMove={onMove} color="var(--stage-accent)" ariaLabel="satellite — drag to change distance" />
+        <MovableDot value={sat} onMove={onMove} color="var(--stage-accent)" ariaLabel="satellite, drag to change distance" />
       </Stage>
     </div>
   );
@@ -136,7 +136,7 @@ export function GravitationLab({
       </Callout>
       {graph}
       <p style={{ fontSize: 12, opacity: 0.75, margin: 0 }}>
-        The curve falls as 1/r² — steeply near the planet, then a long faint tail. Same maths gives orbital
+        The curve falls as 1/r², steeply near the planet, then a long faint tail. Same maths gives orbital
         speed v = √(GM/r) and ties straight into the Kepler lab.
       </p>
       <LiveRegion>{`Distance ${r.toFixed(1)}, pull ${F.toFixed(1)}. Doubling the distance quarters the force.`}</LiveRegion>

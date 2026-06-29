@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * SexLinkedCrossLab — an X-linked gene cross (colour blindness, haemophilia…) on
- * the shared CrossGrid. The biology that's special — the Y carries no allele, so
- * males are HEMIZYGOUS (a single recessive X shows) — lives here; the grid/tally/
+ * SexLinkedCrossLab, an X-linked gene cross (colour blindness, haemophilia…) on
+ * the shared CrossGrid. The biology that's special, the Y carries no allele, so
+ * males are HEMIZYGOUS (a single recessive X shows), lives here; the grid/tally/
  * predict UI is reused. The payoff: affected sons from a carrier mother, while
  * daughters are carriers, not affected.
  */
@@ -55,12 +55,12 @@ export function SexLinkedCrossLab({
     const mx = g1[0]!, fx = g2[0]!;
     if (fx === 'Y') {
       const affected = !isDom(mx);
-      return { genotype: `${mx}Y`, phenotype: { label: `${affected ? recessive : dominant} ♂`, color: affected ? COL.recM : COL.domM }, note: ` — males are hemizygous: one ${Xr} is enough to show ${recessive}` };
+      return { genotype: `${mx}Y`, phenotype: { label: `${affected ? recessive : dominant} ♂`, color: affected ? COL.recM : COL.domM }, note: `: males are hemizygous: one ${Xr} is enough to show ${recessive}` };
     }
     const xs = [mx, fx].sort((a, b) => (isDom(a) ? -1 : 1) - (isDom(b) ? -1 : 1));
     const domPresent = isDom(mx) || isDom(fx);
     const carrier = domPresent && (!isDom(mx) || !isDom(fx));
-    return { genotype: `${xs[0]}${xs[1]}`, phenotype: { label: `${domPresent ? dominant : recessive} ♀`, color: domPresent ? COL.domF : COL.recF }, note: carrier ? ` — a carrier (one ${Xr}), ${dominant} herself but can pass it on` : '' };
+    return { genotype: `${xs[0]}${xs[1]}`, phenotype: { label: `${domPresent ? dominant : recessive} ♀`, color: domPresent ? COL.domF : COL.recF }, note: carrier ? `: a carrier (one ${Xr}), ${dominant} herself but can pass it on` : '' };
   };
 
   const cycleMom = (i: 0 | 1): void => setMom((m) => m.map((t, j) => (j === i ? (t === XD ? Xr : XD) : t)) as [string, string]);
@@ -98,8 +98,8 @@ export function SexLinkedCrossLab({
       predictFirst={predictFirst}
       header={header}
       legend={legend}
-      title={title ?? 'Sex linkage — why mostly sons are affected'}
-      prompt={prompt ?? 'The gene rides on the X. A carrier mother passes it to half her sons — who, with no second X, show it.'}
+      title={title ?? 'Sex linkage, why mostly sons are affected'}
+      prompt={prompt ?? 'The gene rides on the X. A carrier mother passes it to half her sons, who, with no second X, show it.'}
       objectives={objectives}
       showGenotypeTally
       onReveal={() => { if (!reported.current) { reported.current = true; learner?.report({ activity: 'sex-linked-cross', correct: true, score: { raw: 1, max: 1 }, completion: true }); } }}

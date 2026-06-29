@@ -1,0 +1,1 @@
+import { TruthTableLab, TruthTableMode, TruthTableProps } from "./preset.mjs";

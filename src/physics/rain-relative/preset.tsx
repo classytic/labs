@@ -1,18 +1,18 @@
 'use client';
 
 /**
- * RainRelativeLab — relative velocity you can FEEL.
+ * RainRelativeLab, relative velocity you can FEEL.
  *
  * Sit in a car in the rain. The rain falls straight down in the ground frame,
- * but in YOUR frame it slants — its apparent velocity is V_rain − V_car. Drag
+ * but in YOUR frame it slants, its apparent velocity is V_rain − V_car. Drag
  * the speed up and the rain streaks harder and leans more; the velocity triangle
  * and the angle θ track it live. This is the "show me" the static board lacked.
  *
  * Architecture on purpose: the hundreds of raindrops are drawn on `CanvasLayer`
- * (zero-dep Canvas2D — the engine's particle escape hatch, no Pixi), animated by
+ * (zero-dep Canvas2D, the engine's particle escape hatch, no Pixi), animated by
  * the shared `useFrameLoop` RAF clock; the car, the velocity triangle and the
  * labels sit on an SVG `<Stage>` overlaid on top (crisp + accessible). Honors
- * prefers-reduced-motion. One source of truth — `ratio = tan θ` — drives the
+ * prefers-reduced-motion. One source of truth, `ratio = tan θ`, drives the
  * canvas slant, the triangle, and the readout, so they can never disagree.
  */
 
@@ -82,7 +82,7 @@ export function RainRelativeLab({
   maxSpeed = 10,
   start = 0,
   title = 'Rain on a moving car',
-  prompt = 'Speed up — watch the rain slant. In your frame the rain comes at V_rain − V_car.',
+  prompt = 'Speed up, watch the rain slant. In your frame the rain comes at V_rain − V_car.',
   height = 360,
 }: RainRelativeProps): ReactNode {
   const [speed, setSpeed] = useState(start);
@@ -152,7 +152,7 @@ export function RainRelativeLab({
         <Stage view={VIEW} height={height} preserveAspect={false} background="transparent" ariaLabel="car and velocity triangle">
           {/* road */}
           <Segment from={{ x: -6, y: cy }} to={{ x: 6, y: cy }} color="var(--stage-fg)" opacity={0.5} weight={2} />
-          {/* car — wheels spin while moving */}
+          {/* car, wheels spin while moving */}
           <Car baseY={cy} wheelAngle={wheelAngle.current} />
 
           {/* velocity triangle */}

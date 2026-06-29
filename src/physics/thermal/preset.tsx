@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * HeatingCurveLab — pour heat into ice and watch temperature climb in steps.
+ * HeatingCurveLab, pour heat into ice and watch temperature climb in steps.
  *
  * The whole heat story in one picture, driven by the shared `thermal` core: a
  * burner heats a beaker (ice → water → steam), a thermometer reads the temperature,
- * and the heating curve draws itself on the right — SLOPED runs where one phase
+ * and the heating curve draws itself on the right, SLOPED runs where one phase
  * warms (q = mcΔθ) and FLAT plateaus where it changes phase (q = mL, temperature
  * stuck while the latent heat goes in). The width of each part IS the heat it needs,
  * so water's huge boiling plateau (latent vaporisation ≫ everything) is impossible
@@ -52,7 +52,7 @@ const kJ = (j: number): string => `${(j / 1000).toFixed(j < 10000 ? 1 : 0)} kJ`;
 
 export function HeatingCurveLab({
   substance: sub0 = 'water',
-  title = 'Heating curve — pour in heat, watch it climb in steps',
+  title = 'Heating curve: pour in heat, watch it climb in steps',
   prompt = 'Heat ice until it melts, warms, and boils. Temperature RISES while one phase warms (q = mcΔθ) but stays FLAT during a phase change (q = mL).',
   objectives = [
     'Read a heating curve: sloped = warming, flat = changing phase',
@@ -140,7 +140,7 @@ export function HeatingCurveLab({
               <text x={GX1 - 4} y={TY(g.t) - 3} textAnchor="end" fontSize={10} fill="var(--stage-muted)">{g.l}</text>
             </g>
           ))}
-          {/* segments — sloped heat runs vs flat plateaus, each with its q */}
+          {/* segments, sloped heat runs vs flat plateaus, each with its q */}
           {segs.map((s, i) => {
             const x0 = QX(s.qStart), x1 = QX(s.qStart + s.q), y0 = TY(s.t0), y1 = TY(s.t1);
             const isChange = s.kind === 'change';
@@ -172,8 +172,8 @@ export function HeatingCurveLab({
       <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
         <Callout tone="info">
           <span style={{ display: 'grid', gap: 6 }}>
-            <span><span style={{ color: 'var(--stage-accent)', fontWeight: 800 }}>sloped</span> — warming one phase: <Tex tex="q = mc\,\Delta\theta" /></span>
-            <span><span style={{ color: 'var(--stage-warn)', fontWeight: 800 }}>flat</span> — phase change: <Tex tex="q = mL" /></span>
+            <span><span style={{ color: 'var(--stage-accent)', fontWeight: 800 }}>sloped</span>, warming one phase: <Tex tex="q = mc\,\Delta\theta" /></span>
+            <span><span style={{ color: 'var(--stage-warn)', fontWeight: 800 }}>flat</span>, phase change: <Tex tex="q = mL" /></span>
           </span>
         </Callout>
         <span style={{ color: 'var(--stage-muted)' }}>now: <strong style={{ color: 'var(--stage-fg)' }}>

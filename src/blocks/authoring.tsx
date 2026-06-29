@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * @classytic/labs/blocks — editor UI kit.
+ * @classytic/labs/blocks, editor UI kit.
  *
  * The creator-facing authoring controls shared by every block's editing panel:
  * a settings panel, caret-stable text/number inputs, chips, a comma↔array tags
@@ -150,7 +150,7 @@ export function JsonArea<T>({ value, onChange, rows = 6 }: { value: T; onChange:
         onChange={(e) => { setDraft(e.target.value); try { onChange(JSON.parse(e.target.value) as T); setBad(false); } catch { setBad(true); } }}
         className="w-full rounded border border-border bg-background px-2 py-1 font-mono text-[11px] leading-snug"
       />
-      {bad ? <span className="text-[11px] text-destructive">invalid JSON — last valid kept</span> : null}
+      {bad ? <span className="text-[11px] text-destructive">invalid JSON, last valid kept</span> : null}
     </div>
   );
 }
@@ -189,7 +189,7 @@ function IconSwatch({ v, label }: { v: string; label?: string }): ReactNode {
   return <span style={{ fontSize: 19, lineHeight: 1 }}>{v}</span>;
 }
 
-/** A searchable, categorised icon picker — teachers click an icon (or a scene
+/** A searchable, categorised icon picker, teachers click an icon (or a scene
  *  backdrop), never type emoji. Falls back to a paste-any-emoji field. */
 export function IconPicker({ value, onChange, placeholder = 'pick' }: { value?: string; onChange: (v: string) => void; placeholder?: string }): ReactNode {
   const [open, setOpen] = useState(false);
@@ -213,7 +213,7 @@ export function IconPicker({ value, onChange, placeholder = 'pick' }: { value?: 
                   <IconSwatch v={it.v} label={it.label} />
                 </button>
               ))}
-              {shown.length === 0 && <span className="text-[11px] text-muted-foreground" style={{ gridColumn: '1 / -1' }}>no match — paste any emoji below</span>}
+              {shown.length === 0 && <span className="text-[11px] text-muted-foreground" style={{ gridColumn: '1 / -1' }}>no match, paste any emoji below</span>}
             </div>
             <input value={value ?? ''} onChange={(e) => onChange(e.target.value)} placeholder="or paste any emoji" className="mt-2 w-full rounded border border-border bg-background px-2 py-1 text-[12px]" />
           </div>
@@ -225,7 +225,7 @@ export function IconPicker({ value, onChange, placeholder = 'pick' }: { value?: 
 
 export interface RowCol { key: string; label: string; type?: 'text' | 'number' | 'pos' | 'select' | 'tags' | 'bool' | 'icon'; options?: string[]; grow?: boolean }
 
-/** Edit an array of records as add/remove/reorder rows of typed fields — the
+/** Edit an array of records as add/remove/reorder rows of typed fields, the
  *  creator-facing alternative to hand-writing JSON. */
 export function RowsEditor<T extends object>({ rows, onChange, columns, newRow, addLabel = 'row' }: {
   rows: T[]; onChange: (rows: T[]) => void; columns: RowCol[]; newRow: () => T; addLabel?: string;

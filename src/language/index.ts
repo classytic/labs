@@ -1,9 +1,9 @@
-// @classytic/labs/language — interactive language-learning labs.
+// @classytic/labs/language, interactive language-learning labs.
 //
 // Data-driven: a creator (or agent) declares a `Deck` (vocab) or a small spec
 // (grammar); the labs play it. A new language pair = new data, not new code.
-// DOM-based (not SVG Stage scenes) — vocab/grammar are card/tile recall, not
-// spatial manipulation — but ride the stage `useLearner` seam for progress.
+// DOM-based (not SVG Stage scenes), vocab/grammar are card/tile recall, not
+// spatial manipulation, but ride the stage `useLearner` seam for progress.
 
 export * from './deck.js';
 export { Icon, normalizeIcon, registerLabIcon, type IconRef, type IconValue } from './icon.js';

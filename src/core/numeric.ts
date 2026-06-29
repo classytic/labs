@@ -1,5 +1,5 @@
 /**
- * numeric — small numerical-calculus helpers, used when an exact symbolic result
+ * numeric, small numerical-calculus helpers, used when an exact symbolic result
  * isn't available (e.g. a function the differentiator doesn't handle) or when a
  * widget just needs a number. Pure, dependency-free.
  */
@@ -40,7 +40,7 @@ export function riemannSum(fn: RealFn, range: [number, number], n: number, mode:
 }
 
 /**
- * Composite Simpson's rule — a high-accuracy definite-integral estimate (error
+ * Composite Simpson's rule, a high-accuracy definite-integral estimate (error
  * O(h⁴), vs O(h) for a Riemann sum). Used as the "reference" a Riemann sum
  * converges toward. `n` is forced even. Not exact, but accurate to ~machine
  * precision for smooth integrands at n≈1000.
@@ -57,7 +57,7 @@ export function integrate(fn: RealFn, range: [number, number], n = 1000): number
 /**
  * Estimate a one-sided limit of `fn` as x → c from `side` (+1 right, −1 left) by
  * sampling a shrinking sequence of offsets. Returns the closest-in value and
- * whether the sequence is *converging* (consecutive samples agree) — so callers
+ * whether the sequence is *converging* (consecutive samples agree), so callers
  * can honestly report "estimated limit" + confidence rather than a hard claim.
  */
 export function estimateOneSidedLimit(fn: RealFn, c: number, side: 1 | -1): { value: number; converging: boolean } {

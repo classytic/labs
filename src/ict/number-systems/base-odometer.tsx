@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * BaseOdometer — the same quantity, ticking in every base at once.
+ * BaseOdometer, the same quantity, ticking in every base at once.
  *
  * Stacked odometer rows (one per base) all driven by ONE shared integer:
- * increment it and binary/octal/decimal/hex roll in lockstep — the binary row
- * rolls fastest (the rightmost-bit frequency cascade), hex barely moves — so
+ * increment it and binary/octal/decimal/hex roll in lockstep, the binary row
+ * rolls fastest (the rightmost-bit frequency cascade), hex barely moves, so
  * "base is a costume, not a different number" is something you watch, not read.
  * A race toggle auto-counts via the frame loop so the cascade plays as motion.
  * Composes the shared WheelRow (DRY: the wheel + carry animation live in one place).
@@ -41,7 +41,7 @@ const LABELS: Record<number, string> = { 2: 'BIN', 8: 'OCT', 10: 'DEC', 16: 'HEX
 export function BaseOdometerLab({
   bases = [2, 8, 10, 16], width = 'auto', start = 0, max = 255,
   race = false, speed = 2, highlightBase, target,
-  title = 'Base odometer', prompt = 'One quantity, every base at once — +1 and watch them all roll.',
+  title = 'Base odometer', prompt = 'One quantity, every base at once: +1 and watch them all roll.',
   objectives,
 }: BaseOdometerProps): ReactNode {
   const [value, setValue] = useState(Math.max(0, Math.min(max, Math.floor(start))));

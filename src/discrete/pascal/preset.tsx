@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * PascalTriangleLab — where counting, the binomial theorem, and a fractal meet. The
- * triangle is built live by the one rule that defines it — each cell is the SUM of
- * the two above — and every cell is also C(n,k): the number of ways to choose k of
+ * PascalTriangleLab, where counting, the binomial theorem, and a fractal meet. The
+ * triangle is built live by the one rule that defines it, each cell is the SUM of
+ * the two above, and every cell is also C(n,k): the number of ways to choose k of
  * n (so the counting labs and this are the same numbers). Click a cell to see the
  * two parents add into it AND its three identities (combination · path count ·
  * binomial coefficient). Pick the binomial view and a whole ROW becomes the
  * expansion (a+b)ⁿ. Flip "odd/even" and the triangle blooms into the Sierpiński
- * triangle — the wow that shows structure hides in plain arithmetic.
+ * triangle, the wow that shows structure hides in plain arithmetic.
  *
- * Values come from nCr (kernel), but the recurrence is what's shown — the formula
+ * Values come from nCr (kernel), but the recurrence is what's shown, the formula
  * is derived by the picture, not stated.
  */
 
@@ -19,7 +19,7 @@ import { nCr } from '../core/combinatorics.js';
 import { Tex } from '../../core/tex.js';
 import { Chip, Slider } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout } from '../../kit/frame.js';
-import { useHints, HintLadder } from '../../kit/pedagogy.js';
+import { useHints, HintLadder, useChallenge, ChallengeCard, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
 import { useControlSurface } from '@classytic/stage';
 
 export type PascalView = 'build' | 'binomial' | 'parity';
@@ -53,6 +53,20 @@ export function PascalTriangleLab({ rows = 7, view: view0 = 'build', title = "Pa
   const [view, setView] = useState<PascalView>(view0);
   const [sel, setSel] = useState<{ n: number; k: number } | null>({ n: 4, k: 2 });
   const hints = useHints(hintList);
+
+  const Q: ChallengeQuestion[] = useMemo(() => [{
+    id: 'pascal-C52',
+    prompt: 'Row 5 of Pascal’s triangle is 1, 5, 10, 10, 5, 1. What is C(5,2) — the number of ways to choose 2 from 5?',
+    choices: [
+      { value: '20', label: '20' },
+      { value: '10', label: '10' },
+      { value: '7', label: '7' },
+    ],
+    answer: '10',
+    explain: 'Each cell is the sum of the two above it, and equals C(n,k); C(5,2)=10, while 5×4=20 counts ORDERED pairs.',
+  }], []);
+  const ch = useChallenge(Q);
+  useCheckpoint({ solved: ch.allCorrect, activity: 'pascal:predict' });
 
   const vbW = N * CW + 2 * R + 40, vbH = PAD + (N + 1) * RH + 10;
   const cx = (n: number, k: number): number => vbW / 2 + (k - n / 2) * CW;
@@ -119,7 +133,7 @@ export function PascalTriangleLab({ rows = 7, view: view0 = 'build', title = "Pa
       <div style={{ display: 'grid', gap: 6, fontSize: 13.5 }}>
         {parents && (parents.l || parents.r)
           ? <p style={{ margin: 0 }}>📐 sum of the two above: <b>{parents.l ? nCr(parents.l.n, parents.l.k) : 0} + {parents.r ? nCr(parents.r.n, parents.r.k) : 0} = {nCr(sel.n, sel.k)}</b></p>
-          : <p style={{ margin: 0 }}>📐 an edge — always <b>1</b> (one way).</p>}
+          : <p style={{ margin: 0 }}>📐 an edge, always <b>1</b> (one way).</p>}
         <p style={{ margin: 0 }}>🎯 = ways to <b>choose {sel.k} of {sel.n}</b> (C({sel.n},{sel.k}))</p>
         <p style={{ margin: 0 }}>➕ = coefficient of <Tex tex={`a^{${sel.n - sel.k}}b^{${sel.k}}`} /> in (a+b)<sup>{sel.n}</sup></p>
         <p style={{ margin: 0, color: 'var(--stage-muted)' }}>row {sel.n} sums to 2<sup>{sel.n}</sup> = {2 ** sel.n}</p>
@@ -129,6 +143,7 @@ export function PascalTriangleLab({ rows = 7, view: view0 = 'build', title = "Pa
 
   const footer = (
     <>
+      <ChallengeCard questions={Q} state={ch} title="Predict first" />
       {view === 'binomial' && selRow >= 0 && (
         <div style={{ padding: '8px 12px', borderRadius: 10, background: 'color-mix(in oklab, var(--stage-accent) 8%, transparent)', overflowX: 'auto' }}>
           <Tex tex={expansionTex(selRow)} /> <span style={{ color: 'var(--stage-muted)', fontSize: 12 }}>← row {selRow} of the triangle is the coefficients</span>

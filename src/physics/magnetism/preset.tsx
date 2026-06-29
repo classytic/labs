@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * MagnetismLab — a magnetic field you can SEE and probe (the "magnetism visualized"
+ * MagnetismLab, a magnetic field you can SEE and probe (the "magnetism visualized"
  * gap). Drag a bar magnet (and its ends to rotate), or switch to a current-carrying
- * wire, and the FIELD LINES retrace live on the @classytic/stage `field` kernel —
+ * wire, and the FIELD LINES retrace live on the @classytic/stage `field` kernel , 
  * radial dipole lines N→S for the magnet, circular loops for the wire. Drag the
  * compass anywhere and its needle snaps to the field there. Interactive, not a
  * timed sim (no Play needed): the field is recomputed on every drag.
@@ -97,7 +97,7 @@ function FieldFigure({ sources, lines, mode, center, northOff, compass, current 
           <polyline points={ln.points.map((pt) => P(pt).join(',')).join(' ')} fill="none" stroke={lineColor} strokeWidth={1.6} strokeLinejoin="round" strokeLinecap="round" />
           {ln.points.length > 24 && (() => {
             const j = Math.floor(ln.points.length * 0.45);
-            // wire loops run CCW for current out (⊙), CW for current in (⊗) — flip the arrowhead
+            // wire loops run CCW for current out (⊙), CW for current in (⊗), flip the arrowhead
             const rev = mode === 'wire' && current < 0;
             return arrow(ln.points[rev ? j + 2 : j]!, ln.points[rev ? j : j + 2]!, `a${i}`, 'var(--stage-accent)');
           })()}
@@ -133,7 +133,7 @@ function FieldFigure({ sources, lines, mode, center, northOff, compass, current 
 }
 
 export function MagnetismLab({
-  title = 'Magnetism — field you can see',
+  title = 'Magnetism: field you can see',
   prompt = 'Drag the magnet (and its ends to turn it), or switch to a wire. The compass snaps to the field wherever you drop it.',
   objectives = ['Read a magnetic field as field lines', 'Field lines run N → S; a compass aligns with them', 'A current makes circular field loops'],
 }: MagnetismProps = {}): ReactNode {

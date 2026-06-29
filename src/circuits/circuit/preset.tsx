@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Circuit network — a SceneDoc FACTORY on @classytic/stage. A creator declares a
+ * Circuit network, a SceneDoc FACTORY on @classytic/stage. A creator declares a
  * battery + parallel BRANCHES (each a series chain of resistor/bulb/switch); the
  * learner closes switches and tunes the battery to hit a goal (light a bulb /
  * reach a target current / light them all). EMF + each switch are FREE scalars
@@ -104,7 +104,11 @@ export function circuitDoc({ emf = 6, emfRange = [1, 12, 1], internalR = 0, bran
 
 export function CircuitNetworkLab(props: CircuitNetworkProps): ReactNode {
   const { branches = DEFAULT_BRANCHES, emfRange = [1, 12, 1], controlId, height = 360, prompt = 'Close the switch and power the circuit.' } = props;
-  const initial = useMemo(() => circuitDoc(props), [JSON.stringify(props)]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Key the initial doc on the DOC-shaping props only. Display-only props (prompt,
+  // height, controlId) must NOT rebuild the doc, or a host re-render that only
+  // tweaks the prompt would wipe the learner's in-progress edits.
+  const docKey = JSON.stringify({ emf: props.emf, internalR: props.internalR, branches: props.branches, goal: props.goal });
+  const initial = useMemo(() => circuitDoc(props), [docKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const { editor, doc } = useEditor(initial);
   const resolved = resolve(doc);
   const { switches } = useMemo(() => flatten(branches), [branches]);
@@ -124,10 +128,18 @@ export function CircuitNetworkLab(props: CircuitNetworkProps): ReactNode {
 
   useCheckpoint({ solved: meta.solved, activity: 'circuit-network' });
 
+  // Describe the live circuit state on the figure itself so a screen-reader user
+  // gets the same "is it lit, which switches are closed" read-out a sighted user
+  // sees, not just the static authoring prompt.
+  const switchSummary = switches.length
+    ? switches.map((s) => `${s.label} ${Number(resolved.values.get(s.id) ?? 0) >= 0.5 ? 'closed' : 'open'}`).join(', ')
+    : 'no switches';
+  const figureLabel = `Circuit diagram. ${meta.solved ? 'Powered, goal reached' : 'Not yet powered'}. Battery ${emf} volts. ${switchSummary}. ${prompt}`;
+
   const figure = (
     <>
       <LabStyles />
-      <Scene doc={doc} interactive={false} showGrid={false} showAxes={false} height={height} ariaLabel={prompt} />
+      <Scene doc={doc} interactive={false} showGrid={false} showAxes={false} height={height} ariaLabel={figureLabel} />
       <LiveRegion>
         {meta.solved ? 'Circuit powered, goal reached.' : `Current ${(meta.Itotal * 1000).toFixed(0)} milliamps.`}
       </LiveRegion>
@@ -138,10 +150,28 @@ export function CircuitNetworkLab(props: CircuitNetworkProps): ReactNode {
     <ControlBar>
       {switches.map((s) => {
         const closed = Number(resolved.values.get(s.id) ?? 0) >= 0.5;
-        return <Chip key={s.id} selected={closed} onClick={() => toggle(s.id)}>{s.label}: {closed ? 'closed' : 'open'}</Chip>;
+        const flip = (): void => toggle(s.id);
+        // A switch is a real, focusable button (the Chip renders <button>, so
+        // Tab + Enter/Space already work). We add role="button", an explicit
+        // aria-label that says what it does + its state, aria-pressed for the
+        // on/off, and an Enter/Space onKeyDown mirroring the keyboard pattern
+        // used elsewhere (e.g. discrete/venn) so the switch is fully operable and
+        // self-describing for assistive tech.
+        return (
+          <Chip
+            key={s.id}
+            selected={closed}
+            onClick={flip}
+            role="button"
+            tabIndex={0}
+            aria-pressed={closed}
+            aria-label={`toggle ${s.label} (currently ${closed ? 'closed' : 'open'})`}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } }}
+          >{s.label}: {closed ? 'closed' : 'open'}</Chip>
+        );
       })}
       <Field label="🔋 battery" value={`${emf} V`}>
-        <Slider value={emf} min={emfMin} max={emfMax} step={emfStep} onChange={setEmf} ariaLabel="battery voltage" style={{ width: 120 }} />
+        <Slider value={emf} min={emfMin} max={emfMax} step={emfStep} onChange={setEmf} ariaLabel={`battery voltage, ${emf} volts`} style={{ width: 120 }} />
       </Field>
     </ControlBar>
   );

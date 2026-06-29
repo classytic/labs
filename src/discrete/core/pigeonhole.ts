@@ -1,5 +1,5 @@
 /**
- * Pigeonhole kernel — the certainty math behind "guarantee ≠ likely". With more
+ * Pigeonhole kernel, the certainty math behind "guarantee ≠ likely". With more
  * pigeons than holes some hole holds ≥ ⌈n/k⌉. The lab's adversary deals the
  * worst case; these functions say exactly when a collision is FORCED.
  */

@@ -1,5 +1,5 @@
 /**
- * Lab-template registry — the "marketplace" of reusable lab families.
+ * Lab-template registry, the "marketplace" of reusable lab families.
  *
  * A template is a pedagogical FAMILY (balance-algebra, area-model, circuit, …):
  * a params schema + defaults + a factory that produces a portable SceneDoc, plus
@@ -17,7 +17,7 @@ export interface LabTemplate {
   id: string;
   /** Human title for the catalog. */
   title: string;
-  /** Domain bucket — 'algebra' | 'calculus' | 'physics' | 'circuits' | … */
+  /** Domain bucket, 'algebra' | 'calculus' | 'physics' | 'circuits' | … */
   category: string;
   /** One-line description for the catalog card. */
   description?: string;
@@ -49,7 +49,7 @@ export function getLabTemplate(id: string): LabTemplate | undefined {
   return TEMPLATES.get(id);
 }
 
-/** Result of instantiating a template — typed errors before a bad scene is built. */
+/** Result of instantiating a template, typed errors before a bad scene is built. */
 export type InstantiateResult =
   | { ok: true; doc: SceneDoc }
   | { ok: false; error: string; issues?: { path: string; message: string }[] };

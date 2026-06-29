@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * KeplerLab — "Equal areas, equal time", the shape and rhythm of orbits.
+ * KeplerLab, "Equal areas, equal time", the shape and rhythm of orbits.
  *
  * A planet on a true ellipse with the star at one FOCUS (Kepler 1). It moves by
  * solving Kepler's equation M = E − e·sinE, so it genuinely speeds up at
- * perihelion and dawdles at aphelion — and the wedges swept in equal time slices
+ * perihelion and dawdles at aphelion, and the wedges swept in equal time slices
  * (shaded alternately) come out EQUAL in area (Kepler 2): fat-and-short near the
  * star, thin-and-long far away. The period follows T² ∝ a³ (Kepler 3), so a wider
  * orbit takes disproportionately longer.
@@ -47,7 +47,7 @@ function solveE(M: number, e: number): number {
 
 export function KeplerLab({
   semiMajor = 4, eccentricity = 0.5, wedges = true,
-  title = 'Kepler — equal areas in equal time',
+  title = 'Kepler: equal areas in equal time',
   prompt = 'The planet rides a true ellipse with the star at a focus. It speeds up near the star and slows far away, yet the wedge it sweeps in each equal time-slice has the SAME area (Kepler’s 2nd law). Stretch the orbit, and the period grows as T² ∝ a³.',
   objectives,
   controlConfig,
@@ -120,7 +120,7 @@ export function KeplerLab({
         </span>
       </Callout>
       <p style={{ fontSize: 12, opacity: 0.75, margin: 0 }}>
-        Each shaded wedge is one equal time-slice — they look different but enclose the <strong>same area</strong>
+        Each shaded wedge is one equal time-slice, they look different but enclose the <strong>same area</strong>
         (Kepler’s 2nd law), so the planet must move fastest at perihelion. T²/a³ stays constant as you widen the
         orbit (Kepler’s 3rd law).
       </p>

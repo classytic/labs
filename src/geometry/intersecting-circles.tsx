@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * IntersectingCircles — NOT a special widget, just one **authored scene** over the
+ * IntersectingCircles, NOT a special widget, just one **authored scene** over the
  * general `GeometryBoard` (the common-chord construction). It exists as a handy
  * preset; a creator can build any other construction by passing a different
  * `scene` to `GeometryBoard` directly.

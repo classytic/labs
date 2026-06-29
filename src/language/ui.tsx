@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Shared DOM UI for the language labs — Speaker button + POS-coloured Tile.
+ * Shared DOM UI for the language labs, Speaker button + POS-coloured Tile.
  * Themed via the `.lang-*` classes shipped in `@classytic/labs/styles.css`
  * (POS colours come from `--lang-pos-*` tokens). Kept here, not in the generic
  * `kit/controls`, so non-language labs pay nothing for it.
@@ -13,7 +13,7 @@ import { hasVoiceFor, speak, POS_LABEL, type DeckItem, type Pos } from './deck.j
 /**
  * True once the browser's TTS voice list is populated (it loads async).
  *
- * Starts `false` — NOT seeded from `getVoices()` — so the first client render
+ * Starts `false`, NOT seeded from `getVoices()`, so the first client render
  * matches the server (where there's no `speechSynthesis`). Seeding from the
  * live voice list would make a TTS-only item render its speaker button on the
  * client but not the server → a hydration mismatch that forces React to
@@ -33,11 +33,11 @@ export function useVoicesReady(): boolean {
 }
 
 /**
- * A speaker button — renders nothing if the item can't be voiced.
+ * A speaker button, renders nothing if the item can't be voiced.
  *
  * `audioUrl` items can voice on the server too (no browser needed), so they
  * render the button consistently across SSR/hydration. Browser-TTS items only
- * become voiceable once `voicesReady` flips post-mount — gating on it (instead
+ * become voiceable once `voicesReady` flips post-mount, gating on it (instead
  * of querying `window.speechSynthesis` during render) keeps the first client
  * render identical to the server.
  */

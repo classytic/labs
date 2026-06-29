@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * NormalDistributionLab — the bell curve as a working instrument. Drag μ and σ and
+ * NormalDistributionLab, the bell curve as a working instrument. Drag μ and σ and
  * the curve slides + widens; drag the two shaded handles and read P(a ≤ X ≤ b) as
  * the AREA under the curve, with each bound's z-score (how many σ from the mean).
  * A second mode draws the 68–95–99.7 rule as nested bands. This is the tool every
@@ -136,7 +136,7 @@ export function NormalDistributionLab({ mu = 0, sigma = 1, a = -1, b = 1, mode: 
             ? <>
                 <Bracket x1={xOf(m - sig)} x2={xOf(m + sig)} y={yOf(0) + 30} text={`±1σ → ${(withinSigma(1) * 100).toFixed(1)}% of all values`} tone="good" side="below" />
                 <Spotlight cx={xOf(m + 2 * sig)} cy={yOf(normalPdf(m + 2 * sig, m, sig))} r={11} tone="warn" />
-                <Pointer x={xOf(m + 2 * sig)} y={yOf(normalPdf(m + 2 * sig, m, sig))} dx={26} dy={-34} text="rare — beyond 2σ" tone="warn" />
+                <Pointer x={xOf(m + 2 * sig)} y={yOf(normalPdf(m + 2 * sig, m, sig))} dx={26} dy={-34} text="rare, beyond 2σ" tone="warn" />
               </>
             : <>{handle(lo, 'a', za)}{handle(hi, 'b', zb)}</>}
         </svg>

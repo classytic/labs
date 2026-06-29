@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * InteractiveProblem — the authorable engine: a CREATOR writes a config (equations,
+ * InteractiveProblem, the authorable engine: a CREATOR writes a config (equations,
  * params, derived quantities, an optional ask+check) and gets a live, graded
- * interactive graph. No bespoke component per question — the same engine plots any
+ * interactive graph. No bespoke component per question, the same engine plots any
  * equations, exposes params as sliders, DERIVES what the question needs (roots,
  * intersections, tangent/normal, area) from the symbolic engine, and CHECKS the
  * student's answer symbolically + numerically.

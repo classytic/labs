@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * EnergySkateLab — "Where did the energy go?", KE ⇄ PE on a ramp, with friction
+ * EnergySkateLab, "Where did the energy go?", KE ⇄ PE on a ramp, with friction
  * bleeding the total into heat.
  *
- * A skater is released from a height on a parabolic ramp. Three stacked bars —
- * potential, kinetic, and thermal — ALWAYS sum to the same total: as the skater
+ * A skater is released from a height on a parabolic ramp. Three stacked bars , 
+ * potential, kinetic, and thermal, ALWAYS sum to the same total: as the skater
  * drops, the PE bar empties into the KE bar and back on the way up. Turn friction
  * on and a THERMAL bar grows each pass, so the skater can never climb as high
- * again — mechanical energy isn't destroyed, it's moved to heat. (The "LOL" energy
+ * again, mechanical energy isn't destroyed, it's moved to heat. (The "LOL" energy
  * bar chart, animated.)
  *
  * This complements WorkEnergyLab (work = area under F–x): here the spotlight is
@@ -43,8 +43,8 @@ const yAt = (x: number): number => H * (x / X) * (x / X);   // parabolic valley
 
 export function EnergySkateLab({
   startHeight = 4, friction = false, mass = 1,
-  title = 'Where did the energy go? — KE ⇄ PE (and heat)',
-  prompt = 'Release the skater and watch potential energy pour into kinetic and back. The three bars always add to the same total — unless friction is on, then a heat bar grows and the skater can’t climb as high again.',
+  title = 'Where did the energy go?: KE ⇄ PE (and heat)',
+  prompt = 'Release the skater and watch potential energy pour into kinetic and back. The three bars always add to the same total, unless friction is on, then a heat bar grows and the skater can’t climb as high again.',
   objectives,
   controlConfig,
 }: EnergySkateProps): ReactNode {
@@ -74,7 +74,7 @@ export function EnergySkateLab({
     // (unconditional, so it can't jitter forever at vanishing amplitude).
     if (fric && E0 - qRef.current <= m * G * 0.03) { xRef.current = 0; setRunning(false); return; }
     if (ke <= 0) {
-      // turning point — reverse direction
+      // turning point, reverse direction
       dirRef.current = -dirRef.current;
       ke = 0;
     }

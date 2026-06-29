@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/blocks — chemistry lab block specs.
+ * @classytic/labs/blocks, chemistry lab block specs.
  *
  * `defineBlock` editor adapters for the chemistry labs (one domain per file; the
  * registry is assembled in `./index.ts`). Each spec pairs a real zod schema with
@@ -17,8 +17,8 @@ import { BohrAtom, ReactionProfile, ReactionLab, Battery, GasBoxLab, SolutionBox
 // New labs use the shared labBlock factory (auto LabConfig editor, no per-block panel).
 export const LeChatelierBlock = labBlock({
   key: 'le-chatelier',
-  label: 'Le Chatelier — equilibrium shifts',
-  description: 'A reversible reaction A ⇌ νB at equilibrium (Q = K). Stress it — add a species, compress, heat — and it shifts to oppose the change (shift direction emerges from the core, never hardcoded). AUTHOR YOUR OWN reaction: set the species names, product coefficient, colours, K, and whether the forward reaction is endothermic. Defaults to N₂O₄ ⇌ 2 NO₂ (colourless ⇌ brown).',
+  label: 'Le Chatelier: equilibrium shifts',
+  description: 'A reversible reaction A ⇌ νB at equilibrium (Q = K). Stress it, add a species, compress, heat, and it shifts to oppose the change (shift direction emerges from the core, never hardcoded). AUTHOR YOUR OWN reaction: set the species names, product coefficient, colours, K, and whether the forward reaction is endothermic. Defaults to N₂O₄ ⇌ 2 NO₂ (colourless ⇌ brown).',
   schema: z.object({
     reactantName: z.string().optional().describe('left species, e.g. N₂O₄'),
     productName: z.string().optional().describe('right species, e.g. NO₂'),
@@ -35,7 +35,7 @@ export const LeChatelierBlock = labBlock({
 export const ElectrochemBlock = labBlock({
   key: 'electrochem',
   label: 'Galvanic cell (Nernst EMF)',
-  description: 'A voltaic cell with two metal half-cells, a salt bridge, and a live voltmeter. The lower-E° metal is the anode (−); electrons flow to the cathode (+). The meter reads the Nernst EMF E = E°cell − (RT/nF)·ln Q, so changing an ion concentration moves the voltage — or pick the same metal both sides for a concentration cell. Author the two electrodes + concentrations.',
+  description: 'A voltaic cell with two metal half-cells, a salt bridge, and a live voltmeter. The lower-E° metal is the anode (−); electrons flow to the cathode (+). The meter reads the Nernst EMF E = E°cell − (RT/nF)·ln Q, so changing an ion concentration moves the voltage, or pick the same metal both sides for a concentration cell. Author the two electrodes + concentrations.',
   schema: z.object({
     metalA: z.enum(['Mg', 'Al', 'Zn', 'Fe', 'Ni', 'Pb', 'Cu', 'Ag']).optional(),
     metalB: z.enum(['Mg', 'Al', 'Zn', 'Fe', 'Ni', 'Pb', 'Cu', 'Ag']).optional(),
@@ -49,7 +49,7 @@ export const ElectrochemBlock = labBlock({
 export const PeriodicTrendsBlock = labBlock({
   key: 'periodic-trends',
   label: 'Periodic trends (heatmap)',
-  description: 'The periodic table (H–Xe) coloured by a property — atomic radius, ionisation energy or electronegativity — so the trend reads as a gradient: radius grows down/left, ionisation energy & electronegativity grow up/right. Hover an element for its value. Pick the default property and a highlighted element; ships a predict-first question.',
+  description: 'The periodic table (H–Xe) coloured by a property, atomic radius, ionisation energy or electronegativity, so the trend reads as a gradient: radius grows down/left, ionisation energy & electronegativity grow up/right. Hover an element for its value. Pick the default property and a highlighted element; ships a predict-first question.',
   schema: z.object({
     property: z.enum(['radius', 'ie', 'en']).optional().describe('which property to colour by'),
     highlight: z.string().optional().describe('element symbol to highlight, e.g. Cl'),
@@ -73,7 +73,7 @@ export const StoichiometryBlock = labBlock({
 export const KineticsBlock = labBlock({
   key: 'kinetics',
   label: 'Reaction kinetics (collisions + Arrhenius)',
-  description: 'A vessel of molecules where only high-energy collisions (≥ Eₐ) succeed and convert A→B, beside the Maxwell–Boltzmann energy spread (shaded reactive tail) and a live A/B bar. Heat it or add a catalyst (lowers Eₐ) and watch the rate jump — backed by k = A·e^(−Eₐ/RT). Author the activation energy, rate, order, molecule count and temperature; ships a predict-first question.',
+  description: 'A vessel of molecules where only high-energy collisions (≥ Eₐ) succeed and convert A→B, beside the Maxwell–Boltzmann energy spread (shaded reactive tail) and a live A/B bar. Heat it or add a catalyst (lowers Eₐ) and watch the rate jump, backed by k = A·e^(−Eₐ/RT). Author the activation energy, rate, order, molecule count and temperature; ships a predict-first question.',
   schema: z.object({
     EaKJ: z.number().optional().describe('activation energy, kJ/mol'),
     kRef: z.number().optional().describe('rate constant at 300 K (sets the pace)'),
@@ -105,7 +105,7 @@ export const GasBoxBlock = defineBlock({
   tag: 'GasBox',
   void: true,
   label: 'Gas box (PV = nRT, kinetic theory)',
-  description: 'Hundreds of molecules bounce in a box; drag the piston (V), heat it (T), add molecules (n) — pressure is MEASURED from wall collisions, so PV=nRT emerges. Lock T/V/P for Boyle/Gay-Lussac/Charles.',
+  description: 'Hundreds of molecules bounce in a box; drag the piston (V), heat it (T), add molecules (n), pressure is MEASURED from wall collisions, so PV=nRT emerges. Lock T/V/P for Boyle/Gay-Lussac/Charles.',
   category: 'interactive',
   schema: z.object({
     holdConstant: z.enum(['none', 'temperature', 'volume', 'pressure']).default('none'),
@@ -137,7 +137,7 @@ export const SolutionBoxBlock = defineBlock({
   tag: 'SolutionBox',
   void: true,
   label: 'Solution box (molarity = n/V)',
-  description: 'Solute as dots in a box: add solute (more dots) or water (same dots, bigger box) — M=n/V shows as a number AND colour intensity. Draggable probe proves molarity is a local density.',
+  description: 'Solute as dots in a box: add solute (more dots) or water (same dots, bigger box), M=n/V shows as a number AND colour intensity. Draggable probe proves molarity is a local density.',
   category: 'interactive',
   schema: z.object({
     moles: z.number().default(0.5),
@@ -167,7 +167,7 @@ export const DilutionBlock = defineBlock({
   tag: 'Dilution',
   void: true,
   label: 'Dilution (C₁V₁ = C₂V₂)',
-  description: 'Two beakers show the SAME solute dots — concentrated in the aliquot, spread in the final volume — so C₁V₁=C₂V₂ is seen as conservation of moles: same dots, bigger box, lower concentration.',
+  description: 'Two beakers show the SAME solute dots, concentrated in the aliquot, spread in the final volume, so C₁V₁=C₂V₂ is seen as conservation of moles: same dots, bigger box, lower concentration.',
   category: 'interactive',
   schema: z.object({
     stockConcentration: z.number().default(2),
@@ -196,7 +196,7 @@ export const BohrAtomBlock = defineBlock({
   key: 'bohr-atom',
   void: true,
   label: 'Bohr atom',
-  description: 'Animated shell model — drag Z to walk the first 20 elements; shells fill 2, 8, 8.',
+  description: 'Animated shell model, drag Z to walk the first 20 elements; shells fill 2, 8, 8.',
   category: 'interactive',
   schema: z.object({ protons: z.number().optional(), title: z.string().optional() }),
   Component: ({ attributes, mode, updateAttributes }) => {
@@ -220,7 +220,7 @@ export const ReactionProfileBlock = defineBlock({
   key: 'reaction-profile',
   void: true,
   label: 'Reaction profile',
-  description: 'Energy diagram — activation energy, ΔH (exo/endothermic), catalyst toggle.',
+  description: 'Energy diagram, activation energy, ΔH (exo/endothermic), catalyst toggle.',
   category: 'interactive',
   schema: z.object({
     deltaH: z.number().optional(),
@@ -252,7 +252,7 @@ export const ReactionLabBlock = defineBlock({
   key: 'reaction-lab',
   void: true,
   label: 'Reaction lab',
-  description: 'Atoms collide and bond — A + B → A–B, with a temperature/kinetics knob.',
+  description: 'Atoms collide and bond, A + B → A–B, with a temperature/kinetics knob.',
   category: 'interactive',
   schema: z.object({ a: z.string().optional(), b: z.string().optional(), title: z.string().optional() }),
   Component: ({ attributes, mode, updateAttributes }) => {
@@ -280,7 +280,7 @@ export const BatteryBlock = defineBlock({
   key: 'battery',
   void: true,
   label: 'Battery (galvanic cell)',
-  description: 'Electrons flow from anode to cathode — half-reactions + EMF.',
+  description: 'Electrons flow from anode to cathode, half-reactions + EMF.',
   category: 'interactive',
   schema: z.object({ emf: z.number().optional(), title: z.string().optional() }),
   Component: ({ attributes, mode, updateAttributes }) => {

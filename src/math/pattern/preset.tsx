@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Growing pattern → formula — a SceneDoc FACTORY (Brilliant-style visual
+ * Growing pattern → formula, a SceneDoc FACTORY (Brilliant-style visual
  * algebra), built on @classytic/stage. A creator declares the linear rule
  * count(n) = a·n + b; the template GENERATES the figures for n = 1..k and asks
  * the learner to find the rule. A linear rule is fixed by any two points, so
@@ -16,7 +16,7 @@ import {
 } from '@classytic/stage';
 import { PATTERN_FIGURE_ASSET } from './asset.js';
 import { LabStyles, Stepper, CheckButton, StatusPill, Chip } from '../../kit/controls.js';
-import { LabFrame, ControlBar, LiveRegion } from '../../kit/frame.js';
+import { LabFrame, ControlBar, ControlExpr, LiveRegion } from '../../kit/frame.js';
 import { useCheckpoint } from '../../kit/pedagogy.js';
 
 registerAsset('pattern-figure', PATTERN_FIGURE_ASSET);
@@ -125,13 +125,13 @@ export function GrowingPatternLab({ a = 2, b = 3, steps = 4, prompt = 'Find the 
   const controlBar = (
     <ControlBar>
       {check === 'steppers' ? (
-        <>
-          <span style={{ fontWeight: 600 }}>Your rule:</span>
+        <ControlExpr>
+          <span>Your rule:</span>
           <Stepper label="a" value={aGuess} min={0} max={9} onChange={(v) => { setScalar('aGuess', v); setResult(null); }} />
-          <span className="sep">· n &nbsp;+</span>
+          <span>· n&nbsp;+</span>
           <Stepper label="b" value={bGuess} min={0} max={9} onChange={(v) => { setScalar('bGuess', v); setResult(null); }} />
           <span style={{ opacity: 0.7 }}>→ <strong>{ruleLabel(aGuess, bGuess)}</strong></span>
-        </>
+        </ControlExpr>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
           {(choices ?? []).map((ch) => (
@@ -140,8 +140,8 @@ export function GrowingPatternLab({ a = 2, b = 3, steps = 4, prompt = 'Find the 
         </div>
       )}
       <CheckButton onClick={check_} disabled={check === 'mcq' && !sel}>Check</CheckButton>
-      {result === 'correct' && <StatusPill ok>✓ Correct — predicts n = {predictN} too!</StatusPill>}
-      {result === 'wrong' && <StatusPill ok={false}>Not quite — match every step</StatusPill>}
+      {result === 'correct' && <StatusPill ok>✓ Correct, predicts n = {predictN} too!</StatusPill>}
+      {result === 'wrong' && <StatusPill ok={false}>Not quite, match every step</StatusPill>}
     </ControlBar>
   );
 

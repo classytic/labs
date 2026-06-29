@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * SamplingDistributionLab — the two ideas that turn a sample into an inference.
+ * SamplingDistributionLab, the two ideas that turn a sample into an inference.
  *
- *  • sampling mode — draw sample after sample (size n) from the population and pile
+ *  • sampling mode, draw sample after sample (size n) from the population and pile
  *    up their MEANS. The pile is far tighter than the population and matches
  *    Normal(μ, σ/√n): the Central Limit Theorem, and why bigger n ⇒ smaller error.
- *  • CI mode — from each sample build a confidence interval x̄ ± z*·(σ/√n) and stack
- *    them; colour green if it captures μ, red if it misses. About C% are green —
+ *  • CI mode, from each sample build a confidence interval x̄ ± z*·(σ/√n) and stack
+ *    them; colour green if it captures μ, red if it misses. About C% are green , 
  *    making concrete what "95% confident" actually means (it's the PROCEDURE, not
  *    one interval). Running coverage converges to the chosen level.
  *

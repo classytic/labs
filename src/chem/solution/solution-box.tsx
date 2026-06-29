@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * SolutionBoxLab — molarity is a CROWD: particles per litre, seen.
+ * SolutionBoxLab, molarity is a CROWD: particles per litre, seen.
  *
  * Solute shown as discrete dots in a transparent box. Add solute (more dots =
  * more moles, the numerator) or add water (the box widens so the SAME dots spread
- * apart, the denominator) — and M = n/V is read off as both a number AND the
+ * apart, the denominator), and M = n/V is read off as both a number AND the
  * colour intensity. A draggable probe counts dots in a fixed region, proving
  * molarity is a LOCAL density, not a whole-apparatus label. Composes the shared
  * SolutionField (single source of truth for the dot engine).
  *
  * The unit-bridging algebra (mol↔g via molar mass, mol↔particles via Nₐ) belongs
- * in a paired MathDerivation — this lab only makes density-vs-amount felt.
+ * in a paired MathDerivation, this lab only makes density-vs-amount felt.
  */
 
 import { useState, type ReactNode } from 'react';
@@ -36,7 +36,7 @@ export interface SolutionBoxProps {
 
 const DOTS_PER_MOL = 200;
 
-/** Predict how M = n/V responds to changing the numerator vs the denominator — the core molarity misconception. */
+/** Predict how M = n/V responds to changing the numerator vs the denominator, the core molarity misconception. */
 const SOLUTION_CHALLENGE: ChallengeQuestion[] = [
   {
     id: 'add-water',
@@ -47,7 +47,7 @@ const SOLUTION_CHALLENGE: ChallengeQuestion[] = [
       { value: 'same', label: 'stays the same' },
     ],
     answer: 'falls',
-    explain: 'The same dots spread through a bigger box — n is fixed, V grows, so the density n/V drops.',
+    explain: 'The same dots spread through a bigger box, n is fixed, V grows, so the density n/V drops.',
   },
   {
     id: 'add-solute',
@@ -58,13 +58,13 @@ const SOLUTION_CHALLENGE: ChallengeQuestion[] = [
       { value: 'same', label: 'stays the same' },
     ],
     answer: 'rises',
-    explain: 'More dots in the same box — n grows, V is fixed, so n/V climbs.',
+    explain: 'More dots in the same box, n grows, V is fixed, so n/V climbs.',
   },
 ];
 
 export function SolutionBoxLab({
   moles = 0.5, volume = 0.5, maxMolarity = 4, hue = 178, showProbe = true,
-  title = 'Molarity is a crowd — particles per litre',
+  title = 'Molarity is a crowd: particles per litre',
   prompt = 'Add solute (more dots) or add water (same dots, bigger box). M = n / V is the dot density.',
   height = 230, objectives,
 }: SolutionBoxProps): ReactNode {

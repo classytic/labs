@@ -1,18 +1,19 @@
 'use client';
 
 /**
- * VectorTypes — a labeled reference figure for the vectors chapter opener:
+ * VectorTypes, a labeled reference figure for the vectors chapter opener:
  * equal, negative, null, unit, parallel, position. These are DEFINITIONAL
  * (no manipulation builds intuition here), so per the engine's video-vs-
  * interactive rule it's a clean figure, not a puzzle. Data-driven: a creator
  * can pass their own panels; the default is the standard CAIE/IGCSE set.
  *
- * Reuses @classytic/stage `Vector`/`Dot`/`Label` — one mini <Stage> per panel.
+ * Reuses @classytic/stage `Vector`/`Dot`/`Label`, one mini <Stage> per panel.
  */
 
 import { Fragment, type ReactNode } from 'react';
 import { Stage, Vector, Dot, Label, type Vec2 } from '@classytic/stage';
 import { LabFrame } from '../../kit/frame.js';
+import { useChallenge, ChallengeCard, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
 
 interface PanelVec { tail?: Vec2; comp: Vec2; color?: string; label?: string }
 export interface TypePanel {
@@ -35,7 +36,7 @@ const DEFAULT_TYPES: TypePanel[] = [
   { name: 'Equal', caption: 'Same magnitude AND direction.', vectors: [{ tail: { x: -1.4, y: 0.7 }, comp: { x: 2, y: 0 }, color: A }, { tail: { x: -1.4, y: -0.8 }, comp: { x: 2, y: 0 }, color: A }] },
   { name: 'Negative (−a)', caption: 'Same magnitude, opposite direction.', vectors: [{ tail: { x: -1.2, y: 0.6 }, comp: { x: 2, y: 0 }, color: A, label: 'a' }, { tail: { x: 1.2, y: -0.7 }, comp: { x: -2, y: 0 }, color: A2, label: '−a' }] },
   { name: 'Null (0)', caption: 'Zero magnitude, no direction.', origin: true },
-  { name: 'Unit (â)', caption: 'Magnitude 1 — direction only.', vectors: [{ comp: { x: 1, y: 0 }, color: G, label: 'â' }], origin: true },
+  { name: 'Unit (â)', caption: 'Magnitude 1: direction only.', vectors: [{ comp: { x: 1, y: 0 }, color: G, label: 'â' }], origin: true },
   { name: 'Parallel', caption: 'Same direction, any magnitude.', vectors: [{ tail: { x: -1.4, y: 0.7 }, comp: { x: 1.2, y: 0 }, color: A }, { tail: { x: -1.4, y: -0.8 }, comp: { x: 2.6, y: 0 }, color: A }] },
   { name: 'Position (r)', caption: 'From a fixed origin O to a point.', vectors: [{ comp: { x: 1.5, y: 1.1 }, color: A2, label: 'r' }], origin: true },
 ];
@@ -59,9 +60,26 @@ function Panel({ p }: { p: TypePanel }): ReactNode {
   );
 }
 
+const CHALLENGE: ChallengeQuestion[] = [
+  {
+    id: 'vector-vs-scalar',
+    prompt: 'Which of these is a VECTOR (it has a direction, not just a size)?',
+    choices: [
+      { value: 'velocity', label: 'Velocity' },
+      { value: 'speed', label: 'Speed' },
+      { value: 'mass', label: 'Mass' },
+      { value: 'temperature', label: 'Temperature' },
+    ],
+    answer: 'velocity',
+    explain: 'Velocity is a vector: it carries a direction (e.g. 5 m/s north). Speed, mass and temperature are scalars: magnitude only.',
+  },
+];
+
 export function VectorTypesLab({ types = DEFAULT_TYPES, title = 'Types of vectors' }: VectorTypesProps): ReactNode {
+  const ch = useChallenge(CHALLENGE);
+  useCheckpoint({ solved: ch.allCorrect, activity: 'vector-types' });
   return (
-    <LabFrame title={title}>
+    <LabFrame title={title} footer={<ChallengeCard questions={CHALLENGE} state={ch} />}>
       <div className="lang-typegrid">
         {types.map((p, i) => <Panel key={i} p={p} />)}
       </div>

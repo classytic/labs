@@ -7,7 +7,8 @@
  */
 
 import { Fragment, type ReactNode } from 'react';
-import { Vector, Segment, Label, Polygon, useCoords, type Vec2 } from '@classytic/stage';
+import { Vector, Segment, Label, useCoords, type Vec2 } from '@classytic/stage';
+import * as ElectronicsGlyphs from './electronics.js';
 
 /**
  * An angle arc drawn at point `at`, swept from direction `from` to direction
@@ -41,7 +42,7 @@ export function AngleArc({ at, from, to, rPx = 26, color = 'var(--stage-fg)', la
   return (
     <Fragment>
       <path d={`M ${sx} ${sy} A ${rPx} ${rPx} 0 0 ${sweep} ${ex} ${ey}`} fill="none" stroke={color} strokeWidth={1.6} opacity={0.85} />
-      {label && <text x={lx} y={ly} fill={color} fontSize={13} fontWeight={600} textAnchor="middle" dominantBaseline="middle">{label}</text>}
+      {label && <text x={lx} y={ly} fill={color} fontSize={13} fontWeight={600} textAnchor="middle" dominantBaseline="middle" style={{ paintOrder: 'stroke', stroke: 'var(--stage-bg)', strokeWidth: 3.5, strokeLinejoin: 'round' }}>{label}</text>}
     </Fragment>
   );
 }
@@ -73,7 +74,7 @@ export interface LabeledVectorProps {
 
 /**
  * An arrow (tail → tail+comp) with an optional tip label and optional dashed
- * x/y component decomposition — the SVG equivalent of the old canvas
+ * x/y component decomposition, the SVG equivalent of the old canvas
  * `drawVector(..., { label, components })`.
  */
 export function LabeledVector({ tail = { x: 0, y: 0 }, comp, color = 'var(--stage-accent)', weight = 2.5, label, components = false }: LabeledVectorProps): ReactNode {
@@ -90,7 +91,7 @@ export function LabeledVector({ tail = { x: 0, y: 0 }, comp, color = 'var(--stag
       <Vector tail={tail} tip={tip} color={color} weight={weight} />
       {label && (() => {
         // Place the label just BEYOND the arrowhead, along the arrow's own (screen-space)
-        // direction — so it never sits on the line, and labels of nearby vectors fan apart
+        // direction, so it never sits on the line, and labels of nearby vectors fan apart
         // instead of stacking at a fixed corner. (Screen y is flipped vs math y.)
         const len = Math.hypot(comp.x, comp.y) || 1;
         const ux = comp.x / len, uy = -comp.y / len;
@@ -114,17 +115,58 @@ export interface ResistorBoxProps {
   reading?: string;
 }
 
-/** A schematic resistor: an outlined box (filled with the canvas bg) + a label
- *  above and an optional reading below. The SVG equivalent of the old canvas
- *  `drawResistor`. */
-export function ResistorBox({ center, w, h, color = 'var(--stage-accent)', label, reading }: ResistorBoxProps): ReactNode {
-  const x0 = center.x - w / 2, x1 = center.x + w / 2;
-  const y0 = center.y - h / 2, y1 = center.y + h / 2;
+/**
+ * Math-coordinate ADAPTERS over the canonical pixel-space electronics glyph library
+ * (kit/electronics.tsx). A lab drawing on a math-unit <Stage> places a real
+ * schematic symbol by giving a `center` in view units; the adapter projects to
+ * pixels and renders the ONE canonical glyph, so there is a single definition of
+ * each symbol across every circuit lab. `liveAt`/state props drive the glyph.
+ */
+export function ResistorBox({ center, w, color = 'var(--stage-fg)', label, reading, live }: ResistorBoxProps & { live?: boolean }): ReactNode {
+  const c = useCoords();
+  const [cx, cy] = c.toPx(center.x, center.y);
+  const half = Math.max(c.sx(w / 2), 24);
   return (
     <Fragment>
-      <Polygon points={[{ x: x0, y: y0 }, { x: x1, y: y0 }, { x: x1, y: y1 }, { x: x0, y: y1 }]} color={color} fill="var(--stage-bg)" fillOpacity={1} weight={2} />
-      {label && <Label x={center.x} y={y1} text={label} color="var(--stage-fg)" size={11} dy={-12} />}
-      {reading && <Label x={center.x} y={y0} text={reading} color={color} size={11} dy={16} />}
+      <ElectronicsGlyphs.ResistorGlyph cx={cx} cy={cy} half={half} live={live} label={label} />
+      {reading && <Label x={center.x} y={center.y} text={reading} color={color} size={11} dy={22} />}
     </Fragment>
   );
+}
+
+export type GlyphOrient = 'h' | 'v';
+
+/** Rotate a glyph 90° for a vertical wire, keeping its label horizontal (rendered separately). */
+function Oriented({ cx, cy, orient, label, glyph }: { cx: number; cy: number; orient: GlyphOrient; label?: string; glyph: (showLabel: boolean) => ReactNode }): ReactNode {
+  if (orient === 'h') return <Fragment>{glyph(true)}</Fragment>;
+  return (
+    <Fragment>
+      <g transform={`rotate(90 ${cx} ${cy})`}>{glyph(false)}</g>
+      {label && <text x={cx + 16} y={cy + 4} fill="var(--stage-fg)" fontSize={11} fontWeight={600} textAnchor="start" style={{ pointerEvents: 'none' }}>{label}</text>}
+    </Fragment>
+  );
+}
+
+/** Cell / battery at a math `center`; `half` (units) → terminal reach. `cells` > 1 = a battery. */
+export function CellBox({ center, half, live, label, cells, orient = 'h' }: { center: Vec2; half: number; live?: boolean; label?: string; cells?: number; orient?: GlyphOrient }): ReactNode {
+  const c = useCoords();
+  const [cx, cy] = c.toPx(center.x, center.y);
+  const h = Math.max(c.sx(half), 22);
+  return <Oriented cx={cx} cy={cy} orient={orient} label={label} glyph={(s) => <ElectronicsGlyphs.CellGlyph cx={cx} cy={cy} half={h} live={live} label={s ? label : undefined} cells={cells} />} />;
+}
+
+/** Filament lamp at a math `center`; `brightness` 0..1 glows it. */
+export function BulbBox({ center, half, live, brightness, label, orient = 'h' }: { center: Vec2; half: number; live?: boolean; brightness?: number; label?: string; orient?: GlyphOrient }): ReactNode {
+  const c = useCoords();
+  const [cx, cy] = c.toPx(center.x, center.y);
+  const h = Math.max(c.sx(half), 22);
+  return <Oriented cx={cx} cy={cy} orient={orient} label={label} glyph={(s) => <ElectronicsGlyphs.BulbGlyph cx={cx} cy={cy} half={h} live={live} brightness={brightness} label={s ? label : undefined} />} />;
+}
+
+/** SPST switch at a math `center`; `closed` lays the lever down. */
+export function SwitchBox({ center, half, live, closed, label, orient = 'h' }: { center: Vec2; half: number; live?: boolean; closed?: boolean; label?: string; orient?: GlyphOrient }): ReactNode {
+  const c = useCoords();
+  const [cx, cy] = c.toPx(center.x, center.y);
+  const h = Math.max(c.sx(half), 22);
+  return <Oriented cx={cx} cy={cy} orient={orient} label={label} glyph={(s) => <ElectronicsGlyphs.SwitchGlyph cx={cx} cy={cy} half={h} live={live} closed={closed} label={s ? label : undefined} />} />;
 }

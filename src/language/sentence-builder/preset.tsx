@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * SentenceBuilder — order the words into a correct sentence.
+ * SentenceBuilder, order the words into a correct sentence.
  *
  * The flagship grammar lab: tiles are colour-coded by part of speech and carry
  * an optional L1 gloss, so a learner SEES the structure while building it. The
- * `prompt` shows the meaning (e.g. the learner's-language sentence) above —
+ * `prompt` shows the meaning (e.g. the learner's-language sentence) above , 
  * which is exactly how a Bangla speaker meets English word order: same meaning,
  * different slot order (SOV → SVO).
  *
  * Tap a tile in the bank to place it; tap a placed tile to take it back. No
- * drag — buttons are touch- and keyboard-friendly. Validates by resulting text,
+ * drag, buttons are touch- and keyboard-friendly. Validates by resulting text,
  * so duplicate/interchangeable words still pass.
  */
 
@@ -83,7 +83,7 @@ export function SentenceBuilderLab({
           <span className="lang-line-empty">{hint}</span>
         ) : (
           line.map((i) => (
-            <Tile key={i} pos={tiles[i]!.pos} text={tiles[i]!.text} gloss={tiles[i]!.gloss} dir={targetDir} onClick={() => take(i)} ariaLabel={`${tiles[i]!.text} — tap to remove`} />
+            <Tile key={i} pos={tiles[i]!.pos} text={tiles[i]!.text} gloss={tiles[i]!.gloss} dir={targetDir} onClick={() => take(i)} ariaLabel={`${tiles[i]!.text}, tap to remove`} />
           ))
         )}
       </div>
@@ -91,7 +91,7 @@ export function SentenceBuilderLab({
       {/* the word bank */}
       <div className="lang-bank" aria-label="word bank">
         {bank.map((i) => (
-          <Tile key={i} pos={tiles[i]!.pos} text={tiles[i]!.text} gloss={tiles[i]!.gloss} dir={targetDir} onClick={() => place(i)} ariaLabel={`${tiles[i]!.text} — tap to place`} />
+          <Tile key={i} pos={tiles[i]!.pos} text={tiles[i]!.text} gloss={tiles[i]!.gloss} dir={targetDir} onClick={() => place(i)} ariaLabel={`${tiles[i]!.text}, tap to place`} />
         ))}
       </div>
 

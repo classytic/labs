@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * ProjectileLab — tune launch angle + speed, land the shot on the target. Now on
+ * ProjectileLab, tune launch angle + speed, land the shot on the target. Now on
  * the @classytic/stage engine (SVG, accessible): the ground, cannon, predicted
  * arc, target, and ball are real primitives in a metre coordinate system; the
  * flight animates on the engine clock.
@@ -16,7 +16,7 @@ import { num, toRad } from '../core/util.js';
 /**
  * A field cannon anchored at the launch point (math origin), elevated to
  * `angle`. Drawn in a LOCAL pixel frame with STATIC coordinates and rotated via
- * an SVG transform — so no transcendental-derived coordinate is ever serialized
+ * an SVG transform, so no transcendental-derived coordinate is ever serialized
  * into an attribute (SSR-deterministic, per the engine's `fmt` rule). Sized in
  * world units (px-per-metre) so it tracks pan/zoom like the rest of the scene.
  */
@@ -39,7 +39,7 @@ function CannonGlyph({ angle }: { angle: number }): ReactNode {
   return (
     <g>
       <StageAssetDefs />
-      {/* barrel + breech cap — local +x runs along the bore, screen-rotated by −angle (math y is up) */}
+      {/* barrel + breech cap, local +x runs along the bore, screen-rotated by −angle (math y is up) */}
       <g transform={`${T} rotate(${fmt(-angle)})`}>
         <circle cx={-s * 1.3} cy={0} r={hw * 1.15} fill={grad} stroke={edge} strokeWidth={0.7} />
         <path
@@ -54,7 +54,7 @@ function CannonGlyph({ angle }: { angle: number }): ReactNode {
         {/* muzzle bore */}
         <ellipse cx={L} cy={0} rx={hw * 0.22} ry={hw * 0.9} fill={dark} />
       </g>
-      {/* carriage wheel — upright (NOT rotated with the barrel), at the pivot */}
+      {/* carriage wheel, upright (NOT rotated with the barrel), at the pivot */}
       <g transform={T}>
         <circle cx={0} cy={0} r={s * 2.2} fill="var(--stage-bg)" stroke={metal} strokeWidth={2} />
         {spokes.map((p, i) => <line key={i} x1={0} y1={0} x2={p.x} y2={p.y} stroke={metal} strokeWidth={1.2} />)}
@@ -118,11 +118,11 @@ export function ProjectileLab(props: ProjectileLabProps): ReactNode {
       <Stage view={view} height={300} ariaLabel={`Projectile launched at ${angle}° and ${speed} m/s; target at ${target} m`}>
         <Segment from={{ x: view.xMin, y: 0 }} to={{ x: WORLD_W, y: 0 }} color="var(--stage-fg)" opacity={0.5} weight={1.5} />
         {[0, 20, 40, 60, 80, 100, 120].map((m) => <Label key={m} x={m} y={0} text={`${m}m`} color="var(--stage-fg)" size={10} dy={14} />)}
-        {/* target — a bullseye on the ground */}
+        {/* target, a bullseye on the ground */}
         <Circle center={{ x: target, y: 2.6 }} r={2.6} color="var(--stage-accent-2)" fill="none" weight={2} />
         <Circle center={{ x: target, y: 2.6 }} r={1.1} color="var(--stage-accent-2)" fill="var(--stage-accent-2)" fillOpacity={0.9} weight={0} />
         <Label x={target} y={2.6} text="target" color="var(--stage-accent-2)" size={11} dy={-22} />
-        {/* cannon — tapered barrel + spoked carriage wheel */}
+        {/* cannon, tapered barrel + spoked carriage wheel */}
         <CannonGlyph angle={angle} />
         <Polyline points={arc} color="var(--stage-accent)" opacity={0.55} weight={1.5} dashed />
         {/* projectile with a soft motion glow */}
@@ -143,7 +143,7 @@ export function ProjectileLab(props: ProjectileLabProps): ReactNode {
   const aside = (
     <>
       {(phase === 'hit' || phase === 'miss') && (
-        <StatusPill ok={phase === 'hit'}>{phase === 'hit' ? '🎯 Direct hit!' : 'So close — adjust and retry'}</StatusPill>
+        <StatusPill ok={phase === 'hit'}>{phase === 'hit' ? '🎯 Direct hit!' : 'So close, adjust and retry'}</StatusPill>
       )}
       <Callout tone="result">
         <span style={{ display: 'grid', gap: 4, fontVariantNumeric: 'tabular-nums' }}>
@@ -159,7 +159,7 @@ export function ProjectileLab(props: ProjectileLabProps): ReactNode {
   return (
     <LabFrame
       title="Projectile Lab"
-      prompt="Tune the angle and speed — can you land the shot on the target?"
+      prompt="Tune the angle and speed, can you land the shot on the target?"
       aside={aside}
       controls={controls}
     >

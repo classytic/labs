@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * ZTableLab — read a z-table like the exam expects, and see what each lookup MEANS.
+ * ZTableLab, read a z-table like the exam expects, and see what each lookup MEANS.
  * Standardize a raw value (x → z = (x−μ)/σ), then the classic Φ(z) table lights up
  * the row/column and cell for that z, while a mini standard-normal curve shades the
  * matching tail and shows the probability. Click any cell to jump there (and the
@@ -9,14 +9,14 @@
  * Φ(−z) = 1 − Φ(z), spelled out rather than hidden.
  *
  * Φ comes from the normal kernel (`normalCdf`); the table is just that function laid
- * out as the familiar grid — one source of truth, no transcribed magic numbers.
+ * out as the familiar grid, one source of truth, no transcribed magic numbers.
  */
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { normalCdf, normalPdf, zScore } from '../core/normal.js';
 import { Tex } from '../../core/tex.js';
 import { Chip } from '../../kit/controls.js';
-import { useHints, HintLadder } from '../../kit/pedagogy.js';
+import { useHints, HintLadder, useCheckpoint } from '../../kit/pedagogy.js';
 import { LabFrame, ControlBar } from '../../kit/frame.js';
 import { useControlSurface } from '@classytic/stage';
 
@@ -78,6 +78,19 @@ export function ZTableLab({ x = 650, mu = 500, sigma = 100, tail = 'left', title
     box.scrollTop += (rr.top - br.top) - box.clientHeight / 2 + rr.height / 2;
   }, [zLook]);
 
+  // intrinsic "solved" signal: the learner has standardized x → z and read the
+  // table for at least 3 DISTINCT z-values (proving they can convert and look up).
+  const lookedUp = useRef<Set<number>>(new Set());
+  const [lookupCount, setLookupCount] = useState(0);
+  useEffect(() => {
+    if (Number.isFinite(zLook) && !lookedUp.current.has(zLook)) {
+      lookedUp.current.add(zLook);
+      setLookupCount(lookedUp.current.size);
+    }
+  }, [zLook]);
+  const solved = lookupCount >= 3;
+  useCheckpoint({ solved, activity: `z-table:${title}`, hintsUsed: hints?.count ?? 0 });
+
   useControlSurface(controlId, {
     x: { type: 'number', label: 'raw value x', min: -10000, max: 10000, step: 1, get: () => xv, set: setXv },
     mu: { type: 'number', label: 'mean μ', min: -10000, max: 10000, step: 1, get: () => m, set: setM },
@@ -114,7 +127,7 @@ export function ZTableLab({ x = 650, mu = 500, sigma = 100, tail = 'left', title
         </div>
       </div>
 
-      {z < 0 && <p className="lab-prompt" style={{ marginTop: 6 }}>z is negative — the table lists |z|; use symmetry <b><Tex tex={`\\Phi(${f2(z)}) = 1 - \\Phi(${f2(-z)}) = ${f4(phi)}`} /></b>.</p>}
+      {z < 0 && <p className="lab-prompt" style={{ marginTop: 6 }}>z is negative, the table lists |z|; use symmetry <b><Tex tex={`\\Phi(${f2(z)}) = 1 - \\Phi(${f2(-z)}) = ${f4(phi)}`} /></b>.</p>}
 
       {/* the z-table */}
       <div ref={scrollBox} style={{ overflow: 'auto', maxHeight: 300, borderRadius: 10, border: '1px solid var(--stage-grid)', marginTop: 8 }}>

@@ -1,0 +1,1 @@
+import { HeatingCurveLab, HeatingCurveProps } from "./preset.mjs";

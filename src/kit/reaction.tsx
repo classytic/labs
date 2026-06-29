@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * ReactionFlow — the shared reactants → products renderer (single source of truth
+ * ReactionFlow, the shared reactants → products renderer (single source of truth
  * for reaction equations). Give it terms; it lays out coefficient + MoleculeGlyph
- * + "+" separators, a reaction arrow, then the products — as a self-contained,
+ * + "+" separators, a reaction arrow, then the products, as a self-contained,
  * responsive <svg>. Reused by photosynthesis, respiration, and the chemistry
  * reaction labs so every reaction speaks the same visual vocabulary.
  */

@@ -1,4 +1,4 @@
-// @classytic/labs/ict — information & communication technology labs.
+// @classytic/labs/ict, information & communication technology labs.
 // Number systems (binary / octal / hex) built on image-based, "won't-forget"
 // strategies: place-value odometer wheels + nibble grouping.
 export {

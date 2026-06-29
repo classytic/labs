@@ -1,21 +1,21 @@
 'use client';
 
 /**
- * KarnaughMapLab — the GENERAL "simplify boolean by eye" tool. A K-map is just a
+ * KarnaughMapLab, the GENERAL "simplify boolean by eye" tool. A K-map is just a
  * truth table re-laid in GRAY-CODE order so that adjacent cells differ in ONE
  * variable; circling a power-of-two block of 1s drops the variable that changes
  * across it. That is the same "overcount, then correct" move as the rest of the
- * pack — a group merges redundant minterms the way ÷k! merges redundant orderings.
+ * pack, a group merges redundant minterms the way ÷k! merges redundant orderings.
  *
  * Creator declares a `formula` (any 2–4 variable expression) OR explicit
  * `minterms` (+ optional `dontCares`). Two modes:
- *   • show     — the kernel's minimal cover is drawn as coloured loops + the SOP.
- *   • simplify — the learner taps 1-cells to draw their own groups; each is
+ *   • show    , the kernel's minimal cover is drawn as coloured loops + the SOP.
+ *   • simplify, the learner taps 1-cells to draw their own groups; each is
  *                live-validated (legal sub-cube? all ones?) and its product term
  *                shown; solved when every 1 is covered, with a "minimal!" bonus.
  *
  * Minimisation is Quine–McCluskey in the stage logic kernel (`minimize` /
- * `cubeOfSelection`) — the map only RENDERS what the kernel computes. Groups that
+ * `cubeOfSelection`), the map only RENDERS what the kernel computes. Groups that
  * wrap the map edges render as two (or four) loops, exactly as on paper.
  */
 
@@ -25,6 +25,7 @@ import { Tex } from '../../core/tex.js';
 import { Chip } from '../../kit/controls.js';
 import { LabFrame } from '../../kit/frame.js';
 import { useHints, HintLadder, RevealSolution, useCheckpoint } from '../../kit/pedagogy.js';
+import { CATEGORICAL } from '../../kit/palette.js';
 
 export type KMapMode = 'show' | 'simplify';
 export interface KMapProps {
@@ -42,12 +43,12 @@ export interface KMapProps {
 
 const CS = 50;            // cell size
 const LH = 50, TH = 46;   // left / top header gutters
-const PALETTE = ['#2f9e44', '#1c7ed6', '#e8590c', '#9c36b5', '#1098ad', '#e03131'];
+const PALETTE = CATEGORICAL;
 
 const gray = (i: number): number => i ^ (i >> 1);
 const bits = (v: number, n: number): string => v.toString(2).padStart(n, '0');
 
-/** Maximal consecutive runs of sorted indices (wrap shows as two runs — desired). */
+/** Maximal consecutive runs of sorted indices (wrap shows as two runs, desired). */
 function runs(idx: number[]): [number, number][] {
   const s = [...idx].sort((a, b) => a - b);
   const out: [number, number][] = [];
@@ -154,7 +155,7 @@ export function KarnaughMapLab({ formula, minterms: mtIn, dontCares: dcIn = [], 
   };
 
   const figure = (
-    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', maxWidth: W, height: 'auto' }} role="img" aria-label={`Karnaugh map of ${vars.join(',')}, ${minterms.length} ones`}>
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', maxWidth: '100%', height: 'auto' }} role="grid" aria-label={`Karnaugh map, ${n} variables (${vars.join(', ')}), ${nRows * nCols} cells, ${minterms.length} one${minterms.length === 1 ? '' : 's'}`}>
           {/* axis var labels */}
           <text x={LH + gridW / 2} y={16} textAnchor="middle" fontSize={13} fontWeight={700} fill="var(--stage-muted)">{colVars.join('')}</text>
           <text x={14} y={TH + gridH / 2} textAnchor="middle" fontSize={13} fontWeight={700} fill="var(--stage-muted)" transform={`rotate(-90 14 ${TH + gridH / 2})`}>{rowVars.join('')}</text>
@@ -172,8 +173,19 @@ export function KarnaughMapLab({ formula, minterms: mtIn, dontCares: dcIn = [], 
             const isOne = oneSet.has(m), isDC = dcSet.has(m);
             const sel = mode === 'simplify' && selected.includes(m);
             const val = isOne ? '1' : isDC ? 'X' : '0';
+            const tappable = mode === 'simplify' && (isOne || isDC) && !revealed;
+            const cellLabel = `minterm ${m}, value ${val}${sel ? ', selected' : ''}`;
             return (
-              <g key={`c${gr}-${gc}`} onClick={() => tapCell(m)} style={{ cursor: mode === 'simplify' && (isOne || isDC) && !revealed ? 'pointer' : 'default' }}>
+              <g
+                key={`c${gr}-${gc}`}
+                onClick={() => tapCell(m)}
+                onKeyDown={tappable ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tapCell(m); } } : undefined}
+                role={tappable ? 'button' : 'img'}
+                tabIndex={tappable ? 0 : undefined}
+                aria-label={cellLabel}
+                aria-pressed={tappable ? sel : undefined}
+                style={{ cursor: tappable ? 'pointer' : 'default' }}
+              >
                 <rect x={cellX(gc)} y={cellY(gr)} width={CS} height={CS} fill={sel ? 'color-mix(in oklab, var(--stage-good) 24%, transparent)' : isOne ? 'color-mix(in oklab, var(--stage-good) 9%, transparent)' : 'var(--stage-bg)'} stroke="var(--stage-grid)" strokeWidth={1} />
                 <text x={cellX(gc) + CS / 2} y={cellY(gr) + CS / 2} textAnchor="middle" dominantBaseline="central" fontSize={17} fontWeight={800} fill={isOne ? 'var(--stage-good)' : isDC ? 'var(--stage-warn)' : 'var(--stage-muted)'} style={{ pointerEvents: 'none' }}>{val}</text>
                 <text x={cellX(gc) + CS - 4} y={cellY(gr) + 11} textAnchor="end" fontSize={8.5} fill="var(--stage-muted)" style={{ pointerEvents: 'none' }} fontFamily="ui-monospace, monospace">{m}</text>
@@ -217,7 +229,7 @@ export function KarnaughMapLab({ formula, minterms: mtIn, dontCares: dcIn = [], 
                 <Chip selected={false} onClick={() => setSelected([])}>clear pick</Chip>
                 <Chip selected={false} onClick={() => { setGroups([]); setSelected([]); setRevealed(false); }}>reset</Chip>
               </div>
-              {allCovered && <p className="lab-pill" data-state="ok" style={{ marginTop: 8 }}>{minimal ? '✓ all ones covered — minimal!' : `✓ covered, but minimal is ${result.cover.length} group${result.cover.length === 1 ? '' : 's'}`}</p>}
+              {allCovered && <p className="lab-pill" data-state="ok" style={{ marginTop: 8 }}>{minimal ? '✓ all ones covered, minimal!' : `✓ covered, but minimal is ${result.cover.length} group${result.cover.length === 1 ? '' : 's'}`}</p>}
             </>
           )}
     </>
@@ -226,7 +238,7 @@ export function KarnaughMapLab({ formula, minterms: mtIn, dontCares: dcIn = [], 
   const footer = (
     <>
       {mode === 'simplify' && (
-        <RevealSolution available={!allCovered || !minimal} buttonLabel="Show minimal cover" solution={<>The minimal SOP is <TexExpr expr={result.expression} /> — {result.cover.length} group{result.cover.length === 1 ? '' : 's'}.</>} onReveal={() => setRevealed(true)} />
+        <RevealSolution available={!allCovered || !minimal} buttonLabel="Show minimal cover" solution={<>The minimal SOP is <TexExpr expr={result.expression} />, {result.cover.length} group{result.cover.length === 1 ? '' : 's'}.</>} onReveal={() => setRevealed(true)} />
       )}
       <HintLadder hints={hints} />
     </>

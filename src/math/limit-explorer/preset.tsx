@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * LimitExplorer — "what value does f approach as x → c?", on @classytic/stage.
+ * LimitExplorer, "what value does f approach as x → c?", on @classytic/stage.
  * Plots f(x), drops a dashed line at x = c, and walks dots in from both sides
  * (h = 1, 0.1, 0.01, 0.001). When the two sides converge to one value, that's
- * the limit — even where f(c) itself is a hole. Reuses `estimateOneSidedLimit`.
+ * the limit, even where f(c) itself is a hole. Reuses `estimateOneSidedLimit`.
  */
 
 import { Fragment, useEffect, useMemo, useState, type ReactNode } from 'react';
@@ -16,7 +16,7 @@ import { estimateOneSidedLimit } from '../../core/numeric.js';
 import { clamp } from '../../core/util.js';
 
 const STEPS = [1, 0.1, 0.01, 0.001];
-const fmt = (v: number): string => (Number.isFinite(v) ? v.toFixed(4) : '—');
+const fmt = (v: number): string => (Number.isFinite(v) ? v.toFixed(4) : ', ');
 
 export interface LimitExplorerProps {
   equation?: string;
@@ -39,7 +39,7 @@ export function LimitExplorer({ equation = '(x^2 - 1)/(x - 1)', xRange = [-1, 3]
   }, [equation]);
 
   if (!model.ok) {
-    return <div className="not-prose"><p style={{ fontWeight: 600 }}>{title}</p><div style={{ padding: 12, fontSize: 13, color: 'var(--stage-danger)' }}>“{equation}” — {model.error}</div></div>;
+    return <div className="not-prose"><p style={{ fontWeight: 600 }}>{title}</p><div style={{ padding: 12, fontSize: 13, color: 'var(--stage-danger)' }}>“{equation}”, {model.error}</div></div>;
   }
   const { f, fLatex } = model;
 

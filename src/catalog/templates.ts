@@ -1,6 +1,6 @@
 /**
  * Register the built-in lab families. Importing this module imports each
- * preset's doc factory — which self-registers its stage asset — and adds the
+ * preset's doc factory, which self-registers its stage asset, and adds the
  * family to the registry. New family = add one entry here.
  */
 
@@ -21,7 +21,7 @@ registerLabTemplate({
   id: 'mystery-bucket',
   title: 'Mystery bucket (weigh the unknown)',
   category: 'algebra',
-  description: 'Add unit weights until a balance is level — discover the hidden weight (the unknown) with no symbols. The essentials opener.',
+  description: 'Add unit weights until a balance is level, discover the hidden weight (the unknown) with no symbols. The essentials opener.',
   paramsSchema: z.object({ bucketWeight: z.number(), maxWeights: z.number().optional() }),
   defaultParams: { bucketWeight: 5, maxWeights: 10 },
   factory: (p) => mysteryBucketDoc({ bucketWeight: (p.bucketWeight as number) ?? 5, count: 0, maxWeights: p.maxWeights as number | undefined }),
@@ -41,7 +41,7 @@ registerLabTemplate({
   id: 'area-model',
   title: 'Area model (algebra tiles)',
   category: 'algebra',
-  description: '(x+a)(x+b) as a partitioned rectangle — expand or factor.',
+  description: '(x+a)(x+b) as a partitioned rectangle, expand or factor.',
   paramsSchema: z.object({ a: z.number(), b: z.number(), mode: z.enum(['expand', 'factor']).optional() }),
   defaultParams: { a: 3, b: 2, mode: 'expand' },
   factory: (p) => areaModelDoc(p as { a: number; b: number; mode?: 'expand' | 'factor' }),
@@ -61,7 +61,7 @@ registerLabTemplate({
   id: 'balance-lever',
   title: 'Lever / torque',
   category: 'physics',
-  description: 'Balance the mobile — set the unknown weight so Σ(w·d) matches.',
+  description: 'Balance the mobile, set the unknown weight so Σ(w·d) matches.',
   paramsSchema: z.object({ items: z.array(z.unknown()).optional(), start: z.number().optional(), maxWeight: z.number().optional() }),
   defaultParams: { start: 1, maxWeight: 12 },
   factory: (p) => leverBalanceDoc(p as Parameters<typeof leverBalanceDoc>[0]),
@@ -69,7 +69,7 @@ registerLabTemplate({
 
 registerLabTemplate({
   id: 'optics',
-  title: 'Optics — reflection',
+  title: 'Optics: reflection',
   category: 'physics',
   description: 'Reflect a light ray off mirrors into the target.',
   defaultParams: {},
@@ -80,7 +80,7 @@ registerLabTemplate({
   id: 'circuit',
   title: 'Circuit',
   category: 'circuits',
-  description: 'Battery + series/parallel branches — light the bulb.',
+  description: 'Battery + series/parallel branches, light the bulb.',
   paramsSchema: z.object({ emf: z.number().optional(), branches: z.array(z.unknown()).optional() }),
   defaultParams: { emf: 6, branches: [[{ type: 'switch', closed: false }, { type: 'bulb', ohms: 6 }]], goal: { kind: 'lightBulb' } },
   factory: (p) => circuitDoc(p as Parameters<typeof circuitDoc>[0]),

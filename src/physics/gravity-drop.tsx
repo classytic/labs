@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * GravityDrop — drop identical balls on three worlds; stronger gravity wins.
+ * GravityDrop, drop identical balls on three worlds; stronger gravity wins.
  * On the @classytic/stage engine (SVG): three lanes in a fixed coordinate box,
  * the balls fall on the engine clock, landing times appear as they hit.
  */
@@ -15,7 +15,7 @@ const num = (v: number | string | undefined, fb: number): number => { const n = 
 
 /**
  * A falling ball: a shaded sphere (tone fill + top-left specular) with a motion
- * trail whose length scales with speed — so the eye reads Jupiter's ball as
+ * trail whose length scales with speed, so the eye reads Jupiter's ball as
  * genuinely faster than the Moon's. Drawn in pixels (project the math centre
  * first); the trail and highlight are constant-quality regardless of zoom.
  */
@@ -106,8 +106,8 @@ export function GravityDrop(props: GravityDropProps): ReactNode {
   return (
     <LabFrame
       title="Gravity Drop"
-      prompt={`Drop identical balls from ${fallH} m on three worlds — stronger gravity wins.`}
-      aside={<Callout>Same mass, same height — only <strong>g</strong> differs.</Callout>}
+      prompt={`Drop identical balls from ${fallH} m on three worlds, stronger gravity wins.`}
+      aside={<Callout>Same mass, same height, only <strong>g</strong> differs.</Callout>}
       controls={controls}
     >
       {figure}

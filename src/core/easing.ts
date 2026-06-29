@@ -1,5 +1,5 @@
 /**
- * Easing / rate functions — pure `(t in [0,1]) => number`. Ported from manim's
+ * Easing / rate functions, pure `(t in [0,1]) => number`. Ported from manim's
  * `rate_functions` + the standard web set. Shape `alpha` before interpolation.
  */
 
@@ -22,7 +22,7 @@ export const rushInto: Easing = (t) => 2 * smooth(t / 2);
 /** Decelerate to rest (manim `rush_from`). */
 export const rushFrom: Easing = (t) => 2 * smooth(t / 2 + 0.5) - 1;
 
-/** Go to 1 then back to 0 (manim `there_and_back`) — great for pulses. */
+/** Go to 1 then back to 0 (manim `there_and_back`), great for pulses. */
 export const thereAndBack: Easing = (t) => smooth(t < 0.5 ? 2 * t : 2 * (1 - t));
 
 /** Overshoot then settle. */
@@ -63,7 +63,7 @@ export function squish(fn: Easing, a = 0.2, b = 0.8): Easing {
   return (t) => (t < a ? 0 : t > b ? 1 : fn((t - a) / (b - a)));
 }
 
-/** Built-in registry — extend with `registerEasing` (see ./registry). */
+/** Built-in registry, extend with `registerEasing` (see ./registry). */
 export const EASINGS: Record<string, Easing> = {
   linear,
   smooth,

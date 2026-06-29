@@ -1,21 +1,21 @@
 'use client';
 
 /**
- * Space glyph kit — Earth, Sun and a satellite, drawn in the stage's pixel frame
+ * Space glyph kit, Earth, Sun and a satellite, drawn in the stage's pixel frame
  * (project the world centre, then size everything off the px radius so the glyph
  * is crisp at any zoom). Kurzgesagt-style: radial body gradient + a rim shadow
  * for spherical depth + a top-left specular highlight, the technique borrowed from
  * my-video's EarthIcon. Gradient ids are made unique per instance so multiple
  * glyphs on one Stage don't collide.
  *
- * These are decorative (pointer-events:none) — drop a draggable MovableDot on top
+ * These are decorative (pointer-events:none), drop a draggable MovableDot on top
  * if the body needs to be grabbed.
  */
 
 import { useId, type ReactNode } from 'react';
 import { useCoords, fmt, type Vec2 } from '@classytic/stage';
 
-/** Earth — blue oceans, a few green landmasses, ice caps, rim + shine + atmosphere. */
+/** Earth, blue oceans, a few green landmasses, ice caps, rim + shine + atmosphere. */
 export function EarthGlyph({ center, r, atmosphere = true }: { center: Vec2; r: number; atmosphere?: boolean }): ReactNode {
   const c = useCoords();
   const [cx, cy] = c.toPx(center.x, center.y);
@@ -54,7 +54,7 @@ export function EarthGlyph({ center, r, atmosphere = true }: { center: Vec2; r: 
   );
 }
 
-/** Sun — glowing core with a corona of rays. */
+/** Sun, glowing core with a corona of rays. */
 export function SunGlyph({ center, r }: { center: Vec2; r: number }): ReactNode {
   const c = useCoords();
   const [cx, cy] = c.toPx(center.x, center.y);
@@ -82,7 +82,7 @@ export function SunGlyph({ center, r }: { center: Vec2; r: number }): ReactNode 
   );
 }
 
-/** Satellite — a body with two solar-panel wings and a dish. */
+/** Satellite, a body with two solar-panel wings and a dish. */
 export function SatelliteGlyph({ center, size, tilt = -0.4 }: { center: Vec2; size: number; tilt?: number }): ReactNode {
   const c = useCoords();
   const [cx, cy] = c.toPx(center.x, center.y);

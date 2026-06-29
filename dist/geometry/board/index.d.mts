@@ -1,0 +1,1 @@
+import { GeoElement, GeometryBoard, GeometryBoardProps, geoSceneToDoc } from "./preset.mjs";

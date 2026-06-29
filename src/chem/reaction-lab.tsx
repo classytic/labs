@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * ReactionLab — a synthesis reaction as moving atoms: A + B collide and bond into
+ * ReactionLab, a synthesis reaction as moving atoms: A + B collide and bond into
  * A–B. Raise the temperature and they collide harder/more often (kinetics); press
- * React to run it. Atoms are conserved — none created or destroyed, just
+ * React to run it. Atoms are conserved, none created or destroyed, just
  * rearranged.
  *
  * Now on the @classytic/stage engine (SVG, accessible, themed).
@@ -84,7 +84,7 @@ export function ReactionLab({ a = 'A', b = 'B', title = 'A + B → A–B', heigh
   return (
     <LabFrame
       title={title}
-      prompt="Atoms rearrange — none are created or destroyed. Raise the temperature to react faster."
+      prompt="Atoms rearrange, none are created or destroyed. Raise the temperature to react faster."
       aside={<Callout tone="result">{bonded ? 'product' : playing ? 'reacting…' : 'reactants'}</Callout>}
       controls={controls}
     >

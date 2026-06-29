@@ -1,0 +1,1 @@
+import { WorkPotentialLab, WorkPotentialProps } from "./preset.mjs";

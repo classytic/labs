@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * VennSetBoard — the GENERAL sets + inclusion–exclusion tool (2 or 3 sets). The
+ * VennSetBoard, the GENERAL sets + inclusion–exclusion tool (2 or 3 sets). The
  * creator declares set MEMBERS; the lab places each element in its true region,
  * shows live region counts, and (explore) the inclusion–exclusion breakdown
- * |A∪B| = |A| + |B| − |A∩B| — the "overcount, then correct" spine made visible.
+ * |A∪B| = |A| + |B| − |A∩B|, the "overcount, then correct" spine made visible.
  *
  * The trinity made literal: a SET expression is a PROPOSITIONAL formula over
  * membership (∩↔∧, ∪↔∨, ᶜ↔¬), so "shade the region for A ∩ ¬B" runs on the SAME
- * `compileLogic` kernel as the truth-table lab — one source of truth.
+ * `compileLogic` kernel as the truth-table lab, one source of truth.
  *
  * Self-contained SVG (a fixed diagram, not a coordinate plot), so no Stage coords
  * needed; counts/IE come from `@classytic/labs/discrete/core`.
@@ -38,17 +38,21 @@ export interface VennSetBoardProps {
 
 interface Geo { vb: [number, number, number, number]; circles: { cx: number; cy: number; r: number }[]; centroids: Record<string, [number, number]>; labels: { x: number; y: number }[] }
 
+// Geometry tuned for clean, well-separated region labels: centres form an
+// equilateral triangle (side ≈ r) so the seven regions are evenly sized, set
+// names sit OUTSIDE their circles with margin (no clipping / overlap), and each
+// count lands on its region's true visual centroid.
 const GEO2: Geo = {
-  vb: [0, 0, 340, 210],
-  circles: [{ cx: 132, cy: 108, r: 84 }, { cx: 208, cy: 108, r: 84 }],
-  centroids: { '10': [78, 108], '01': [262, 108], '11': [170, 108], '00': [38, 26] },
-  labels: [{ x: 70, y: 22 }, { x: 270, y: 22 }],
+  vb: [0, 0, 340, 224],
+  circles: [{ cx: 132, cy: 118, r: 82 }, { cx: 208, cy: 118, r: 82 }],
+  centroids: { '10': [80, 118], '01': [260, 118], '11': [170, 118], '00': [40, 30] },
+  labels: [{ x: 104, y: 26 }, { x: 236, y: 26 }],
 };
 const GEO3: Geo = {
-  vb: [0, 0, 340, 260],
-  circles: [{ cx: 132, cy: 102, r: 80 }, { cx: 208, cy: 102, r: 80 }, { cx: 170, cy: 168, r: 80 }],
-  centroids: { '100': [96, 78], '010': [244, 78], '001': [170, 210], '110': [170, 66], '101': [116, 144], '011': [224, 144], '111': [170, 118], '000': [38, 28] },
-  labels: [{ x: 78, y: 20 }, { x: 262, y: 20 }, { x: 170, y: 252 }],
+  vb: [0, 0, 360, 306],
+  circles: [{ cx: 140, cy: 116, r: 78 }, { cx: 220, cy: 116, r: 78 }, { cx: 180, cy: 186, r: 78 }],
+  centroids: { '100': [104, 96], '010': [256, 96], '001': [180, 232], '110': [180, 84], '101': [132, 162], '011': [228, 162], '111': [180, 140], '000': [44, 30] },
+  labels: [{ x: 104, y: 30 }, { x: 256, y: 30 }, { x: 180, y: 296 }],
 };
 
 const PALETTE = ['var(--stage-accent)', 'var(--stage-accent-2)', 'var(--stage-good)'];
@@ -148,6 +152,16 @@ export function VennSetBoardLab({
     reset: { type: 'action', label: 'clear', invoke: reset },
   });
 
+  // The diagram geometry only exists for 2 or 3 sets; surface a friendly error
+  // instead of silently drawing 4+ sets with 2-set circles.
+  if (n < 2 || n > 3) {
+    return (
+      <LabFrame title={title} prompt={prompt}>
+        <p className="lab-misconception" role="status"><span aria-hidden>⚠</span> The Venn lab supports 2 or 3 sets; you gave {n}. Reduce the number of sets.</p>
+      </LabFrame>
+    );
+  }
+
   const [vx, vy, vw, vh] = geo.vb;
   const showShade = mode === 'shade';
 
@@ -156,15 +170,19 @@ export function VennSetBoardLab({
         <svg viewBox={`${vx} ${vy} ${vw} ${vh}`} style={{ width: '100%', maxWidth: 360, height: 'auto' }} role="img" aria-label={`Venn diagram of ${names.join(', ')}`}>
           {/* shaded regions (or faint target preview after a wrong check) */}
           {showShade && [...shaded].map((sig) => <RegionShape key={sig} sig={sig} geo={geo} color="var(--stage-accent)" uid={uid} opacity={0.38} />)}
-          {/* circle outlines + faint fills */}
+          {/* circle rings + faint matching fills — the ring colour ties each
+              circle to its set name (no gray outlines floating free) */}
           {geo.circles.map((c, i) => (
-            <circle key={i} cx={c.cx} cy={c.cy} r={c.r} fill={PALETTE[i]} fillOpacity={0.06} stroke="var(--stage-fg)" strokeOpacity={0.5} strokeWidth={1.5} />
+            <circle key={i} cx={c.cx} cy={c.cy} r={c.r} fill={PALETTE[i]} fillOpacity={0.09} stroke={PALETTE[i]} strokeOpacity={0.7} strokeWidth={2} />
           ))}
-          {geo.labels.map((l, i) => <text key={i} x={l.x} y={l.y} fill={PALETTE[i]} fontSize={15} fontWeight={800} textAnchor="middle">{names[i]}</text>)}
+          {geo.labels.map((l, i) => (
+            <text key={i} x={l.x} y={l.y} fill={PALETTE[i]} fontSize={15} fontWeight={800} textAnchor="middle"
+              style={{ paintOrder: 'stroke', stroke: 'var(--stage-bg)', strokeWidth: 4, strokeLinejoin: 'round' }}>{names[i]}</text>
+          ))}
           {/* region counts (explore) */}
           {mode === 'explore' && regions.filter((r) => r.count > 0 && r.sig !== '0'.repeat(n)).map((r) => (
-            <text key={r.sig} x={r.centroid[0]} y={r.centroid[1]} fill="var(--stage-fg)" fontSize={15} fontWeight={700} textAnchor="middle" dominantBaseline="central"
-              style={{ paintOrder: 'stroke', stroke: 'var(--stage-bg)', strokeWidth: 4, strokeLinejoin: 'round' }}>{r.count}</text>
+            <text key={r.sig} x={r.centroid[0]} y={r.centroid[1]} fill="var(--stage-fg)" fontSize={16} fontWeight={700} textAnchor="middle" dominantBaseline="central"
+              style={{ paintOrder: 'stroke', stroke: 'var(--stage-bg)', strokeWidth: 4.5, strokeLinejoin: 'round' }}>{r.count}</text>
           ))}
         </svg>
     </div>
@@ -202,7 +220,7 @@ export function VennSetBoardLab({
       <span style={{ fontWeight: 600, marginRight: 4 }}>Shade: {target}</span>
       {regions.map((r) => <Chip key={r.sig} selected={shaded.has(r.sig)} onClick={() => toggle(r.sig)}>{regionLabel(r.sig, names)}</Chip>)}
       <CheckButton onClick={check} disabled={shaded.size === 0}>Check</CheckButton>
-      {checked && <StatusPill ok={correct}>{correct ? '✓ Exactly right' : 'Not quite — adjust the regions'}</StatusPill>}
+      {checked && <StatusPill ok={correct}>{correct ? '✓ Exactly right' : 'Not quite, adjust the regions'}</StatusPill>}
     </ControlBar>
   ) : undefined;
 

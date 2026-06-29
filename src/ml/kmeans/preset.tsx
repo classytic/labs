@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * KMeansLab — unsupervised clustering you can watch converge. Points sit in a few
+ * KMeansLab, unsupervised clustering you can watch converge. Points sit in a few
  * blobs; you drag the k centroids to seed them, then Step (Lloyd's algorithm):
  * every point recolours to its nearest centroid, and each centroid jumps to the
- * mean of its cluster. Run animates it — centroids migrate into the blobs, the
+ * mean of its cluster. Run animates it, centroids migrate into the blobs, the
  * within-cluster error (inertia) drops, and it stops when nothing moves. Seed the
- * centroids badly on purpose and you land in a worse local minimum — the key
+ * centroids badly on purpose and you land in a worse local minimum, the key
  * k-means intuition that initialisation matters.
  *
  * Pure stage primitives: Dot (coloured by assignment) + MovableDot (centroids) +
@@ -33,7 +33,7 @@ export interface KMeansProps {
 
 const COLORS = ['var(--stage-accent)', 'var(--stage-good)', 'var(--stage-danger)', 'var(--stage-warn)', 'var(--stage-accent-2)'];
 
-// deterministic blobs (no Math.random — SSR-stable)
+// deterministic blobs (no Math.random, SSR-stable)
 const OFFS: [number, number][] = [[-0.8, 0.5], [0.6, 0.9], [-0.4, -0.7], [0.9, -0.3], [0.1, 0.6], [-0.9, -0.2], [0.5, -0.85]];
 const BLOBS: [number, number][] = [[2.6, 7.2], [7.4, 7.6], [5, 2.7]];
 const DEFAULT_POINTS = BLOBS.flatMap(([cx, cy]) => OFFS.map(([dx, dy]) => ({ x: cx + dx, y: cy + dy })));
@@ -49,7 +49,7 @@ export function KMeansLab({
   seeds,
   span = 10,
   showLines = true,
-  title = 'k-means — watch the clusters form',
+  title = 'k-means: watch the clusters form',
   prompt = 'Drag the centroids to seed them, then Step: points recolour to the nearest centroid, centroids jump to their cluster mean. Seed them badly and you get stuck in a worse answer.',
   objectives,
   height = 380,

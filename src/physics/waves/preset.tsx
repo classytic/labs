@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * WaveLab — one playground for the whole of waves, animated on <CanvasLayer>.
- *   • travelling — a wave you SHAPE (amplitude, wavelength, frequency); v = fλ falls
+ * WaveLab, one playground for the whole of waves, animated on <CanvasLayer>.
+ *   • travelling, a wave you SHAPE (amplitude, wavelength, frequency); v = fλ falls
  *     out live, with λ and A marked right on the wave.
- *   • superpose  — two waves add; line them up (constructive, 2A) or oppose them
+ *   • superpose , two waves add; line them up (constructive, 2A) or oppose them
  *     (destructive, flat), or detune the second → BEATS (a throbbing envelope).
- *   • standing   — two opposite waves lock into a standing wave: fixed NODES (never
+ *   • standing  , two opposite waves lock into a standing wave: fixed NODES (never
  *     move) and ANTINODES (max swing), with a harmonic selector (λ = 2L/n).
  * Optional 🔊 maps the frequency into the audible range (two tones in beats mode, so
  * you HEAR the wah-wah). All maths from the wave kernel; honours reduced-motion.

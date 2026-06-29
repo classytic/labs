@@ -1,4 +1,4 @@
-// @classytic/labs/biology — interactive biology labs (enzymes, photosynthesis,
+// @classytic/labs/biology, interactive biology labs (enzymes, photosynthesis,
 // inheritance). Built on @classytic/stage; tokenized, authorable, agent-drivable.
 export { EnzymeRateLab, type EnzymeRateProps } from './enzyme-rate/index.js';
 export { PhotosynthesisFactorsLab, type PhotosynthesisFactorsProps } from './photosynthesis-factors/index.js';

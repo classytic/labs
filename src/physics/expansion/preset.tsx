@@ -1,18 +1,18 @@
 'use client';
 
 /**
- * ThermalExpansionLab — heat a solid and it grows. Drag the temperature and watch:
+ * ThermalExpansionLab, heat a solid and it grows. Drag the temperature and watch:
  *
- *   • LENGTH  ΔL = α·L·ΔT          (a rod stretches — why rails and bridges leave gaps)
+ *   • LENGTH  ΔL = α·L·ΔT          (a rod stretches, why rails and bridges leave gaps)
  *   • AREA    ΔA = 2α·A·ΔT          (a plate grows in both directions)
  *   • VOLUME  ΔV = 3α·V·ΔT          (a ball swells in all three)
- *   • BIMETALLIC STRIP — two metals with different α bonded back-to-back: the one
+ *   • BIMETALLIC STRIP, two metals with different α bonded back-to-back: the one
  *     that expands more (brass) ends up on the OUTSIDE of the curve, so the strip
- *     bends. Heat it enough and it closes a contact — that's a thermostat.
+ *     bends. Heat it enough and it closes a contact, that's a thermostat.
  *
  * Real expansion is tiny (α ~ 10⁻⁵ /°C), so the drawing is MAGNIFIED for visibility
  * (the on-screen note says by how much) while the readout shows the TRUE ΔL/ΔA/ΔV.
- * Interactive — recomputes as you drag, no simulation loop. Pure SVG, themed.
+ * Interactive, recomputes as you drag, no simulation loop. Pure SVG, themed.
  */
 
 import { useId, useState, type ReactNode } from 'react';
@@ -49,11 +49,11 @@ const METALS: Record<string, { a: number; label: string }> = {
 
 export function ThermalExpansionLab({
   mode: mode0 = 'length',
-  title = 'Thermal expansion — heat it, it grows',
-  prompt = 'Solids expand when heated as their atoms jiggle further apart. Drag the temperature: length, area and volume each grow — and two bonded metals bend.',
+  title = 'Thermal expansion: heat it, it grows',
+  prompt = 'Solids expand when heated as their atoms jiggle further apart. Drag the temperature: length, area and volume each grow, and two bonded metals bend.',
   objectives = [
     'Use ΔL = αLΔT, and that area grows by 2α and volume by 3α',
-    'See expansion is tiny but real — why rails, bridges and pipes need gaps',
+    'See expansion is tiny but real, why rails, bridges and pipes need gaps',
     'Explain a bimetallic strip / thermostat: unequal α → it bends',
   ],
   controlConfig,
@@ -94,7 +94,7 @@ export function ThermalExpansionLab({
       </svg>,
     );
     aside = expansionAside(<Tex tex={'\\Delta L = \\alpha\\,L\\,\\Delta T'} block />, `ΔL = ${dLmm.toFixed(2)} mm`,
-      <>A 1 m {METALS[material]!.label} rod warmed {dT} °C grows just <strong style={{ color: 'var(--stage-fg)' }}>{dLmm.toFixed(2)} mm</strong> — tiny, but a 100 m bridge would grow {(dLmm * 100).toFixed(0)} mm, so it needs expansion joints.</>);
+      <>A 1 m {METALS[material]!.label} rod warmed {dT} °C grows just <strong style={{ color: 'var(--stage-fg)' }}>{dLmm.toFixed(2)} mm</strong>, tiny, but a 100 m bridge would grow {(dLmm * 100).toFixed(0)} mm, so it needs expansion joints.</>);
   } else if (mode === 'area') {
     const cx = W / 2, cy = H / 2 + 6, s0 = 210;        // centred; grows symmetrically about the centre
     const s1 = s0 * (1 + frac * MAG);
@@ -106,7 +106,7 @@ export function ThermalExpansionLab({
         {/* both-directions arrows */}
         <text x={cx} y={cy + s1 / 2 + 20} textAnchor="middle" fontSize={15} fill="var(--stage-good)">↔</text>
         <text x={cx - s1 / 2 - 16} y={cy + 5} textAnchor="middle" fontSize={15} fill="var(--stage-good)">↕</text>
-        <text x={cx} y={cy - s1 / 2 - 12} textAnchor="middle" fontSize={11} fill="var(--stage-muted)">drawing ×{MAG} — grows in BOTH directions (2α)</text>
+        <text x={cx} y={cy - s1 / 2 - 12} textAnchor="middle" fontSize={11} fill="var(--stage-muted)">drawing ×{MAG}, grows in BOTH directions (2α)</text>
       </svg>,
     );
     aside = expansionAside(<Tex tex={'\\Delta A = 2\\alpha\\,A\\,\\Delta T'} block />, `ΔA = ${dAcm2.toFixed(1)} cm²`,
@@ -128,7 +128,7 @@ export function ThermalExpansionLab({
         </defs>
         {/* ground shadow grounds the ball in 3-D */}
         <ellipse cx={cx} cy={cy + r1 + 16} rx={r1 * 0.82} ry={r1 * 0.13} fill="rgba(0,0,0,0.16)" />
-        {/* the heated ball — solid colour + curvature rim + specular */}
+        {/* the heated ball, solid colour + curvature rim + specular */}
         <circle cx={cx} cy={cy} r={r1} fill={tCol} />
         <circle cx={cx} cy={cy} r={r1} fill={`url(#${gid}-rim)`} />
         {/* latitude / longitude lines so it reads as a sphere, not a disc */}
@@ -138,13 +138,13 @@ export function ThermalExpansionLab({
         <circle cx={cx} cy={cy} r={r1} fill="none" stroke="var(--stage-metal)" strokeWidth={2} />
         {/* original size, marked on the ball's face */}
         <circle cx={cx} cy={cy} r={r0} fill="none" stroke="var(--stage-bg)" strokeWidth={2.5} strokeDasharray="6 5" opacity={0.85} />
-        <text x={cx} y={cy - r1 - 14} textAnchor="middle" fontSize={11} fill="var(--stage-muted)">drawing ×{MAG} — grows in ALL three directions (3α)</text>
+        <text x={cx} y={cy - r1 - 14} textAnchor="middle" fontSize={11} fill="var(--stage-muted)">drawing ×{MAG}, grows in ALL three directions (3α)</text>
       </svg>,
     );
     aside = expansionAside(<Tex tex={'\\Delta V = 3\\alpha\\,V\\,\\Delta T'} block />, `ΔV = ${dVcm3.toFixed(1)} cm³`,
       <>A solid swells in all three directions, so the volume coefficient is <strong style={{ color: 'var(--stage-fg)' }}>3α</strong>. A 1 L {METALS[material]!.label} block warmed {dT} °C gains {dVcm3.toFixed(1)} cm³.</>);
   } else {
-    // bimetallic strip — brass (high α) bonded over steel (low α); bends toward steel
+    // bimetallic strip, brass (high α) bonded over steel (low α); bends toward steel
     const x0 = 150, y0 = 120, L = 320, thick = 9;
     const aHi = METALS.brass!.a, aLo = METALS.steel!.a;
     const theta = Math.max(0, Math.min(1.15, (aHi - aLo) * dT * 1700)); // total bend angle, rad (magnified)
@@ -175,13 +175,13 @@ export function ThermalExpansionLab({
         <text x={tip.x + 16} y={contactY + 4} fontSize={12} fontWeight={800} fill={on ? 'var(--stage-good)' : 'var(--stage-muted)'}>{on ? 'ON' : 'off'}</text>
         {/* legend */}
         <g fontSize={11}>
-          <rect x={470} y={70} width={12} height={12} fill="#c9912f" /><text x={488} y={80} fill="var(--stage-fg)">brass (α high) — outside</text>
-          <rect x={470} y={90} width={12} height={12} fill="color-mix(in oklab, var(--stage-metal) 70%, var(--stage-fg))" /><text x={488} y={100} fill="var(--stage-fg)">steel (α low) — inside</text>
+          <rect x={470} y={70} width={12} height={12} fill="#c9912f" /><text x={488} y={80} fill="var(--stage-fg)">brass (α high), outside</text>
+          <rect x={470} y={90} width={12} height={12} fill="color-mix(in oklab, var(--stage-metal) 70%, var(--stage-fg))" /><text x={488} y={100} fill="var(--stage-fg)">steel (α low), inside</text>
         </g>
       </svg>,
     );
     aside = expansionAside(<Tex tex={'\\text{brass } \\alpha > \\text{steel } \\alpha'} block />, on ? 'contact CLOSED' : 'contact open',
-      <>Brass expands more than steel, so when heated it must take the <strong style={{ color: 'var(--stage-fg)' }}>longer, outer</strong> edge of the curve — the strip bends toward the steel. Drag the temperature up until it closes the contact: that's how a <strong style={{ color: 'var(--stage-fg)' }}>thermostat</strong> works.</>);
+      <>Brass expands more than steel, so when heated it must take the <strong style={{ color: 'var(--stage-fg)' }}>longer, outer</strong> edge of the curve, the strip bends toward the steel. Drag the temperature up until it closes the contact: that's how a <strong style={{ color: 'var(--stage-fg)' }}>thermostat</strong> works.</>);
   }
 
   const controls = (

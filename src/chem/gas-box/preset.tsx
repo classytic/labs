@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * GasBoxLab — gas in a box: pressure you can watch being MADE.
+ * GasBoxLab, gas in a box: pressure you can watch being MADE.
  *
  * Hundreds of molecules bounce in a box on <CanvasLayer>; drag the piston to set
  * volume, slide temperature (every molecule speeds up, cool→hot colour) and amount
- * n (dots appear/vanish). Pressure is NOT a control — it is MEASURED from how often
+ * n (dots appear/vanish). Pressure is NOT a control, it is MEASURED from how often
  * + how hard the molecules drum the walls (each wall strike flashes), so PV=nRT
  * emerges from the mechanism instead of being plugged in. A "hold constant" lock
  * yields Boyle (lock T), Gay-Lussac (lock V), Charles (lock P → piston floats).
  *
  * The kinetic-theory algebra (P = ⅓(N/V)m⟨v²⟩ → PV=nRT) lives in a PAIRED
- * MathDerivation block, not here — the sim makes it felt, the derivation proves it.
+ * MathDerivation block, not here, the sim makes it felt, the derivation proves it.
  * SVG gauge/readouts overlay the canvas; honours prefers-reduced-motion.
  */
 
@@ -46,7 +46,7 @@ const GASBOX_CHALLENGE: ChallengeQuestion[] = [
       { value: 'same', label: 'is unchanged' },
     ],
     answer: 'double',
-    explain: 'Same molecules strike half the space twice as often — Boyle’s law, P ∝ 1/V.',
+    explain: 'Same molecules strike half the space twice as often, Boyle’s law, P ∝ 1/V.',
   },
   {
     id: 'gaylussac',
@@ -57,7 +57,7 @@ const GASBOX_CHALLENGE: ChallengeQuestion[] = [
       { value: 'same', label: 'is unchanged' },
     ],
     answer: 'rise',
-    explain: 'Hotter molecules move faster and hit the walls harder and more often — Gay-Lussac, P ∝ T.',
+    explain: 'Hotter molecules move faster and hit the walls harder and more often, Gay-Lussac, P ∝ T.',
   },
 ];
 
@@ -71,7 +71,7 @@ interface Flash { along: number; side: 0 | 1 | 2 | 3; life: number }
 export function GasBoxLab({
   holdConstant = 'none', particleCount = 180, temperature = 300, volume = 7,
   showGauge = true,
-  title = 'Gas in a box — watch pressure being made',
+  title = 'Gas in a box: watch pressure being made',
   prompt = 'Drag the piston, heat it up, add molecules. Pressure is the drumbeat of hits on the walls.',
   height = 300, objectives,
 }: GasBoxProps): ReactNode {
@@ -88,7 +88,7 @@ export function GasBoxLab({
   const flashes = useRef<Flash[]>([]);
   const pTarget = useRef(0);                // captured P when entering Charles mode
   // reduced-motion is read AFTER mount so the first client render matches the
-  // server (where matchMedia is absent) — no hydration divergence.
+  // server (where matchMedia is absent), no hydration divergence.
   const reduce = useReducedMotionDeferred();
   const gate = usePlayGate();
   const [mounted, setMounted] = useState(false);
@@ -152,7 +152,7 @@ export function GasBoxLab({
     ctx.fillStyle = grid; ctx.globalAlpha = 0.35; ctx.fillRect(x0, y0, x1 - x0, y1 - y0); ctx.globalAlpha = 1;
     // walls
     ctx.strokeStyle = fg; ctx.lineWidth = 2; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
-    // molecules — colour encodes temperature (cold blue → hot orange)
+    // molecules, colour encodes temperature (cold blue → hot orange)
     const tFrac = clamp((temp - TMIN) / (TMAX - TMIN), 0, 1);
     const hue = 232 - tFrac * 210;
     ctx.fillStyle = `hsl(${hue.toFixed(0)} 78% 55%)`;

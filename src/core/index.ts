@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/core — the small shared toolkit the labs build on, ON TOP of
+ * @classytic/labs/core, the small shared toolkit the labs build on, ON TOP of
  * the @classytic/stage engine.
  *
  * Stage owns the engine (coordinate system, SVG/Canvas primitives, resolver,
@@ -9,7 +9,7 @@
  *
  * The legacy canvas engine that used to live here (useHiDpiCanvas, scene draw
  * primitives, canvas coords/dragging, the old control/learner/clock duplicates,
- * the expr shim, the canvas primitive registry) has been retired — every lab now
+ * the expr shim, the canvas primitive registry) has been retired, every lab now
  * renders on stage. Import clock/control/learner/expr/coords from
  * `@classytic/stage`.
  */
@@ -22,7 +22,7 @@ export { mulberry32, randInt, shuffle, sample, gaussian, type Rng } from './rng.
 
 export { Tex } from './tex.js';
 
-// Inline sub/superscript text — HTML <sub>/<sup> for readouts (stage's SVG
+// Inline sub/superscript text, HTML <sub>/<sup> for readouts (stage's SVG
 // <Label> covers diagrams). Both share stage's `parseRichText` grammar.
 export { RichText } from '../kit/rich.js';
 export { parseRichText, type RichSpan } from '@classytic/stage';

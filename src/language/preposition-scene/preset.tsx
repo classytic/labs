@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * PrepositionScene — pick the preposition that matches a spatial picture.
+ * PrepositionScene, pick the preposition that matches a spatial picture.
  *
  * Prepositions are inherently spatial, so each item shows a little scene (a
  * thing in / on / under / beside a box) and the learner names the relation.
  * The teaching point for Bangla speakers: English puts the preposition BEFORE
- * the noun ("on the box"), where Bangla uses a postposition AFTER it — so the
+ * the noun ("on the box"), where Bangla uses a postposition AFTER it, so the
  * answer slots in front of the noun and the note makes that contrast explicit.
  */
 
@@ -30,9 +30,9 @@ export interface PrepItem {
   options: string[];
   /** Spatial relation to depict (positions the figure vs the landmark). */
   scene: Relation;
-  /** The figure being placed — an emoji string or an `IconRef`. Default a ball. */
+  /** The figure being placed, an emoji string or an `IconRef`. Default a ball. */
   figure?: IconValue;
-  /** The reference landmark — an emoji/`IconRef`, OR a backdrop key string
+  /** The reference landmark, an emoji/`IconRef`, OR a backdrop key string
    *  ('sky'|'water'|'ground'|'room'). Default a box. */
   landmark?: IconValue;
   note?: string;
@@ -45,7 +45,7 @@ export interface PrepositionProps {
 }
 
 // Always CENTER-anchor a figure (translate(-50%,-50%)) at a safe %, never flush
-// to an edge — emoji glyph metrics vary by platform, and a top:0% figure clips
+// to an edge, emoji glyph metrics vary by platform, and a top:0% figure clips
 // under the panel's overflow:hidden on fonts whose glyph overshoots its box.
 // Centred placement grows the glyph around its midpoint, so it stays inside.
 const figAt = (left: string, top: string, scale = 1, opacity?: number): CSSProperties => ({
@@ -54,7 +54,7 @@ const figAt = (left: string, top: string, scale = 1, opacity?: number): CSSPrope
   ...(opacity != null ? { opacity } : {}),
 });
 
-// where the figure sits relative to the centered landmark — pure data, so any
+// where the figure sits relative to the centered landmark, pure data, so any
 // emoji pair (bird/tree, boat/river, cloud/sky…) composes without new code.
 const FIGURE_POS: Record<Relation, CSSProperties> = {
   over: figAt('50%', '20%'),
@@ -92,7 +92,7 @@ function backdropFigPos(kind: string, rel: Relation): CSSProperties {
   return figAt('50%', '48%');
 }
 
-/** Plain-text label for an icon value (emoji char or IconRef.alt) — for the
+/** Plain-text label for an icon value (emoji char or IconRef.alt), for the
  *  scene's aria-label, since the visuals themselves are decorative. */
 function iconLabel(v: IconValue): string {
   const r = normalizeIcon(v);
@@ -116,7 +116,7 @@ function SceneView({ relation, figure = '🔵', landmark = '📦' }: { relation:
   );
 }
 
-export function PrepositionSceneLab({ items, title = 'Where is it?', prompt = 'Pick the preposition — in English it comes BEFORE the noun.' }: PrepositionProps): ReactNode {
+export function PrepositionSceneLab({ items, title = 'Where is it?', prompt = 'Pick the preposition: in English it comes BEFORE the noun.' }: PrepositionProps): ReactNode {
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [solvedCount, setSolvedCount] = useState(0);
@@ -152,7 +152,7 @@ export function PrepositionSceneLab({ items, title = 'Where is it?', prompt = 'P
 
       {picked !== null && (
         <p className="lang-why" data-state={correct ? 'ok' : 'no'} aria-live="polite">
-          {correct ? (item.note ?? `English: "${item.answer} ${item.noun}" — the preposition comes first.`) : 'Not quite — look at the picture.'}
+          {correct ? (item.note ?? `English: "${item.answer} ${item.noun}", the preposition comes first.`) : 'Not quite, look at the picture.'}
         </p>
       )}
     </div>

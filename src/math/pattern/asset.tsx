@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * pattern-figure asset — ONE figure in a growing visual pattern whose tile count
+ * pattern-figure asset, ONE figure in a growing visual pattern whose tile count
  * follows a linear rule count(n) = a·n + b, built on @classytic/stage. The `a·n`
  * "grow" tiles are stacked as n rows of a (each step adds a row), and the `b`
- * constant tiles sit in a fixed strip below in a distinct colour — making "a per
+ * constant tiles sit in a fixed strip below in a distinct colour, making "a per
  * step, plus a fixed b" legible. Deterministic: cells are a pure function of
  * (n, a, b, cell, origin).
  */

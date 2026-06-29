@@ -1,0 +1,1 @@
+import { LinearModelLab, LinearModelProps } from "./preset.mjs";

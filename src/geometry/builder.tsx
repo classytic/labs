@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * GeometryBuilder — a visual, click-to-build editor for a `GeometryBoard` scene.
+ * GeometryBuilder, a visual, click-to-build editor for a `GeometryBoard` scene.
  *
  * Pick a tool, click the board: drop points, connect them into segments/lines,
  * draw circles (centre → through-point), mark the intersection of two
@@ -10,7 +10,7 @@
  *
  * Now on the @classytic/stage engine: the construction is converted to a SceneDoc
  * and rendered with stage's resolver + `renderElements` (SVG, accessible, real
- * draggable points) — the canvas geometry math is gone. `GeometryBoard` is the
+ * draggable points), the canvas geometry math is gone. `GeometryBoard` is the
  * read-only render of this editor's output.
  */
 
@@ -171,7 +171,7 @@ export function GeometryBuilder({ scene = [], onChange, title = 'Build a constru
         <button type="button" onClick={() => set([])} className="ml-auto rounded-md px-2 py-1 text-xs text-muted-foreground hover:text-destructive">clear</button>
       </div>
       <p className="px-3 pt-1.5 text-xs text-muted-foreground">{hint}{pending.length ? ` · ${pending.length} selected` : ''}</p>
-      <Stage view={VIEW} height={height} onPointerMath={onBuild} ariaLabel={`Geometry construction editor — ${tool} tool`} className="cursor-crosshair">
+      <Stage view={VIEW} height={height} onPointerMath={onBuild} ariaLabel={`Geometry construction editor, ${tool} tool`} className="cursor-crosshair">
         <Grid />
         <Axes />
         {renderElements(doc, resolved, { draggablePoints: tool === 'select', onPointMove })}

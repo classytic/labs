@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/blocks — physics lab block specs.
+ * @classytic/labs/blocks, physics lab block specs.
  *
  * `defineBlock` editor adapters for the physics labs (one domain per file; the
  * registry is assembled in `./index.ts`). Each spec pairs a zod schema with a
@@ -35,13 +35,18 @@ import { EntropyLab } from '../physics/entropy/index.js';
 import { TemperatureScalesLab } from '../physics/temperature-scales/index.js';
 import { WaterDensityLab } from '../physics/water-density/index.js';
 import { EfficiencyLab } from '../physics/efficiency/index.js';
+import { ElectricFieldLab } from '../physics/electric-field/index.js';
+import { ElectricFluxLab } from '../physics/electric-flux/index.js';
+import { GaussLab } from '../physics/gauss-law/index.js';
+import { WorkEnergyLab } from '../physics/work-energy/index.js';
+import { WorkPotentialLab } from '../physics/work-potential/index.js';
 import { labBlock, buildComponents, commonLabProps } from './lab-block.js';
 
 export const ProjectileLabBlock = defineBlock({
   key: 'projectile-lab', // MDX tag = 'ProjectileLab'
   void: true,
   label: 'Projectile lab',
-  description: 'Interactive projectile motion — tune angle & speed, hit a target.',
+  description: 'Interactive projectile motion, tune angle & speed, hit a target.',
   category: 'interactive',
   schema: z.object({ targetMeters: z.number().optional(), g: z.number().optional() }),
   Component: ({ attributes }) => <ProjectileLab targetMeters={attributes.targetMeters} g={attributes.g} />,
@@ -51,7 +56,7 @@ export const OrbitLabBlock = defineBlock({
   key: 'orbit-lab',
   void: true,
   label: 'Orbit lab',
-  description: 'Interactive orbit — launch a satellite: crash, orbit, or escape.',
+  description: 'Interactive orbit, launch a satellite: crash, orbit, or escape.',
   category: 'interactive',
   schema: z.object({}),
   Component: () => <OrbitLab />,
@@ -61,7 +66,7 @@ export const GravityDropBlock = defineBlock({
   key: 'gravity-drop',
   void: true,
   label: 'Gravity drop',
-  description: 'Drop balls on three worlds — compare how gravity changes the fall.',
+  description: 'Drop balls on three worlds, compare how gravity changes the fall.',
   category: 'interactive',
   schema: z.object({ height: z.number().optional() }),
   Component: ({ attributes }) => <GravityDrop height={attributes.height} />,
@@ -71,7 +76,7 @@ export const RiverBoatBlock = defineBlock({
   key: 'river-boat',
   void: true,
   label: 'River crossing (vectors)',
-  description: 'Boat-and-river vector problem — step through tip-to-tail addition + component resolution.',
+  description: 'Boat-and-river vector problem, step through tip-to-tail addition + component resolution.',
   category: 'interactive',
   schema: z.object({
     boatSpeed: z.number().optional(),
@@ -119,7 +124,7 @@ export const OpticsBlock = defineBlock({
   schema: z.object({}),
   Component: ({ mode }) => (
     mode === 'editing'
-      ? <div><ConfigPanel><span style={{ opacity: 0.7 }}>No settings — drag the source, aim, or mirrors in the lesson.</span></ConfigPanel><OpticsLab /></div>
+      ? <div><ConfigPanel><span style={{ opacity: 0.7 }}>No settings, drag the source, aim, or mirrors in the lesson.</span></ConfigPanel><OpticsLab /></div>
       : <OpticsLab />
   ),
 });
@@ -129,7 +134,7 @@ export const LeverBlock = defineBlock({
   tag: 'Lever',
   void: true,
   label: 'Lever (balance the torque)',
-  description: 'A known weight at a distance vs an unknown — set the unknown so turning effects match.',
+  description: 'A known weight at a distance vs an unknown, set the unknown so turning effects match.',
   category: 'interactive',
   schema: z.object({ knownWeight: z.number().default(4), knownDist: z.number().default(3), unknownDist: z.number().default(2), controlId: z.string().optional() }),
   Component: ({ attributes, mode, updateAttributes }) => {
@@ -233,7 +238,7 @@ export const RainRelativeBlock = defineBlock({
   tag: 'RainRelative',
   void: true,
   label: 'Rain on a moving car (relative velocity)',
-  description: 'Animated rain that slants as the car speeds up — apparent velocity V_rain − V_car, with a live triangle + angle.',
+  description: 'Animated rain that slants as the car speeds up, apparent velocity V_rain − V_car, with a live triangle + angle.',
   category: 'interactive',
   schema: z.object({ maxSpeed: z.number().default(10), start: z.number().default(0), title: z.string().optional(), prompt: z.string().optional() }),
   Component: ({ attributes, mode, updateAttributes }) => {
@@ -309,7 +314,7 @@ export const RampForcesBlock = defineBlock({
           <ConfigRow label="title"><TextField value={attributes.title ?? ''} onChange={(v) => updateAttributes({ title: v })} placeholder="Tilt the Ramp" /></ConfigRow>
           <ConfigRow label="angle (°)"><NumField value={attributes.angleDeg ?? 30} onChange={(v) => updateAttributes({ angleDeg: v })} /></ConfigRow>
           <ConfigRow label="friction μ"><NumField value={attributes.friction ?? 0.3} onChange={(v) => updateAttributes({ friction: v })} /></ConfigRow>
-          <ConfigRow label='controls — e.g. { "hide": ["mass"], "lock": ["angle"] }'><JsonArea value={attributes.controls ?? {}} onChange={(v) => updateAttributes({ controls: v })} rows={3} /></ConfigRow>
+          <ConfigRow label='controls: e.g. { "hide": ["mass"], "lock": ["angle"] }'><JsonArea value={attributes.controls ?? {}} onChange={(v) => updateAttributes({ controls: v })} rows={3} /></ConfigRow>
         </ConfigPanel>
         {widget}
       </div>
@@ -373,13 +378,13 @@ const stringSchema = z.object({ mode: z.enum(['pulse', 'resonance']).optional(),
 export const StringReflectionBlock = wlab('string-reflection', 'Reflection & standing waves on a string', 'A pulse reflects (fixed end inverts, free end upright); a continuous wave + its reflection lock into a standing wave at the resonant harmonics fₙ=n·c/2L.', stringSchema, (a) => <StringReflectionLab {...a} />);
 
 const magnetismSchema = z.object({ ...common });
-export const MagnetismBlock = wlab('magnetism', 'Magnetism — field lines & compass', 'Drag a bar magnet (or switch to a current-carrying wire); the field lines retrace live and a draggable compass needle aligns to the field.', magnetismSchema, (a) => <MagnetismLab {...a} />);
+export const MagnetismBlock = wlab('magnetism', 'Magnetism, field lines & compass', 'Drag a bar magnet (or switch to a current-carrying wire); the field lines retrace live and a draggable compass needle aligns to the field.', magnetismSchema, (a) => <MagnetismLab {...a} />);
 
 const lorentzSchema = z.object({ charge: z.union([z.literal(1), z.literal(-1)]).optional(), fieldOut: z.boolean().optional(), B: z.number().optional(), speed: z.number().optional(), ...common });
 export const LorentzBlock = wlab('lorentz', 'Lorentz force F = q·v×B', 'A charge fired into a magnetic field curves (cyclotron motion); v, B, F shown perpendicular with the right-hand rule. Flip charge or field → the curve reverses. Cyclotron / aurora framing.', lorentzSchema, (a) => <LorentzForceLab {...a} />);
 
 const impulseSchema = z.object({ mass: z.number().optional(), speed: z.number().optional(), contact: z.number().optional(), crackForce: z.number().optional(), ...common });
-export const ImpulseBlock = wlab('impulse', 'Impulse — catch the egg (J = F·Δt = Δp)', 'Same ball, same speed → fixed impulse. Stretch the contact time and the force–time pulse morphs from a tall spike to a low bump with EQUAL shaded area, so the peak force plummets. A fragile egg cracks above its force limit — the number behind airbags, crumple zones and bending your knees.', impulseSchema, (a) => <ImpulseLab {...a} />);
+export const ImpulseBlock = wlab('impulse', 'Impulse, catch the egg (J = F·Δt = Δp)', 'Same ball, same speed → fixed impulse. Stretch the contact time and the force–time pulse morphs from a tall spike to a low bump with EQUAL shaded area, so the peak force plummets. A fragile egg cracks above its force limit, the number behind airbags, crumple zones and bending your knees.', impulseSchema, (a) => <ImpulseLab {...a} />);
 
 const bulletWallsSchema = z.object({ speed: z.number().optional(), toughness: z.number().optional(), planks: z.number().optional(), mass: z.number().optional(), ...common });
 export const BulletWallsBlock = wlab('bullet-walls', 'Bullet through N planks (penetration)', 'The classic "how many planks?" problem, predict-first: each plank drains a fixed chunk of energy (a fixed Δv²), so the bullet slows plank-by-plank and lodges when its kinetic energy runs out. Guess the count, fire, and watch v² = u² − 2as play out with a draining energy bar.', bulletWallsSchema, (a) => <BulletWallsLab {...a} />);
@@ -389,31 +394,31 @@ export const BulletWallsBlock = wlab('bullet-walls', 'Bullet through N planks (p
 // Any knob (keyed by its Field/Control name) can also be hidden or locked.
 const ccSchema = z.object({ hide: z.array(z.string()).optional(), lock: z.array(z.string()).optional() }).optional();
 const circularSchema = z.object({ speed: z.number().optional(), radius: z.number().optional(), mass: z.number().optional(), controlConfig: ccSchema, ...common });
-export const CircularMotionBlock = wlab('circular-motion', 'Circular motion — centripetal force & cut the string', 'A ball whirls on a string: velocity stays tangent while the tension (centripetal force F = mv²/r) points to the centre, bending the path without changing speed. Cut the string and it flies off along the TANGENT — not radially outward — killing the classic misconception. Live F, ω and period.', circularSchema, (a) => <CircularMotionLab {...a} />);
+export const CircularMotionBlock = wlab('circular-motion', 'Circular motion, centripetal force & cut the string', 'A ball whirls on a string: velocity stays tangent while the tension (centripetal force F = mv²/r) points to the centre, bending the path without changing speed. Cut the string and it flies off along the TANGENT, not radially outward, killing the classic misconception. Live F, ω and period.', circularSchema, (a) => <CircularMotionLab {...a} />);
 
 const energySkateSchema = z.object({ startHeight: z.number().optional(), friction: z.boolean().optional(), mass: z.number().optional(), controlConfig: ccSchema, ...common });
-export const EnergySkateBlock = wlab('energy-skate', 'Energy skate park — KE ⇄ PE (+ heat)', 'A skater released on a ramp: potential, kinetic and thermal bars always sum to the same total. Friction off → it returns to the same height forever; friction on → the heat bar grows and every peak is lower. Energy conservation and conversion, animated (the LOL bar chart).', energySkateSchema, (a) => <EnergySkateLab {...a} />);
+export const EnergySkateBlock = wlab('energy-skate', 'Energy skate park, KE ⇄ PE (+ heat)', 'A skater released on a ramp: potential, kinetic and thermal bars always sum to the same total. Friction off → it returns to the same height forever; friction on → the heat bar grows and every peak is lower. Energy conservation and conversion, animated (the LOL bar chart).', energySkateSchema, (a) => <EnergySkateLab {...a} />);
 
 const shmSchema = z.object({ mode: z.enum(['spring', 'pendulum']).optional(), k: z.number().optional(), length: z.number().optional(), mass: z.number().optional(), amplitude: z.number().optional(), controlConfig: ccSchema, ...common });
-export const SimpleHarmonicBlock = wlab('shm', 'Simple harmonic motion — spring & pendulum', 'One a = −ω²x kernel, two skins. A restoring force ∝ displacement gives x(t) = A·cos(ωt), and a pen traces it out as a SINE — the bridge to the waves lessons. Spring: ω=√(k/m). Pendulum: ω=√(g/L), with the period independent of mass and amplitude. Live ω/T/f and a PE⇄KE energy split.', shmSchema, (a) => <SimpleHarmonicLab {...a} />, 'SimpleHarmonic');
+export const SimpleHarmonicBlock = wlab('shm', 'Simple harmonic motion, spring & pendulum', 'One a = −ω²x kernel, two skins. A restoring force ∝ displacement gives x(t) = A·cos(ωt), and a pen traces it out as a SINE, the bridge to the waves lessons. Spring: ω=√(k/m). Pendulum: ω=√(g/L), with the period independent of mass and amplitude. Live ω/T/f and a PE⇄KE energy split.', shmSchema, (a) => <SimpleHarmonicLab {...a} />, 'SimpleHarmonic');
 
 const atwoodSchema = z.object({ m1: z.number().optional(), m2: z.number().optional(), ...common });
-export const AtwoodBlock = wlab('atwood', 'Atwood machine — two masses over a pulley', 'Two masses share one rope over a pulley. Only the difference in weight drives the system while the total mass resists it: a = (m₁−m₂)g/(m₁+m₂), tension T = 2m₁m₂g/(m₁+m₂). Equal masses balance; a tiny difference on big masses gives a slow, measurable a — how Atwood weighed gravity. Predict which side falls, then release.', atwoodSchema, (a) => <AtwoodLab {...a} />);
+export const AtwoodBlock = wlab('atwood', 'Atwood machine, two masses over a pulley', 'Two masses share one rope over a pulley. Only the difference in weight drives the system while the total mass resists it: a = (m₁−m₂)g/(m₁+m₂), tension T = 2m₁m₂g/(m₁+m₂). Equal masses balance; a tiny difference on big masses gives a slow, measurable a, how Atwood weighed gravity. Predict which side falls, then release.', atwoodSchema, (a) => <AtwoodLab {...a} />);
 
 const terminalSchema = z.object({ mass: z.number().optional(), drag: z.number().optional(), parachute: z.boolean().optional(), controlConfig: ccSchema, ...common });
-export const TerminalVelocityBlock = wlab('terminal-velocity', 'Terminal velocity — the skydiver (air drag)', 'A fall with air resistance: drag grows with speed (∝v²) until it balances gravity, so the speed levels off at v_t = √(mg/b). The weight arrow stays fixed while the drag arrow rises to meet it and the v–t curve flattens onto its asymptote (exact tanh solution). Pop the parachute and v_t collapses to a survivable speed.', terminalSchema, (a) => <TerminalVelocityLab {...a} />);
+export const TerminalVelocityBlock = wlab('terminal-velocity', 'Terminal velocity, the skydiver (air drag)', 'A fall with air resistance: drag grows with speed (∝v²) until it balances gravity, so the speed levels off at v_t = √(mg/b). The weight arrow stays fixed while the drag arrow rises to meet it and the v–t curve flattens onto its asymptote (exact tanh solution). Pop the parachute and v_t collapses to a survivable speed.', terminalSchema, (a) => <TerminalVelocityLab {...a} />);
 
 const keplerSchema = z.object({ semiMajor: z.number().optional(), eccentricity: z.number().optional(), wedges: z.boolean().optional(), controlConfig: ccSchema, ...common });
-export const KeplerBlock = wlab('kepler', 'Kepler’s laws — orbits & equal areas', 'A planet on a true ellipse with the star at a focus (Kepler 1). Solving Kepler’s equation makes it genuinely speed up at perihelion, and the equal-time wedges it sweeps come out equal in area (Kepler 2) — fat-and-short near the star, thin-and-long far out. Stretch the orbit and the period grows as T² ∝ a³ (Kepler 3).', keplerSchema, (a) => <KeplerLab {...a} />);
+export const KeplerBlock = wlab('kepler', 'Kepler’s laws, orbits & equal areas', 'A planet on a true ellipse with the star at a focus (Kepler 1). Solving Kepler’s equation makes it genuinely speed up at perihelion, and the equal-time wedges it sweeps come out equal in area (Kepler 2), fat-and-short near the star, thin-and-long far out. Stretch the orbit and the period grows as T² ∝ a³ (Kepler 3).', keplerSchema, (a) => <KeplerLab {...a} />);
 
 const gravitationSchema = z.object({ planetMass: z.number().optional(), satMass: z.number().optional(), ...common });
-export const GravitationBlock = wlab('gravitation', 'Universal gravitation — the inverse-square law', 'Newton’s F = G·M·m / r². Drag the satellite and the pull tracks 1/r²: double the distance and the force drops to a quarter (not a half). A live F–r curve marks your spot on the steep fall-off; the same law thins weight with altitude (g = GM/r²) and sets orbital speed v = √(GM/r).', gravitationSchema, (a) => <GravitationLab {...a} />);
+export const GravitationBlock = wlab('gravitation', 'Universal gravitation, the inverse-square law', 'Newton’s F = G·M·m / r². Drag the satellite and the pull tracks 1/r²: double the distance and the force drops to a quarter (not a half). A live F–r curve marks your spot on the steep fall-off; the same law thins weight with altitude (g = GM/r²) and sets orbital speed v = √(GM/r).', gravitationSchema, (a) => <GravitationLab {...a} />);
 
 const heatTransferSchema = z.object({ mode: z.enum(['conduction', 'convection', 'radiation']).optional(), controlConfig: ccSchema, ...common });
-export const HeatTransferBlock = wlab('heat-transfer', 'Heat transfer — conduction / convection / radiation', 'The three ways heat moves, each with its rate law and animation. Author a survey (all three) OR a focused lesson: set mode + controlConfig.hide=[\'mechanism\'] to show conduction (or convection / radiation) on its own.', heatTransferSchema, (a) => <HeatTransferLab {...a} />);
+export const HeatTransferBlock = wlab('heat-transfer', 'Heat transfer, conduction / convection / radiation', 'The three ways heat moves, each with its rate law and animation. Author a survey (all three) OR a focused lesson: set mode + controlConfig.hide=[\'mechanism\'] to show conduction (or convection / radiation) on its own.', heatTransferSchema, (a) => <HeatTransferLab {...a} />);
 
 const thermalExpansionSchema = z.object({ mode: z.enum(['length', 'area', 'volume', 'bimetallic']).optional(), controlConfig: ccSchema, ...common });
-export const ThermalExpansionBlock = wlab('thermal-expansion', 'Thermal expansion — length / area / volume / bimetallic', 'Heat a solid and it grows: ΔL=αLΔT, ΔA=2αAΔT, ΔV=3αVΔT, plus a bimetallic-strip thermostat. Author one case (e.g. mode:\'area\', controlConfig.hide=[\'what expands\']) or the full set.', thermalExpansionSchema, (a) => <ThermalExpansionLab {...a} />);
+export const ThermalExpansionBlock = wlab('thermal-expansion', 'Thermal expansion, length / area / volume / bimetallic', 'Heat a solid and it grows: ΔL=αLΔT, ΔA=2αAΔT, ΔV=3αVΔT, plus a bimetallic-strip thermostat. Author one case (e.g. mode:\'area\', controlConfig.hide=[\'what expands\']) or the full set.', thermalExpansionSchema, (a) => <ThermalExpansionLab {...a} />);
 
 // ── Heat & temperature + thermodynamics (on the thermal core + thermo kernel) ──
 const heatingCurveSchema = z.object({
@@ -427,22 +432,22 @@ const heatingCurveSchema = z.object({
   power: z.number().optional().describe('initial heating power, W (negative cools)'),
   ...common,
 });
-export const HeatingCurveBlock = wlab('heating-curve', 'Heating curve — q=mcΔθ runs + latent plateaus', 'Pour heat into ice and watch temperature climb in steps: sloped runs where a phase warms (q=mcΔθ) and flat plateaus where it melts/boils (q=mL). Burner + beaker + thermometer beside the live curve. AUTHOR the model: pick a preset OR declare a custom substance (specific + latent heats, melt/boil points) and the starting mass/power.', heatingCurveSchema, (a) => <HeatingCurveLab {...a} />);
+export const HeatingCurveBlock = wlab('heating-curve', 'Heating curve, q=mcΔθ runs + latent plateaus', 'Pour heat into ice and watch temperature climb in steps: sloped runs where a phase warms (q=mcΔθ) and flat plateaus where it melts/boils (q=mL). Burner + beaker + thermometer beside the live curve. AUTHOR the model: pick a preset OR declare a custom substance (specific + latent heats, melt/boil points) and the starting mass/power.', heatingCurveSchema, (a) => <HeatingCurveLab {...a} />);
 
 const gasProcessSchema = z.object({ kind: z.enum(['isothermal', 'adiabatic', 'isobaric', 'isochoric']).optional(), gas: z.enum(['monatomic', 'diatomic']).optional(), moles: z.number().optional(), tempK: z.number().optional().describe('initial temperature, K'), volumeL: z.number().optional().describe('initial volume, L'), ...common });
-export const GasProcessBlock = wlab('gas-process', 'Gas processes — work = area under P–V', 'Expand/compress an ideal gas isothermally, adiabatically, isobarically or isochorically. The shaded area under the P–V curve is the work; the first law ΔU = Q − W balances every term. A faint reference isotherm shows the adiabatic falling steeper.', gasProcessSchema, (a) => <GasProcessLab {...a} />);
+export const GasProcessBlock = wlab('gas-process', 'Gas processes, work = area under P–V', 'Expand/compress an ideal gas isothermally, adiabatically, isobarically or isochorically. The shaded area under the P–V curve is the work; the first law ΔU = Q − W balances every term. A faint reference isotherm shows the adiabatic falling steeper.', gasProcessSchema, (a) => <GasProcessLab {...a} />);
 
 const carnotSchema = z.object({ hotK: z.number().optional().describe('hot reservoir temperature, K'), coldK: z.number().optional().describe('cold reservoir temperature, K'), gas: z.enum(['monatomic', 'diatomic']).optional(), expansionRatio: z.number().optional().describe('isothermal expansion V₂/V₁'), ...common });
-export const CarnotBlock = wlab('carnot', 'Carnot cycle — P–V loop + T–S rectangle', 'The most efficient heat engine, shown as a P–V loop (enclosed area = net work) and the same cycle as a T–S rectangle (heat in at Th, out at Tc). Efficiency η = 1 − Tc/Th, with the entropy bookkeeping ΔS = Qh/Th = Qc/Tc → net 0.', carnotSchema, (a) => <CarnotCycleLab {...a} />);
+export const CarnotBlock = wlab('carnot', 'Carnot cycle, P–V loop + T–S rectangle', 'The most efficient heat engine, shown as a P–V loop (enclosed area = net work) and the same cycle as a T–S rectangle (heat in at Th, out at Tc). Efficiency η = 1 − Tc/Th, with the entropy bookkeeping ΔS = Qh/Th = Qc/Tc → net 0.', carnotSchema, (a) => <CarnotCycleLab {...a} />);
 
 const entropySchema = z.object({ mode: z.enum(['heat', 'expansion']).optional(), ...common });
-export const EntropyBlock = wlab('entropy', 'Entropy & the 2nd law — the one-way arrow', 'Why heat flows hot→cold (ΔS_total = Q/Tc − Q/Th > 0) and a gas spreads into a vacuum (ΔS = nR·ln Vf/Vi). The total entropy of the universe always increases. Two modes: heat flow and free expansion.', entropySchema, (a) => <EntropyLab {...a} />);
+export const EntropyBlock = wlab('entropy', 'Entropy & the 2nd law, the one-way arrow', 'Why heat flows hot→cold (ΔS_total = Q/Tc − Q/Th > 0) and a gas spreads into a vacuum (ΔS = nR·ln Vf/Vi). The total entropy of the universe always increases. Two modes: heat flow and free expansion.', entropySchema, (a) => <EntropyLab {...a} />);
 
 const tempScalesSchema = z.object({ ...common });
-export const TemperatureScalesBlock = wlab('temperature-scales', 'Temperature scales — °C / °F / K', 'One mercury column read against Celsius, Fahrenheit and Kelvin at once (F = 9⁄5·C + 32, K = C + 273.15). Fixed points marked; jump to absolute zero, ice, body, boiling. Shows why Kelvin starts at absolute zero.', tempScalesSchema, (a) => <TemperatureScalesLab {...a} />);
+export const TemperatureScalesBlock = wlab('temperature-scales', 'Temperature scales, °C / °F / K', 'One mercury column read against Celsius, Fahrenheit and Kelvin at once (F = 9⁄5·C + 32, K = C + 273.15). Fixed points marked; jump to absolute zero, ice, body, boiling. Shows why Kelvin starts at absolute zero.', tempScalesSchema, (a) => <TemperatureScalesLab {...a} />);
 
 const waterDensitySchema = z.object({ mode: z.enum(['anomaly', 'lake']).optional(), ...common });
-export const WaterDensityBlock = wlab('water-density', 'Water’s 4 °C anomaly — why ice floats', 'Water is densest at 4 °C and expands again toward freezing, so ice floats. Drag the temperature on the density curve, or switch to the lake view to see why a pond freezes top-down (4 °C water and fish survive below the ice).', waterDensitySchema, (a) => <WaterDensityLab {...a} />);
+export const WaterDensityBlock = wlab('water-density', 'Water’s 4 °C anomaly, why ice floats', 'Water is densest at 4 °C and expands again toward freezing, so ice floats. Drag the temperature on the density curve, or switch to the lake view to see why a pond freezes top-down (4 °C water and fish survive below the ice).', waterDensitySchema, (a) => <WaterDensityLab {...a} />);
 
 const efficiencySchema = z.object({
   device: z.enum(['incandescent', 'led', 'petrol-engine', 'electric-motor', 'power-station', 'human']).optional(),
@@ -451,7 +456,31 @@ const efficiencySchema = z.object({
   streams: z.array(z.object({ label: z.string(), share: z.number(), kind: z.enum(['useful', 'waste']), color: z.string().optional() })).optional().describe('author your own energy breakdown'),
   ...common,
 });
-export const EfficiencyBlock = wlab('efficiency', 'Efficiency — input→output ratio (Sankey)', 'Efficiency as the fraction of energy that comes out useful: η = useful ÷ input, drawn as a Sankey energy flow that splits into a useful stream and wasted heat. Compare real devices (incandescent vs LED, engine vs motor) or AUTHOR your own breakdown via the streams field.', efficiencySchema, (a) => <EfficiencyLab {...a} />);
+export const EfficiencyBlock = wlab('efficiency', 'Efficiency, input→output ratio (Sankey)', 'Efficiency as the fraction of energy that comes out useful: η = useful ÷ input, drawn as a Sankey energy flow that splits into a useful stream and wasted heat. Compare real devices (incandescent vs LED, engine vs motor) or AUTHOR your own breakdown via the streams field.', efficiencySchema, (a) => <EfficiencyLab {...a} />);
+
+// ── Electrostatics (charges / flux / Gauss) + work–energy (on the shared `field` core) ──
+const electricFieldSchema = z.object({ title: z.string().optional(), prompt: z.string().optional(), objectives: z.array(z.string()).optional() });
+export const ElectricFieldBlock = wlab('electric-field', 'Electric field, charges & the force F = qE', 'Drag two charges and flip their signs; field lines retrace live, flowing out of + into −. Drop a test charge anywhere and a force arrow F = qE appears, toward + or away depending on its sign. Like charges repel, opposites attract.', electricFieldSchema, (a) => <ElectricFieldLab {...a} />);
+
+const electricFluxSchema = z.object({
+  field: z.number().optional().describe('field strength in vacuum (arbitrary units)'),
+  area: z.number().optional().describe('area: length of the flat window, scene units'),
+  angleDeg: z.number().optional().describe('initial angle between the area normal and the field, degrees'),
+  height: z.number().optional(),
+  activity: z.string().optional(),
+  title: z.string().optional(),
+  prompt: z.string().optional(),
+});
+export const ElectricFluxBlock = wlab('electric-flux', 'Electric flux Φ = E·A·cosθ (line-counting)', 'Flux made literal: how many field lines thread your area. Rotate the area (edge-on Φ = 0, face-on Φ = E·A), resize it, or change the medium (permittivity εr weakens E). The lines that pass through light up: that count is the flux.', electricFluxSchema, (a) => <ElectricFluxLab {...a} />);
+
+const gaussSchema = z.object({ height: z.number().optional(), activity: z.string().optional(), title: z.string().optional(), prompt: z.string().optional() });
+export const GaussLawBlock = wlab('gauss-law', 'Gauss’s law, flux depends only on charge inside', 'A Gaussian loop (drag its centre, drag the rim to resize) sits in the field of two charges. Green markers show field leaving, red show field entering. The net flux Φ = Q/ε₀ depends only on the charge ENCLOSED, not the loop’s size or shape, and a charge outside adds zero.', gaussSchema, (a) => <GaussLab {...a} />, 'GaussLaw');
+
+const workEnergySchema = z.object({ mode: z.enum(['spring', 'constant']).optional(), title: z.string().optional(), prompt: z.string().optional(), objectives: z.array(z.string()).optional() });
+export const WorkEnergyBlock = wlab('work-energy', 'Work done = area under the force–distance graph', 'Work made visible as the AREA under the force–distance graph. A spring (F = kx) gives a triangle so W = ½kx², a constant force gives a rectangle so W = Fx. Drag the distance and the shaded area (the work) grows with it; the equation updates live.', workEnergySchema, (a) => <WorkEnergyLab {...a} />);
+
+const workPotentialSchema = z.object({ height: z.number().optional(), activity: z.string().optional(), title: z.string().optional(), prompt: z.string().optional() });
+export const WorkPotentialBlock = wlab('work-potential', 'Potential & work, equipotentials and W = qΔV', 'Electric potential made visible through equipotential rings (V = kQ/r) with field lines at right angles. Drag points A and B: the work to move a charge A → B is W = qΔV and depends only on the endpoints, never the path. Slide a point around a ring (same V) and the work is zero.', workPotentialSchema, (a) => <WorkPotentialLab {...a} />);
 
 export const physicsBlocks = [
   ProjectileLabBlock,
@@ -490,10 +519,15 @@ export const physicsBlocks = [
   TemperatureScalesBlock,
   WaterDensityBlock,
   EfficiencyBlock,
+  ElectricFieldBlock,
+  ElectricFluxBlock,
+  GaussLawBlock,
+  WorkEnergyBlock,
+  WorkPotentialBlock,
 ] as const;
 
 // tag→component MDX render map. The 24 wlab-based blocks are DERIVED from physicsBlocks
-// (one source of truth — a new wlab block appears here automatically). Only the bespoke
+// (one source of truth, a new wlab block appears here automatically). Only the bespoke
 // defineBlock blocks (custom editor UI, or a different raw render component) are listed by hand.
 export const physicsComponents = {
   ...buildComponents(physicsBlocks),

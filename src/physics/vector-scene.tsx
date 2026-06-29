@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * VectorScene — a GENERAL vector-algebra board (not one problem), now on the
+ * VectorScene, a GENERAL vector-algebra board (not one problem), now on the
  * @classytic/stage engine (SVG arrows, draggable tips, accessible).
  *
  * A creator declares named vectors; some are draggable (drag the tip to set
@@ -135,7 +135,7 @@ export function VectorScene({ vectors, view, title = 'Vectors', height = 340 }: 
   ) : undefined;
 
   return (
-    <LabFrame title={title} prompt={draggables.length > 0 ? 'Drag a vector’s tip to change it — sums and components update live.' : undefined} aside={aside}>
+    <LabFrame title={title} prompt={draggables.length > 0 ? 'Drag a vector’s tip to change it, sums and components update live.' : undefined} aside={aside}>
       {figure}
     </LabFrame>
   );

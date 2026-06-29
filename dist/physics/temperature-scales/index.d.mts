@@ -1,0 +1,1 @@
+import { TemperatureScalesLab, TemperatureScalesProps } from "./preset.mjs";

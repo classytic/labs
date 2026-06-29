@@ -1,16 +1,16 @@
 /**
- * @classytic/labs/language — shared deck model + helpers.
+ * @classytic/labs/language, shared deck model + helpers.
  *
  * The ONE authorable model for language labs: a creator (or an agent) declares
  * a `Deck` of items; every vocab lab plays it. Grammar labs take their own
  * small data shapes but reuse `Pos` + the audio resolver here. No content is
- * generated — audio is creator-supplied (uploaded / external URL) or the
+ * generated, audio is creator-supplied (uploaded / external URL) or the
  * browser's built-in `speechSynthesis`, nothing else.
  */
 
 import type { IconValue } from './icon.js';
 
-/** Part of speech — drives the Montessori-style colour coding across grammar
+/** Part of speech, drives the Montessori-style colour coding across grammar
  *  labs so a learner builds one consistent visual intuition. */
 export type Pos =
   | 'noun' | 'verb' | 'article' | 'adjective' | 'preposition'
@@ -31,7 +31,7 @@ export interface DeckItem {
   transliteration?: string;
   /** Optional audio: an uploaded media URL OR an external URL. Never generated. */
   audioUrl?: string;
-  /** Optional picture for kids/visual decks — an emoji string, or an `IconRef`
+  /** Optional picture for kids/visual decks, an emoji string, or an `IconRef`
    *  ({ kind:'emoji'|'svg'|'image', … }) for a registered SVG / uploaded image. */
   icon?: IconValue;
   /** Optional usage example (target language). */
@@ -87,7 +87,7 @@ export function speak(item: DeckItem, lang: string): boolean {
   return false;
 }
 
-/** Deterministic shuffle (seeded LCG) — same input+seed → same order, so SSR
+/** Deterministic shuffle (seeded LCG), same input+seed → same order, so SSR
  *  and client agree. Never uses Math.random at module scope. */
 export function seededShuffle<T>(arr: readonly T[], seed = 1): T[] {
   const a = arr.slice();

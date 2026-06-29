@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Probability glyph kit — proper dice + coins for chance/statistics labs (the
+ * Probability glyph kit, proper dice + coins for chance/statistics labs (the
  * Brilliant-grade replacement for the ⚀⚁⚂ emoji). Pixel space, token-coloured,
  * pure SVG. A DiceGlyph draws the standard pip layout for value 1–6; a CoinGlyph
  * draws a ridged heads/tails coin. Both take a `live`/`highlight` accent so a lab
@@ -11,7 +11,7 @@
 import type { ReactNode } from 'react';
 
 const FG = 'var(--stage-fg)';
-// percentages must sum to 100% — a smaller sum leaks transparency into the fill
+// percentages must sum to 100%, a smaller sum leaks transparency into the fill
 const FACE = 'color-mix(in oklab, var(--stage-bg) 92%, var(--stage-fg))';
 const METAL = 'var(--stage-metal)';
 const GOLD = 'var(--stage-warn)';

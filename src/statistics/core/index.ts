@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/statistics core — the pure kernels: descriptive statistics
+ * @classytic/labs/statistics core, the pure kernels: descriptive statistics
  * (centre/spread/position) and sequences & series (arithmetic/geometric). The
  * labs render these numbers, never recompute them.
  */

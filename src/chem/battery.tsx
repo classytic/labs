@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Battery — a galvanic (voltaic) cell. Two half-cells: at the anode a metal is
+ * Battery, a galvanic (voltaic) cell. Two half-cells: at the anode a metal is
  * oxidized and releases electrons; they flow through the external wire to the
  * cathode, where ions are reduced. Watch the electrons stream, see the
  * half-reactions and the cell EMF.
@@ -64,7 +64,7 @@ export function Battery({ emf, title = 'Galvanic cell: electrons on the move', h
   const figure = (
     <PlayWrap gate={gate}>
       <Stage view={VIEW} height={height} preserveAspect={false} ariaLabel={`Galvanic cell, ${E.toFixed(2)} V, ${(current * 1000).toFixed(0)} mA`}>
-        {/* beakers (electrolyte solutions) — glass walls + a liquid surface line */}
+        {/* beakers (electrolyte solutions), glass walls + a liquid surface line */}
         <Polygon points={rect(LX, 16, BBOT, BTOP)} color="var(--stage-fg)" fill="var(--stage-accent)" fillOpacity={0.16} weight={1.5} />
         <Polygon points={rect(RX, 16, BBOT, BTOP)} color="var(--stage-fg)" fill="var(--stage-accent-2)" fillOpacity={0.16} weight={1.5} />
         <Segment from={{ x: LX - 16, y: BTOP - 1.2 }} to={{ x: LX + 16, y: BTOP - 1.2 }} color="var(--stage-accent)" opacity={0.7} weight={1.5} />

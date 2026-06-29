@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/blocks — biology lab block specs.
+ * @classytic/labs/blocks, biology lab block specs.
  *
  * `defineBlock` editor adapters for the biology labs. One domain per file;
  * assembled in `./index.ts` and exported at `@classytic/labs/blocks/biology`.
@@ -17,7 +17,7 @@ export const EnzymeRateBlock = defineBlock({
   tag: 'EnzymeRate',
   void: true,
   label: 'Enzyme rate (optimum & denaturation)',
-  description: 'Drag temperature (or pH); the rate climbs to an optimum then crashes as the lock-and-key active site is mangled — irreversibly for temperature (cooling won’t fix it), reversibly for pH. The bell is built from plotted points.',
+  description: 'Drag temperature (or pH); the rate climbs to an optimum then crashes as the lock-and-key active site is mangled, irreversibly for temperature (cooling won’t fix it), reversibly for pH. The bell is built from plotted points.',
   category: 'interactive',
   schema: z.object({
     factor: z.enum(['temperature', 'pH']).default('temperature'),
@@ -48,7 +48,7 @@ export const PhotosynthesisFactorsBlock = defineBlock({
   key: 'photosynthesis-factors',
   tag: 'PhotosynthesisFactors',
   void: true,
-  label: 'Photosynthesis — limiting factors',
+  label: 'Photosynthesis: limiting factors',
   description: 'Sliders for light, CO₂ and temperature; the rate climbs then plateaus at the factor in shortest supply (raise it → higher plateau), while temperature gives a peak (denaturation). Freeze curves to compare.',
   category: 'interactive',
   schema: z.object({
@@ -140,7 +140,7 @@ export const GeneticCrossBlock = defineBlock({
   tag: 'GeneticCross',
   void: true,
   label: 'Genetic cross (dominance / codominance / blood groups)',
-  description: 'The general cross tool: pick a pattern — simple dominance, ABO blood groups (multiple alleles + codominance → AB), or incomplete dominance (red × white → pink) — or author your own allele model. Gametes drop onto the 2×2 grid; genotype + phenotype ratios read off as tally bars. Predict-before-reveal.',
+  description: 'The general cross tool: pick a pattern, simple dominance, ABO blood groups (multiple alleles + codominance → AB), or incomplete dominance (red × white → pink), or author your own allele model. Gametes drop onto the 2×2 grid; genotype + phenotype ratios read off as tally bars. Predict-before-reveal.',
   category: 'interactive',
   schema: z.object({
     preset: z.enum(['monohybrid', 'blood-type', 'incomplete', 'dihybrid', 'custom']).default('blood-type'),
@@ -185,7 +185,7 @@ export const SequenceBlock = defineBlock({
   tag: 'Sequence',
   void: true,
   label: 'DNA/RNA sequence (replication / transcription / translation)',
-  description: 'A base-pairing builder: the template strand is given and the learner builds the partner by pairing each unit. Pick the process — replication (A–T, G–C, semiconservative), transcription (T→U into mRNA), or translation (codons → amino acids via the genetic code) — and the template.',
+  description: 'A base-pairing builder: the template strand is given and the learner builds the partner by pairing each unit. Pick the process, replication (A–T, G–C, semiconservative), transcription (T→U into mRNA), or translation (codons → amino acids via the genetic code), and the template.',
   category: 'interactive',
   schema: z.object({
     kind: z.enum(['replication', 'transcription', 'translation']).default('replication'),

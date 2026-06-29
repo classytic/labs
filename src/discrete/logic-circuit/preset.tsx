@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * BooleanCircuitLab — the GENERAL "build something real with logic gates" tool.
+ * BooleanCircuitLab, the GENERAL "build something real with logic gates" tool.
  * A creator declares a NETLIST (input switches, typed gates wired by id, output
  * devices = LEDs/lamps); the learner flips switches and watches power flow
  * through the gates and LIGHT the outputs. One tool → any combinational circuit:
@@ -190,7 +190,7 @@ export function BooleanCircuitLab({ inputs: inputs0, gates, outputs, initial, ti
   const footer = (
     <>
       {goals.length > 0 && (
-        <RevealSolution available={!solved} buttonLabel="Stuck? hint" solution={<>Flip the switches so the gate(s) output a 1 into <b>{goals.map((g) => g.label ?? g.id).join(', ')}</b>.</>} onReveal={() => { /* hint only — no auto-solve for an open circuit */ }} note="Try each switch combination — the wires glow when they carry a 1." />
+        <RevealSolution available={!solved} buttonLabel="Stuck? hint" solution={<>Flip the switches so the gate(s) output a 1 into <b>{goals.map((g) => g.label ?? g.id).join(', ')}</b>.</>} onReveal={() => { /* hint only, no auto-solve for an open circuit */ }} note="Try each switch combination, the wires glow when they carry a 1." />
       )}
       <HintLadder hints={hints} />
     </>

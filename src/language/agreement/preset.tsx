@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * AgreementLab — make the verb agree with its subject.
+ * AgreementLab, make the verb agree with its subject.
  *
  * Bangla drops the present copula ("He doctor") and has no 3rd-person -s
  * ("She go"), so subject–verb agreement is a core English error. The learner
@@ -75,7 +75,7 @@ export function AgreementLab({ items, title = 'Make them agree', prompt = 'Pick 
 
       {picked !== null && (
         <p className="lang-why" data-state={correct ? 'ok' : 'no'} aria-live="polite">
-          {correct ? (item.note ?? `${item.subject} ${item.correct}${item.tail ? ' ' + item.tail : ''}.`) : 'Not quite — try another.'}
+          {correct ? (item.note ?? `${item.subject} ${item.correct}${item.tail ? ' ' + item.tail : ''}.`) : 'Not quite, try another.'}
         </p>
       )}
     </div>

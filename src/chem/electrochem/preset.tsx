@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * ElectrochemLab — a galvanic (voltaic) cell with a live voltmeter, on the shared
+ * ElectrochemLab, a galvanic (voltaic) cell with a live voltmeter, on the shared
  * `@classytic/stage/chem` Nernst engine. Two metal/metal-ion half-cells joined by a
  * salt bridge: the metal that's easier to oxidise (lower E°) becomes the ANODE (−),
  * the other the CATHODE (+), and electrons stream anode→cathode through the wire.
  *
  * The voltmeter reads the Nernst EMF  E = E°cell − (RT/nF)·ln Q, so dragging an ion
- * concentration moves the needle in real time — dilute the cathode ion and the
+ * concentration moves the needle in real time, dilute the cathode ion and the
  * voltage drops; pick the SAME metal both sides for a concentration cell (E° = 0,
  * driven purely by the concentration difference). Pick the two electrodes (Daniell
- * Zn/Cu by default) — fully authorable. Play-gated electron flow; pure SVG.
+ * Zn/Cu by default), fully authorable. Play-gated electron flow; pure SVG.
  */
 
 import { useRef, useState, type ReactNode } from 'react';
@@ -52,8 +52,8 @@ export function ElectrochemLab({
   metalB = 'Cu',
   concA = 1,
   concB = 1,
-  title = 'Galvanic cell — the voltage from a reaction',
-  prompt = 'Two metals in their salt solutions, joined by a wire and a salt bridge. The voltmeter reads the cell EMF from the Nernst equation — change a concentration and watch it move.',
+  title = 'Galvanic cell: the voltage from a reaction',
+  prompt = 'Two metals in their salt solutions, joined by a wire and a salt bridge. The voltmeter reads the cell EMF from the Nernst equation, change a concentration and watch it move.',
   objectives = [
     'Identify the anode (oxidation, −) and cathode (reduction, +) from E°',
     'Read the standard cell EMF E°cell = E°cathode − E°anode',
@@ -146,7 +146,7 @@ export function ElectrochemLab({
         <Tex tex={'E = E^\\circ_{cell} - \\dfrac{RT}{nF}\\ln Q'} block />
         <span style={{ color: 'var(--stage-muted)' }}>
           <strong style={{ color: 'var(--stage-danger, #e03131)' }}>{anode.metal}</strong> is the anode (oxidised, loses e⁻); <strong style={{ color: 'var(--stage-good, #16a34a)' }}>{cathode.metal}</strong> is the cathode (reduced). {sameMetal
-            ? <>Same metal both sides ⇒ E°cell = 0 — this is a <strong style={{ color: 'var(--stage-fg)' }}>concentration cell</strong>, driven only by the concentration difference.</>
+            ? <>Same metal both sides ⇒ E°cell = 0, this is a <strong style={{ color: 'var(--stage-fg)' }}>concentration cell</strong>, driven only by the concentration difference.</>
             : <>Diluting the cathode ion raises Q and lowers E; concentrating it raises E.</>}
         </span>
       </div>

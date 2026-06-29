@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * BayesLab — base-rate neglect, taught Brilliant-style: ONE idea at a time, big.
- *   THEORY (default): a 4-step walkthrough — (1) the rare population, (2) the test
+ * BayesLab, base-rate neglect, taught Brilliant-style: ONE idea at a time, big.
+ *   THEORY (default): a 4-step walkthrough, (1) the rare population, (2) the test
  *   catches most sick people, (3) but also flags many healthy ones, (4) so a
  *   positive is usually a false alarm. Each step reveals one more layer of a large
  *   area model; the frequency tree + answer land on the last step.
@@ -20,7 +20,7 @@ import { LabFrame, ControlBar, Field, Callout } from '../../kit/frame.js';
 import { ProportionModel, type PropRow } from '../../kit/proportion.js';
 import { FrequencyTree } from '../../kit/freq-tree.js';
 import { useSteps, StepNav } from '../../kit/steps.js';
-import { useHints, HintLadder, RevealSolution } from '../../kit/pedagogy.js';
+import { useHints, HintLadder, RevealSolution, useChallenge, ChallengeCard, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
 
 export interface BayesProps {
   prior?: number;
@@ -46,12 +46,11 @@ const r0 = (x: number): number => Math.round(x);
 export function BayesLab({
   prior = 0.01, sensitivity = 0.9, falsePositive = 0.09, population = 1000,
   conditionLabels = ['disease', 'healthy'], testLabels = ['test +', 'test −'],
-  predict = false, title = 'Bayes — the base-rate trap', prompt, objectives, hints: hintList, controlId,
+  predict = false, title = 'Bayes: the base-rate trap', prompt, objectives, hints: hintList, controlId,
 }: BayesProps): ReactNode {
   const [p, setP] = useState(prior);
   const [s, setS] = useState(sensitivity);
   const [f, setF] = useState(falsePositive);
-  const [guess, setGuess] = useState(0.5);
   const [revealed, setRevealed] = useState(!predict);
   const [mode, setMode] = useState<'theory' | 'sample'>('theory');
   const [perStep, setPerStep] = useState(50);
@@ -63,6 +62,23 @@ export function BayesLab({
   const posterior = bayes(s, p, f);
   const [has, not] = conditionLabels, [pos] = testLabels;
   const posShort = pos.replace('test ', '');
+
+  // ── predict-first challenge: commit BEFORE the reveal (gates `revealed`) ──────
+  const predictQ: ChallengeQuestion[] = [{
+    id: 'bayes-posterior',
+    prompt: `Of everyone who tests ${posShort}, roughly what fraction TRULY have the ${has}?`,
+    choices: [
+      { value: 'most', label: 'most of them' },
+      { value: 'about-half', label: 'about half' },
+      { value: 'small', label: 'only a small fraction' },
+    ],
+    answer: 'small',
+    explain: `Base-rate neglect: the ${has} is rare (prior ${pct(p)}), so even an accurate test produces far more false alarms than true positives, the posterior stays small.`,
+  }];
+  const ch = useChallenge(predictQ);
+  // a correct prediction (or sampling) lifts the reveal gate.
+  if (predict && ch.allCorrect && !revealed) setRevealed(true);
+  useCheckpoint({ solved: ch.allCorrect, activity: 'bayes:predict', hintsUsed: hints.count });
 
   const N = population;
   const tp = N * p * s, fn = N * p * (1 - s), fp = N * (1 - p) * f, tn = N * (1 - p) * (1 - f);
@@ -103,9 +119,9 @@ export function BayesLab({
   const showResult = level >= 3 && (revealed || sampling);
 
   useControlSurface(controlId, {
-    prevalence: { type: 'number', label: 'prior P(A) — prevalence', min: 0.001, max: 0.5, step: 0.001, get: () => p, set: setP },
-    sensitivity: { type: 'number', label: 'P(B|A) — true-positive rate', min: 0.5, max: 1, step: 0.01, get: () => s, set: setS },
-    falsePositive: { type: 'number', label: 'P(B|¬A) — false-positive rate', min: 0, max: 0.5, step: 0.01, get: () => f, set: setF },
+    prevalence: { type: 'number', label: 'prior P(A): prevalence', min: 0.001, max: 0.5, step: 0.001, get: () => p, set: setP },
+    sensitivity: { type: 'number', label: 'P(B|A): true-positive rate', min: 0.5, max: 1, step: 0.01, get: () => s, set: setS },
+    falsePositive: { type: 'number', label: 'P(B|¬A): false-positive rate', min: 0, max: 0.5, step: 0.01, get: () => f, set: setF },
     reveal: { type: 'action', label: 'reveal the posterior', invoke: () => setRevealed(true) },
   });
 
@@ -117,9 +133,9 @@ export function BayesLab({
     : [{ frac: 1, color: MUTED, opacity: 0.3, count: dHea }];
 
   const captions = [
-    `Out of ${r0(N).toLocaleString()} people, only ${r0(tp + fn)} actually have the ${has} — it's rare (${pct(p)}).`,
+    `Out of ${r0(N).toLocaleString()} people, only ${r0(tp + fn)} actually have the ${has}, it's rare (${pct(p)}).`,
     `The test is sensitive: of those ${r0(tp + fn)} sick people it catches ${r0(tp)} (and misses ${r0(fn)}).`,
-    `But the same test also flags ${r0(fp)} of the ${r0(fp + tn)} healthy people — false alarms.`,
+    `But the same test also flags ${r0(fp)} of the ${r0(fp + tn)} healthy people, false alarms.`,
     `So ${r0(tp + fp)} test ${posShort}, yet only ${r0(tp)} are truly sick → a positive means just ${pct(posterior)}.`,
   ];
   const caption = sampling
@@ -163,15 +179,7 @@ export function BayesLab({
           {live && <span style={{ fontSize: 12, color: MUTED }}>{r0(nTot).toLocaleString()} sampled → true {pct(posterior)}</span>}
         </Callout>
       ) : (
-        <div>
-          <p className="lab-prompt">🎯 Before the reveal — if you test {posShort}, what's the chance you actually have it?</p>
-          <ControlBar>
-            <Field label="your guess" value={pct(guess)}>
-              <Slider value={guess} min={0} max={1} step={0.01} onChange={setGuess} ariaLabel="your guess" />
-            </Field>
-            <Chip selected={false} onClick={() => setRevealed(true)}>reveal</Chip>
-          </ControlBar>
-        </div>
+        <ChallengeCard questions={predictQ} state={ch} title="Predict first" />
       )}
     </>
   ) : undefined;
@@ -198,7 +206,7 @@ export function BayesLab({
   const footer = (
     <>
       {!sampling && <StepNav steps={steps} nextLabel="Continue →" doneLabel="✓ that's the trap" />}
-      <RevealSolution available={!revealed && level >= 3 && !sampling} buttonLabel="Show the answer" solution={<>P({has} | {posShort}) = {pct(posterior)} — far below the test's accuracy, because the prior is only {pct(p)}.</>} onReveal={() => setRevealed(true)} />
+      <RevealSolution available={!revealed && level >= 3 && !sampling} buttonLabel="Show the answer" solution={<>P({has} | {posShort}) = {pct(posterior)}, far below the test's accuracy, because the prior is only {pct(p)}.</>} onReveal={() => setRevealed(true)} />
       <HintLadder hints={hints} />
     </>
   );
@@ -207,7 +215,7 @@ export function BayesLab({
 }
 
 /** The answer as a picture: of everyone who tests +, what red share truly has it.
- *  A bar of JUST the positive region (true-positive red | false-positive orange) —
+ *  A bar of JUST the positive region (true-positive red | false-positive orange) , 
  *  the posterior IS the red fraction, legible at any prior (unlike the 1%-wide
  *  column the area model degenerates to). minWidth keeps the red sliver visible. */
 function PositiveBar({ tp, fp, pos, has }: { tp: number; fp: number; pos: string; has: string }): ReactNode {

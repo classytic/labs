@@ -1,0 +1,1 @@
+import { MagnetismLab, MagnetismProps } from "./preset.mjs";

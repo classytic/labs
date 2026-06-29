@@ -1,0 +1,1 @@
+import { ParabolaProps, VertexParabolaLab } from "./preset.mjs";

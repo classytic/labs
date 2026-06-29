@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * HeatTransferLab — the three ways heat travels, side by side, each with its real
+ * HeatTransferLab, the three ways heat travels, side by side, each with its real
  * rate law and an iconic animation:
  *
- *   • CONDUCTION — through a solid, atom to atom. A rod between a hot and a cold
+ *   • CONDUCTION, through a solid, atom to atom. A rod between a hot and a cold
  *     end settles into a linear temperature gradient; energy packets march down it
  *     at a speed set by Fourier's law  Q̇ = k·A·ΔT/L  (copper races, wood crawls).
- *   • CONVECTION — bulk flow in a fluid. Heated fluid expands, rises, cools at the
- *     top and sinks — a rolling convection current. Rate  Q̇ = h·A·ΔT.
- *   • RADIATION — electromagnetic waves, no medium needed. A hot body glows and
+ *   • CONVECTION, bulk flow in a fluid. Heated fluid expands, rises, cools at the
+ *     top and sinks, a rolling convection current. Rate  Q̇ = h·A·ΔT.
+ *   • RADIATION, electromagnetic waves, no medium needed. A hot body glows and
  *     throws photons outward; the power obeys Stefan–Boltzmann  P = εσA(T⁴ − T₀⁴),
  *     so doubling the absolute temperature multiplies the radiated power by 16.
  *
@@ -34,7 +34,7 @@ export interface HeatTransferProps {
   objectives?: string[];
   /**
    * Creator policy. To author a SINGLE-mechanism lesson (e.g. conduction only),
-   * set `mode: 'conduction'` and `controlConfig: { hide: ['mechanism'] }` — the
+   * set `mode: 'conduction'` and `controlConfig: { hide: ['mechanism'] }`, the
    * switcher vanishes and the lab is focused on that one idea. Any knob (material,
    * rod length, body temperature, …) can likewise be hidden or locked.
    */
@@ -54,12 +54,12 @@ const clamp = (v: number, a: number, b: number): number => Math.max(a, Math.min(
 
 export function HeatTransferLab({
   mode: mode0 = 'conduction',
-  title = 'Heat transfer — conduction, convection & radiation',
+  title = 'Heat transfer: conduction, convection & radiation',
   prompt = 'The three ways heat moves: through solids (conduction), by bulk fluid flow (convection), and as radiation across empty space.',
   objectives = [
     'Tell conduction, convection and radiation apart by their mechanism',
     'See conduction depends on the material: Q̇ = k·A·ΔT/L (copper ≫ wood)',
-    'See radiation obeys T⁴ — double the temperature, 16× the power',
+    'See radiation obeys T⁴, double the temperature, 16× the power',
   ],
   controlConfig,
 }: HeatTransferProps = {}): ReactNode {
@@ -109,7 +109,7 @@ export function HeatTransferLab({
             <text x={110} y={yMid - 62} textAnchor="middle" fontSize={12} fontWeight={700} fill="var(--stage-fg)">{hotC}°C</text>
             <rect x={x1} y={yMid - 55} width={80} height={110} rx={8} fill={thermalColor(0)} opacity={0.85} />
             <text x={x1 + 40} y={yMid - 62} textAnchor="middle" fontSize={12} fontWeight={700} fill="var(--stage-fg)">0°C</text>
-            {/* rod — segmented hot→cold gradient */}
+            {/* rod, segmented hot→cold gradient */}
             {Array.from({ length: NSEG }, (_, i) => (
               <rect key={i} x={x0 + (i / NSEG) * len} y={yMid - rodH / 2} width={len / NSEG + 1} height={rodH} fill={thermalColor(1 - i / NSEG)} />
             ))}
@@ -148,7 +148,7 @@ export function HeatTransferLab({
         <Callout tone="result"><span style={tnum}><strong style={{ fontSize: 16 }}>Q̇ = {condRate.toFixed(condRate < 10 ? 2 : 0)} W</strong></span></Callout>
         <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
           <Tex tex={'\\dot{Q} = \\dfrac{k\\,A\\,\\Delta T}{L}'} block />
-          <span style={{ color: 'var(--stage-muted)' }}>conduction = atom-to-atom through a solid. <strong style={{ color: 'var(--stage-fg)' }}>{MATERIALS[material]!.label}</strong> has k = {k} W/m·K — metals conduct ~1000× better than wood.</span>
+          <span style={{ color: 'var(--stage-muted)' }}>conduction = atom-to-atom through a solid. <strong style={{ color: 'var(--stage-fg)' }}>{MATERIALS[material]!.label}</strong> has k = {k} W/m·K, metals conduct ~1000× better than wood.</span>
         </div>
       </>
     );
@@ -207,7 +207,7 @@ export function HeatTransferLab({
         <Callout tone="result"><span style={tnum}><strong style={{ fontSize: 16 }}>Q̇ ≈ {convRate.toFixed(0)} W</strong></span></Callout>
         <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
           <Tex tex={'\\dot{Q} = h\\,A\\,\\Delta T'} block />
-          <span style={{ color: 'var(--stage-muted)' }}>Heated fluid expands → less dense → <strong style={{ color: 'var(--stage-fg)' }}>rises</strong>; it cools up top, grows denser and <strong style={{ color: 'var(--stage-fg)' }}>sinks</strong> — a rolling current that carries heat with the moving matter. (No solid needed; impossible in a vacuum.)</span>
+          <span style={{ color: 'var(--stage-muted)' }}>Heated fluid expands → less dense → <strong style={{ color: 'var(--stage-fg)' }}>rises</strong>; it cools up top, grows denser and <strong style={{ color: 'var(--stage-fg)' }}>sinks</strong>, a rolling current that carries heat with the moving matter. (No solid needed; impossible in a vacuum.)</span>
         </div>
       </>
     );
@@ -223,7 +223,7 @@ export function HeatTransferLab({
           <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={`Radiation from a body at ${bodyK} kelvin, ${radP.toFixed(0)} watts`}>
             {/* cold surroundings note (top-left, clear of the play toggle) */}
             <text x={20} y={26} textAnchor="start" fontSize={12} fill="var(--stage-muted)">surroundings {surrK} K</text>
-            {/* radiated photons — wavy arrows flying outward (recycled by phase) */}
+            {/* radiated photons, wavy arrows flying outward (recycled by phase) */}
             {Array.from({ length: Math.round(nPhotons) }, (_, i) => {
               const ang = (i / Math.round(nPhotons)) * Math.PI * 2 + i * 0.7;
               const u = ((t * (0.4 + tFrac) + i * 0.13) % 1);
@@ -260,7 +260,7 @@ export function HeatTransferLab({
         <Callout tone="result"><span style={tnum}><strong style={{ fontSize: 16 }}>P = {radP.toFixed(radP < 10 ? 1 : 0)} W</strong></span></Callout>
         <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
           <Tex tex={'P = \\varepsilon\\,\\sigma\\,A\\,(T^4 - T_0^4)'} block />
-          <span style={{ color: 'var(--stage-muted)' }}>EM waves — needs <strong style={{ color: 'var(--stage-fg)' }}>no medium</strong> (this is how the Sun reaches us). The T⁴ is fierce: double the kelvin temperature → <strong style={{ color: 'var(--stage-fg)' }}>16×</strong> the power. A matte-black surface radiates far more than a shiny one.</span>
+          <span style={{ color: 'var(--stage-muted)' }}>EM waves, needs <strong style={{ color: 'var(--stage-fg)' }}>no medium</strong> (this is how the Sun reaches us). The T⁴ is fierce: double the kelvin temperature → <strong style={{ color: 'var(--stage-fg)' }}>16×</strong> the power. A matte-black surface radiates far more than a shiny one.</span>
         </div>
       </>
     );

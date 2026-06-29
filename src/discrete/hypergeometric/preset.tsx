@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * HypergeometricLab — does it matter whether you put the ball back? Same urn (K
+ * HypergeometricLab, does it matter whether you put the ball back? Same urn (K
  * winners in N), draw n, and compare the two distributions of "how many winners":
  *   • WITH replacement  → binomial   C(n,k) pᵏ(1−p)ⁿ⁻ᵏ,  p = K/N  (draws independent)
  *   • WITHOUT            → hypergeometric  C(K,k)·C(N−K,n−k) / C(N,n)
  * Drawn as paired bars. The lesson lives in the difference: without replacement is
- * NARROWER (each draw shifts the odds — a finite-population correction (N−n)/(N−1)),
+ * NARROWER (each draw shifts the odds, a finite-population correction (N−n)/(N−1)),
  * but as the population N grows huge the two distributions merge (taking one ball
  * barely changes the mix). Both share the same mean n·K/N.
  *
@@ -17,7 +17,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import { nCr } from '../core/combinatorics.js';
 import { Chip, Slider } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout } from '../../kit/frame.js';
-import { useHints, HintLadder } from '../../kit/pedagogy.js';
+import { useHints, HintLadder, useChallenge, ChallengeCard, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
 import { useControlSurface } from '@classytic/stage';
 import { Tex } from '../../core/tex.js';
 
@@ -37,12 +37,29 @@ const PW = W - ML - MR, PH = H - MT - MB;
 const BIN = 'var(--stage-accent)', HYP = 'var(--stage-warn)';
 const f3 = (x: number): string => (x < 0.0005 && x > 0 ? x.toExponential(1) : x.toFixed(3));
 
+const Q: ChallengeQuestion[] = [
+  {
+    id: 'narrower',
+    prompt: "Same urn, draw n. One version puts each ball BACK (independent draws), the other does NOT. Which distribution of 'number of winners' is NARROWER (less spread)?",
+    choices: [
+      { value: 'without', label: 'WITHOUT replacement (hypergeometric)' },
+      { value: 'with', label: 'WITH replacement (binomial)' },
+      { value: 'same', label: 'identical spread' },
+    ],
+    answer: 'without',
+    explain:
+      'Without replacement is narrower. Each draw removes a ball and shifts the odds for the next, so draws are negatively correlated. That shrinks the variance by the finite-population correction (N−n)/(N−1) < 1: varHyp = varBin · (N−n)/(N−1). The means stay identical at n·K/N; only the spread differs, and the two converge as N grows huge.',
+  },
+];
+
 export function HypergeometricLab({ N: N0 = 10, K: K0 = 4, n: n0 = 3, title = 'With vs without replacement', prompt, objectives, hints: hintList, controlId }: HypergeometricProps): ReactNode {
   const [N, setN] = useState(N0);
   const [K, setK] = useState(K0);
   const [n, setN_] = useState(n0);
   const [sel, setSel] = useState<number | null>(null);
   const hints = useHints(hintList);
+  const ch = useChallenge(Q);
+  useCheckpoint({ solved: ch.allCorrect, activity: 'hypergeometric:predict' });
 
   const Kc = Math.min(K, N), nc = Math.min(n, N);
   const p = Kc / N;
@@ -112,8 +129,9 @@ export function HypergeometricLab({ N: N0 = 10, K: K0 = 4, n: n0 = 3, title = 'W
 
   const footer = (
     <>
+      <ChallengeCard questions={Q} state={ch} title="Predict first" />
       <p className="lab-prompt" style={{ fontSize: 12.5, color: 'var(--stage-muted)' }}>
-        Without replacement is narrower by the factor (N−n)/(N−1) = {((N - nc) / (N - 1 || 1)).toFixed(2)}. Push N up (with K/N fixed) and the bars converge — for a huge population, taking one out barely changes the odds.
+        Without replacement is narrower by the factor (N−n)/(N−1) = {((N - nc) / (N - 1 || 1)).toFixed(2)}. Push N up (with K/N fixed) and the bars converge, for a huge population, taking one out barely changes the odds.
       </p>
       <HintLadder hints={hints} />
     </>

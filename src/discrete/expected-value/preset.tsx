@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * ExpectedValueLab — E[X] = Σ value·prob, made physical: each outcome is a WEIGHT
+ * ExpectedValueLab, E[X] = Σ value·prob, made physical: each outcome is a WEIGHT
  * (heavier = more likely) sitting at its value on a number line, and the expected
  * value is exactly where they BALANCE (the long-run average payout). Framed as "is
  * this game worth it?": a cost marker shows the house edge when E[X] < cost. Then
  * SPIN it many times and watch the running average settle onto E[X] (the law of
- * large numbers — the average is the expectation, earned).
+ * large numbers, the average is the expectation, earned).
  *
  * Drag the probabilities/values; the fulcrum slides. Kernel = expectedValue; seeded
  * rng for replayable spins.
@@ -17,7 +17,8 @@ import { expectedValue } from '../core/probability.js';
 import { mulberry32, type Rng } from '../../core/rng.js';
 import { Chip, Slider, Stepper } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout } from '../../kit/frame.js';
-import { useHints, HintLadder } from '../../kit/pedagogy.js';
+import { useHints, HintLadder, useCheckpoint } from '../../kit/pedagogy.js';
+import { CATEGORICAL } from '../../kit/palette.js';
 import { useControlSurface } from '@classytic/stage';
 import { Tex } from '../../core/tex.js';
 
@@ -33,11 +34,11 @@ export interface ExpectedValueProps {
 }
 
 const W = 520, H = 210, ML = 30, MR = 20, AXIS = 138;
-const PAL = ['#1c7ed6', '#2f9e44', '#e8590c', '#9c36b5', '#0ca678', '#e03131'];
+const PAL = CATEGORICAL;
 
 export function ExpectedValueLab({
   outcomes = [{ label: 'lose', value: 0, prob: 0.7 }, { label: 'small', value: 5, prob: 0.25 }, { label: 'jackpot', value: 50, prob: 0.05 }],
-  cost = 5, title = 'Expected value — is the game fair?', prompt, objectives, hints: hintList, controlId,
+  cost = 5, title = 'Expected value: is the game fair?', prompt, objectives, hints: hintList, controlId,
 }: ExpectedValueProps): ReactNode {
   const [probs, setProbs] = useState<number[]>(outcomes.map((o) => o.prob));
   const [vals, setVals] = useState<number[]>(outcomes.map((o) => o.value));
@@ -52,6 +53,10 @@ export function ExpectedValueLab({
   const lo = Math.min(0, ...vals), hi = Math.max(...vals, cost) * 1.12 || 1;
   const xOf = (v: number): number => ML + ((v - lo) / (hi - lo)) * (W - ML - MR);
   const avg = plays ? total / plays : null;
+
+  const tol = Math.max(0.5, Math.abs(ev) * 0.05);
+  const solved = plays >= 30 && avg != null && Math.abs(avg - ev) <= tol;
+  useCheckpoint({ solved, activity: `expected-value:${title}`, hintsUsed: hints?.count ?? 0 });
 
   const spin = (times: number): void => {
     let t = total, c = plays;
@@ -110,7 +115,7 @@ export function ExpectedValueLab({
         <span>= <b style={{ color: 'var(--stage-good)' }}>{ev.toFixed(2)}</b></span>
       </div>
       <div>
-        <p className="lab-prompt" style={{ fontSize: 13 }}>Play it for real — the average payout homes in on E[X].</p>
+        <p className="lab-prompt" style={{ fontSize: 13 }}>Play it for real, the average payout homes in on E[X].</p>
         <ControlBar>
           <Chip selected={false} onClick={() => spin(1)}>spin 1</Chip>
           <Chip selected={false} onClick={() => spin(50)}>spin 50</Chip>

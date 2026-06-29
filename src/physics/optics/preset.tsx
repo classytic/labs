@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Optics flagship — drag the source, the aim point, or the mirrors so the light
+ * Optics flagship, drag the source, the aim point, or the mirrors so the light
  * ray reflects into the target. A general tool built on @classytic/stage:
  * creators place any mirrors + target.
  */
@@ -16,7 +16,7 @@ registerAsset('optics-ray', OPTICS_RAY_ASSET);
 export { OPTICS_RAY_ASSET };
 
 // The optics-ray asset draws the rich hatched mirror face; the segment itself is
-// hidden (it still resolves, so the asset receives its endpoints) — its endpoint
+// hidden (it still resolves, so the asset receives its endpoints), its endpoint
 // points stay visible as drag handles.
 const MIRROR: { hidden: true } = { hidden: true };
 
@@ -70,7 +70,7 @@ export function OpticsLab({ height = 380 }: OpticsProps): ReactNode {
       <span style={{ display: 'grid', gap: 4 }}>
         <span style={{ opacity: 0.8 }}>bounces: {bounces}</span>
         <span style={{ color: hit ? 'var(--stage-good)' : 'var(--stage-warn)', fontWeight: 600 }}>
-          {hit ? '✓ Target lit!' : 'not yet — keep adjusting'}
+          {hit ? '✓ Target lit!' : 'not yet, keep adjusting'}
         </span>
       </span>
     </Callout>

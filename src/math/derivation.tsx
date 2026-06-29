@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * Derivation — a step-by-step algebra/equation derivation, revealed one line at a
+ * Derivation, a step-by-step algebra/equation derivation, revealed one line at a
  * time. Each step is a LaTeX expression (rendered with KaTeX) plus an optional
  * justification ("subtract yₚ", "cross-multiply"). The learner clicks through;
- * the latest line is emphasized. This is how you teach a *derivation* — the
- * two-point line form, the quadratic formula, a chord-length proof — as a guided
+ * the latest line is emphasized. This is how you teach a *derivation*, the
+ * two-point line form, the quadratic formula, a chord-length proof, as a guided
  * sequence rather than a wall of algebra.
  *
  * Pure presentation over the engine's `<Tex>` + the shared control kit (no canvas,
- * no equation solving implied — the author supplies the steps, optionally
+ * no equation solving implied, the author supplies the steps, optionally
  * generated/verified with the symbolic engine).
  */
 
@@ -56,7 +56,7 @@ export function Derivation({ steps, title = 'Derivation', showAll = false }: Der
         >
           <span style={{ fontFamily: 'ui-monospace, monospace', fontSize: 12, opacity: 0.55 }}>{i + 1}</span>
           <span style={{ fontSize: 15 }}><Tex tex={s.tex} /></span>
-          {s.note && <span style={{ fontSize: 13, opacity: 0.65 }}>— {s.note}</span>}
+          {s.note && <span style={{ fontSize: 13, opacity: 0.65 }}>,  {s.note}</span>}
         </li>
       ))}
     </ol>

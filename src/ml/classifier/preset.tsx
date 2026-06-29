@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * ClassifierThresholdLab — the precision/recall trade-off you can drag. Positive
+ * ClassifierThresholdLab, the precision/recall trade-off you can drag. Positive
  * and negative examples sit along a score axis (they OVERLAP, like any real
  * classifier). Drag the threshold: everything to its right is predicted positive.
- * The 2×2 confusion matrix and precision / recall / accuracy / F1 update live —
+ * The 2×2 confusion matrix and precision / recall / accuracy / F1 update live , 
  * slide right and precision climbs while recall falls; there's no setting that
  * maxes both. Misclassified points get a red ring.
  *
@@ -16,7 +16,7 @@ import { useState, type ReactNode } from 'react';
 import { Stage, Segment, Polygon, Dot, Circle, Label, MovableDot, type Vec2 } from '@classytic/stage';
 import { StatusPill } from '../../kit/controls.js';
 import { LabFrame, LiveRegion } from '../../kit/frame.js';
-import { useCheckpoint } from '../../kit/pedagogy.js';
+import { useCheckpoint, useChallenge, ChallengeCard, type ChallengeQuestion } from '../../kit/pedagogy.js';
 import { clamp } from '../../core/util.js';
 
 export interface ClassifierProps {
@@ -35,20 +35,36 @@ const NEG = 'var(--stage-muted)';
 const DEFAULT_POS = [4, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9];
 const DEFAULT_NEG = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6];
 
+const PREDICT_Q: ChallengeQuestion[] = [
+  {
+    id: 'recall-vs-threshold',
+    prompt: 'As you RAISE the threshold (label fewer things positive), what happens to RECALL — the share of true positives you catch?',
+    choices: [
+      { value: 'down', label: 'recall falls' },
+      { value: 'up', label: 'recall rises' },
+      { value: 'same', label: 'unchanged' },
+    ],
+    answer: 'down',
+    explain:
+      'Raising the threshold means fewer points clear the bar, so you catch fewer of the real positives (more false negatives): recall falls. Precision usually rises in return, since the ones you do call positive are more likely correct. That is the trade-off, no single threshold maxes both.',
+  },
+];
+
 export function ClassifierThresholdLab({
   positives = DEFAULT_POS,
   negatives = DEFAULT_NEG,
   threshold = 5,
   span = 10,
   title = 'The precision–recall trade-off',
-  prompt = 'Drag the threshold: everything to its right is called positive. Watch the confusion matrix — pushing precision up costs you recall.',
+  prompt = 'Drag the threshold: everything to its right is called positive. Watch the confusion matrix, pushing precision up costs you recall.',
   objectives,
   height = 300,
 }: ClassifierProps): ReactNode {
   const view = { xMin: 0, xMax: span, yMin: -4, yMax: 4 };
   const [t, setT] = useState(threshold);
   const [moved, setMoved] = useState(false);
-  useCheckpoint({ solved: moved, activity: 'classifier-threshold' });
+  const ch = useChallenge(PREDICT_Q);
+  useCheckpoint({ solved: moved && ch.allCorrect, activity: 'classifier-threshold' });
 
   const TP = positives.filter((s) => s >= t).length;
   const FN = positives.length - TP;
@@ -126,9 +142,12 @@ export function ClassifierThresholdLab({
   );
 
   const footer = (
-    <LiveRegion>
-      {`Threshold ${t.toFixed(1)}. Precision ${(precision * 100).toFixed(0)} percent, recall ${(recall * 100).toFixed(0)} percent.`}
-    </LiveRegion>
+    <>
+      <ChallengeCard questions={PREDICT_Q} state={ch} title="Predict first" />
+      <LiveRegion>
+        {`Threshold ${t.toFixed(1)}. Precision ${(precision * 100).toFixed(0)} percent, recall ${(recall * 100).toFixed(0)} percent.`}
+      </LiveRegion>
+    </>
   );
 
   return (

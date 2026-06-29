@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * VectorBoard — the GENERAL, authorable vector lab (CAIE/IGCSE).
+ * VectorBoard, the GENERAL, authorable vector lab (CAIE/IGCSE).
  *
  * A creator declares vectors (tail, components, colour, label, draggable) + how
  * to combine them (`sum` → resultant, tip-to-tail / parallelogram; `diff` →
  * relative velocity, the rain / "V_RC = V_C − V_A" case) + an optional
  * drag-to-match goal. From this one board: resultant addition, component
- * resolution, river-crossing, walking-home, relative-velocity — all as DATA.
+ * resolution, river-crossing, walking-home, relative-velocity, all as DATA.
  *
  * Built entirely on @classytic/stage primitives (Vector, MovableDot, Axes, vec
- * math, useLearner) + the shared LabeledVector / AngleArc helpers — nothing
+ * math, useLearner) + the shared LabeledVector / AngleArc helpers, nothing
  * reinvented. Drag a head, watch the resultant + angle update; land it on the
  * target to solve.
  */
@@ -60,8 +60,8 @@ const ORIGIN: Vec2 = { x: 0, y: 0 };
 const PALETTE = ['var(--stage-accent)', 'var(--stage-accent-2)', 'var(--stage-good)'];
 
 /**
- * Frame the board to everything that matters — origin, every arrow tip, the
- * resultant, and the goal — with padding, snapped to integers for clean axes.
+ * Frame the board to everything that matters, origin, every arrow tip, the
+ * resultant, and the goal, with padding, snapped to integers for clean axes.
  * Computed from the AUTHORED vectors (not live drag state) so the view stays put
  * while the learner drags, and the resultant can never shoot off-frame.
  */
@@ -123,12 +123,12 @@ export function VectorBoardLab({
   const resMag = resultant ? vec.mag(resultant) : 0;
   const resDeg = resultant ? Math.round(toDeg(vec.angle(resultant))) : 0;
   const resColor = solved ? 'var(--stage-good)' : resultantColor;
-  // a lone summed vector already IS the resultant — don't draw/label a duplicate
+  // a lone summed vector already IS the resultant, don't draw/label a duplicate
   const showResultant = !!resultant && !(combine === 'sum' && vectors.length === 1);
 
   // misconception: right magnitude, wrong direction (a common drag-to-match error)
   const misconception = goal && !solved && resultant && Math.abs(vec.mag(resultant) - vec.mag(goal.match)) < tol
-    ? 'Right length — now fix the direction (rotate it onto the target).'
+    ? 'Right length, now fix the direction (rotate it onto the target).'
     : undefined;
 
   const figure = (
@@ -146,7 +146,7 @@ export function VectorBoardLab({
           </>
         )}
 
-        {/* authored vectors — magnitude label anchored ⅔ along the shaft (out
+        {/* authored vectors, magnitude label anchored ⅔ along the shaft (out
             near the fanned-apart TIPS, NOT the shared origin where every label
             would pile up) and pushed perpendicular off the line. Shown as
             |a| = 4.1 so it can't be read as a coordinate. */}
@@ -158,7 +158,7 @@ export function VectorBoardLab({
           const magStr = vec.mag(c).toFixed(1);
           const text = v.label ? (show.magnitude ? `|${v.label}| = ${magStr}` : v.label) : (show.magnitude ? magStr : '');
           // anchor along the shaft, then push perpendicular onto the side AWAY
-          // from the resultant (the busy centre) — so labels land in the empty
+          // from the resultant (the busy centre), so labels land in the empty
           // wedges, never on a shaft, the handle, or each other.
           const at = { x: t.x + c.x * 0.62, y: t.y + c.y * 0.62 };
           const L = Math.hypot(c.x, c.y) || 1;
@@ -175,7 +175,7 @@ export function VectorBoardLab({
           );
         })}
 
-        {/* resultant — skip the duplicate when it IS a lone input vector */}
+        {/* resultant, skip the duplicate when it IS a lone input vector */}
         {resultant && (
           <>
             {show.components && (
@@ -198,7 +198,7 @@ export function VectorBoardLab({
         {/* draggable heads (drawn last so they sit on top) */}
         {vectors.map((v, i) => (
           v.drag
-            ? <MovableDot key={`d${v.id ?? i}`} value={tipOf(i)} onMove={(p) => setComps((cs) => cs.map((c, j) => (j === i ? { x: snapV(p.x) - tailOf(i).x, y: snapV(p.y) - tailOf(i).y } : c)))} range={{ min: Math.min(view.xMin, view.yMin), max: Math.max(view.xMax, view.yMax) }} color={v.color ?? PALETTE[i % PALETTE.length]} ariaLabel={`${v.label ?? 'vector'} head`} />
+            ? <MovableDot key={`d${v.id ?? i}`} value={tipOf(i)} onMove={(p) => setComps((cs) => cs.map((c, j) => (j === i ? { x: snapV(p.x) - tailOf(i).x, y: snapV(p.y) - tailOf(i).y } : c)))} range={{ min: Math.min(view.xMin, view.yMin), max: Math.max(view.xMax, view.yMax) }} snap={snap || 1} color={v.color ?? PALETTE[i % PALETTE.length]} ariaLabel={`${v.label ?? 'vector'} head`} />
             : null
         ))}
     </Stage>

@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * MontyHallLab — the paradox as a GAME you play, not a chart you stare at. Three
+ * MontyHallLab, the paradox as a GAME you play, not a chart you stare at. Three
  * doors (one hides a car, the rest goats); you pick, Monty throws open a goat, and
  * you choose to STAY or SWITCH and watch the door swing open on your fate. Every
  * game you (and the auto-player) finish feeds two growing win-rate bars, so the
- * shocking truth — switch ≈ 2/3, stay ≈ 1/3 — is something you EARN by watching it
+ * shocking truth, switch ≈ 2/3, stay ≈ 1/3, is something you EARN by watching it
  * happen, the law of large numbers built from felt experience.
  *
  * Doors/car/goat are stage glyphs (DoorGlyph swings open via CSS); the round logic
@@ -75,7 +75,7 @@ export function MontyHallLab({ doors = 3, seed = 7, title = 'The Monty Hall game
     const others = Array.from({ length: n }, (_, k) => k).filter((k) => k !== i);
     const target = i === car ? others.filter((k) => k !== car)[randInt(rng.current, 0, others.length - 2)]! : car;
     setSwitchTo(target);
-    // Monty opens every door that is neither your pick nor the switch target — all goats
+    // Monty opens every door that is neither your pick nor the switch target, all goats
     setOpened(Array.from({ length: n }, (_, k) => k).filter((k) => k !== i && k !== target));
     after(750, () => setPhase('revealed'));
   }, [phase, autoRunning, n, car]);
@@ -138,9 +138,9 @@ export function MontyHallLab({ doors = 3, seed = 7, title = 'The Monty Hall game
   const swTarget = (n - 1) / n, stTarget = 1 / n;
 
   const narration = (): ReactNode => {
-    if (phase === 'pick') return pick == null ? <>🎬 Pick a door — one hides the <b>car</b>, the others <b>goats</b>.</> : <>You chose <b>Door {pick + 1}</b>. Monty is opening a goat…</>;
-    if (phase === 'revealed') return <>Monty opened {opened.map((d) => `Door ${d + 1}`).join(', ')} — a goat! 🐐 Now: <b>stay</b> with Door {pick! + 1}, or <b>switch</b> to Door {switchTo! + 1}?</>;
-    return won ? <><b style={{ color: 'var(--stage-good)' }}>🎉 You win the car!</b> You {strategy === 'switch' ? 'switched' : 'stayed'}.</> : <><b style={{ color: 'var(--stage-bad)' }}>🐐 A goat.</b> You {strategy === 'switch' ? 'switched' : 'stayed'} — the car was behind Door {car + 1}.</>;
+    if (phase === 'pick') return pick == null ? <>🎬 Pick a door, one hides the <b>car</b>, the others <b>goats</b>.</> : <>You chose <b>Door {pick + 1}</b>. Monty is opening a goat…</>;
+    if (phase === 'revealed') return <>Monty opened {opened.map((d) => `Door ${d + 1}`).join(', ')}, a goat! 🐐 Now: <b>stay</b> with Door {pick! + 1}, or <b>switch</b> to Door {switchTo! + 1}?</>;
+    return won ? <><b style={{ color: 'var(--stage-good)' }}>🎉 You win the car!</b> You {strategy === 'switch' ? 'switched' : 'stayed'}.</> : <><b style={{ color: 'var(--stage-bad)' }}>🐐 A goat.</b> You {strategy === 'switch' ? 'switched' : 'stayed'}, the car was behind Door {car + 1}.</>;
   };
 
   const btn: React.CSSProperties = { padding: '9px 18px', borderRadius: 999, border: '1.5px solid var(--stage-grid)', background: 'var(--stage-bg)', color: 'var(--stage-fg)', fontWeight: 700, fontSize: 14, cursor: 'pointer' };
@@ -194,13 +194,13 @@ export function MontyHallLab({ doors = 3, seed = 7, title = 'The Monty Hall game
 
   const aside = (
     <Callout tone="result">
-      {/* tally bars — the convergence, earned */}
+      {/* tally bars, the convergence, earned */}
       <div style={{ display: 'grid', gap: 10 }}>
         {([['switch', swRate, swTarget, tally.switchWins, tally.switchGames, 'var(--stage-good)'], ['stay', stRate, stTarget, tally.stayWins, tally.stayGames, 'var(--stage-muted)']] as const).map(([name, rate, target, wins, games, color]) => (
           <div key={name}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 700, marginBottom: 3 }}>
               <span style={{ color, textTransform: 'capitalize' }}>{name} wins</span>
-              <span style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--stage-muted)' }}>{games ? `${(rate * 100).toFixed(1)}%` : '—'} · {wins}/{games} <span style={{ opacity: 0.7 }}>(→ {(target * 100).toFixed(0)}%)</span></span>
+              <span style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--stage-muted)' }}>{games ? `${(rate * 100).toFixed(1)}%` : ', '} · {wins}/{games} <span style={{ opacity: 0.7 }}>(→ {(target * 100).toFixed(0)}%)</span></span>
             </div>
             <div style={{ position: 'relative', height: 16, borderRadius: 8, background: 'color-mix(in oklab, var(--stage-grid) 60%, transparent)', overflow: 'hidden' }}>
               <div style={{ width: `${rate * 100}%`, height: '100%', background: color, borderRadius: 8, transition: 'width .12s linear' }} />

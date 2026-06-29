@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * Tex — render a LaTeX string with KaTeX AT RENDER TIME, so the markup is
+ * Tex, render a LaTeX string with KaTeX AT RENDER TIME, so the markup is
  * identical on the server and client: SSR/static exports show real maths (not raw
  * `\cdot`/`\dfrac`), there's no raw-then-hydrate flash, and hydration matches.
  *
- * `katex` is a static import kept in this OWN module — stage/labs `neverBundle`
+ * `katex` is a static import kept in this OWN module, stage/labs `neverBundle`
  * leave it external, so only `<Tex>` importers pull it (the consumer resolves the
  * optional peer; non-Tex consumers never bundle it). If `renderToString` throws on
  * a malformed string we fall back to the raw LaTeX in a `<code>`. Pair with

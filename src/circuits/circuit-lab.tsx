@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * CircuitLab — two resistors driven by a battery, in series or parallel, with the
+ * CircuitLab, two resistors driven by a battery, in series or parallel, with the
  * voltage- and current-divider rules made visible. Drag V, R₁, R₂; flip series
  * ↔ parallel; step through: total resistance → total current → how it divides.
  *
@@ -14,9 +14,10 @@
 
 import { useEffect, useState, type ReactNode } from 'react';
 import { Stage, Segment, Label, type Vec2 } from '@classytic/stage';
+import { solveDC, type Elem } from '@classytic/stage/circuit';
 import { Slider, Chip } from '../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout } from '../kit/frame.js';
-import { ResistorBox } from '../kit/diagram.js';
+import { ResistorBox, CellBox } from '../kit/diagram.js';
 import { Tex } from '../core/tex.js';
 import { num, clamp } from '../core/util.js';
 
@@ -57,12 +58,18 @@ export function CircuitLab({ voltage, r1, r2, mode: modeInit = 'series', height 
   useEffect(() => { setR2(clamp(num(r2, 200), 10, 1000)); }, [r2]);
   useEffect(() => { setParallel(modeInit === 'parallel'); }, [modeInit]);
 
-  const Rtot = parallel ? (R1 * R2) / (R1 + R2) : R1 + R2;
-  const Itot = V / Rtot;
-  const v1 = parallel ? V : (V * R1) / (R1 + R2);
-  const v2 = parallel ? V : (V * R2) / (R1 + R2);
-  const i1 = parallel ? V / R1 : Itot;
-  const i2 = parallel ? V / R2 : Itot;
+  // solved by the one circuit engine (stage/circuit), not a per-lab divider formula:
+  // series  V(1)-R1->(2)-R2->gnd ;  parallel  both R1,R2 from node 1 to gnd.
+  const elems: Elem[] = parallel
+    ? [{ kind: 'V', n1: 1, n2: 0, value: V, id: 'b' }, { kind: 'R', n1: 1, n2: 0, value: R1 }, { kind: 'R', n1: 1, n2: 0, value: R2 }]
+    : [{ kind: 'V', n1: 1, n2: 0, value: V, id: 'b' }, { kind: 'R', n1: 1, n2: 2, value: R1 }, { kind: 'R', n1: 2, n2: 0, value: R2 }];
+  const sol = solveDC(elems);
+  const Itot = Math.abs(sol.current['b'] ?? 0);
+  const Rtot = Itot > 1e-12 ? V / Itot : Infinity;
+  const v1 = parallel ? V : (sol.nodeV[1] ?? 0) - (sol.nodeV[2] ?? 0); // drop across R1
+  const v2 = parallel ? V : (sol.nodeV[2] ?? 0);                       // drop across R2
+  const i1 = v1 / R1;
+  const i2 = v2 / R2;
 
   const steps = parallel ? STEPS_PARALLEL : STEPS_SERIES;
   const clampedStep = Math.min(step, steps.length - 1);
@@ -72,12 +79,10 @@ export function CircuitLab({ voltage, r1, r2, mode: modeInit = 'series', height 
 
   const figure = (
       <Stage view={VIEW} height={height} preserveAspect={false} ariaLabel={`${parallel ? 'Parallel' : 'Series'} circuit: ${V}V battery with R1 ${R1.toFixed(0)} and R2 ${R2.toFixed(0)} ohms`}>
-        {/* battery */}
+        {/* battery (canonical cell glyph, vertical on the left rail) */}
         {W({ x: BX, y: cyMid + 6 }, { x: BX, y: TOP }, 'b-up')}
         {W({ x: BX, y: cyMid - 6 }, { x: BX, y: BOT }, 'b-dn')}
-        <Segment from={{ x: BX - 5, y: cyMid + 6 }} to={{ x: BX + 5, y: cyMid + 6 }} color="var(--stage-accent-2)" weight={2.5} />
-        <Segment from={{ x: BX - 3, y: cyMid - 6 }} to={{ x: BX + 3, y: cyMid - 6 }} color="var(--stage-accent-2)" weight={2.5} />
-        <Label x={BX + 8} y={cyMid} text={`${V.toFixed(0)} V`} color="var(--stage-accent-2)" anchor="start" size={12} />
+        <CellBox center={{ x: BX, y: cyMid }} half={6} orient="v" live label={`${V.toFixed(0)} V`} />
 
         {!parallel ? (
           <>
@@ -154,7 +159,7 @@ export function CircuitLab({ voltage, r1, r2, mode: modeInit = 'series', height 
 
   return (
     <LabFrame
-      title={parallel ? 'Parallel — current divides' : 'Series — voltage divides'}
+      title={parallel ? 'Parallel, current divides' : 'Series, voltage divides'}
       prompt={steps[clampedStep]}
       aside={aside}
       controls={controls}

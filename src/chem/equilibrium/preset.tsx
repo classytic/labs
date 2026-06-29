@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * LeChatelierLab — a reversible reaction at equilibrium that fights back, on the
+ * LeChatelierLab, a reversible reaction at equilibrium that fights back, on the
  * shared `equilibrium` core. The reaction is AUTHORABLE: a creator declares the two
  * species, the product coefficient, the colours, K, and whether the forward reaction
- * is endothermic — so the SAME lab teaches N₂O₄⇌2NO₂ (brown/colourless), the
+ * is endothermic, so the SAME lab teaches N₂O₄⇌2NO₂ (brown/colourless), the
  * chromate⇌dichromate colour change, a cobalt-complex equilibrium, and so on. The
  * default is the classic:
  *
@@ -12,7 +12,7 @@
  *
  * The flask tint tracks the product; concentration bars + a live trace show both.
  * Apply a stress (add a species, compress, heat/cool) and watch Le Chatelier shift
- * it to oppose the change — the SHIFT DIRECTION emerges from the core's Q-vs-K, never
+ * it to oppose the change, the SHIFT DIRECTION emerges from the core's Q-vs-K, never
  * hardcoded, so it stays correct for whatever reaction the creator declares.
  * Hand-driven on EquilibriumCore, play-gated.
  */
@@ -33,7 +33,7 @@ export interface LeChatelierProps {
   productName?: string;
   /** Product stoichiometric coefficient ν (A ⇌ ν·B). */
   productCoeff?: number;
-  /** Product colour token — the flask tints toward this as product forms. */
+  /** Product colour token, the flask tints toward this as product forms. */
   productColor?: string;
   /** Reactant colour token. */
   reactantColor?: string;
@@ -60,7 +60,7 @@ const EQUILIBRIUM_CHALLENGE: ChallengeQuestion[] = [
       { value: 'none', label: 'no change' },
     ],
     answer: 'reactant',
-    explain: 'Squeezing favours the side with fewer gas moles — 1 mol N₂O₄ beats 2 mol NO₂, so the mix goes paler.',
+    explain: 'Squeezing favours the side with fewer gas moles, 1 mol N₂O₄ beats 2 mol NO₂, so the mix goes paler.',
   },
   {
     id: 'heat',
@@ -83,8 +83,8 @@ export function LeChatelierLab({
   reactantColor = 'var(--stage-accent, #3b82f6)',
   K = 0.6,
   endothermic = true,
-  title = 'Le Chatelier — equilibrium fights back',
-  prompt = 'A reversible reaction sits at equilibrium (Q = K). Stress it — add a gas, squeeze it, heat it — and watch the reaction shift to oppose the change.',
+  title = 'Le Chatelier: equilibrium fights back',
+  prompt = 'A reversible reaction sits at equilibrium (Q = K). Stress it, add a gas, squeeze it, heat it, and watch the reaction shift to oppose the change.',
   objectives = [
     'Read equilibrium as Q = K (the reaction quotient meets the constant)',
     'Predict the shift when you add/remove a species or change the volume',
@@ -176,7 +176,7 @@ export function LeChatelierLab({
       </Callout>
       <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
         <Tex tex={`K = \\dfrac{[\\mathrm{${productName}}]${exp}}{[\\mathrm{${reactantName}}]}`} block />
-        <span style={{ color: 'var(--stage-muted)' }}>The system always moves to bring <strong style={{ color: 'var(--stage-fg)' }}>Q back to K</strong>. Add a species and it’s consumed; compress and it shifts to fewer moles; {endothermic ? 'heat and the endothermic forward reaction wins' : 'heat and the exothermic reverse reaction wins'} — and K itself changes with temperature.</span>
+        <span style={{ color: 'var(--stage-muted)' }}>The system always moves to bring <strong style={{ color: 'var(--stage-fg)' }}>Q back to K</strong>. Add a species and it’s consumed; compress and it shifts to fewer moles; {endothermic ? 'heat and the endothermic forward reaction wins' : 'heat and the exothermic reverse reaction wins'}, and K itself changes with temperature.</span>
       </div>
     </>
   );

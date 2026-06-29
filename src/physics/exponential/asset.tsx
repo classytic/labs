@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * rate-process asset — one exponential-relaxation curve, two skins (sim ≠ render):
+ * rate-process asset, one exponential-relaxation curve, two skins (sim ≠ render):
  *   DECAY: a grid of atoms vanishing as N falls, with the half-life called out.
  *   COOLING: a thermometer relaxing toward room temperature (the dashed asymptote).
  * Both are the SAME `rate` sim (dy/dt = (target−y)/τ); only the skin + labels differ.
@@ -104,10 +104,10 @@ function chart(
       {/* target asymptote */}
       <line x1={tx0} y1={ty} x2={tx1} y2={ty} stroke="var(--stage-good)" strokeWidth={1.5} strokeDasharray="6 5" />
       {(() => { const [x, y] = P(CH.x1 + 6, sy(m.target)); return <text x={x} y={y + 3} fontSize={11} fontWeight={700} fill="var(--stage-good)">{decay ? '0' : `${m.target.toFixed(0)}° room`}</text>; })()}
-      {/* half-value guide (decay: N₀/2 — the half-life mark) */}
+      {/* half-value guide (decay: N₀/2, the half-life mark) */}
       {decay && (() => { const [x, y] = P(CH.x0, sy(m.value0 / 2)); const [x1] = P(CH.x1, 0); return <><line x1={x} y1={y} x2={x1} y2={y} stroke="var(--stage-grid)" strokeWidth={1} strokeDasharray="3 4" /><text x={x + 4} y={y - 3} fontSize={9.5} fill="var(--stage-muted)">N₀/2</text></>; })()}
       <polyline points={curve} fill="none" stroke="var(--stage-accent)" strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" />
-      {(() => { const [x, y] = P((CH.x0 + CH.x1) / 2, CH.yBot - 16); return <text x={x} y={y} textAnchor="middle" fontSize={11} fill="var(--stage-muted)">{decay ? `half-life ≈ ${halfLife.toFixed(1)} s — each one halves what's left` : `cooling toward room temp · τ ≈ ${m.tau.toFixed(1)} s`} · t = {m.tSec.toFixed(1)} s</text>; })()}
+      {(() => { const [x, y] = P((CH.x0 + CH.x1) / 2, CH.yBot - 16); return <text x={x} y={y} textAnchor="middle" fontSize={11} fill="var(--stage-muted)">{decay ? `half-life ≈ ${halfLife.toFixed(1)} s, each one halves what's left` : `cooling toward room temp · τ ≈ ${m.tau.toFixed(1)} s`} · t = {m.tSec.toFixed(1)} s</text>; })()}
     </g>
   );
 }

@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * DiffusionLab — two gases, one box: the `particles` core made tangible. The blue
+ * DiffusionLab, two gases, one box: the `particles` core made tangible. The blue
  * and red particles start on opposite sides; press Play and they random-walk into a
- * uniform mix — diffusion, and why it never spontaneously un-mixes. Hotter (faster)
+ * uniform mix, diffusion, and why it never spontaneously un-mixes. Hotter (faster)
  * particles mix sooner. SceneDoc + particles sim + the diffusion asset (sim ≠ render).
  */
 
@@ -23,7 +23,7 @@ const DIFFUSION_CHALLENGE: ChallengeQuestion[] = [
     id: 'unmix',
     prompt: 'Once the two gases are fully mixed, can they spontaneously separate back to opposite sides on their own?',
     choices: [
-      { value: 'no', label: 'No — mixing is one-way' },
+      { value: 'no', label: 'No: mixing is one-way' },
       { value: 'wait', label: 'Yes, if you wait long enough' },
       { value: 'cool', label: 'Only if you cool it' },
     ],
@@ -50,8 +50,8 @@ export interface DiffusionProps {
 }
 
 export function DiffusionLab({
-  title = 'Diffusion — why things mix',
-  prompt = 'Blue and red gas start apart. Press Play: random collisions spread them into a uniform mix — and it never un-mixes on its own.',
+  title = 'Diffusion: why things mix',
+  prompt = 'Blue and red gas start apart. Press Play: random collisions spread them into a uniform mix, and it never un-mixes on its own.',
   objectives = ['See diffusion as random motion, not a force', 'Watch two gases mix to uniform (the "mixed %" climbs)', 'Hotter (faster) particles mix sooner'],
 }: DiffusionProps = {}): ReactNode {
   const [speed, setSpeed] = useState(3);

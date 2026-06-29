@@ -1,24 +1,24 @@
 'use client';
 
 /**
- * LabFrame — the shared layout shell every lab composes into, so labs stop being
+ * LabFrame, the shared layout shell every lab composes into, so labs stop being
  * hand-rolled inline-styled one-offs and read as ONE product. Structure:
  *
- *   title + one-line prompt           (header — no walls of text)
+ *   title + one-line prompt           (header, no walls of text)
  *   [▸ goals]                         (collapsed disclosure, reveal-on-action)
  *   ┌─ figure (dominant) ─┬─ aside ─┐ (one grid; aside optional + narrow)
  *   └─────────────────────┴─────────┘
  *   [ one controls bar ]             (ALL knobs in one place, never scattered)
  *   feedback / hints / reveal        (quiet footer)
  *
- * Everything styles off `.lab-*` in @classytic/labs/styles.css — no inline layout.
+ * Everything styles off `.lab-*` in @classytic/labs/styles.css, no inline layout.
  * Pair with the existing pedagogy kit (HintLadder, RevealSolution, Feedback).
  *
- * CREATOR CONTROL — `controlConfig` lets the author decide, per knob, what a learner
+ * CREATOR CONTROL, `controlConfig` lets the author decide, per knob, what a learner
  * may touch: `{ hide: ['mass'], lock: ['angle'] }`. Hidden knobs vanish; locked knobs
  * stay visible but read-only (their value is whatever the creator set as the initial
  * prop). LabFrame provides this as context; `Field` (keyed by its `name ?? label`) and
- * the `Control` wrapper consume it — so a lab opts in with ~2 lines and every knob,
+ * the `Control` wrapper consume it, so a lab opts in with ~2 lines and every knob,
  * existing or new, honours it. The mechanism is uniform: no per-knob boolean props.
  */
 
@@ -52,13 +52,13 @@ export interface LabFrameProps {
   children: ReactNode;
   /** Optional narrow side column (readouts, a guess, a result callout). */
   aside?: ReactNode;
-  /** The single controls bar — pass <ControlBar>…</ControlBar>. */
+  /** The single controls bar, pass <ControlBar>…</ControlBar>. */
   controls?: ReactNode;
   /** Quiet footer: feedback / hints / reveal / a note. */
   footer?: ReactNode;
-  /** Ref on the outer container — e.g. for useInView() to pause a sim off-screen. */
+  /** Ref on the outer container, e.g. for useInView() to pause a sim off-screen. */
   rootRef?: Ref<HTMLDivElement>;
-  /** Creator's per-control hide/lock policy — flows to every Field/Control below. */
+  /** Creator's per-control hide/lock policy, flows to every Field/Control below. */
   controlConfig?: ControlConfig;
 }
 
@@ -92,6 +92,18 @@ export function LabFrame({ title, prompt, objectives, children, aside, controls,
 /** The single controls bar. Put `Field`s (or any control) inside. */
 export function ControlBar({ children }: { children: ReactNode }): ReactNode {
   return <>{children}</>;
+}
+
+/**
+ * Group an inline expression (parens, steppers, "→ result", …) so it reads as ONE
+ * unit. `.lab-controls` is a grid that gives EACH ControlBar child its own ~185px
+ * cell, which scatters a multi-piece expression across columns. Wrap those pieces
+ * in `<ControlExpr>` and they stay together (one cell, tight gaps, baseline-aligned).
+ */
+export function ControlExpr({ children }: { children: ReactNode }): ReactNode {
+  // span the FULL controls row (gridColumn 1/-1) so the expression has the whole
+  // width and stays on one line, instead of wrapping inside a single ~185px cell.
+  return <span style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8, fontWeight: 600 }}>{children}</span>;
 }
 
 const LockMark = (): ReactNode => (

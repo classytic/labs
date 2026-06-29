@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Balance-scale algebra flagship — a SceneDoc FACTORY (a general tool for any
+ * Balance-scale algebra flagship, a SceneDoc FACTORY (a general tool for any
  * a·x + b = c), built on @classytic/stage. All "logic" is typed numeric
  * derivations that actually evaluate: L = a·x+b (linop), diff = L−R, tilt =
  * clamp(3·diff), balanced = (diff == 0). Solving the equation == balancing.
@@ -15,7 +15,7 @@ import {
 import { BALANCE_ALGEBRA_ASSET } from './asset.js';
 import { LabStyles, Slider, StatusPill } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, LiveRegion } from '../../kit/frame.js';
-import { useCheckpoint } from '../../kit/pedagogy.js';
+import { useCheckpoint, Feedback } from '../../kit/pedagogy.js';
 
 registerAsset('balance-algebra', BALANCE_ALGEBRA_ASSET);
 export { BALANCE_ALGEBRA_ASSET };
@@ -57,7 +57,7 @@ export function balanceAlgebraDoc(eq: BalanceEquation): SceneDoc {
     meta: {
       pedagogy: {
         objectives: ['Solve a linear equation a·x + b = c by keeping a balance level'],
-        misconceptions: [{ trigger: 'sets x so one side is heavier', note: 'doing a thing to one side only — both sides must stay equal' }],
+        misconceptions: [{ trigger: 'sets x so one side is heavier', note: 'doing a thing to one side only, both sides must stay equal' }],
         hints: ['What single value of x makes both pans weigh the same?', `Try x = ${eq.answer}.`],
         difficulty: 2,
         successCriteria: 'The beam is level (left load = right load).',
@@ -94,6 +94,17 @@ export function BalanceAlgebraLab({ coef = 2, addend = 1, rhs = 7, answer = 3, c
   const setX = (v: number): void => { editor.dispatch({ op: 'mutate', id: 'x', patch: { free: { value: v } } }); };
   const eqLabel = `${coef === 1 ? '' : coef}x${addend ? ` + ${addend}` : ''} = ${rhs}`;
 
+  // diff = L − R drives the tilt. diff > 0 → left heavier → x is too big.
+  // diff < 0 → right heavier → x is too small. The hint reasons FROM the scale.
+  const diff = L - R;
+  const solution = coef !== 0 ? (rhs - addend) / coef : NaN;
+  const solutionStr = Number.isInteger(solution) ? String(solution) : solution.toFixed(2);
+  const hint = balanced
+    ? `Solved. x = (c − b) / a = (${rhs} − ${addend}) / ${coef} = ${solutionStr}`
+    : diff > 0
+      ? `Left side is heavier (${L} > ${R}): make x smaller.`
+      : `Right side is heavier (${L} < ${R}): make x bigger.`;
+
   const figure = (
     <>
       <LabStyles />
@@ -107,13 +118,14 @@ export function BalanceAlgebraLab({ coef = 2, addend = 1, rhs = 7, answer = 3, c
         <Slider value={x} min={0} max={maxX} step={1} onChange={setX} ariaLabel="value of x" />
       </Field>
       <span style={{ opacity: 0.75 }}>left {L} · right {R}</span>
-      <StatusPill ok={balanced}>{balanced ? '✓ Balanced — solved!' : 'Not balanced'}</StatusPill>
+      <StatusPill ok={balanced}>{balanced ? '✓ Balanced, solved!' : 'Not balanced'}</StatusPill>
+      <Feedback ok={balanced} okText={`Balanced. x = (c − b) / a = ${solutionStr}`} tryText={hint} />
     </ControlBar>
   );
 
   const footer = (
     <LiveRegion>
-      {balanced ? `Balanced. x equals ${x}. Solved.` : `Left load ${L}, right load ${R}.`}
+      {balanced ? `Balanced. x equals ${x}. ${hint}` : `Left load ${L}, right load ${R}. ${hint}`}
     </LiveRegion>
   );
 

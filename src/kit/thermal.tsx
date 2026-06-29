@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * Thermal glyph vocabulary — illustrative, STATE-DRIVEN heat & temperature props:
- *  • ThermometerGlyph — bulb + mercury column whose height & colour track temperature
- *  • BeakerGlyph       — glass beaker with a liquid fill + meniscus, floating ice that
+ * Thermal glyph vocabulary, illustrative, STATE-DRIVEN heat & temperature props:
+ *  • ThermometerGlyph, bulb + mercury column whose height & colour track temperature
+ *  • BeakerGlyph      , glass beaker with a liquid fill + meniscus, floating ice that
  *                        melts (iceFrac→0), bubbles that rise while boiling, steam wisps
- *  • BurnerGlyph       — a burner whose flame grows with heating power (or frosts when cooling)
+ *  • BurnerGlyph      , a burner whose flame grows with heating power (or frosts when cooling)
  *
  * Same authoring contract as the electronics kit: PURE SVG <g> fragments (no
  * <defs>, no hooks, no CSS animation), drawn in PIXEL space, colours are
- * --stage-* tokens, and MOTION IS DATA — the host's frame loop passes a `phase`
+ * --stage-* tokens, and MOTION IS DATA, the host's frame loop passes a `phase`
  * (seconds) and the intensities (boiling/steam/iceFrac 0..1), so everything
  * honours prefers-reduced-motion upstream and replays deterministically as video.
  * These are illustrative (lesson-facing), not exam schematic symbols.
@@ -157,7 +157,7 @@ export function BeakerGlyph({ x, y, w, h, fillFrac, color, boiling = 0, steam = 
 export function BurnerGlyph({ cx, baseY, w, level, phase = 0 }: {
   /** centre x, the y of the burner top (flame grows upward from here). */
   cx: number; baseY: number; w: number;
-  /** −1..1 — positive heats (flame, taller with level), negative cools (frost). */
+  /** −1..1, positive heats (flame, taller with level), negative cools (frost). */
   level: number;
   phase?: number;
 }): ReactNode {
@@ -178,7 +178,7 @@ export function BurnerGlyph({ cx, baseY, w, level, phase = 0 }: {
       {/* burner bar + stand */}
       <rect x={cx - w / 2} y={baseY} width={w} height={9} rx={4} fill={METAL} />
       <rect x={cx - w / 2 - 4} y={baseY + 9} width={w + 8} height={4} rx={2} fill="color-mix(in oklab, var(--stage-metal) 70%, var(--stage-bg))" />
-      {/* heating flame — stacked translucent teardrops give a soft glow without filters */}
+      {/* heating flame, stacked translucent teardrops give a soft glow without filters */}
       {flame > 0.02 && (
         <>
           {teardrop(1.25, 'color-mix(in oklab, var(--stage-warn, #e0a020) 55%, transparent)', 0.35)}
@@ -188,7 +188,7 @@ export function BurnerGlyph({ cx, baseY, w, level, phase = 0 }: {
           <circle cx={cx} cy={tip} r={1.5} fill="#fff" opacity={0.8} />
         </>
       )}
-      {/* cooling — frost spikes below the bar */}
+      {/* cooling, frost spikes below the bar */}
       {cold > 0.02 && (
         <g opacity={0.5 + cold * 0.45} stroke="color-mix(in oklab, #2b7fff 70%, var(--stage-bg))" strokeWidth={2} strokeLinecap="round">
           {[-1, 0, 1].map((k) => {

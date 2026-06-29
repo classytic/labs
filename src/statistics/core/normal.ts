@@ -1,7 +1,7 @@
 /**
- * Normal-distribution kernel — the bell curve's pdf/cdf, the z-score, and the
+ * Normal-distribution kernel, the bell curve's pdf/cdf, the z-score, and the
  * area between two points (the probability a value lands in a range). The cdf uses
- * the Abramowitz–Stegun erf approximation (max error ~1.5e-7 — far tighter than
+ * the Abramowitz–Stegun erf approximation (max error ~1.5e-7, far tighter than
  * any teaching needs). The labs render these; they never re-derive them.
  */
 
@@ -33,7 +33,7 @@ export function zScore(x: number, mu = 0, sigma = 1): number {
   return (x - mu) / sigma;
 }
 
-/** The 68–95–99.7 rule — P(within k·σ of the mean). */
+/** The 68–95–99.7 rule, P(within k·σ of the mean). */
 export function withinSigma(k: number): number {
   return normalBetween(-k, k, 0, 1);
 }

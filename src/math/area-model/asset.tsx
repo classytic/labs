@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * area-model asset — a GENERAL "algebra tiles" area model for (x+a)(x+b),
+ * area-model asset, a GENERAL "algebra tiles" area model for (x+a)(x+b),
  * built on the @classytic/stage engine. The resolver is the single source of
  * truth: from the symbolic side length `x` (a bound scalar) and the integer
- * constants a, b it computes the four regions of the partitioned rectangle —
+ * constants a, b it computes the four regions of the partitioned rectangle , 
  *     x²            (the square, area x·x)
  *     a·x  +  b·x   (the strips, area scales WITH x)
  *     a·b           (the constant block, fixed size)
- * — so the learner SEES the x-terms grow with x while the constant does not.
+ *, so the learner SEES the x-terms grow with x while the constant does not.
  * EXPAND (watch the pieces) and FACTOR (find a, b) share one asset.
  */
 

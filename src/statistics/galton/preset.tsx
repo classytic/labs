@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * GaltonBoardLab — the bean machine: balls rain down through a triangle of pegs,
+ * GaltonBoardLab, the bean machine: balls rain down through a triangle of pegs,
  * bouncing left or right by pure chance, and pile up into a BELL CURVE. It is the
- * Central Limit Theorem you can watch happen — each ball is a sum of coin-flips
+ * Central Limit Theorem you can watch happen, each ball is a sum of coin-flips
  * (a binomial), and a pile of them traces the normal distribution. The bridge from
  * "coin flips / law of large numbers" into the curve all of statistics & ML runs on.
  *
@@ -57,7 +57,7 @@ export function GaltonBoardLab({ rows = 12, seed = 7, showCurve = true, title = 
 
   useEffect(() => { setMounted(true); }, []);
 
-  // binomial probabilities (Pascal row) — the theoretical envelope
+  // binomial probabilities (Pascal row), the theoretical envelope
   const pmf = useMemo(() => {
     const row = [1];
     for (let i = 0; i < R; i++) { const next = [1]; for (let k = 0; k < row.length - 1; k++) next.push(row[k]! + row[k + 1]!); next.push(1); row.length = 0; row.push(...next); }

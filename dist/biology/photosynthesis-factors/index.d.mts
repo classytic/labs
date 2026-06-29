@@ -1,0 +1,1 @@
+import { PhotosynthesisFactorsLab, PhotosynthesisFactorsProps } from "./preset.mjs";

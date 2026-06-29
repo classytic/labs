@@ -1,4 +1,4 @@
-// @classytic/labs/ml — machine-learning & data-analytics labs. The manipulation
+// @classytic/labs/ml, machine-learning & data-analytics labs. The manipulation
 // IS the lesson here (drag params, watch loss/clusters/metrics), so these lean on
 // the stage primitives directly: scatter + draggable controls + frame-loop +
 // live readouts. RegressionLab was the litmus test for the whole ML/DA track.

@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * RippleTankLab — two-source interference in 2-D, the famous ripple tank. Two point
+ * RippleTankLab, two-source interference in 2-D, the famous ripple tank. Two point
  * sources send out circular waves; where crests meet crests the water heaves
  * (CONSTRUCTIVE, a bright antinodal line, path difference = nλ) and where a crest
  * meets a trough it goes flat (DESTRUCTIVE, a dark nodal line, Δ = (n+½)λ). Drag the
  * sources, change the wavelength, and the fan of interference fringes opens and
  * closes. Two views: "ripples" (the live animated field) and "fringes" (the static
- * interference amplitude — crisp bright/dark hyperbolas).
+ * interference amplitude, crisp bright/dark hyperbolas).
  *
  * A genuine per-cell field → CanvasLayer heatmap. Distances are in pixels so the
  * wavefronts stay circular regardless of the box's aspect. Honours reduced-motion.
@@ -37,7 +37,7 @@ export interface RippleTankProps {
 
 const VIEW = { xMin: 0, xMax: 1, yMin: 0, yMax: 1 };
 
-export function RippleTankLab({ wavelength = 0.1, view: view0 = 'ripples', title = 'Ripple tank — two-source interference', prompt, objectives, hints: hintList, controlId, height = 320 }: RippleTankProps): ReactNode {
+export function RippleTankLab({ wavelength = 0.1, view: view0 = 'ripples', title = 'Ripple tank: two-source interference', prompt, objectives, hints: hintList, controlId, height = 320 }: RippleTankProps): ReactNode {
   const [lam, setLam] = useState(wavelength);      // fraction of width
   const [view, setView] = useState<RippleView>(view0);
   const [mounted, setMounted] = useState(false);
@@ -50,7 +50,7 @@ export function RippleTankLab({ wavelength = 0.1, view: view0 = 'ripples', title
   const drag = useRef<0 | 1 | null>(null);
 
   useEffect(() => { setMounted(true); }, []);
-  // CanvasLayer's onPointerMath has no "up" — release the grabbed source globally so
+  // CanvasLayer's onPointerMath has no "up", release the grabbed source globally so
   // the next press re-picks the nearest one.
   useEffect(() => { const up = (): void => { drag.current = null; }; window.addEventListener('pointerup', up); return () => window.removeEventListener('pointerup', up); }, []);
   // Animate while the (single) play gate is on. `draw` is intentionally NOT memoized:
@@ -106,14 +106,14 @@ export function RippleTankLab({ wavelength = 0.1, view: view0 = 'ripples', title
       <Callout tone="result">
         <div className="lab-field-label" style={{ marginBottom: 6 }}>interference</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 14, fontWeight: 700 }}>
-          <span><span style={{ color: 'var(--stage-good)' }}>bright</span> — crests meet · <Tex tex="\Delta = n\lambda" /></span>
-          <span><span style={{ color: 'var(--stage-accent)' }}>dark</span> — crest + trough · <Tex tex="\Delta = \left(n + \tfrac12\right)\lambda" /></span>
+          <span><span style={{ color: 'var(--stage-good)' }}>bright</span>, crests meet · <Tex tex="\Delta = n\lambda" /></span>
+          <span><span style={{ color: 'var(--stage-accent)' }}>dark</span>, crest + trough · <Tex tex="\Delta = \left(n + \tfrac12\right)\lambda" /></span>
         </div>
       </Callout>
       <p className="lab-prompt" style={{ fontSize: 13 }}>
         {view === 'fringes'
           ? 'Static interference pattern: the bright hyperbolas are where the two waves always reinforce; the dark ones where they always cancel.'
-          : 'Live ripples — watch crests collide. The still (grey) lines between the churn are where the waves cancel.'}
+          : 'Live ripples, watch crests collide. The still (grey) lines between the churn are where the waves cancel.'}
         {' '}Shorter wavelength or wider sources → more, tighter fringes.
       </p>
     </>

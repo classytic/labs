@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * EfficiencyLab — efficiency as the input→output RATIO you can see. Energy flows in
+ * EfficiencyLab, efficiency as the input→output RATIO you can see. Energy flows in
  * on the left and splits into a USEFUL output stream and WASTED streams (usually
  * heat), drawn as a Sankey: each ribbon's thickness is its share of the energy, so
  * efficiency η = useful / input is literally the fraction of the flow that stays
  * green. Compare an incandescent bulb (≈5%) with an LED (≈45%), a petrol engine
- * (≈25%) with an electric motor (≈90%) — and feel why "wasted as heat" matters.
+ * (≈25%) with an electric motor (≈90%), and feel why "wasted as heat" matters.
  *
  * The device is AUTHORABLE: a creator declares the streams (label, share, useful or
  * waste) so the same lab draws any energy-flow / efficiency diagram. Interactive
@@ -31,9 +31,9 @@ export interface EfficiencyProps {
   /** Built-in device preset (ignored if `streams` is given). */
   device?: 'incandescent' | 'led' | 'petrol-engine' | 'electric-motor' | 'power-station' | 'human';
   deviceName?: string;
-  /** Energy supplied, J (default 100 — so shares read as percentages). */
+  /** Energy supplied, J (default 100, so shares read as percentages). */
   inputJoules?: number;
-  /** Author your own breakdown — overrides the preset entirely. */
+  /** Author your own breakdown, overrides the preset entirely. */
   streams?: EffStream[];
   title?: string;
   prompt?: string;
@@ -58,11 +58,11 @@ export function EfficiencyLab({
   deviceName,
   inputJoules = 100,
   streams: streamsProp,
-  title = 'Efficiency — how much of the energy is useful?',
+  title = 'Efficiency: how much of the energy is useful?',
   prompt = 'Energy in splits into useful output and wasted energy (mostly heat). Efficiency is the fraction that comes out useful: η = useful ÷ input. Compare the devices.',
   objectives = [
     'Define efficiency as the input→output ratio η = useful energy ÷ total input',
-    'Read a Sankey diagram — ribbon thickness is energy share',
+    'Read a Sankey diagram, ribbon thickness is energy share',
     'Compare real devices and see where energy is wasted (heat)',
   ],
 }: EfficiencyProps = {}): ReactNode {
@@ -152,7 +152,7 @@ export function EfficiencyLab({
       </Callout>
       <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
         <Tex tex={'\\eta = \\dfrac{\\text{useful output}}{\\text{total input}}'} block />
-        <span style={{ color: 'var(--stage-muted)' }}>Of every <strong style={{ color: 'var(--stage-fg)' }}>{inputJoules} J</strong> in, <strong style={{ color: GREEN }}>{usefulJ.toFixed(0)} J</strong> comes out useful and <strong style={{ color: HEAT }}>{(inputJoules - usefulJ).toFixed(0)} J</strong> is wasted (mostly heat). Energy is conserved — efficiency is about how much ends up where you want it.</span>
+        <span style={{ color: 'var(--stage-muted)' }}>Of every <strong style={{ color: 'var(--stage-fg)' }}>{inputJoules} J</strong> in, <strong style={{ color: GREEN }}>{usefulJ.toFixed(0)} J</strong> comes out useful and <strong style={{ color: HEAT }}>{(inputJoules - usefulJ).toFixed(0)} J</strong> is wasted (mostly heat). Energy is conserved, efficiency is about how much ends up where you want it.</span>
       </div>
     </>
   );

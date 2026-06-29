@@ -1,5 +1,5 @@
 /**
- * Probability kernel — equally-likely sample spaces, conditioning, Bayes,
+ * Probability kernel, equally-likely sample spaces, conditioning, Bayes,
  * independence, expectation. This is the "truth" the base-rate / Monty labs read
  * (the agent narrates these numbers; it never invents them). Conditioning =
  * shrink the sample space: P(A|B) = |A∩B| / |B|.
@@ -14,7 +14,7 @@ export function complement(p: number): number {
   return 1 - p;
 }
 
-/** P(A|B) = P(A∩B) / P(B) — restrict the world to B, then re-count. */
+/** P(A|B) = P(A∩B) / P(B), restrict the world to B, then re-count. */
 export function conditional(pAandB: number, pB: number): number {
   return pB > 0 ? pAandB / pB : NaN;
 }
@@ -30,7 +30,7 @@ export function bayes(pBgivenA: number, pA: number, pBgivenNotA: number): number
 }
 
 /** A and B are independent iff P(A∩B) = P(A)·P(B) (within eps). NOT the same as
- *  disjoint — disjoint events are maximally DEPENDENT. */
+ *  disjoint, disjoint events are maximally DEPENDENT. */
 export function independent(pA: number, pB: number, pAandB: number, eps = 1e-9): boolean {
   return Math.abs(pAandB - pA * pB) <= eps;
 }

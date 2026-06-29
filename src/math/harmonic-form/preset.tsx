@@ -1,19 +1,19 @@
 'use client';
 
 /**
- * HarmonicFormLab — "two waves are secretly one": a cos x + b sin x = R cos(x + α).
+ * HarmonicFormLab, "two waves are secretly one": a cos x + b sin x = R cos(x + α).
  *
  * The whole insight is that adding a cosine and a sine of the SAME frequency gives
- * a SINGLE shifted cosine — and you can SEE why with phasors. The cos term is a
+ * a SINGLE shifted cosine, and you can SEE why with phasors. The cos term is a
  * vector of length a along the axis; the sin term is a vector of length b at a
  * right angle to it (sin lags cos by 90°). Add them tip-to-tail and the resultant
- * has length R = √(a²+b²) at angle α — exactly the amplitude and phase of the one
+ * has length R = √(a²+b²) at angle α, exactly the amplitude and phase of the one
  * combined wave. Drag a and b: the phasor triangle and the three waves update live,
  * and the messy two-wave sum visibly collapses onto one clean R cos(x + α).
  *
  * This builds the INTUITION for the auxiliary-angle form (Edexcel "express in the
  * form R cos(x+α)"). The exact R and α arithmetic is left to written working / a
- * paired derivation — the lab is the picture, not the algebra.
+ * paired derivation, the lab is the picture, not the algebra.
  *
  * Convention: a cos x + b sin x = R cos(x + α) ⇒ a = R cos α, b = −R sin α, so
  * α = atan2(−b, a) and the resultant phasor is (a, −b). Tokenized SVG; accessible.
@@ -66,7 +66,7 @@ const HARMONIC_CHALLENGE: ChallengeQuestion[] = [
       { value: 'same', label: 'stays the same' },
     ],
     answer: 'up',
-    explain: 'R = √(a² + b²) is the hypotenuse — growing either coefficient lengthens it.',
+    explain: 'R = √(a² + b²) is the hypotenuse, growing either coefficient lengthens it.',
   },
 ];
 
@@ -162,7 +162,7 @@ export function HarmonicFormLab({
   const footer = (
     <>
       <p className="lab-prompt">
-        The two coloured waves add to the bold one. Its height is <TexHtml tex="R=\sqrt{a^2+b^2}" /> and it peaks at <TexHtml tex="x=-\alpha" /> — the phasor's length and angle.
+        The two coloured waves add to the bold one. Its height is <TexHtml tex="R=\sqrt{a^2+b^2}" /> and it peaks at <TexHtml tex="x=-\alpha" />, the phasor's length and angle.
       </p>
       <ChallengeCard questions={HARMONIC_CHALLENGE} state={challenge} title="Predict" />
       <LiveRegion>{`${a} cos x ${b < 0 ? 'minus' : 'plus'} ${Math.abs(b)} sin x equals ${R.toFixed(2)} cos(x ${alpha < 0 ? 'minus' : 'plus'} ${Math.abs(alpha).toFixed(3)}).`}</LiveRegion>

@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/blocks — geometry lab block specs.
+ * @classytic/labs/blocks, geometry lab block specs.
  *
  * `defineBlock` editor adapters for the geometry labs (one domain per file; the
  * registry is assembled in `./index.ts`). Each spec pairs a zod schema with a
@@ -30,7 +30,7 @@ export const GeometryBoardBlock = defineBlock({
   key: 'geometry-board',
   void: true,
   label: 'Geometry board',
-  description: 'Build a construction — points, circles, lines & computed intersections. Drag points live.',
+  description: 'Build a construction, points, circles, lines & computed intersections. Drag points live.',
   category: 'interactive',
   schema: z.object({
     scene: z.array(z.record(z.string(), z.unknown())).optional(),
@@ -61,7 +61,7 @@ export const IntersectingCirclesBlock = defineBlock({
   key: 'intersecting-circles',
   void: true,
   label: 'Intersecting circles',
-  description: 'Common chord of two circles — drag the centres, chord length by Pythagoras.',
+  description: 'Common chord of two circles, drag the centres, chord length by Pythagoras.',
   category: 'interactive',
   schema: z.object({ r1: z.number().optional(), r2: z.number().optional(), title: z.string().optional() }),
   Component: ({ attributes, mode, updateAttributes }) => {

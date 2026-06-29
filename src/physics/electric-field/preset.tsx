@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * ElectricFieldLab — Coulomb's field you can see and probe, on the same
+ * ElectricFieldLab, Coulomb's field you can see and probe, on the same
  * @classytic/stage `field` kernel that draws magnetism (one kernel → both). Drag
  * two charges (flip either +/−); field lines retrace live, flowing OUT of + into −.
- * Drop the test charge anywhere and a force arrow F = qE appears — toward + or away,
+ * Drop the test charge anywhere and a force arrow F = qE appears, toward + or away,
  * depending on its sign. Interactive (recomputed on drag), not a timed sim.
  */
 
@@ -51,10 +51,9 @@ export interface ElectricFieldProps {
   objectives?: string[];
 }
 
-function ChargeFigure({ sources, lines, charges, test, testSign }: {
+function ChargeFigure({ sources, lines, test, testSign }: {
   sources: FieldSource[];
   lines: { points: Vec2[]; sign: number }[];
-  charges: { at: Vec2; q: number }[];
   test: Vec2;
   testSign: number;
 }): ReactNode {
@@ -83,15 +82,27 @@ function ChargeFigure({ sources, lines, charges, test, testSign }: {
       {/* force arrow on the test charge */}
       {(() => { const [tx, ty] = P(test); const [fx, fy] = P(fTip); return <g style={{ pointerEvents: 'none' }}><line x1={tx} y1={ty} x2={fx} y2={fy} stroke={FORCE} strokeWidth={3} strokeLinecap="round" />{arrow(test, fTip, 'F', FORCE)}<text x={fx + 6} y={fy + 4} fontSize={12} fontWeight={800} fill={FORCE}>F</text></g>; })()}
       {/* charges */}
-      {charges.map((ch, i) => { const [x, y] = P(ch.at); const col = ch.q > 0 ? POS : NEG; return <g key={`c${i}`}><circle cx={x} cy={y} r={15} fill={col} /><text x={x} y={y + 5} textAnchor="middle" fontSize={18} fontWeight={800} fill="white">{ch.q > 0 ? '+' : '−'}</text></g>; })}
       {/* test charge marker */}
       {(() => { const [x, y] = P(test); return <g style={{ pointerEvents: 'none' }}><circle cx={x} cy={y} r={8} fill="var(--stage-bg)" stroke={FORCE} strokeWidth={2.5} /><text x={x} y={y + 4} textAnchor="middle" fontSize={11} fontWeight={800} fill={FORCE}>{testSign > 0 ? '+' : '−'}</text></g>; })()}
     </>
   );
 }
 
+/** The charge discs with their ± sign, drawn ON TOP so the drag handles never hide them. */
+function ChargeSymbols({ charges }: { charges: { at: Vec2; q: number }[] }): ReactNode {
+  const c = useCoords();
+  return (
+    <g style={{ pointerEvents: 'none' }}>
+      {charges.map((ch, i) => {
+        const [x, y] = c.toPx(ch.at.x, ch.at.y);
+        return <g key={i}><circle cx={x} cy={y} r={15} fill={ch.q > 0 ? POS : NEG} stroke="var(--stage-bg)" strokeWidth={2} /><text x={x} y={y + 5} textAnchor="middle" fontSize={18} fontWeight={800} fill="white">{ch.q > 0 ? '+' : '−'}</text></g>;
+      })}
+    </g>
+  );
+}
+
 export function ElectricFieldLab({
-  title = 'Electric field — charges & the force you feel',
+  title = 'Electric field: charges & the force you feel',
   prompt = 'Drag the two charges and flip their signs; field lines flow out of + into −. Drop the test charge and watch the force F = qE.',
   objectives = ['Read an electric field as field lines (out of +, into −)', 'See like charges repel, opposites attract', 'Feel the force on a test charge: F = qE'],
 }: ElectricFieldProps = {}): ReactNode {
@@ -111,10 +122,11 @@ export function ElectricFieldLab({
 
   const figure = (
     <Stage view={VIEW} height={420} ariaLabel="Electric field lines from two charges, with a draggable test charge feeling a force">
-      <ChargeFigure sources={sources} lines={lines} charges={charges} test={test} testSign={testSign} />
+      <ChargeFigure sources={sources} lines={lines} test={test} testSign={testSign} />
       <MovableDot value={a} onMove={(p) => setA(p)} color={qa > 0 ? POS : NEG} ariaLabel="charge A" r={9} />
       <MovableDot value={b} onMove={(p) => setB(p)} color={qb > 0 ? POS : NEG} ariaLabel="charge B" r={9} />
       <MovableDot value={test} onMove={(p) => setTest(p)} color={FORCE} ariaLabel="test charge" r={8} />
+      <ChargeSymbols charges={charges} />
     </Stage>
   );
 

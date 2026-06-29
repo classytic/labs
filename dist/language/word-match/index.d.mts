@@ -1,0 +1,1 @@
+import { WordMatchLab, WordMatchProps } from "./preset.mjs";

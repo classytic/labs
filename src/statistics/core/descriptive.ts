@@ -1,5 +1,5 @@
 /**
- * Descriptive statistics — the pure kernel the statistics labs trust as the
+ * Descriptive statistics, the pure kernel the statistics labs trust as the
  * source of truth (centre, spread, position). No dependencies; every lab POINTS
  * to these numbers rather than recomputing them, so the figure and the readout
  * can never disagree. Median uses the standard average-of-middle-two for even n;
@@ -39,7 +39,7 @@ export function variance(xs: number[], sample = false): number {
 
 export const stddev = (xs: number[], sample = false): number => Math.sqrt(variance(xs, sample));
 
-/** Linear-interpolated quantile (q in [0,1]) — the inclusive "p = (n−1)q" method. */
+/** Linear-interpolated quantile (q in [0,1]), the inclusive "p = (n−1)q" method. */
 export function quantile(xs: number[], q: number): number {
   if (!xs.length) return 0;
   const s = [...xs].sort((a, b) => a - b);

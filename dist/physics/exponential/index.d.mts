@@ -1,0 +1,1 @@
+import { DecayCoolingLab, DecayCoolingProps } from "./preset.mjs";

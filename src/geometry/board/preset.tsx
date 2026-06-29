@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * GeometryBoard — a declarative interactive-geometry engine, now on the
+ * GeometryBoard, a declarative interactive-geometry engine, now on the
  * @classytic/stage scene model. A creator describes a CONSTRUCTION as a list of
  * `GeoElement`s; we convert it to a portable SceneDoc and let stage's resolver
  * do the dependency math (circle/line intersection, midpoints) + dragging +
- * a11y. The canvas geometry math is gone — stage already owns it.
+ * a11y. The canvas geometry math is gone, stage already owns it.
  *
  *   <GeometryBoard scene={[
  *     { type:'point', id:'A', x:3, y:0, draggable:true },
@@ -16,6 +16,7 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Scene, type SceneDoc, type SceneElement, type ViewBox } from '@classytic/stage';
+import { LabFrame } from '../../kit/frame.js';
 
 type View = ViewBox;
 
@@ -32,6 +33,7 @@ export interface GeometryBoardProps {
   scene?: GeoElement[];
   view?: View;
   title?: string;
+  prompt?: string;
   subtitle?: string;
   height?: number;
 }
@@ -62,15 +64,20 @@ export function geoSceneToDoc(scene: GeoElement[], view: View): SceneDoc {
   return { schemaVersion: 2, type: 'stage-scene', view, elements, bindings: [] };
 }
 
-export function GeometryBoard({ scene = [], view = DEFAULT_VIEW, title, height = 360 }: GeometryBoardProps): ReactNode {
+export function GeometryBoard({
+  scene = [],
+  view = DEFAULT_VIEW,
+  title = 'Geometry construction',
+  prompt = 'Drag the points to explore the construction.',
+  height = 360,
+}: GeometryBoardProps): ReactNode {
   const initial = useMemo(() => geoSceneToDoc(scene, view), [scene, view]);
   const [doc, setDoc] = useState<SceneDoc>(initial);
   useEffect(() => { setDoc(initial); }, [initial]);
 
-  return (
-    <div className="not-prose">
-      {title && <p style={{ fontWeight: 600, marginBottom: 6 }}>{title}</p>}
-      <Scene doc={doc} onChange={setDoc} interactive showGrid showAxes height={height} ariaLabel={title ?? 'Geometry construction'} />
-    </div>
+  const figure = (
+    <Scene doc={doc} onChange={setDoc} interactive showGrid showAxes height={height} ariaLabel={title} />
   );
+
+  return <LabFrame title={title} prompt={prompt}>{figure}</LabFrame>;
 }

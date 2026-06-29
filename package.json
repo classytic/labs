@@ -1,6 +1,6 @@
 {
   "name": "@classytic/labs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Interactive learning lab — authorable, domain-organized interactive lessons (math, physics, chemistry, circuits, geometry…) built on the @classytic/stage engine. Per-domain subpaths; lesson blocks + presets creators compose and sell.",
   "author": "Classytic",
   "license": "MIT",
@@ -82,6 +82,14 @@
     "./kit": {
       "types": "./dist/kit/index.d.mts",
       "default": "./dist/kit/index.mjs"
+    },
+    "./build": {
+      "types": "./dist/build/index.d.mts",
+      "default": "./dist/build/index.mjs"
+    },
+    "./logic": {
+      "types": "./dist/logic/index.d.mts",
+      "default": "./dist/logic/index.mjs"
     },
     "./blocks": {
       "types": "./dist/blocks/index.d.mts",
@@ -191,7 +199,7 @@
   "peerDependencies": {
     "@classytic/cms": ">=0.2.1",
     "@classytic/cms-ui": ">=0.3.1",
-    "@classytic/stage": ">=0.1.0",
+    "@classytic/stage": ">=0.2.0",
     "clsx": ">=2",
     "katex": ">=0.16",
     "lucide-react": ">=0.4",
@@ -221,7 +229,7 @@
     "@changesets/cli": "^2.27.9",
     "@classytic/cms-ui": "^0.3.1",
     "@classytic/dev-tools": "^0.2.0",
-    "@classytic/stage": "^0.1.0",
+    "@classytic/stage": "^0.2.0",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",

@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * Area-model algebra tiles — a SceneDoc FACTORY for (x+a)(x+b), built on
+ * Area-model algebra tiles, a SceneDoc FACTORY for (x+a)(x+b), built on
  * @classytic/stage. Two modes share ONE asset:
  *  - EXPAND: drag x and watch x² + (a+b)x + ab; strips grow with x, the
- *    constant block does not — the multiplication made visible.
+ *    constant block does not, the multiplication made visible.
  *  - FACTOR: given x² + px + q, find a and b (steppers + Check). The unique
  *    positive factor pair {a,b} makes the check unambiguous (swap accepted).
  */
@@ -17,8 +17,8 @@ import {
 import { AREA_MODEL_ASSET } from './asset.js';
 import { Tex } from '../../core/tex.js';
 import { LabStyles, Stepper, CheckButton, StatusPill, Slider } from '../../kit/controls.js';
-import { LabFrame, ControlBar, Field, LiveRegion } from '../../kit/frame.js';
-import { useCheckpoint } from '../../kit/pedagogy.js';
+import { LabFrame, ControlBar, ControlExpr, Field, LiveRegion } from '../../kit/frame.js';
+import { useCheckpoint, useChallenge, ChallengeCard, type ChallengeQuestion } from '../../kit/pedagogy.js';
 
 registerAsset('area-model', AREA_MODEL_ASSET);
 export { AREA_MODEL_ASSET };
@@ -75,7 +75,23 @@ export function AreaModelLab({ a = 3, b = 2, mode = 'expand', unit = 1, controlI
   const p = a + b;
   const q = a * b;
 
-  useCheckpoint({ solved: result === 'correct', activity: `factor-x2+${p}x+${q}`, response: `(x+${ga})(x+${gb})` });
+  // Predict-first gate: commit to the middle coefficient before the expansion is shown.
+  const predictQ = useMemo<ChallengeQuestion[]>(() => {
+    const sum = a + b;        // correct middle coefficient
+    const product = a * b;    // common wrong answer (the constant term)
+    const lure = sum + 1;     // one more plausible number
+    const values = Array.from(new Set([sum, product, lure])).sort((m, n) => m - n);
+    return [{
+      id: 'middle-coeff',
+      prompt: `(x + ${a})(x + ${b}) expands to x² + ?x + ?. What is the MIDDLE coefficient?`,
+      choices: values.map((v) => ({ value: String(v), label: String(v) })),
+      answer: String(sum),
+      explain: `The middle term is a+b=${sum} (the sum), and the constant is a·b=${product} (the product) — the area-model's two off-diagonal tiles vs the corner tile.`,
+    }];
+  }, [a, b]);
+  const ch = useChallenge(predictQ);
+
+  useCheckpoint({ solved: result === 'correct' && ch.allCorrect, activity: `factor-x2+${p}x+${q}`, response: `(x+${ga})(x+${gb})` });
 
   const check = (): void => {
     const ok = ga + gb === p && ga * gb === q;
@@ -93,24 +109,30 @@ export function AreaModelLab({ a = 3, b = 2, mode = 'expand', unit = 1, controlI
     );
     const controlBar = (
       <ControlBar>
-        <span style={{ fontWeight: 600 }}>(x +</span>
-        <Stepper label="a" value={ga} min={0} max={12} onChange={(v) => { setGa(v); setResult(null); }} />
-        <span className="sep">)(x +</span>
-        <Stepper label="b" value={gb} min={0} max={12} onChange={(v) => { setGb(v); setResult(null); }} />
-        <span className="sep">)</span>
-        <span style={{ opacity: 0.7 }}><Tex tex={`\\to x^2 + ${ga + gb}x + ${ga * gb}`} /></span>
+        {/* one tight inline expression so the parens/steppers/result don't scatter */}
+        <ControlExpr>
+          <span>(x +</span>
+          <Stepper label="a" value={ga} min={0} max={12} onChange={(v) => { setGa(v); setResult(null); }} />
+          <span>)(x +</span>
+          <Stepper label="b" value={gb} min={0} max={12} onChange={(v) => { setGb(v); setResult(null); }} />
+          <span>)</span>
+          <span style={{ opacity: 0.7, marginLeft: 4 }}><Tex tex={`\\to x^2 + ${ga + gb}x + ${ga * gb}`} /></span>
+        </ControlExpr>
         <CheckButton onClick={check}>Check</CheckButton>
         {result === 'correct' && <StatusPill ok>✓ Correct!</StatusPill>}
-        {result === 'wrong' && <StatusPill ok={false}>Not yet — match {p}x and {q}</StatusPill>}
+        {result === 'wrong' && <StatusPill ok={false}>Not yet, match {p}x and {q}</StatusPill>}
       </ControlBar>
     );
     const footer = (
-      <LiveRegion>
-        {result === 'correct' ? `Correct. The factors are x plus ${a} and x plus ${b}.` : ''}
-      </LiveRegion>
+      <>
+        <ChallengeCard questions={predictQ} state={ch} title="Predict first" />
+        <LiveRegion>
+          {result === 'correct' ? `Correct. The factors are x plus ${a} and x plus ${b}.` : ''}
+        </LiveRegion>
+      </>
     );
     return (
-      <LabFrame title="Area-model factoring" prompt={`Factor ${trinomialLabel(a, b)} — find the two side lengths.`} controls={controlBar} footer={footer}>
+      <LabFrame title="Area-model factoring" prompt={`Factor ${trinomialLabel(a, b)}: find the two side lengths.`} controls={controlBar} footer={footer}>
         {figure}
       </LabFrame>
     );
@@ -130,5 +152,6 @@ export function AreaModelLab({ a = 3, b = 2, mode = 'expand', unit = 1, controlI
       <span style={{ opacity: 0.75 }}>area = {((x + a) * (x + b)).toFixed(2)}</span>
     </ControlBar>
   );
-  return <LabFrame title="Area-model expansion" controls={controlBar}>{figure}</LabFrame>;
+  const footer = <ChallengeCard questions={predictQ} state={ch} title="Predict first" />;
+  return <LabFrame title="Area-model expansion" controls={controlBar} footer={footer}>{figure}</LabFrame>;
 }

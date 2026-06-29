@@ -1,0 +1,1 @@
+import { registerBuiltinParts } from "./parts/index.mjs";

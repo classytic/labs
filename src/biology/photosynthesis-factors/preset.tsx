@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * PhotosynthesisFactorsLab — limiting factors: the slowest worker sets the pace.
+ * PhotosynthesisFactorsLab, limiting factors: the slowest worker sets the pace.
  *
  * Sliders for light, CO₂ and temperature. The rate climbs with light then
- * PLATEAUS at whichever factor is in shortest supply — raise CO₂ and the SAME
+ * PLATEAUS at whichever factor is in shortest supply, raise CO₂ and the SAME
  * light curve climbs to a higher plateau, proving light was no longer limiting.
  * Temperature is different: it gives a PEAK (optimum) not a plateau, because past
  * the optimum enzymes denature. "Freeze curve" overlays a faint copy so two CO₂
@@ -38,31 +38,31 @@ const CLIFF = 14; // °C past optimum over which the rate falls (denaturation/st
 const FACTORS_CHALLENGE: ChallengeQuestion[] = [
   {
     id: 'plateau',
-    prompt: 'Raising light further does nothing — the rate-vs-light curve has flattened. What sets the height of that plateau?',
+    prompt: 'Raising light further does nothing, the rate-vs-light curve has flattened. What sets the height of that plateau?',
     choices: [
       { value: 'factor', label: 'another factor (CO₂ or temperature)' },
       { value: 'colour', label: 'the colour of the light' },
-      { value: 'random', label: 'nothing — it’s random' },
+      { value: 'random', label: 'nothing: it’s random' },
     ],
     answer: 'factor',
-    explain: 'Where the curve flattens, some OTHER factor (CO₂ supply or temperature) is now the bottleneck — the slowest worker sets the pace.',
+    explain: 'Where the curve flattens, some OTHER factor (CO₂ supply or temperature) is now the bottleneck, the slowest worker sets the pace.',
   },
   {
     id: 'cliff',
-    prompt: 'Push temperature well ABOVE the optimum and the rate CRASHES — not just plateaus. Why?',
+    prompt: 'Push temperature well ABOVE the optimum and the rate CRASHES, not just plateaus. Why?',
     choices: [
       { value: 'denature', label: 'enzymes denature' },
       { value: 'co2', label: 'more CO₂ dissolves' },
       { value: 'light', label: 'the light weakens' },
     ],
     answer: 'denature',
-    explain: 'Past the optimum the enzymes lose their shape (denature) — that destroys capacity, unlike a mere limiting factor.',
+    explain: 'Past the optimum the enzymes lose their shape (denature), that destroys capacity, unlike a mere limiting factor.',
   },
 ];
 
 export function PhotosynthesisFactorsLab({
   light = 70, co2 = 50, temperature = 25, tempOptimum = 28,
-  title = 'Limiting factors — the slowest worker sets the pace',
+  title = 'Limiting factors: the slowest worker sets the pace',
   prompt = 'Raise light: the rate plateaus where another factor (CO₂ or temperature) takes over.',
   height = 240, objectives,
 }: PhotosynthesisFactorsProps): ReactNode {
@@ -94,7 +94,7 @@ export function PhotosynthesisFactorsLab({
 
   const figure = (
     <>
-      {/* photosynthesis equation — shared MoleculeGlyph + ReactionFlow engine */}
+      {/* photosynthesis equation, shared MoleculeGlyph + ReactionFlow engine */}
       <ReactionFlow
         reactants={[{ kind: 'co2', coef: 6 }, { kind: 'h2o', coef: 6 }, { kind: 'light' }]}
         products={[{ kind: 'glucose' }, { kind: 'o2', coef: 6 }]}

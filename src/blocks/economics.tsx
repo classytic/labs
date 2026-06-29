@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/blocks — economics (commerce) lab block specs.
+ * @classytic/labs/blocks, economics (commerce) lab block specs.
  *
  * `defineBlock` editor adapters for the economics labs. A creator/agent authors
  * the curve parameters + which controls are on. One domain per file; assembled in

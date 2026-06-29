@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * circuit-network asset — a GENERAL circuits template on the @classytic/stage
+ * circuit-network asset, a GENERAL circuits template on the @classytic/stage
  * engine (the stage-based successor to the old canvas CircuitBuilder). A circuit
  * is a battery + parallel BRANCHES, each a series chain of components
  * (resistor / bulb / switch). The resolver owns the whole solve (Ohm + series-
@@ -10,10 +10,10 @@
  * trace. Switch states + battery EMF are FREE scalars bound in, so the circuit
  * is agent-drivable and the visual can never disagree with the physics.
  *
- * Branch-list model (series / parallel / series-parallel — the intro set), NOT
+ * Branch-list model (series / parallel / series-parallel, the intro set), NOT
  * an arbitrary mesh netlist (that needs an MNA solver and risks singular states).
  * SVG: current flow is a CSS-var-driven dash animation that honours
- * prefers-reduced-motion — no per-frame re-resolve, no /canvas needed here.
+ * prefers-reduced-motion, no per-frame re-resolve, no /canvas needed here.
  */
 
 import type { ReactNode } from 'react';
@@ -21,6 +21,7 @@ import {
   useCoords, registerAsset, StageAssetDefs,
   type Vec2, type AssetResolveArgs, type AssetSpec, type AssetGeometry, type ElementStyle,
 } from '@classytic/stage';
+import { solveDC, type Elem } from '@classytic/stage/circuit';
 import { num as n } from '../../core/util.js';
 
 type CompType = 'resistor' | 'bulb' | 'switch';
@@ -36,6 +37,47 @@ const RETURN_DROP = 2.2; // gap below the lowest branch for the battery return w
 
 const numOr = (v: unknown, d: number): number => (typeof v === 'number' && Number.isFinite(v) ? v : typeof v === 'boolean' ? (v ? 1 : 0) : d);
 
+interface Raw { i: number; type: CompType; ohms: number; branch: number; pos: number; closed: boolean }
+
+/**
+ * Solve the branch-list network through the ONE circuit engine (@classytic/stage/circuit
+ * MNA): parallel branches between the left bus (node 1) and the ground return (node 0),
+ * each a series chain with its own internal nodes; closed switch = near-zero R, open
+ * branch = omitted. Returns the totals + per-branch current read back from node voltages.
+ */
+function solveNetwork(raw: Raw[], nBranch: number, emf: number, internalR: number): { Itotal: number; branchI: number[] } {
+  const elems: Elem[] = [];
+  let node = 2;
+  if (internalR > 1e-9) {
+    const bn = node++;
+    elems.push({ kind: 'V', n1: bn, n2: 0, value: emf, id: 'batt' });
+    elems.push({ kind: 'R', n1: bn, n2: 1, value: internalR });
+  } else {
+    elems.push({ kind: 'V', n1: 1, n2: 0, value: emf, id: 'batt' });
+  }
+  const branchOf = (b: number): Raw[] => raw.filter((r) => r.branch === b).sort((a, c) => a.pos - c.pos);
+  const first: ({ a: number; b: number; R: number } | null)[] = [];
+  for (let b = 0; b < nBranch; b++) {
+    const chain = branchOf(b);
+    const open = chain.length === 0 || chain.some((r) => r.type === 'switch' && !r.closed);
+    if (open) { first[b] = null; continue; }
+    let prev = 1; let f: { a: number; b: number; R: number } | null = null;
+    chain.forEach((r, idx) => {
+      const nb = idx === chain.length - 1 ? 0 : node++;
+      const R = r.type === 'switch' ? 1e-6 : Math.max(1e-9, r.ohms);
+      elems.push({ kind: 'R', n1: prev, n2: nb, value: R });
+      if (!f) f = { a: prev, b: nb, R };
+      prev = nb;
+    });
+    first[b] = f;
+  }
+  const sol = solveDC(elems);
+  const V = sol.nodeV;
+  const Itotal = Math.abs(sol.current['batt'] ?? 0);
+  const branchI = first.map((f) => (f ? Math.abs(((V[f.a] ?? 0) - (V[f.b] ?? 0)) / f.R) : 0));
+  return { Itotal, branchI };
+}
+
 function resolver({ params, bound }: AssetResolveArgs): AssetGeometry {
   const nComp = Math.max(0, Math.round(n(params.nComp, 0)));
   const nBranch = Math.max(1, Math.round(n(params.nBranch, 1)));
@@ -47,7 +89,6 @@ function resolver({ params, bound }: AssetResolveArgs): AssetGeometry {
   const goalTol = n(params.goalTol, 0.05);
 
   // 1. read components
-  interface Raw { i: number; type: CompType; ohms: number; branch: number; pos: number; closed: boolean }
   const raw: Raw[] = [];
   for (let i = 0; i < nComp; i++) {
     const type = TYPE[Math.round(n(params[`t${i}`], 1))] ?? 'resistor';
@@ -56,23 +97,12 @@ function resolver({ params, bound }: AssetResolveArgs): AssetGeometry {
     raw.push({ i, type, ohms: Math.max(0, n(params[`o${i}`], type === 'switch' ? 0 : 1)), branch: Math.round(n(params[`b${i}`], 0)), pos: n(params[`p${i}`], i), closed });
   }
 
-  // 2. per-branch resistance (open switch ⇒ ∞)
+  // 2-3. solve the whole network through the ONE circuit engine (stage/circuit MNA) —
+  // this lab shares the same solver as every other; no per-lab series/parallel math.
   const branchOf = (b: number): Raw[] => raw.filter((r) => r.branch === b).sort((a, c) => a.pos - c.pos);
-  const branchR: number[] = [];
-  for (let b = 0; b < nBranch; b++) {
-    const comps = branchOf(b);
-    const open = comps.some((r) => r.type === 'switch' && !r.closed);
-    branchR[b] = open ? Infinity : comps.reduce((s, r) => s + (r.type === 'switch' ? 0 : r.ohms), 0);
-  }
+  const { Itotal, branchI } = solveNetwork(raw, nBranch, emf, internalR);
 
-  // 3. reduce + solve
-  const invSum = branchR.reduce((s, R) => s + (Number.isFinite(R) && R > 0 ? 1 / R : Number.isFinite(R) ? 1e9 : 0), 0);
-  const Rpar = invSum > 0 ? 1 / invSum : Infinity;
-  const Rtot = Number.isFinite(Rpar) ? Rpar + internalR : Infinity;
-  const Itotal = Number.isFinite(Rtot) && Rtot > 1e-9 ? emf / Rtot : 0;
-  const Vbranch = emf - Itotal * internalR;
-
-  // 4. layout — a CLOSED rectangular loop, centered vertically on 0: components
+  // 4. layout, a CLOSED rectangular loop, centered vertically on 0: components
   // sit on the branch rungs (the top rung for a single branch), the battery sits
   // on the bottom return wire, and two vertical buses close both ends. This reads
   // as a circuit in every case (the old single-branch path collapsed to a line).
@@ -85,7 +115,7 @@ function resolver({ params, bound }: AssetResolveArgs): AssetGeometry {
   for (let b = 0; b < nBranch; b++) {
     const yb = yTop - b * ROW_GAP;
     const chain = branchOf(b);
-    const Ib = Number.isFinite(branchR[b]) && branchR[b]! > 0 ? Vbranch / (branchR[b] as number) : (Number.isFinite(branchR[b]) ? Itotal : 0);
+    const Ib = branchI[b] ?? 0;
     const m = chain.length;
     chain.forEach((r, idx) => {
       const x = m === 1 ? 0 : (XL + PADX) + ((XR - PADX) - (XL + PADX)) * (idx / (m - 1));
@@ -96,7 +126,7 @@ function resolver({ params, bound }: AssetResolveArgs): AssetGeometry {
     });
   }
 
-  // 5. wires — left/right buses + bottom return (battery) + one rung per branch;
+  // 5. wires, left/right buses + bottom return (battery) + one rung per branch;
   // energized when current actually flows through that wire.
   const railEnergized = Itotal > 1e-6;
   const wires: Wire[] = [
@@ -106,8 +136,7 @@ function resolver({ params, bound }: AssetResolveArgs): AssetGeometry {
   ];
   for (let b = 0; b < nBranch; b++) {
     const yb = yTop - b * ROW_GAP;
-    const Ib = Number.isFinite(branchR[b]) && (branchR[b] as number) > 0 ? Vbranch / (branchR[b] as number) : 0;
-    wires.push({ pts: [{ x: XL, y: yb }, { x: XR, y: yb }], energized: Ib > 1e-6 });
+    wires.push({ pts: [{ x: XL, y: yb }, { x: XR, y: yb }], energized: (branchI[b] ?? 0) > 1e-6 });
   }
 
   // 6. goal check
@@ -122,7 +151,7 @@ function resolver({ params, bound }: AssetResolveArgs): AssetGeometry {
   return {
     kind: 'asset-geom',
     parts: { battery: { x: 0, y: yReturn } },
-    meta: { comps, wires, emf, Itotal, Rtot: Number.isFinite(Rtot) ? Rtot : -1, solved, flowDur, energized: railEnergized },
+    meta: { comps, wires, emf, Itotal, Rtot: Itotal > 1e-12 ? emf / Itotal : -1, solved, flowDur, energized: railEnergized },
   };
 }
 
@@ -131,7 +160,7 @@ function Component({ geom }: { geom: AssetGeometry; style?: ElementStyle; label?
   const p = geom.parts as Record<string, Vec2>;
   const m = (geom.meta ?? {}) as { comps: Comp[]; wires: Wire[]; emf: number; Itotal: number; solved: boolean; flowDur: number };
   const P = (v: Vec2): [number, number] => c.toPx(v.x, v.y);
-  const HALF = 22; // component half-width in px (FIXED — not scaled, so symbols stay tidy on a wide view)
+  const HALF = 22; // component half-width in px (FIXED, not scaled, so symbols stay tidy on a wide view)
 
   const wirePath = (w: Wire): string => w.pts.map((v) => P(v).join(',')).join(' ');
 
@@ -154,21 +183,21 @@ function Component({ geom }: { geom: AssetGeometry; style?: ElementStyle; label?
       const glow = comp.brightness;
       const lit = glow > 0.02;
       const fill = lit ? `color-mix(in oklab, var(--stage-warn) ${Math.round(glow * 90)}%, var(--stage-bg))` : 'var(--stage-bg)';
-      const d = r * 0.72; // X half-diagonal (≈ r/√2 — the cross stays inside the rim)
+      const d = r * 0.72; // X half-diagonal (≈ r/√2, the cross stays inside the rim)
       const cross = lit ? 'var(--stage-sheen)' : 'var(--stage-metal)';
       const crossOp = lit ? 0.95 : 0.65;
       return (
         <g key={i}>
           {lit && <circle cx={cx} cy={cy} r={r + 7 + 8 * glow} fill="var(--stage-warn)" opacity={0.22 * glow} />}
           <circle cx={cx} cy={cy} r={r} fill={fill} stroke="var(--stage-metal)" strokeWidth={1.75} />
-          {/* lamp symbol: circle with an X (⊗) — unambiguous, never reads as the AC "~" sign */}
+          {/* lamp symbol: circle with an X (⊗), unambiguous, never reads as the AC "~" sign */}
           <line x1={cx - d} y1={cy - d} x2={cx + d} y2={cy + d} stroke={cross} strokeWidth={1.5} opacity={crossOp} />
           <line x1={cx - d} y1={cy + d} x2={cx + d} y2={cy - d} stroke={cross} strokeWidth={1.5} opacity={crossOp} />
           <text x={cx} y={cy + r + 15} fill="var(--stage-fg)" fontSize={11} fontWeight={600} textAnchor="middle">{comp.label}</text>
         </g>
       );
     }
-    // switch — lever from left terminal; closed horizontal, open lifted
+    // switch, lever from left terminal; closed horizontal, open lifted
     const lev = comp.closed ? { x: cx + HALF, y: cy } : { x: cx + HALF * 0.5, y: cy - HALF * 0.9 };
     return (
       <g key={i}>

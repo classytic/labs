@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * DerivativeExplorer — "the derivative is a slope," on the @classytic/stage
+ * DerivativeExplorer, "the derivative is a slope," on the @classytic/stage
  * engine. Plot f(x); drag the point along the curve and shrink the gap h to
  * watch the SECANT collapse onto the TANGENT (exact f'(x) from the shared expr
  * engine's symbolic `differentiate`, numerical fallback). Replaces the canvas
- * version — now SVG, accessible, themed, KaTeX formulas via the Tex primitive.
+ * version, now SVG, accessible, themed, KaTeX formulas via the Tex primitive.
  */
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
@@ -55,7 +55,7 @@ export function DerivativeExplorer({ equation = '0.15*x^3 - x', xRange = [-4, 4]
   }, [equation]);
 
   if (!model.ok) {
-    return <div className="not-prose"><p style={{ fontWeight: 600 }}>{title}</p><div style={{ padding: 12, fontSize: 13, color: 'var(--stage-danger)' }}>“{equation}” — {model.error}</div></div>;
+    return <div className="not-prose"><p style={{ fontWeight: 600 }}>{title}</p><div style={{ padding: 12, fontSize: 13, color: 'var(--stage-danger)' }}>“{equation}”, {model.error}</div></div>;
   }
 
   const { f, slopeAt, fLatex, dfLatex } = model;
@@ -87,8 +87,8 @@ export function DerivativeExplorer({ equation = '0.15*x^3 - x', xRange = [-4, 4]
         <Slider value={h} min={0.05} max={3} step={0.05} onChange={setH} ariaLabel="secant gap h" />
       </Field>
       <span style={{ opacity: 0.8 }}>x = <strong>{x0.toFixed(2)}</strong></span>
-      <span style={{ opacity: 0.8 }}>secant slope <strong>{Number.isFinite(secant) ? secant.toFixed(2) : '—'}</strong></span>
-      <span style={{ color: 'var(--stage-good)', fontWeight: 600 }}>f′(x) = {Number.isFinite(m) ? m.toFixed(2) : '—'}</span>
+      <span style={{ opacity: 0.8 }}>secant slope <strong>{Number.isFinite(secant) ? secant.toFixed(2) : ', '}</strong></span>
+      <span style={{ color: 'var(--stage-good)', fontWeight: 600 }}>f′(x) = {Number.isFinite(m) ? m.toFixed(2) : ', '}</span>
     </ControlBar>
   );
 

@@ -1,4 +1,4 @@
-// @classytic/labs/catalog — the lab-template registry + built-in families.
+// @classytic/labs/catalog, the lab-template registry + built-in families.
 // Importing this registers all built-in templates.
 import { registerBuiltinTemplates } from './templates.js';
 

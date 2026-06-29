@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * NumberLineLab — see a number's place, including BELOW zero. A horizontal line
+ * NumberLineLab, see a number's place, including BELOW zero. A horizontal line
  * with a draggable marker that snaps to integers; optionally pose a target
  * ("drag to where x lands") so the learner discovers that taking away more than
- * you have lands you left of zero — a negative. Reusable for integers,
+ * you have lands you left of zero, a negative. Reusable for integers,
  * inequalities, and the "owing weight" intuition.
  */
 
@@ -55,7 +55,7 @@ export function NumberLineLab({
         {ticks.map((t) => <Segment key={`t${t}`} from={{ x: t, y: t === 0 ? -0.26 : -0.16 }} to={{ x: t, y: t === 0 ? 0.26 : 0.16 }} color="var(--stage-fg)" opacity={t === 0 ? 0.7 : 0.35} weight={t === 0 ? 2 : 1} />)}
         {ticks.filter((t) => span <= 16 || t % 2 === 0).map((t) => <Label key={`l${t}`} x={t} y={0} text={String(t)} color="var(--stage-muted)" dy={22} size={12} />)}
         {solved && target != null && <Dot x={target} y={0} r={11} color="var(--stage-good)" opacity={0.3} />}
-        <MovableDot value={{ x: val, y: 0 }} onMove={(p) => setVal(clamp(snap(p.x), min, max))} constrain="horizontal" range={{ min, max }} step={1} color={markerColor} ariaLabel="number-line marker" />
+        <MovableDot value={{ x: val, y: 0 }} onMove={(p) => setVal(clamp(snap(p.x), min, max))} constrain="horizontal" range={{ min, max }} snap={1} step={1} color={markerColor} ariaLabel="number-line marker" />
     </Stage>
   );
 

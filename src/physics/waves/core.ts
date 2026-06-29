@@ -1,8 +1,8 @@
 /**
- * Wave kernel — the pure maths every waves lab trusts. A travelling wave is
+ * Wave kernel, the pure maths every waves lab trusts. A travelling wave is
  * y(x,t) = A·sin(kx − ωt + φ) with k = 2π/λ (spatial) and ω = 2πf (temporal); its
  * speed is v = fλ (one wavelength passes every period). Two equal waves going
- * opposite ways add to a STANDING wave 2A·sin(kx)·cos(ωt) — fixed nodes (always 0)
+ * opposite ways add to a STANDING wave 2A·sin(kx)·cos(ωt), fixed nodes (always 0)
  * and antinodes (max swing); a string clamped both ends fits n half-wavelengths in
  * its length L (harmonic n ⇒ λ = 2L/n). Superposing two near frequencies gives
  * BEATS at |f₁−f₂|. The labs render these; they never re-derive them.

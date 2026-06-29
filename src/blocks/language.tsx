@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/blocks — language lab block specs.
+ * @classytic/labs/blocks, language lab block specs.
  *
  * `defineBlock` editor adapters for the language labs (one domain per file; the
  * registry is assembled in `./index.ts`). Each spec pairs a real zod schema
@@ -37,7 +37,7 @@ export const SentenceBuilderBlock = defineBlock({
   tag: 'SentenceBuilder',
   void: true,
   label: 'Sentence builder (word order)',
-  description: 'Order colour-coded word tiles into a correct sentence — visualizes word order (great for SOV→SVO).',
+  description: 'Order colour-coded word tiles into a correct sentence, visualizes word order (great for SOV→SVO).',
   category: 'interactive',
   schema: z.object({
     tiles: z.array(sentenceTileSchema).default(DEMO_SENTENCE),
@@ -76,7 +76,7 @@ export const WordMatchBlock = defineBlock({
   tag: 'WordMatch',
   void: true,
   label: 'Word match (vocab pairs)',
-  description: 'Tap to pair each word with its meaning — or its picture (kids/concrete). Reads a vocab deck.',
+  description: 'Tap to pair each word with its meaning, or its picture (kids/concrete). Reads a vocab deck.',
   category: 'interactive',
   schema: z.object({
     deck: deckSchema.default(DEMO_DECK),
@@ -86,7 +86,7 @@ export const WordMatchBlock = defineBlock({
     prompt: z.string().optional(),
   }),
   Component: ({ attributes, mode, updateAttributes }) => {
-    // deck may arrive missing, malformed, or as a JSON string (MDX round-trip) — coerce to a
+    // deck may arrive missing, malformed, or as a JSON string (MDX round-trip), coerce to a
     // deck that always has a non-empty `items` array, else WordMatchLab's `.items.length` throws.
     let rawDeck: unknown = attributes.deck;
     if (typeof rawDeck === 'string') { try { rawDeck = JSON.parse(rawDeck); } catch { /* keep */ } }
@@ -121,13 +121,13 @@ const DEMO_ARTICLES: ArticleItem[] = [
   { before: 'I saw', noun: 'cat', after: 'on the wall.', answer: 'a', why: 'a → any one (new), before a consonant sound' },
   { before: 'She is', noun: 'engineer.', answer: 'an', why: 'an → before a vowel sound (engineer)' },
   { before: 'Please open', noun: 'door.', answer: 'the', why: 'the → the specific door we both mean' },
-  { before: 'I like', noun: 'tea.', answer: '—', why: 'no article → tea in general (uncountable)' },
+  { before: 'I like', noun: 'tea.', answer: ', ', why: 'no article → tea in general (uncountable)' },
 ];
 
 const DEMO_AGREE: AgreementItem[] = [
   { subject: 'She', options: ['go', 'goes'], correct: 'goes', tail: 'to school.', note: 'he / she / it → add -s: goes' },
   { subject: 'They', options: ['is', 'are'], correct: 'are', tail: 'happy.', note: 'plural subject → are' },
-  { subject: 'He', options: ['is', 'are', 'am'], correct: 'is', tail: 'a doctor.', note: 'English needs "is" — Bangla drops the present copula' },
+  { subject: 'He', options: ['is', 'are', 'am'], correct: 'is', tail: 'a doctor.', note: 'English needs "is", Bangla drops the present copula' },
 ];
 
 export const ArticleLensBlock = defineBlock({
@@ -135,7 +135,7 @@ export const ArticleLensBlock = defineBlock({
   tag: 'ArticleLens',
   void: true,
   label: 'Article lens (a / an / the)',
-  description: 'Pick the right article (a/an/the/none) — built for the "Bangla has no articles" gap.',
+  description: 'Pick the right article (a/an/the/none), built for the "Bangla has no articles" gap.',
   category: 'interactive',
   schema: z.object({ items: z.array(articleItemSchema).default(DEMO_ARTICLES), objectives: z.array(z.string()).optional(), hints: z.array(z.string()).optional(), title: z.string().optional(), prompt: z.string().optional() }),
   Component: ({ attributes, mode, updateAttributes }) => {
@@ -149,7 +149,7 @@ export const ArticleLensBlock = defineBlock({
             <RowsEditor
               rows={items}
               onChange={(v) => updateAttributes({ items: v })}
-              columns={[{ key: 'before', label: 'before', grow: true }, { key: 'noun', label: 'noun', grow: true }, { key: 'after', label: 'after', grow: true }, { key: 'answer', label: 'answer', type: 'select', options: ['a', 'an', 'the', '—'] }, { key: 'why', label: 'why', grow: true }]}
+              columns={[{ key: 'before', label: 'before', grow: true }, { key: 'noun', label: 'noun', grow: true }, { key: 'after', label: 'after', grow: true }, { key: 'answer', label: 'answer', type: 'select', options: ['a', 'an', 'the', ', '] }, { key: 'why', label: 'why', grow: true }]}
               newRow={() => ({ before: '', noun: '', answer: 'a' as const })}
               addLabel="item"
             />
@@ -168,7 +168,7 @@ export const AgreementBlock = defineBlock({
   tag: 'Agreement',
   void: true,
   label: 'Agreement (subject ↔ verb)',
-  description: 'Pick the verb form that matches the subject — covers 3rd-sg -s and the dropped copula.',
+  description: 'Pick the verb form that matches the subject, covers 3rd-sg -s and the dropped copula.',
   category: 'interactive',
   schema: z.object({ items: z.array(agreementItemSchema).default(DEMO_AGREE), title: z.string().optional(), prompt: z.string().optional() }),
   Component: ({ attributes, mode, updateAttributes }) => {
@@ -207,9 +207,9 @@ const DEMO_TRANSFORM_TO: TransformTile[] = [
   { text: '?', pos: 'other' },
 ];
 const DEMO_PREP: PrepItem[] = [
-  { before: 'The bird is', noun: 'the tree.', answer: 'above', options: ['above', 'in', 'under'], scene: 'above', figure: '🐦', landmark: '🌳', note: '"above the tree" — the word comes BEFORE the noun (Bangla puts it after).' },
-  { before: 'The fish is', noun: 'the water.', answer: 'in', options: ['in', 'on', 'over'], scene: 'in', figure: '🐟', landmark: 'water', note: '"in the water" — preposition first.' },
-  { before: 'The cat is', noun: 'the table.', answer: 'under', options: ['on', 'under', 'beside'], scene: 'under', figure: '🐱', landmark: '🪑', note: '"under the table" — preposition first.' },
+  { before: 'The bird is', noun: 'the tree.', answer: 'above', options: ['above', 'in', 'under'], scene: 'above', figure: '🐦', landmark: '🌳', note: '"above the tree", the word comes BEFORE the noun (Bangla puts it after).' },
+  { before: 'The fish is', noun: 'the water.', answer: 'in', options: ['in', 'on', 'over'], scene: 'in', figure: '🐟', landmark: 'water', note: '"in the water", preposition first.' },
+  { before: 'The cat is', noun: 'the table.', answer: 'under', options: ['on', 'under', 'beside'], scene: 'under', figure: '🐱', landmark: '🪑', note: '"under the table", preposition first.' },
 ];
 const PREP_RELATIONS = ['in', 'on', 'over', 'above', 'under', 'below', 'beside', 'between', 'behind', 'infront', 'at'];
 
@@ -249,7 +249,7 @@ export const PrepositionBlock = defineBlock({
   tag: 'Preposition',
   void: true,
   label: 'Preposition scene (in / on / at)',
-  description: 'Pick the preposition that matches a spatial picture — teaches "before the noun" vs Bangla postpositions.',
+  description: 'Pick the preposition that matches a spatial picture, teaches "before the noun" vs Bangla postpositions.',
   category: 'interactive',
   schema: z.object({ items: z.array(prepItemSchema).default(DEMO_PREP), title: z.string().optional(), prompt: z.string().optional() }),
   Component: ({ attributes, mode, updateAttributes }) => {

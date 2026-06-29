@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * CountingTree — the GENERAL sequential-counting + probability-tree tool. One
+ * CountingTree, the GENERAL sequential-counting + probability-tree tool. One
  * model covers the multiplication principle, permutations (draw without
  * replacement → n·(n−1)·…), with-replacement counts (nᵏ), the
  * permutation→combination collapse (÷k!), AND probability trees (multiply the
@@ -10,9 +10,9 @@
  * an agent narrates and never invents.
  *
  * Two authoring forms:
- *   • `stages`  — explicit uniform-per-stage branches (general multiplication /
+ *   • `stages` , explicit uniform-per-stage branches (general multiplication /
  *                 independent probability, e.g. flip a coin 3×).
- *   • `pool`+`draws`+`replacement` — draw k items from a pool; replacement off
+ *   • `pool`+`draws`+`replacement`, draw k items from a pool; replacement off
  *                 ⇒ a permutation tree (5·4·3), on ⇒ nᵏ.
  */
 
@@ -20,7 +20,7 @@ import { Fragment, useMemo, useState, type ReactNode } from 'react';
 import { Stage, Segment, Dot, Label, useControlSurface, useLearner } from '@classytic/stage';
 import { Stepper, Chip, CheckButton, StatusPill } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field } from '../../kit/frame.js';
-import { useHints, HintLadder, RevealSolution, useCheckpoint } from '../../kit/pedagogy.js';
+import { useHints, HintLadder, RevealSolution, useCheckpoint, useChallenge, ChallengeCard, type ChallengeQuestion } from '../../kit/pedagogy.js';
 import { factorial } from '../core/combinatorics.js';
 import { Tex } from '../../core/tex.js';
 
@@ -130,8 +130,37 @@ export function CountingTreeLab({
   }, [pool, draws, replacement, stages]);
 
   const target = ask === 'unordered' ? unorderedTotal : orderedTotal;
+
+  // ── PREDICT-FIRST: commit to a count before the multiplication is explained ──
+  // Authored from the ACTUAL config: correct = target; distractors are the
+  // classic traps (with-replacement nᵏ, the ÷k! confusion, "add the pool" n·k).
+  const predictQ = useMemo<ChallengeQuestion[]>(() => {
+    if (mode !== 'count') return [];
+    const n = pool ? pool.length : 0;
+    const withRepl = pool ? Math.pow(n, draws) : 0;            // nᵏ trap (forgets the pool shrinks)
+    const kFact = factorial(k);                                 // ÷k! / ×k! confusion
+    const addTrap = pool ? n * draws : 0;                       // adds instead of multiplies
+    const prompt = pool
+      ? `Filling ${draws} ranked ${draws === 1 ? 'spot' : 'spots'} from ${n} ${n === 1 ? 'option' : 'options'}, ${replacement ? 'reuse allowed' : 'with no repeats'} — how many ${ask === 'unordered' ? 'unordered selections' : 'ordered outcomes'} are there?`
+      : `Working down ${k} ${k === 1 ? 'stage' : 'stages'} of choices, how many ${ask === 'unordered' ? 'unordered selections' : 'ordered paths'} does the tree end with?`;
+    const distractors = [withRepl, kFact, addTrap, target + 1, target * 2]
+      .filter((v) => Number.isFinite(v) && v > 0 && v !== target);
+    const seen = new Set<number>([target]);
+    const choiceVals = [target];
+    for (const v of distractors) { if (!seen.has(v)) { seen.add(v); choiceVals.push(v); } if (choiceVals.length >= 3) break; }
+    choiceVals.sort((a, b) => a - b);
+    return [{
+      id: 'predict-count',
+      prompt,
+      choices: choiceVals.map((v) => ({ value: String(v), label: String(v) })),
+      answer: String(target),
+      explain: <>Multiply a <b>shrinking pool</b>: <Tex tex={`${factorStr}${ask === 'unordered' ? ` \\div ${k}!` : ''} = ${target}`} />.</>,
+    }];
+  }, [mode, pool, draws, replacement, ask, k, target, orderedTotal, factorStr]);
+  const ch = useChallenge(predictQ);
+
   const solved = mode === 'count' ? checked && guess === target && !peeked : false;
-  useCheckpoint({ solved, activity: `counting-tree:${title}`, hintsUsed: hints.count });
+  useCheckpoint({ solved: solved || ch.allCorrect, activity: `counting-tree:${title}`, hintsUsed: hints.count });
 
   const check = (): void => setChecked(true);
   const reset = (): void => { setGuess(0); setChecked(false); setSel(-1); };
@@ -175,7 +204,7 @@ export function CountingTreeLab({
         </Stage>
       </div>
 
-      {built.overflow && <p className="lab-prompt">Tree truncated at {MAX_LEAVES} paths — shrink the pool/draws to see it all.</p>}
+      {built.overflow && <p className="lab-prompt">Tree truncated at {MAX_LEAVES} paths, shrink the pool/draws to see it all.</p>}
     </>
   );
 
@@ -185,7 +214,7 @@ export function CountingTreeLab({
         <Stepper value={guess} onChange={(v) => { setGuess(v); setChecked(false); }} min={0} max={Math.max(20, orderedTotal * 2)} />
       </Field>
       <CheckButton onClick={check}>Check</CheckButton>
-      {checked && <StatusPill ok={guess === target}>{guess === target ? `✓ ${target}` : `Not yet — count the branches`}</StatusPill>}
+      {checked && <StatusPill ok={guess === target}>{guess === target ? `✓ ${target}` : `Not yet, count the branches`}</StatusPill>}
       {built.leafPaths.length <= 16 && (
         <Field label="Trace each path">
           {built.leafPaths.map((p, i) => <Chip key={i} selected={sel === i} onClick={() => setSel(sel === i ? -1 : i)}>{p.path}</Chip>)}
@@ -204,6 +233,7 @@ export function CountingTreeLab({
 
   const footer = (
     <>
+      {predictQ.length > 0 && <ChallengeCard questions={predictQ} state={ch} title="Predict first" />}
       {mode === 'count' && checked && (
         <p className="lab-prompt">
           Multiplication principle: <b><Tex tex={`${factorStr} = ${orderedTotal}`} /></b> ordered outcomes.
@@ -211,7 +241,7 @@ export function CountingTreeLab({
         </p>
       )}
       {mode === 'count' && (
-        <RevealSolution available={checked && !solved} solution={<>The count is <b>{target}</b> — <Tex tex={`${factorStr}${ask === 'unordered' ? ` \\div ${k}!` : ''}`} />.</>} onReveal={reveal} />
+        <RevealSolution available={checked && !solved} solution={<>The count is <b>{target}</b>, <Tex tex={`${factorStr}${ask === 'unordered' ? ` \\div ${k}!` : ''}`} />.</>} onReveal={reveal} />
       )}
       <HintLadder hints={hints} />
     </>

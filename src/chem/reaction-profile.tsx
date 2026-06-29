@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * ReactionProfile — an energy vs. reaction-coordinate diagram.
+ * ReactionProfile, an energy vs. reaction-coordinate diagram.
  *
  * Reactants plateau → activation-energy hump (transition state) → products
  * plateau. Tune ΔH (exothermic vs endothermic) and the activation energy Eₐ; flip
@@ -44,7 +44,7 @@ function sample(f: (t: number) => number): Vec2[] {
   return pts;
 }
 
-/** The predict/classify activity — read straight off the diagram the learner just tuned. */
+/** The predict/classify activity, read straight off the diagram the learner just tuned. */
 const CHALLENGE: ChallengeQuestion[] = [
   {
     id: 'type',
@@ -62,7 +62,7 @@ const CHALLENGE: ChallengeQuestion[] = [
       { value: 'both', label: 'both' },
     ],
     answer: 'ea',
-    explain: 'The reactant and product levels are unchanged — only the hump (Eₐ) drops, so ΔH is the same.',
+    explain: 'The reactant and product levels are unchanged, only the hump (Eₐ) drops, so ΔH is the same.',
   },
 ];
 
@@ -127,7 +127,7 @@ export function ReactionProfile({ deltaH, activationEnergy, catalyst: catalystIn
   return (
     <LabFrame
       title={title}
-      prompt="Tune ΔH and the activation energy. A catalyst lowers the hump (green) — a faster path, same ΔH."
+      prompt="Tune ΔH and the activation energy. A catalyst lowers the hump (green), a faster path, same ΔH."
       aside={aside}
       controls={controls}
       footer={<ChallengeCard questions={CHALLENGE} state={challenge} title="Predict" />}

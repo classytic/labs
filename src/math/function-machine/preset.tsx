@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Function machine — a "predict the rule" interactive (Brilliant-style), built
+ * Function machine, a "predict the rule" interactive (Brilliant-style), built
  * on @classytic/stage: inputs → outputs with index-matched connectors, a rule
  * chip, multiple-choice rules, and a Check that reports to the learner seam. A
  * GENERAL tool: a creator passes any inputs/outputs/choices/answer.
@@ -72,7 +72,7 @@ export function FunctionMachineLab({ prompt = 'Which rule produces these outputs
       </div>
       <CheckButton onClick={check} disabled={!sel}>Check</CheckButton>
       {result === 'correct' && <StatusPill ok>✓ Correct!</StatusPill>}
-      {result === 'wrong' && <StatusPill ok={false}>Not quite — try another rule</StatusPill>}
+      {result === 'wrong' && <StatusPill ok={false}>Not quite, try another rule</StatusPill>}
     </ControlBar>
   );
 

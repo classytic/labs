@@ -1,19 +1,19 @@
 'use client';
 
 /**
- * CapacitorLeakLab — why a capacitor charges, holds, and (slowly) LEAKS.
+ * CapacitorLeakLab, why a capacitor charges, holds, and (slowly) LEAKS.
  *
  * A textbook RC loop: a cell charges a capacitor C through a resistor R. Flip
- * the switch to "leak" and the cell is disconnected — the capacitor discharges
+ * the switch to "leak" and the cell is disconnected, the capacitor discharges
  * through its own leakage resistance, the field between the plates thins, drips
- * fall off the lower plate, and Vc decays exponentially. One source of truth —
- * Vc(t), integrated by the shared `useFrameLoop` clock — drives the plate field,
+ * fall off the lower plate, and Vc decays exponentially. One source of truth , 
+ * Vc(t), integrated by the shared `useFrameLoop` clock, drives the plate field,
  * the drips, the live readout, and the Vc–t trace, so they can never disagree.
  *
  * Time-dependent physics lives in the COMPONENT (the pure scene resolver runs
  * once per resolve and can't integrate an ODE); the symbols are the tokenized
  * @classytic/stage electronics glyphs, so the schematic stays exam-standard and
- * rethemes with `--stage-*`. SVG only — honours prefers-reduced-motion.
+ * rethemes with `--stage-*`. SVG only, honours prefers-reduced-motion.
  */
 
 import { useRef, useState, type ReactNode } from 'react';
@@ -23,7 +23,7 @@ import { CellGlyph, ResistorGlyph, CapacitorGlyph } from '../../kit/electronics.
 import { Slider, Chip } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, LiveRegion } from '../../kit/frame.js';
 import { useReducedMotion, useFrameTick } from '../../kit/anim.js';
-import { HintLadder, useHints } from '../../kit/pedagogy.js';
+import { HintLadder, useHints, useCheckpoint } from '../../kit/pedagogy.js';
 
 export interface CapacitorLeakProps {
   /** Source EMF in volts. */
@@ -42,7 +42,7 @@ export interface CapacitorLeakProps {
   hints?: string[];
 }
 
-// schematic geometry (px) — a rectangular loop, all devices on the top edge
+// schematic geometry (px), a rectangular loop, all devices on the top edge
 const W = 440, H = 250;
 const xL = 60, xR = 380, yT = 80, yB = 172;
 const CELL_X = 130, R_X = 230, CAP_X = 330, DEV_HALF = 30;
@@ -53,7 +53,7 @@ const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 export function CapacitorLeakLab({
   emf = 6, rK = 10, capU = 100, leakK = 200, startCharged = false,
   title = 'Charging & leaking a capacitor',
-  prompt = 'Charge it up, then flip to “leak” — watch the field thin and Vc decay.',
+  prompt = 'Charge it up, then flip to “leak”, watch the field thin and Vc decay.',
   objectives, hints = [],
 }: CapacitorLeakProps): ReactNode {
   const [V, setV] = useState(emf);
@@ -87,6 +87,12 @@ export function CapacitorLeakLab({
   const charging = mode === 'charge' && q < 0.995;
   const leaking = mode === 'leak' && q > 0.01;
   const hint = useHints(hints);
+
+  // Solved = the learner has run the discharge to near-empty: in "leak" mode the
+  // voltage fraction has decayed to ≤ 5% (several time constants), so the field
+  // has thinned to nothing. Feeds the hint ladder into a real formative loop.
+  const solved = mode === 'leak' && q <= 0.05;
+  useCheckpoint({ solved, activity: `capacitor-leak:${title}`, hintsUsed: hint.count });
 
   // Vc–t trace: scale the latest samples into the graph box.
   const sampleArr = rate.current.samples;

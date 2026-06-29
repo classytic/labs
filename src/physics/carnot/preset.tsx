@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * CarnotCycleLab — the most efficient possible heat engine, shown two ways at once:
+ * CarnotCycleLab, the most efficient possible heat engine, shown two ways at once:
  *   • P–V diagram: the four-leg loop (hot isothermal expansion → adiabatic expansion
  *     → cold isothermal compression → adiabatic compression). The ENCLOSED area is
  *     the net work the engine delivers per cycle.
- *   • T–S diagram: the very same cycle is a RECTANGLE — heat in along the top (Th),
+ *   • T–S diagram: the very same cycle is a RECTANGLE, heat in along the top (Th),
  *     heat out along the bottom (Tc), entropy unchanged on the adiabatic sides. Its
  *     area (ΔS·(Th−Tc)) equals the net work too, and it makes the entropy bookkeeping
  *     obvious: ΔS = Qh/Th = Qc/Tc, so the gas returns to the same entropy (net ΔS = 0).
@@ -46,12 +46,12 @@ export function CarnotCycleLab({
   coldK = 300,
   gas = 'monatomic',
   expansionRatio = 2,
-  title = 'Carnot cycle — the best a heat engine can do',
+  title = 'Carnot cycle: the best a heat engine can do',
   prompt = 'A gas absorbs heat at a hot temperature, does work, and dumps the rest at a cold one. Watch the loop on the P–V diagram and the same cycle as a rectangle on the T–S diagram.',
   objectives = [
     'See the Carnot cycle as a P–V loop whose area is the net work',
     'Read the same cycle as a T–S rectangle (heat in at Th, out at Tc)',
-    'Derive the efficiency η = 1 − Tc/Th — the ceiling no engine can beat',
+    'Derive the efficiency η = 1 − Tc/Th, the ceiling no engine can beat',
   ],
 }: CarnotProps = {}): ReactNode {
   const [Th, setTh] = useState(hotK);
@@ -148,10 +148,10 @@ export function CarnotCycleLab({
       <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
         <Tex tex={'\\eta = 1 - \\dfrac{T_c}{T_h} = \\dfrac{W}{Q_h}'} block />
         <span style={{ color: 'var(--stage-muted)' }}>
-          Heat enters at <strong style={{ color: 'var(--stage-danger, #e03131)' }}>Th = {Th} K</strong> and leaves at <strong style={{ color: 'var(--stage-accent, #3b82f6)' }}>Tc = {tcc} K</strong>. The wider the temperature gap, the more efficient — but you can never reach 100% without Tc = 0.
+          Heat enters at <strong style={{ color: 'var(--stage-danger, #e03131)' }}>Th = {Th} K</strong> and leaves at <strong style={{ color: 'var(--stage-accent, #3b82f6)' }}>Tc = {tcc} K</strong>. The wider the temperature gap, the more efficient, but you can never reach 100% without Tc = 0.
         </span>
         <span style={{ color: 'var(--stage-muted)' }}>
-          On the T–S rectangle, <Tex tex={'\\Delta S = Q_h/T_h = Q_c/T_c'} /> = {dS.toFixed(2)} J/K, so the gas comes back to the same entropy — <strong style={{ color: 'var(--stage-fg)' }}>net ΔS = 0</strong> for a reversible cycle.
+          On the T–S rectangle, <Tex tex={'\\Delta S = Q_h/T_h = Q_c/T_c'} /> = {dS.toFixed(2)} J/K, so the gas comes back to the same entropy, <strong style={{ color: 'var(--stage-fg)' }}>net ΔS = 0</strong> for a reversible cycle.
         </span>
       </div>
     </>

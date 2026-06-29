@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * KineticsLab — why heat and catalysts speed reactions, shown the visceral way: a
+ * KineticsLab, why heat and catalysts speed reactions, shown the visceral way: a
  * vessel of molecules bouncing around (faster when hot), where only collisions with
- * enough energy (≥ Eₐ) succeed — those flash and convert reactant A → product B.
+ * enough energy (≥ Eₐ) succeed, those flash and convert reactant A → product B.
  * Beside it, the Maxwell–Boltzmann energy spread shows the SAME story as the shaded
  * "can react" tail past Eₐ, and a composition bar tracks A→B in real time.
  *
@@ -59,7 +59,7 @@ const KINETICS_CHALLENGE: ChallengeQuestion[] = [
       { value: 'lowerEa', label: 'it lowers the activation energy' },
     ],
     answer: 'energy',
-    explain: 'Heat widens the energy spread, so a larger fraction (e^(−Eₐ/RT)) clears the barrier — and they move faster, so collide more often.',
+    explain: 'Heat widens the energy spread, so a larger fraction (e^(−Eₐ/RT)) clears the barrier, and they move faster, so collide more often.',
   },
   {
     id: 'cat',
@@ -70,7 +70,7 @@ const KINETICS_CHALLENGE: ChallengeQuestion[] = [
       { value: 'shift', label: 'making the products more stable (changing ΔH)' },
     ],
     answer: 'lowerEa',
-    explain: 'A catalyst offers a lower-Eₐ path, so far more collisions succeed — without being used up or changing the energy of reactants/products.',
+    explain: 'A catalyst offers a lower-Eₐ path, so far more collisions succeed, without being used up or changing the energy of reactants/products.',
   },
 ];
 
@@ -80,7 +80,7 @@ export function KineticsLab({
   order = 1,
   molecules = 30,
   T0 = 300,
-  title = 'Reaction rate — temperature, activation energy & collisions',
+  title = 'Reaction rate: temperature, activation energy & collisions',
   prompt = 'Molecules must collide with enough energy (≥ Eₐ) to react. Heat them up or lower Eₐ with a catalyst and watch many more collisions succeed.',
   objectives = [
     'Explain rate by the collision model: enough-energy collisions react',
@@ -198,7 +198,7 @@ export function KineticsLab({
       </Callout>
       <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
         <Tex tex={'k = A\\,e^{-E_a / RT}'} block />
-        <span style={{ color: 'var(--stage-muted)' }}>Only collisions with energy ≥ Eₐ react. {catalyst ? <><strong style={{ color: B_COL }}>Catalyst on</strong> — Eₐ is lowered, so far more collisions succeed (ΔH is unchanged).</> : <>Heat the vessel and the energy spread widens, pushing more molecules past Eₐ.</>}</span>
+        <span style={{ color: 'var(--stage-muted)' }}>Only collisions with energy ≥ Eₐ react. {catalyst ? <><strong style={{ color: B_COL }}>Catalyst on</strong>, Eₐ is lowered, so far more collisions succeed (ΔH is unchanged).</> : <>Heat the vessel and the energy spread widens, pushing more molecules past Eₐ.</>}</span>
       </div>
     </>
   );

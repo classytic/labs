@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * DopplerLab — why a passing siren drops in pitch. A source glides across the tank
+ * DopplerLab, why a passing siren drops in pitch. A source glides across the tank
  * emitting wavefronts at a steady rate; because it CHASES its own waves, the fronts
  * bunch up ahead (shorter λ → higher pitch) and spread out behind (longer λ → lower
  * pitch). Crank the speed past the wave speed (Mach > 1) and the fronts pile into a
- * shock CONE — the sonic boom. A fixed listener hears the classic high→low sweep as
+ * shock CONE, the sonic boom. A fixed listener hears the classic high→low sweep as
  * the source approaches then recedes; 🔊 plays that Doppler-shifted tone for real.
  *
  *   f_observed = f_source · c / (c − v_radial)

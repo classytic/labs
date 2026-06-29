@@ -1,0 +1,1 @@
+import { PunnettCrossLab, PunnettCrossProps } from "./preset.mjs";

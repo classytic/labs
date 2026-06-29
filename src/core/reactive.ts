@@ -1,5 +1,5 @@
 /**
- * Tiny reactive value — the `ValueTracker` / signal at the heart of
+ * Tiny reactive value, the `ValueTracker` / signal at the heart of
  * interactivity. A slider/drag updates a `value()`; anything derived from it
  * recomputes; React components bound via `useValue` repaint. Framework-light
  * (no external dep); the React glue is one hook.

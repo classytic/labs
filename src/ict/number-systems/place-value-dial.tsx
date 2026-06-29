@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * PlaceValueDial — count in any base and watch the carry ripple.
+ * PlaceValueDial, count in any base and watch the carry ripple.
  *
  * A row of odometer wheels in base-N. +1 ticks the ones wheel; when it passes
- * N−1 it snaps to 0 and KICKS the next wheel up — the carry ripples left while
+ * N−1 it snaps to 0 and KICKS the next wheel up, the carry ripples left while
  * the power-of-N place values light up and sum to the live value. Re-base the
  * SAME count with the base chips to see "10 in any base means you ticked over
- * the base exactly once". In base-2 the wheels become ON/OFF cells — the
+ * the base exactly once". In base-2 the wheels become ON/OFF cells, the
  * "lightbulbs worth 1-2-4-8-16" picture. (Anti-pattern guard: weights stay on
  * screen, the carry is shown not hidden, and it works in both directions.)
  */
@@ -23,7 +23,7 @@ export interface PlaceValueDialProps {
   base?: number;
   width?: number;
   start?: number;
-  /** Pose "spin the dials to N" — reports via the learner seam when matched. */
+  /** Pose "spin the dials to N", reports via the learner seam when matched. */
   target?: number;
   /** Base chips the learner can switch between (re-bases the same value). */
   bases?: number[];

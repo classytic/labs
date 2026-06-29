@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Game-show glyph kit — the "make a choice, open the reveal" vocabulary: a DOOR
+ * Game-show glyph kit, the "make a choice, open the reveal" vocabulary: a DOOR
  * that swings open to show what's behind it, plus a CAR (the prize) and a GOAT
  * (the booby prize) to live behind it. Drawn in PIXEL space, token-coloured, pure
  * SVG. The door's `open` (0→1) animates via an inline CSS transition on the leaf
@@ -19,7 +19,7 @@ const GOLD = 'var(--stage-warn)';
 const GOOD = 'var(--stage-good)';
 const MUTED = 'var(--stage-muted)';
 const SHEEN = 'color-mix(in oklab, var(--stage-sheen, white) 55%, transparent)';
-// NOTE: keep color-mix percentages summing to 100% — a smaller sum leaks alpha
+// NOTE: keep color-mix percentages summing to 100%, a smaller sum leaks alpha
 // (the remainder becomes transparency), which would make the closed door see-through.
 const LEAF = 'color-mix(in oklab, var(--stage-accent) 92%, black)';
 const RECESS = 'color-mix(in oklab, var(--stage-fg) 88%, var(--stage-bg))';
@@ -44,7 +44,7 @@ export function DoorGlyph({ x, y, w, h, label, open = 0, picked = false, dim = f
         <rect x={ix} y={iy} width={iw} height={ih * 0.5} fill="color-mix(in oklab, black 16%, transparent)" />
         {children}
       </g>
-      {/* the door leaf — swings aside as `open` → 1 */}
+      {/* the door leaf, swings aside as `open` → 1 */}
       <g style={{ transform: `scaleX(${Math.max(0.04, 1 - open)})`, transformOrigin: `${ix}px ${iy + ih / 2}px`, transition: 'transform 0.5s cubic-bezier(.4,0,.2,1)' }}>
         <rect x={ix} y={iy} width={iw} height={ih} rx={r * 0.6} fill={LEAF} />
         {/* two recessed panels */}
@@ -67,7 +67,7 @@ export function DoorGlyph({ x, y, w, h, label, open = 0, picked = false, dim = f
   );
 }
 
-/** The prize — a shiny car (side view) in box (x,y,w,h). */
+/** The prize, a shiny car (side view) in box (x,y,w,h). */
 export function CarGlyph({ x, y, w, h }: { x: number; y: number; w: number; h: number }): ReactNode {
   const X = (f: number): number => x + w * f, Y = (f: number): number => y + h * f;
   const edge = 'color-mix(in oklab, var(--stage-warn) 55%, black)';
@@ -103,7 +103,7 @@ export function CarGlyph({ x, y, w, h }: { x: number; y: number; w: number; h: n
   );
 }
 
-/** The booby prize — a goat head in box (x,y,w,h). Big swept horns + beard so it
+/** The booby prize, a goat head in box (x,y,w,h). Big swept horns + beard so it
  *  reads as a goat, not a mouse. */
 export function GoatGlyph({ x, y, w, h }: { x: number; y: number; w: number; h: number }): ReactNode {
   const X = (f: number): number => x + w * f, Y = (f: number): number => y + h * f;
@@ -113,7 +113,7 @@ export function GoatGlyph({ x, y, w, h }: { x: number; y: number; w: number; h: 
   const hw = Math.max(4, w * 0.07);
   return (
     <g>
-      {/* big curved horns sweeping up and back — the goat tell */}
+      {/* big curved horns sweeping up and back, the goat tell */}
       <path d={`M${X(0.4)},${Y(0.28)} C${X(0.3)},${Y(0.16)} ${X(0.18)},${Y(0.1)} ${X(0.1)},${Y(0.16)}`} fill="none" stroke={horn} strokeWidth={hw} strokeLinecap="round" />
       <path d={`M${X(0.6)},${Y(0.28)} C${X(0.7)},${Y(0.16)} ${X(0.82)},${Y(0.1)} ${X(0.9)},${Y(0.16)}`} fill="none" stroke={horn} strokeWidth={hw} strokeLinecap="round" />
       {/* floppy ears */}

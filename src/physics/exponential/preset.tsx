@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * DecayCoolingLab — exponential relaxation made tangible, the standard data-driven
+ * DecayCoolingLab, exponential relaxation made tangible, the standard data-driven
  * way: one SceneDoc + one `rate` sim, two skins via the rate-process asset. Same
- * law (dy/dt = (target−y)/τ) tells two stories — radioactive atoms decaying to 0,
+ * law (dy/dt = (target−y)/τ) tells two stories, radioactive atoms decaying to 0,
  * and a hot drink cooling to room temperature. Press Play; it stops once relaxed.
  */
 
@@ -38,7 +38,7 @@ const EXPONENTIAL_CHALLENGE: ChallengeQuestion[] = [
       { value: 'steady', label: 'at a steady rate throughout' },
     ],
     answer: 'start',
-    explain: 'The rate tracks the gap to the surroundings — biggest at the start, easing to zero as it nears room temperature.',
+    explain: 'The rate tracks the gap to the surroundings, biggest at the start, easing to zero as it nears room temperature.',
   },
 ];
 
@@ -51,8 +51,8 @@ export interface DecayCoolingProps {
 
 export function DecayCoolingLab({
   mode: mode0 = 'decay',
-  title = 'Exponential change — decay & cooling',
-  prompt = 'Same law, two stories: atoms decay and a hot drink cools — each relaxes toward a baseline at a rate set by τ. Press Play.',
+  title = 'Exponential change: decay & cooling',
+  prompt = 'Same law, two stories: atoms decay and a hot drink cools, each relaxes toward a baseline at a rate set by τ. Press Play.',
   objectives = ['See exponential relaxation toward a baseline', 'Read a half-life (decay halves every t½)', 'Recognise the SAME curve behind decay and cooling'],
 }: DecayCoolingProps = {}): ReactNode {
   const [mode, setMode] = useState<'decay' | 'cooling'>(mode0);

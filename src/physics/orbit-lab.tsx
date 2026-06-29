@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * OrbitLab — an orbit is just falling sideways fast enough to keep missing the
+ * OrbitLab, an orbit is just falling sideways fast enough to keep missing the
  * ground. Too slow → crash; too fast → escape; just right → a closed ellipse.
  *
  * A genuine high-element-count animation (a 260-point fading trail + starfield +
  * a sub-stepped N-body integrator mutating a ref every frame), so it renders on
  * the engine's zero-dependency `<CanvasLayer>` (raw Canvas2D) rather than one SVG
- * node per trail point — the same boundary GradientDescent uses.
+ * node per trail point, the same boundary GradientDescent uses.
  */
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
@@ -38,7 +38,7 @@ export function OrbitLab(): ReactNode {
     const cx = c.width / 2, cy = c.height / 2;
     ctx.clearRect(0, 0, c.width, c.height);
 
-    // starfield — sparse + faint so it reads as background, not noise
+    // starfield, sparse + faint so it reads as background, not noise
     ctx.fillStyle = 'color-mix(in oklab, var(--stage-fg) 22%, transparent)';
     for (let i = 0; i < 22; i++) {
       const a = (i * 2.39996) % (Math.PI * 2);
@@ -46,7 +46,7 @@ export function OrbitLab(): ReactNode {
       ctx.beginPath(); ctx.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 0.7, 0, Math.PI * 2); ctx.fill();
     }
     const tr = sim.current.trail;
-    // before launch: a dashed guide ring at the circular-orbit radius — shows the orbit you're aiming for
+    // before launch: a dashed guide ring at the circular-orbit radius, shows the orbit you're aiming for
     if (tr.length === 0) {
       ctx.strokeStyle = 'color-mix(in oklab, var(--stage-accent) 35%, transparent)';
       ctx.lineWidth = 1.5; ctx.setLineDash([5, 6]);
@@ -59,7 +59,7 @@ export function OrbitLab(): ReactNode {
       for (let i = 1; i < tr.length; i++) ctx.lineTo(cx + tr[i]![0]!, cy + tr[i]![1]!);
       ctx.stroke(); ctx.globalAlpha = 1;
     }
-    // central planet — glow + body so it's an obvious focal point
+    // central planet, glow + body so it's an obvious focal point
     const glow = ctx.createRadialGradient(cx, cy, 8, cx, cy, 40);
     glow.addColorStop(0, 'color-mix(in oklab, oklch(0.7 0.13 250) 45%, transparent)');
     glow.addColorStop(1, 'transparent');
@@ -68,7 +68,7 @@ export function OrbitLab(): ReactNode {
     grd.addColorStop(0, 'oklch(0.82 0.13 250)');
     grd.addColorStop(1, 'oklch(0.42 0.13 250)');
     ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(cx, cy, 18, 0, Math.PI * 2); ctx.fill();
-    // satellite — bigger + halo so it's findable
+    // satellite, bigger + halo so it's findable
     const sx = cx + sim.current.x, sy = cy + sim.current.y;
     ctx.fillStyle = 'color-mix(in oklab, oklch(0.92 0.12 90) 35%, transparent)';
     ctx.beginPath(); ctx.arc(sx, sy, 10, 0, Math.PI * 2); ctx.fill();
@@ -105,8 +105,8 @@ export function OrbitLab(): ReactNode {
   const launch = (): void => { resetSim(); setTick((n) => n + 1); setPhase('running'); };
 
   const verdict =
-    phase === 'crashed' ? { text: '💥 Too slow — it fell back and crashed', ok: false }
-      : phase === 'escaped' ? { text: '🚀 Too fast — it escaped into space', ok: false }
+    phase === 'crashed' ? { text: '💥 Too slow, it fell back and crashed', ok: false }
+      : phase === 'escaped' ? { text: '🚀 Too fast, it escaped into space', ok: false }
         : phase === 'running' ? { text: '…orbiting (watch the path close into an ellipse)', ok: true }
           : null;
 
@@ -115,7 +115,7 @@ export function OrbitLab(): ReactNode {
       <CanvasLayer view={VIEW} height={340} draw={draw} ariaLabel={`Satellite orbiting a planet at ${speed.toFixed(2)}× circular speed`} />
       {phase === 'idle' && (
         <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--stage-muted)', margin: '6px 0 0' }}>
-          The dashed ring is a stable circular orbit. Press <strong>Launch</strong> — too slow and it spirals in, too fast and it escapes.
+          The dashed ring is a stable circular orbit. Press <strong>Launch</strong>, too slow and it spirals in, too fast and it escapes.
         </p>
       )}
     </div>

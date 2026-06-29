@@ -18,15 +18,15 @@ import {
   HeatTransferLab, ThermalExpansionLab, TemperatureScalesLab, HeatingCurveLab, WaterDensityLab,
   WaveLab, RippleTankLab, DopplerLab, StringReflectionLab, MagnetismLab, LorentzForceLab,
   StoppingDistanceLab, CollisionTrackLab, WorkEnergyLab, CarnotCycleLab, EfficiencyLab, EntropyLab,
-  GasProcessLab, ElectricFieldLab,
+  GasProcessLab, ElectricFieldLab, ElectricFluxLab, GaussLab, WorkPotentialLab,
 } from '../../dist/physics/index.mjs';
 import { BalanceAlgebraLab } from '../../dist/math/index.mjs';
 import { WordMatchLab, PrepositionSceneLab } from '../../dist/language/index.mjs';
 import { GeometryBuilder } from '../../dist/geometry/index.mjs';
 import { EquationBalanceLab, MarketEquilibriumLab, ElasticityRevenueLab, DemandShiftVsMoveLab, JournalPosterLab, StatementSorterLab } from '../../dist/commerce/index.mjs';
 import { TruthTableLab, CountingTreeLab, VennSetBoardLab, SampleSpaceBoardLab, BooleanCircuitLab, KarnaughMapLab, BayesLab, PascalTriangleLab, BinomialDistributionLab, HypergeometricLab, ExpectedValueLab } from '../../dist/discrete/index.mjs';
-import { FunctionMachineLab, VertexParabolaLab, NumberLineLab, LinearSystemLab, HarmonicFormLab, InteractiveProblem, TriangleTrig, Grapher } from '../../dist/math/index.mjs';
-import { CircuitLab, CapacitorLeakLab } from '../../dist/circuits/index.mjs';
+import { FunctionMachineLab, VertexParabolaLab, NumberLineLab, LinearSystemLab, HarmonicFormLab, InteractiveProblem, TriangleTrig, BrokenTreeLab, StraightLineLab, CircleLab, ConicLab, DomainRangeLab, Grapher } from '../../dist/math/index.mjs';
+import { CircuitLab, CapacitorLeakLab, RCChargingLab, DiodeLab, TransistorLab, CmosInverterLab } from '../../dist/circuits/index.mjs';
 import { GasBoxLab, SolutionBoxLab, DilutionLab, ReactionLab } from '../../dist/chem/index.mjs';
 import { PlaceValueDialLab, BitGrouperLab, BaseOdometerLab } from '../../dist/ict/index.mjs';
 import {
@@ -103,6 +103,9 @@ export const GALLERY = [
   { name: 'entropy', element: h(EntropyLab, {}) },
   { name: 'gas-process', element: h(GasProcessLab, {}) },
   { name: 'electric-field', element: h(ElectricFieldLab, {}) },
+  { name: 'electric-flux', element: h(ElectricFluxLab, { field: 6, area: 3, angleDeg: 30 }) },
+  { name: 'gauss-law', element: h(GaussLab, {}) },
+  { name: 'work-potential', element: h(WorkPotentialLab, {}) },
   { name: 'equation-balance', element: h(EquationBalanceLab, { start: 2, freePost: true }) },
   { name: 'truth-table', element: h(TruthTableLab, { formula: 'p -> q', mode: 'fill' }) },
   { name: 'truth-table-demorgan', element: h(TruthTableLab, { formula: '¬(p ∧ q)', compare: '¬p ∨ ¬q' }) },
@@ -137,11 +140,25 @@ export const GALLERY = [
   { name: 'harmonic-form', element: h(HarmonicFormLab, { a: 4, b: -3 }) },
   { name: 'interactive-intersections', element: h(InteractiveProblem, { title: 'k/x meets |x − 4|', equations: [{ expr: 'abs(x - 4)' }, { expr: 'k/x' }], params: [{ name: 'k', min: 0.5, max: 12, step: 0.5, value: 2 }], xRange: [0.1, 12], yRange: [-0.5, 10], derive: [{ kind: 'intersections', of: [0, 1] }], ask: { prompt: 'Largest k with exactly 3 intersections?', answer: { kind: 'number', value: 4, tol: 0.05 } }, activity: 'q12-intersections' }) },
   { name: 'triangle-trig', element: h(TriangleTrig, { angleDeg: 31, leg: 15, legKind: 'opposite', mode: 'depression', labels: { opposite: 'height', adjacent: 'distance' }, drive: ['angle'] }) },
+  { name: 'broken-tree', element: h(BrokenTreeLab, { originalHeight: 18, target: 12, breakHeight: 3 }) },
+  { name: 'straight-line-two-point', element: h(StraightLineLab, { mode: 'two-point', showDistance: true }) },
+  { name: 'straight-line-perpendicular', element: h(StraightLineLab, { mode: 'perpendicular', given: { m: 2, c: 1 }, through: { x: 4, y: 3 } }) },
+  { name: 'straight-line-intercept', element: h(StraightLineLab, { mode: 'intercept-form', pointA: { x: 4, y: 0 }, pointB: { x: 0, y: 3 } }) },
+  { name: 'circle-tangent', element: h(CircleLab, { center: { x: 1, y: -1 }, radius: 4, showTangent: true, showExpanded: true }) },
+  { name: 'conic-parabola', element: h(ConicLab, { kind: 'parabola', a: 1 }) },
+  { name: 'conic-ellipse', element: h(ConicLab, { kind: 'ellipse', a: 4, b: 2.5 }) },
+  { name: 'domain-range-semicircle', element: h(DomainRangeLab, { equation: 'sqrt(9 - x^2)', xRange: [-6, 6] }) },
+  { name: 'domain-range-pole', element: h(DomainRangeLab, { equation: '1/(x - 2)', xRange: [-6, 8], probe: 5 }) },
+  { name: 'conic-hyperbola', element: h(ConicLab, { kind: 'hyperbola', a: 2, b: 1.5 }) },
   { name: 'number-line', element: h(NumberLineLab, {}) },
   { name: 'linear-system', element: h(LinearSystemLab, {}) },
 
   // ── circuits ──
   { name: 'circuit', element: h(CircuitLab, {}) },
+  { name: 'rc-charging', element: h(RCChargingLab, {}) },
+  { name: 'diode', element: h(DiodeLab, {}) },
+  { name: 'transistor', element: h(TransistorLab, {}) },
+  { name: 'cmos-inverter', element: h(CmosInverterLab, {}) },
   { name: 'capacitor-leak', element: h(CapacitorLeakLab, {}) },
 
   // ── chemistry ──

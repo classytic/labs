@@ -2,10 +2,10 @@
 
 /**
  * Shared building blocks for the number-system labs: base digit helpers + the
- * DigitWheel glyph (a mechanical odometer wheel). Tokenized SVG only — colours
+ * DigitWheel glyph (a mechanical odometer wheel). Tokenized SVG only, colours
  * are `--stage-*` so the wheels retheme with the host. The roll is DATA: the lab
  * passes a 0..1 `roll` phase its frame loop decays, so the digit visibly slides
- * into place (no fake "press play" — the motion tracks the real value change).
+ * into place (no fake "press play", the motion tracks the real value change).
  */
 
 import { useEffect, useRef, type ReactNode } from 'react';
@@ -42,7 +42,7 @@ export interface DigitWheelProps {
   digit: number;
   /** 0 (settled) → 1 (just changed); slides the digit stack while it decays. */
   roll?: number;
-  /** +1 counted up, −1 counted down — direction the wheel rolls. */
+  /** +1 counted up, −1 counted down, direction the wheel rolls. */
   dir?: number;
   /** Non-zero digits read as "active" (accent); a zero is muted. */
   active?: boolean;
@@ -85,7 +85,7 @@ export function DigitWheel({ base, digit, roll = 0, dir = 1, active, onTap, aria
   );
 }
 
-/** A binary ON/OFF cell — the "lightbulb worth 2^n" picture for base-2 mode. */
+/** A binary ON/OFF cell, the "lightbulb worth 2^n" picture for base-2 mode. */
 export function BitCell({ on, onTap, ariaLabel }: { on: boolean; onTap?: () => void; ariaLabel?: string }): ReactNode {
   return (
     <svg
@@ -119,7 +119,7 @@ export interface WheelRowProps {
 
 /**
  * A row of odometer wheels (or bit cells) for `value` in `base`, with the
- * carry-ripple roll animation OWNED here — the single reusable place-value
+ * carry-ripple roll animation OWNED here, the single reusable place-value
  * primitive both PlaceValueDial and BaseOdometer compose, so the animation +
  * weight rendering live in exactly one spot.
  */

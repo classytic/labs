@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * mystery-bucket asset — the ESSENTIALS opener for "Algebra You Can See": a
+ * mystery-bucket asset, the ESSENTIALS opener for "Algebra You Can See": a
  * balance scale with a sealed BUCKET of hidden weight on the left and a row of
- * 1-unit weights on the right. The learner adds units until the beam is level —
+ * 1-unit weights on the right. The learner adds units until the beam is level , 
  * then the bucket's weight is revealed. Teaches *unknown* + *balance* with zero
  * notation, before any letter or coefficient (Hands-On-Equations lineage).
  *
  * Reuses the shared balance vocabulary (flat beam + slim pedestal + hung trays
- * from balance-algebra) + the kit BucketGlyph / WeightGlyph — theme-aware, no
+ * from balance-algebra) + the kit BucketGlyph / WeightGlyph, theme-aware, no
  * copy-pasted glyph drawing. The resolver owns the solve (tilt + balanced).
  */
 

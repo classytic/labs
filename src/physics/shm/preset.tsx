@@ -1,18 +1,18 @@
 'use client';
 
 /**
- * SimpleHarmonicLab — "The same swing", where a spring and a pendulum turn out to
+ * SimpleHarmonicLab, "The same swing", where a spring and a pendulum turn out to
  * be the SAME motion, and where a wave comes from.
  *
  * One SHM kernel, two skins. A restoring force pulls back in proportion to the
  * displacement (spring: F = −kx; pendulum, small angle: F ≈ −mg·x/L), which forces
  * a = −ω²x and the solution x(t) = A·cos(ωt). The mass oscillates while a pen
- * traces x against time — and the trace IS a sine curve, the very shape of the
+ * traces x against time, and the trace IS a sine curve, the very shape of the
  * waves lessons (a wave is SHM spread through space). Energy sloshes between
  * elastic/PE and KE, summing to a constant (ties to the energy-skate lab).
  *
- *   ω = √(k/m)  (spring)        T = 2π√(m/k)      — heavier or softer ⇒ slower
- *   ω = √(g/L)  (pendulum)      T = 2π√(L/g)      — independent of mass AND amplitude
+ *   ω = √(k/m)  (spring)        T = 2π√(m/k)     , heavier or softer ⇒ slower
+ *   ω = √(g/L)  (pendulum)      T = 2π√(L/g)     , independent of mass AND amplitude
  *
  * Ambient PlayWrap gate (pause to read the force arrow). Tokenized SVG.
  */
@@ -74,8 +74,8 @@ const WIN = 6;          // seconds of trace shown
 
 export function SimpleHarmonicLab({
   mode = 'spring', k = 8, length = 2, mass = 1, amplitude,
-  title = 'The same swing — spring, pendulum, and where a wave comes from',
-  prompt = 'A restoring force pulls back in proportion to displacement, so a = −ω²x and the motion is x(t) = A·cos(ωt). Watch the pen trace a sine — that’s the shape of a wave. Swap to a pendulum: its period ignores both mass and amplitude.',
+  title = 'The same swing: spring, pendulum, and where a wave comes from',
+  prompt = 'A restoring force pulls back in proportion to displacement, so a = −ω²x and the motion is x(t) = A·cos(ωt). Watch the pen trace a sine, that’s the shape of a wave. Swap to a pendulum: its period ignores both mass and amplitude.',
   objectives,
   controlConfig,
 }: SimpleHarmonicProps): ReactNode {
@@ -161,7 +161,7 @@ export function SimpleHarmonicLab({
     );
   })();
 
-  // ---- x(t) trace (a sine — the wave link) ----
+  // ---- x(t) trace (a sine, the wave link) ----
   const A_PX = 1.0;
   const curve: Vec2[] = [];
   for (let i = 0; i <= 120; i++) {
@@ -169,7 +169,7 @@ export function SimpleHarmonicLab({
     curve.push({ x: i / 120, y: A_PX * Math.cos(omega * tau) });
   }
   const trace = (
-    <Stage view={{ xMin: 0, xMax: 1, yMin: -1.4, yMax: 1.4 }} height={130} preserveAspect={false} ariaLabel="Displacement traced against time — a sine curve">
+    <Stage view={{ xMin: 0, xMax: 1, yMin: -1.4, yMax: 1.4 }} height={130} preserveAspect={false} ariaLabel="Displacement traced against time, a sine curve">
       <Segment from={{ x: 0, y: 0 }} to={{ x: 1, y: 0 }} color="var(--stage-fg)" opacity={0.4} weight={1} />
       <Label x={0} y={1.4} text="displacement x(t)" color="var(--stage-fg)" size={10} anchor="start" dy={-2} />
       <Label x={1} y={0} text="time →" color="var(--stage-fg)" size={10} anchor="end" dy={14} />
@@ -200,10 +200,10 @@ export function SimpleHarmonicLab({
       <MeterBar label={isSpring ? 'elastic PE = ½kx²' : 'gravitational PE'} frac={peFrac} color="var(--stage-accent-2)" value={`${Math.round(peFrac * 100)}%`} />
       <MeterBar label="kinetic KE = ½mv²" frac={keFrac} color="var(--stage-good)" value={`${Math.round(keFrac * 100)}%`} />
       <p style={{ fontSize: 12, opacity: 0.75, margin: 0 }}>
-        The trace is a <strong>sine</strong> — a wave is just this swing spread through space (v = fλ in the
+        The trace is a <strong>sine</strong>, a wave is just this swing spread through space (v = fλ in the
         waves lab). {isSpring
           ? 'Heavier or softer spring ⇒ slower (T = 2π√(m/k)).'
-          : 'Notice: change the mass or the amplitude and T doesn’t move — a pendulum’s period is T = 2π√(L/g).'}
+          : 'Notice: change the mass or the amplitude and T doesn’t move, a pendulum’s period is T = 2π√(L/g).'}
       </p>
       <LiveRegion>{`${isSpring ? 'Spring' : 'Pendulum'} oscillator. Angular frequency ${omega.toFixed(2)}, period ${T.toFixed(2)} seconds.`}</LiveRegion>
     </div>
@@ -224,7 +224,7 @@ export function SimpleHarmonicLab({
       ) : (
         <>
           <Field label="length L" value={`${L.toFixed(1)} m`}><Slider value={L} min={1} max={3.2} step={0.2} onChange={setL} ariaLabel="pendulum length (m)" /></Field>
-          <Field label="mass m" value={`${m} kg`}><Slider value={m} min={0.5} max={5} step={0.5} onChange={setM} ariaLabel="bob mass (kg) — does not change the period" /></Field>
+          <Field label="mass m" value={`${m} kg`}><Slider value={m} min={0.5} max={5} step={0.5} onChange={setM} ariaLabel="bob mass (kg): does not change the period" /></Field>
           <Field label="amplitude" value={`${ampDeg}°`}><Slider value={ampDeg} min={6} max={40} step={2} onChange={setAmpDeg} ariaLabel="amplitude (degrees)" /></Field>
         </>
       )}

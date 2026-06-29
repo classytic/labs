@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * BitGrouper — slice a byte into nibbles and read the hex.
+ * BitGrouper, slice a byte into nibbles and read the hex.
  *
  * A strip of tappable bits that auto-slices into groups of k FROM THE RIGHT
- * (4 for hex, 3 for octal), translating each group to a hex/octal digit live —
+ * (4 for hex, 3 for octal), translating each group to a hex/octal digit live , 
  * the "group the bits" trick made physical. Flip between hex and octal to watch
  * the SAME bits re-slice and the leftmost group pad with zeros; in octal the top
  * group of a byte never exceeds 3 (greyed), which is exactly why hex won.
@@ -22,7 +22,7 @@ export interface BitGrouperProps {
   /** Group sizes offered as chips (4 = hex, 3 = octal). */
   groupings?: number[];
   start?: number;
-  /** Pose "build this value" — reports via the learner seam when matched. */
+  /** Pose "build this value", reports via the learner seam when matched. */
   target?: { value: number; base: 16 | 8 | 2 };
   showColor?: boolean;
   title?: string;
@@ -53,7 +53,7 @@ function sliceFromRight(value: number, width: number, k: number): Group[] {
 
 export function BitGrouperLab({
   width = 8, groupSize = 4, groupings = [4, 3], start = 0, target, showColor = false,
-  title = 'Bit grouper', prompt = 'Tap the bits. Group from the right — 4 per hex digit, 3 per octal digit.',
+  title = 'Bit grouper', prompt = 'Tap the bits. Group from the right: 4 per hex digit, 3 per octal digit.',
   objectives,
 }: BitGrouperProps): ReactNode {
   const cap = (1 << width) - 1;
@@ -92,7 +92,7 @@ export function BitGrouperLab({
         </p>
         {radix === 8 && hasPartial && (
           <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--stage-muted)' }}>
-            the greyed top octal group is only {width % k} bits — it never passes {(1 << (width % k)) - 1}, so octal wastes the top of a byte (why hex won)
+            the greyed top octal group is only {width % k} bits, it never passes {(1 << (width % k)) - 1}, so octal wastes the top of a byte (why hex won)
           </p>
         )}
         {showColor && (

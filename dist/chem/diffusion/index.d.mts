@@ -1,0 +1,1 @@
+import { DiffusionLab, DiffusionProps } from "./preset.mjs";

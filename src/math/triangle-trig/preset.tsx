@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * TriangleTrig — the first REPRESENTATION plug-in: a thing the graph engine can't
+ * TriangleTrig, the first REPRESENTATION plug-in: a thing the graph engine can't
  * draw (a labelled right triangle), authored by config and reusing the shared
- * answer-check seam. Built for the angle-of-elevation/depression family — "from the
+ * answer-check seam. Built for the angle-of-elevation/depression family, "from the
  * top of a 15 m tower the angle of depression to a point is 31°, find the distance"
  * (the user's "see the angle and the tree/pole distances"). A 2-D split is clearer
  * (and cheaper) than pseudo-3-D.
  *
  * The creator gives an angle + ONE leg; the engine solves the rest (tan/sin/cos),
  * draws the triangle with every side + the angle labelled, exposes chosen knobs as
- * sliders for intuition, and — with `ask` — grades a typed answer via `checkAnswer`.
+ * sliders for intuition, and, with `ask`, grades a typed answer via `checkAnswer`.
  */
 
 import { useState, type ReactNode } from 'react';
@@ -48,13 +48,13 @@ const C_GIVEN = 'var(--stage-accent)';
 const C_HYP = 'var(--stage-accent-2)';
 const C_CALC = 'var(--stage-fg)';
 
-const fmt = (n: number): string => (Number.isFinite(n) ? (Math.abs(n) >= 100 ? n.toFixed(0) : n.toFixed(2)) : '—');
+const fmt = (n: number): string => (Number.isFinite(n) ? (Math.abs(n) >= 100 ? n.toFixed(0) : n.toFixed(2)) : ', ');
 
 export function TriangleTrig({
   angleDeg = 31, leg = 15, legKind = 'opposite', mode = 'depression',
   labels, drive = ['angle'], legMin = 1, legMax,
   ask,
-  title = 'Angle of depression — solve the right triangle',
+  title = 'Angle of depression: solve the right triangle',
   prompt = 'The angle, the height and the ground distance are one right triangle: tan θ = opposite / adjacent.',
   height = 320, activity = 'triangle-trig',
 }: TriangleTrigProps = {}): ReactNode {
@@ -80,8 +80,11 @@ export function TriangleTrig({
   const horiz: Vec2 = { x: A - Math.min(A * 0.55, O * 0.9 + 1), y: O };
 
   const sideLabel = (mid: Vec2, name: string, value: number, color: string, given: boolean, off: { dx?: number; dy?: number }): ReactNode => (
-    <Label x={mid.x} y={mid.y} text={`${name} = ${fmt(value)}`} color={color} size={12} dx={off.dx} dy={off.dy} />
+    <Label x={mid.x} y={mid.y} text={`${name} = ${fmt(value)}`} color={color} size={12} weight={given ? 700 : 600} dx={off.dx} dy={off.dy} />
   );
+  // offset the hypotenuse label PERPENDICULAR to its line (up-left, off the stroke)
+  const hyLen = H || 1;
+  const hypOff = { dx: (-O / hyLen) * 18, dy: (-A / hyLen) * 18 };
 
   const figure = (
     <Stage view={view} height={height} ariaLabel={`Right triangle: ${lab.angle} ${deg} degrees, ${lab.opposite} ${fmt(O)}, ${lab.adjacent} ${fmt(A)}, hypotenuse ${fmt(H)}`}>
@@ -100,7 +103,7 @@ export function TriangleTrig({
       )}
       {sideLabel({ x: A / 2, y: 0 }, lab.adjacent, A, !givenIsOpp ? C_GIVEN : C_CALC, !givenIsOpp, { dy: 16 })}
       {sideLabel({ x: A, y: O / 2 }, lab.opposite, O, givenIsOpp ? C_GIVEN : C_CALC, givenIsOpp, { dx: 16 })}
-      {sideLabel({ x: A / 2, y: O / 2 }, lab.hypotenuse, H, C_HYP, false, { dx: -10, dy: -8 })}
+      {sideLabel({ x: A / 2, y: O / 2 }, lab.hypotenuse, H, C_HYP, false, hypOff)}
     </Stage>
   );
 

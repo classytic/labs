@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * MarketEquilibriumLab — Marshall's scissors: where the market clears.
+ * MarketEquilibriumLab, Marshall's scissors: where the market clears.
  *
  * Drag a horizontal PRICE line across a fixed demand line + supply line. At any
- * non-equilibrium price the lab shades the HORIZONTAL gap between Qd and Qs —
+ * non-equilibrium price the lab shades the HORIZONTAL gap between Qd and Qs , 
  * amber SURPLUS above equilibrium (pressure pushes price down), red SHORTAGE
- * below (pressure pushes price up) — and the band collapses to nothing at the
+ * below (pressure pushes price up), and the band collapses to nothing at the
  * crossing, where a green pill reads "market clears, Qd = Qs". Shift sliders move
  * either curve to watch BOTH P* and Q* move. Reuses the shared econ core +
- * Stage primitives; tokenized; reduced-motion safe (no autoplay — the learner drags).
+ * Stage primitives; tokenized; reduced-motion safe (no autoplay, the learner drags).
  *
  * The algebra (solve a−bQ = c+dQ for Q*) belongs in a paired MathDerivation.
  */
@@ -41,7 +41,7 @@ const SUPPLY0: Curve = { intercept: 1, slope: 0.7 };
 export function MarketEquilibriumLab({
   demand = DEMAND0, supply = SUPPLY0, shiftControls = { demand: true, supply: true },
   priceMax = 10, qtyMax = 12, goodLabel = 'the good',
-  title = "Marshall's scissors — where the market clears",
+  title = "Marshall's scissors: where the market clears",
   prompt = 'Drag the price. Above equilibrium → surplus; below → shortage; the gap is Qs − Qd.',
   height = 320, objectives,
 }: MarketEquilibriumProps): ReactNode {

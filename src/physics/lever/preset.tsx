@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * Balance-lever (torque) — a SceneDoc FACTORY, built on @classytic/stage. A
+ * Balance-lever (torque), a SceneDoc FACTORY, built on @classytic/stage. A
  * creator places weights at distances along an arm; exactly one is unknown, and
  * the learner sets it so the lever balances (net torque zero). Physics is typed
  * derivations that evaluate: torque_i = w_i·d_i (linop, fixed distance), net =
  * ΣL − ΣR, tilt = clamp(gain·net), balanced = (net == 0). v1 ships solveFor:
- * 'weight' (one unknown mass, fixed slots) — single-DOF, uniquely solvable.
+ * 'weight' (one unknown mass, fixed slots), single-DOF, uniquely solvable.
  */
 
 import { useMemo, type ReactNode } from 'react';
@@ -114,7 +114,7 @@ export function LeverBalanceLab({ items = DEFAULT_ITEMS, start = 1, maxWeight = 
   const aside = (
     <>
       <StatusPill ok={balanced}>{balanced ? '✓ Balanced!' : 'Not balanced'}</StatusPill>
-      <Callout tone="result">turning effect — left {leftSum.toFixed(1)} · right {rightSum.toFixed(1)}</Callout>
+      <Callout tone="result">turning effect, left {leftSum.toFixed(1)} · right {rightSum.toFixed(1)}</Callout>
     </>
   );
 

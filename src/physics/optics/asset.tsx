@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * optics-ray asset — traces a light ray from a source, reflecting off mirror
+ * optics-ray asset, traces a light ray from a source, reflecting off mirror
  * segments until it hits a target, exits the scene, or exhausts its bounce
  * budget. Built on @classytic/stage: the resolver reads the bound source/aim
  * points and mirror segments (draggable scene elements) and computes the
@@ -101,7 +101,7 @@ function Component({ geom }: { geom: AssetGeometry; style?: ElementStyle; label?
   const rayStr = rayPx.map((p) => p.join(',')).join(' ');
 
   // Everything here is DECORATIVE: pointer-events:none so the draggable handles
-  // (source / aim / mirror endpoints — real MovableDots in the scene) stay grabbable
+  // (source / aim / mirror endpoints, real MovableDots in the scene) stay grabbable
   // underneath these richer glyphs.
   return (
     <g style={{ pointerEvents: 'none' }}>

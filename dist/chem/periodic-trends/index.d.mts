@@ -1,0 +1,1 @@
+import { PeriodicTrendsLab, PeriodicTrendsProps } from "./preset.mjs";

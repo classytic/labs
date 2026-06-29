@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * SolutionField — the SHARED "solute dots in a solution box" primitive (single
+ * SolutionField, the SHARED "solute dots in a solution box" primitive (single
  * source of truth for the concentration family). Both SolutionBoxLab and
  * DilutionLab compose it, so the dot-field, density tint, Brownian jitter and the
  * draggable probe live in exactly ONE place.
  *
  * GENERIC on purpose: it takes a dot COUNT + a fill fraction (the liquid's share
- * of the box = volume) + a tint 0..1 — the chemistry (moles→dots, M→tint) is the
+ * of the box = volume) + a tint 0..1, the chemistry (moles→dots, M→tint) is the
  * lab's job, not the field's. Dots hold fixed fractional positions so growing the
  * box spreads the SAME dots apart (dilution = spreading, never removing). SVG-free
  * CanvasLayer; deterministic seed (no Math.random at render) so SSR == client;
@@ -24,9 +24,9 @@ export interface SolutionFieldProps {
   dots: number;
   /** Liquid's share of the box width, 0..1 (represents volume). */
   fill: number;
-  /** Density tint 0..1 (e.g. molarity / maxMolarity) — deepens the colour. */
+  /** Density tint 0..1 (e.g. molarity / maxMolarity), deepens the colour. */
   tint: number;
-  /** Solute hue in degrees (HSL) — encodes the species; default teal. */
+  /** Solute hue in degrees (HSL), encodes the species; default teal. */
   hue?: number;
   height?: number;
   /** Drag a fixed-size probe to count dots in a sub-region. */
@@ -61,7 +61,7 @@ export function SolutionField({ dots, fill, tint, hue = 178, height = 230, showP
     seeds.current = pool;
   }
 
-  // gentle Brownian drift via the engine clock — paused off-screen + on reduced-motion
+  // gentle Brownian drift via the engine clock, paused off-screen + on reduced-motion
   const repaint = useFrameTick(
     mounted && animate && !reduce && inView,
     (f) => {

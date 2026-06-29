@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * SequenceLab — ONE base-pairing tool for DNA replication, transcription and
+ * SequenceLab, ONE base-pairing tool for DNA replication, transcription and
  * translation. The template strand is given; the learner BUILDS the partner strand
- * by pairing each unit (base or codon) — that manipulation is the whole point, so
+ * by pairing each unit (base or codon), that manipulation is the whole point, so
  * it clears the "interactive only when it teaches" bar. Pick a base/amino acid from
  * the palette, tap the slot under its template unit; correct locks green, wrong
  * flags red. Replication shows the semiconservative idea: the old strand stays, you
@@ -29,9 +29,9 @@ export interface SequenceLabProps {
 const hash = (s: string): number => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h >>> 0; };
 
 const DEFAULT_TITLE: Record<SequenceKind, string> = {
-  replication: 'DNA replication — build the new strand',
-  transcription: 'Transcription — read DNA into mRNA',
-  translation: 'Translation — read codons into protein',
+  replication: 'DNA replication, build the new strand',
+  transcription: 'Transcription, read DNA into mRNA',
+  translation: 'Translation, read codons into protein',
 };
 const DEFAULT_PROMPT: Record<SequenceKind, string> = {
   replication: 'Each base pairs A–T and G–C. The old strand stays; you build its complement.',
@@ -114,7 +114,7 @@ export function SequenceLab({ kind = 'replication', template, title, prompt, obj
   const footer = (
     <>
       {kind === 'replication' && (
-        <p style={{ fontSize: 12, color: 'var(--stage-muted)', margin: '8px 0 0' }}>Each daughter DNA keeps one <b>old</b> strand + one <b>new</b> strand — that’s <b>semiconservative</b> replication.</p>
+        <p style={{ fontSize: 12, color: 'var(--stage-muted)', margin: '8px 0 0' }}>Each daughter DNA keeps one <b>old</b> strand + one <b>new</b> strand, that’s <b>semiconservative</b> replication.</p>
       )}
       {solved && kind === 'translation' && (
         <p style={{ fontSize: 13, color: 'var(--stage-good)', fontWeight: 700, margin: '8px 0 0' }}>Polypeptide: {units.map((u) => model.partnerOf(u)).join(' – ')}</p>

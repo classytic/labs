@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * LorentzForceLab — the magnetic force on a moving charge, F = q·v×B, made visible.
+ * LorentzForceLab, the magnetic force on a moving charge, F = q·v×B, made visible.
  * A charge fired into a uniform field (into ⊗ or out ⊙ of the page) feels a force
  * ALWAYS PERPENDICULAR to its velocity, so it curves into a circle (cyclotron
- * motion). The lab draws the three perpendicular players live — v (green, tangent),
- * B (the field symbols), F (orange, toward the centre) — and the right-hand rule
+ * motion). The lab draws the three perpendicular players live, v (green, tangent),
+ * B (the field symbols), F (orange, toward the centre), and the right-hand rule
  * spelled out. Flip the charge sign OR the field direction and the curve reverses;
  * F⟂v means the speed never changes (no work). Radius r = mv/(qB); the period is
- * independent of speed — the trick behind the cyclotron, mass spectrometer, and the
+ * independent of speed, the trick behind the cyclotron, mass spectrometer, and the
  * aurora (solar particles spiralling in Earth's field).
  */
 
@@ -44,12 +44,12 @@ const LORENTZ_CHALLENGE: ChallengeQuestion[] = [
     id: 'speed',
     prompt: 'The magnetic force on a moving charge does what to its SPEED?',
     choices: [
-      { value: 'none', label: 'nothing — speed stays constant' },
+      { value: 'none', label: 'nothing: speed stays constant' },
       { value: 'up', label: 'speeds it up' },
       { value: 'down', label: 'slows it down' },
     ],
     answer: 'none',
-    explain: 'F = qv×B is always ⟂ to v, so it does no work — only the direction turns, the speed is constant.',
+    explain: 'F = qv×B is always ⟂ to v, so it does no work, only the direction turns, the speed is constant.',
   },
   {
     id: 'radius',
@@ -122,14 +122,14 @@ export function LorentzForceLab({ charge = 1, fieldOut = true, B: B0 = 1.4, spee
   const aside = (
     <>
       <Callout tone="result">
-        <div className="lab-field-label"><Tex tex="F = q\,v \times B" /></div>
-        <div style={{ fontSize: 15, fontWeight: 800 }}>curves {sense > 0 ? 'counter-clockwise' : 'clockwise'}</div>
+        <div style={{ fontSize: 16 }}><Tex tex="F = q\,v \times B" /></div>
+        <div style={{ fontSize: 14, fontWeight: 600 }}>curves {sense > 0 ? 'counter-clockwise' : 'clockwise'}</div>
         <div style={{ fontSize: 12, color: 'var(--stage-muted)' }}>radius <Tex tex="r = \tfrac{mv}{qB}" /> = {r.toFixed(2)}</div>
       </Callout>
       <p className="lab-prompt" style={{ fontSize: 13 }}>
-        <b>Right-hand rule:</b> fingers point along <b style={{ color: GREEN }}>v</b>, curl toward <b>B</b> ({out ? 'out ⊙' : 'in ⊗'}), thumb = <b style={{ color: ORANGE }}>F</b> (for +q; reverse for −q). F always ⟂ v, so it only turns the charge — the speed never changes.
+        <b>Right-hand rule:</b> fingers point along <b style={{ color: GREEN }}>v</b>, curl toward <b>B</b> ({out ? 'out ⊙' : 'in ⊗'}), thumb = <b style={{ color: ORANGE }}>F</b> (for +q; reverse for −q). F always ⟂ v, so it only turns the charge, the speed never changes.
       </p>
-      <p className="lab-prompt" style={{ fontSize: 12, color: 'var(--stage-muted)' }}>Same idea runs the cyclotron, the mass spectrometer, and the aurora — charged particles from the Sun spiralling in Earth's field.</p>
+      <p className="lab-prompt" style={{ fontSize: 12, color: 'var(--stage-muted)' }}>Same idea runs the cyclotron, the mass spectrometer, and the aurora, charged particles from the Sun spiralling in Earth's field.</p>
     </>
   );
 

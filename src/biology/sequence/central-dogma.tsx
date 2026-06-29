@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * CentralDogmaLab — the whole central dogma in one flow: DNA → (transcription) →
+ * CentralDogmaLab, the whole central dogma in one flow: DNA → (transcription) →
  * mRNA → (translation) → protein. The learner does BOTH steps on one starting
  * strand: first pair the DNA template into mRNA (T→U), then read each 3-base codon
  * to its amino acid. Translation unlocks only once the mRNA is correct, so the
  * dependency (you can't translate what isn't transcribed) is felt. Reuses the
- * sequence core (TRANSCRIBE + CODON_TABLE) — no new pairing logic.
+ * sequence core (TRANSCRIBE + CODON_TABLE), no new pairing logic.
  */
 
 import { useMemo, useState, type ReactNode } from 'react';
@@ -27,7 +27,7 @@ const AA_POOL = ['Met', 'Leu', 'Gly', 'Phe', 'Ser', 'Val', 'Stop', 'Tyr'];
 
 export function CentralDogmaLab({
   dna = ['T', 'A', 'C', 'G', 'A', 'A', 'C', 'C', 'T', 'A', 'T', 'T'],
-  title = 'The central dogma — DNA → mRNA → protein',
+  title = 'The central dogma: DNA → mRNA → protein',
   prompt = 'Transcribe the DNA into mRNA (T→U), then translate each codon into an amino acid.',
   objectives,
 }: CentralDogmaProps): ReactNode {
@@ -83,7 +83,7 @@ export function CentralDogmaLab({
           {dna.map((b, i) => <div key={i} style={tile(colorOf(b))}>{b}</div>)}
         </div>
 
-        {arrow('transcription — copy the template, T → U')}
+        {arrow('transcription, copy the template, T → U')}
 
         {/* mRNA slots */}
         <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
@@ -100,7 +100,7 @@ export function CentralDogmaLab({
           })}
         </div>
 
-        {arrow(transcribed ? 'translation — read each codon off the genetic code' : 'translation — locked until the mRNA is complete')}
+        {arrow(transcribed ? 'translation, read each codon off the genetic code' : 'translation, locked until the mRNA is complete')}
 
         {/* protein slots (one per codon) */}
         <div style={{ display: 'flex', gap: 5, alignItems: 'center', opacity: transcribed ? 1 : 0.45 }}>

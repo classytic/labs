@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * ImpulseLab — "Catch the egg", why a long contact time saves you.
+ * ImpulseLab, "Catch the egg", why a long contact time saves you.
  *
  * The SAME ball at the SAME speed is brought to rest, so the impulse it delivers
  * is FIXED: J = Δp = m·v. You only change HOW LONG the stop takes (a hard wall vs
  * a soft glove / airbag). The force–time pulse is modelled as a half-sine,
- * F(t) = F_peak·sin(πt/Δt), whose area ∫F dt = F_peak·(2Δt/π) is pinned to Δp —
+ * F(t) = F_peak·sin(πt/Δt), whose area ∫F dt = F_peak·(2Δt/π) is pinned to Δp , 
  * so as Δt grows the curve morphs from a tall-thin SPIKE (hard, big peak force)
  * to a low-wide BUMP (soft), the two shaded areas staying equal on FIXED axes:
  * the single-image proof that impulse is conserved while peak force is not.
  *
- * A fragile target (egg) cracks if the peak force tops its limit — so "bend your
+ * A fragile target (egg) cracks if the peak force tops its limit, so "bend your
  * knees / airbags / follow-through" stops being a slogan and becomes a number.
  *
  * Tokenized SVG; time-dependent (integrator here); honours reduced-motion.
@@ -59,7 +59,7 @@ function pulse(dp: number, dt: number): Vec2[] {
 
 export function ImpulseLab({
   mass = 0.5, speed = 8, contact = 0.05, crackForce = 120,
-  title = 'Catch the egg — stretch the stop, shrink the force',
+  title = 'Catch the egg: stretch the stop, shrink the force',
   prompt = 'Same ball, same speed, so the impulse J = m·v is fixed. Drag the contact time: a softer, slower stop keeps the same area but a much smaller peak force.',
   objectives,
   controlConfig,
@@ -136,7 +136,7 @@ export function ImpulseLab({
         weight={1.5}
       />
       <Label x={(cushionFace + wallX) / 2} y={1.8} text={dt > 0.16 ? 'soft glove' : dt < 0.06 ? 'hard wall' : 'cushion'} color="var(--stage-fg)" size={10} dy={-6} />
-      {/* the fragile target — the egg itself (emoji avoids aspect-stretch into an ellipse) */}
+      {/* the fragile target, the egg itself (emoji avoids aspect-stretch into an ellipse) */}
       <Label x={ballX} y={0} text={cracks && settled ? '💥' : '🥚'} color="var(--stage-fg)" size={34} />
       {/* incoming velocity hint before contact */}
       {t < APPROACH && <Label x={ballX} y={ballR + 0.3} text={`${v} m/s →`} color="var(--stage-accent)" size={11} dy={-4} />}
@@ -185,7 +185,7 @@ export function ImpulseLab({
           <span style={{ color: cracks ? 'var(--stage-warn)' : 'var(--stage-good)' }}>peak force ≈ <strong>{fpeak.toFixed(0)} N</strong></span>
         </span>
       </Callout>
-      <StatusPill ok={!cracks}>{cracks ? '💥 Too hard — the egg cracks' : '✓ Gentle enough — egg survives'}</StatusPill>
+      <StatusPill ok={!cracks}>{cracks ? '💥 Too hard, the egg cracks' : '✓ Gentle enough, egg survives'}</StatusPill>
       <p style={{ fontSize: 12, opacity: 0.75, margin: 0 }}>
         Same area under both curves = same impulse. Spreading the stop over more time is exactly why
         <strong> airbags, crumple zones, knee-bending landings</strong> and <strong>following through</strong> work.

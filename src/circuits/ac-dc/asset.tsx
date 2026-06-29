@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * ac-dc asset — the whole "AC or DC?" visual as ONE data-driven scene asset on the
+ * ac-dc asset, the whole "AC or DC?" visual as ONE data-driven scene asset on the
  * @classytic/stage engine (the standard way, like circuit-network). It reads the
  * live `wave` sim state via `simBind` (v / charge / samples / mode / volts) and the
  * resolver owns the entire layout + derived quantities; the Component just projects
@@ -107,7 +107,7 @@ function Component({ geom }: { geom: AssetGeometry }): ReactNode {
   const P = (p: Vec2): [number, number] => c.toPx(p.x, 540 - p.y); // design→math (y up) → px
   const loopPath = 'M ' + LOOP.map((d) => P({ x: d[0], y: d[1] }).join(',')).join(' L ');
   const mid = (SCOPE.yTop + SCOPE.yBot) / 2;
-  // y is flipped (P uses 540 - y), so project both edges then take min + |Δ| — an
+  // y is flipped (P uses 540 - y), so project both edges then take min + |Δ|, an
   // SVG <rect> needs a top-left corner and a POSITIVE height.
   const [scX0, scYa] = P({ x: SCOPE.x0, y: SCOPE.yTop });
   const [scX1, scYb] = P({ x: SCOPE.x1, y: SCOPE.yBot });
@@ -133,7 +133,7 @@ function Component({ geom }: { geom: AssetGeometry }): ReactNode {
           <g>
             <rect x={px0 - 14} y={py - 16} width={px1 - px0 + 28} height={32} rx={16} fill="color-mix(in oklab, var(--stage-accent) 10%, var(--stage-bg))" stroke="var(--stage-grid)" strokeWidth={2} />
             {m.drops.map((d, i) => { const [x, y] = P(d); return <circle key={`d${i}`} cx={x} cy={y} r={5} fill="var(--stage-accent)" opacity={0.85} />; })}
-            <text x={px0 - 6} y={py + 38} fontSize={12} fill="var(--stage-metal)">water analogy — {m.mode === 'dc' ? 'steady one-way flow' : 'back-and-forth slosh'} (same signal)</text>
+            <text x={px0 - 6} y={py + 38} fontSize={12} fill="var(--stage-metal)">water analogy, {m.mode === 'dc' ? 'steady one-way flow' : 'back-and-forth slosh'} (same signal)</text>
           </g>
         );
       })()}

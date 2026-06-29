@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * TerminalVelocityLab — "The skydiver", why falling things stop speeding up.
+ * TerminalVelocityLab, "The skydiver", why falling things stop speeding up.
  *
  * A real fall isn't free fall: air pushes back with a drag that grows with speed
  * (∝ v²). Gravity (mg, constant) wins at first, but as v rises the drag catches
- * up until the two BALANCE — net force zero, acceleration zero, and the speed
+ * up until the two BALANCE, net force zero, acceleration zero, and the speed
  * levels off at the terminal velocity:
  *
  *     m·dv/dt = mg − b·v²        ⟹        v(t) = v_t·tanh(g·t / v_t),   v_t = √(mg/b)
@@ -36,7 +36,7 @@ const TERMINAL_CHALLENGE: ChallengeQuestion[] = [
       { value: 'max', label: 'at its maximum' },
     ],
     answer: 'zero',
-    explain: 'Drag balances weight, so net force is zero — the speed is constant, not the position.',
+    explain: 'Drag balances weight, so net force is zero, the speed is constant, not the position.',
   },
   {
     id: 'when',
@@ -70,7 +70,7 @@ const CHUTE = 70;      // parachute multiplies the drag factor
 
 export function TerminalVelocityLab({
   mass = 80, drag = 0.4, parachute = false,
-  title = 'The skydiver — why you stop speeding up',
+  title = 'The skydiver: why you stop speeding up',
   prompt = 'Air drag grows with speed until it balances gravity; then the net force is zero and the speed levels off at the terminal velocity v_t = √(mg/b). Watch the drag arrow rise to meet the weight, and the v–t curve flatten. Pop the parachute to crash v_t.',
   objectives,
   controlConfig,
@@ -157,7 +157,7 @@ export function TerminalVelocityLab({
         </span>
       </Callout>
       <p style={{ fontSize: 12, opacity: 0.75, margin: 0 }}>
-        At v_t the drag exactly cancels the weight — zero net force, zero acceleration, constant speed.
+        At v_t the drag exactly cancels the weight, zero net force, zero acceleration, constant speed.
         A parachute multiplies the drag, so v_t drops from a deadly ~{Math.round(Math.sqrt((m * G) / d))} m/s to a soft landing.
       </p>
       <LiveRegion>{`Falling at ${v.toFixed(0)} of terminal ${vt.toFixed(0)} metres per second; drag is ${Math.round(dragFrac * 100)} percent of weight.`}</LiveRegion>

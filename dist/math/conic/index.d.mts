@@ -1,0 +1,1 @@
+import { ConicKind, ConicLab, ConicProps } from "./preset.mjs";

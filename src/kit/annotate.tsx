@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Annotation kit — the teacher's pointing finger. Instruments show the mechanism;
+ * Annotation kit, the teacher's pointing finger. Instruments show the mechanism;
  * these let a lesson narrate the WHY *on* the figure: a Callout (leader line +
  * labelled bubble) names a feature ("← best fit", "the valley floor"), a Spotlight
  * pulses to pull the eye, and a Bracket spans a range with a label ("68% within 1σ").
@@ -23,7 +23,7 @@ const charW = 6.4; // ~width per char at fontSize 11
 /** A labelled pointer to (x,y): a dot, a leader line, and a tinted bubble offset by
  *  (dx,dy). Keep dx/dy pointing into open space so the bubble clears the figure.
  *  (Named `Pointer`, not Callout, to avoid clashing with frame.js's prose-box Callout
- *  and cms-ui's document-level Callout block — this one anchors to FIGURE geometry.) */
+ *  and cms-ui's document-level Callout block, this one anchors to FIGURE geometry.) */
 export function Pointer({ x, y, text, dx = 30, dy = -26, tone = 'info', fontSize = 11 }: {
   x: number; y: number; text: string; dx?: number; dy?: number; tone?: Tone; fontSize?: number;
 }): ReactNode {
@@ -41,7 +41,7 @@ export function Pointer({ x, y, text, dx = 30, dy = -26, tone = 'info', fontSize
   );
 }
 
-/** A pulsing attention ring at (cx,cy) — draws the eye to "look here". */
+/** A pulsing attention ring at (cx,cy), draws the eye to "look here". */
 export function Spotlight({ cx, cy, r = 13, tone = 'warn' }: { cx: number; cy: number; r?: number; tone?: Tone }): ReactNode {
   const col = TONE[tone];
   return (
@@ -52,7 +52,7 @@ export function Spotlight({ cx, cy, r = 13, tone = 'warn' }: { cx: number; cy: n
   );
 }
 
-/** A span bracket from x1→x2 at height y with a centred label — "this range means …".
+/** A span bracket from x1→x2 at height y with a centred label, "this range means …".
  *  `side: 'below'` drops the ticks/label under y; 'above' lifts them over it. */
 export function Bracket({ x1, x2, y, text, tone = 'info', side = 'below', fontSize = 11 }: {
   x1: number; x2: number; y: number; text: string; tone?: Tone; side?: 'above' | 'below'; fontSize?: number;

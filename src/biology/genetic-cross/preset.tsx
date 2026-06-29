@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * GeneticCrossLab — ONE authorable cross tool for every Mendelian pattern, now
+ * GeneticCrossLab, ONE authorable cross tool for every Mendelian pattern, now
  * MULTI-LOCUS. The creator declares one model per gene; the lab derives gametes by
  * independent assortment (one allele per locus → 2ⁿ gametes), fills the Punnett
  * grid via the shared CrossGrid, and reads off the genotype + phenotype ratios.
@@ -59,11 +59,11 @@ export function GeneticCrossLab({ spec, loci, parent1, parent2, predictFirst = t
     const genotype = perLocus.map((l) => l.geno.join('')).join('');
     const label = perLocus.map((l) => l.pheno.label).join(' ');
     const color = multi ? (comboColors.get(label) ?? 'var(--stage-accent)') : perLocus[0]!.pheno.color;
-    // masked-recessive note (single locus only — keeps it readable)
+    // masked-recessive note (single locus only, keeps it readable)
     let note = '';
     if (!multi) {
       const [a, b] = perLocus[0]!.geno;
-      if (a !== b) { const [hi, lo] = models[0]!.masks(a, b) ? [a, b] : models[0]!.masks(b, a) ? [b, a] : ['', '']; if (hi) note = ` — the recessive ${lo} is still there, masked`; }
+      if (a !== b) { const [hi, lo] = models[0]!.masks(a, b) ? [a, b] : models[0]!.masks(b, a) ? [b, a] : ['', '']; if (hi) note = `, the recessive ${lo} is still there, masked`; }
     }
     return { genotype, phenotype: { label, color }, note };
   };
@@ -118,8 +118,8 @@ export function GeneticCrossLab({ spec, loci, parent1, parent2, predictFirst = t
       predictFirst={predictFirst}
       header={header}
       legend={legend}
-      title={title ?? (multi ? 'Dihybrid cross — 9 : 3 : 3 : 1' : 'The cross you can count')}
-      prompt={prompt ?? (multi ? 'Two genes assort independently — four gametes each, sixteen boxes, four phenotype classes.' : 'Alleles segregate into gametes, recombine, and the ratio falls out.')}
+      title={title ?? (multi ? 'Dihybrid cross, 9 : 3 : 3 : 1' : 'The cross you can count')}
+      prompt={prompt ?? (multi ? 'Two genes assort independently, four gametes each, sixteen boxes, four phenotype classes.' : 'Alleles segregate into gametes, recombine, and the ratio falls out.')}
       objectives={objectives}
       showGenotypeTally={!multi}
       onReveal={() => { if (!reported.current) { reported.current = true; learner?.report({ activity: 'genetic-cross', correct: true, score: { raw: 1, max: 1 }, completion: true }); } }}

@@ -4,7 +4,7 @@
  * SVG <rect> from two such corners is a known footgun: the projected top/bottom
  * swap, yielding a NEGATIVE height that SVG rejects (bit the ac-dc scope and the lln
  * plot frame). `pxRect` projects both corners and returns a normalized, always-valid
- * rect — use it for every rect in a flipped asset.
+ * rect, use it for every rect in a flipped asset.
  */
 
 export type Proj = (x: number, y: number) => [number, number];

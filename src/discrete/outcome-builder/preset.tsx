@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * OutcomeBuilderLab — "where do the possibilities come from?" Build a sample space
+ * OutcomeBuilderLab, "where do the possibilities come from?" Build a sample space
  * one stage at a time: add a coin or a die and watch the list of ALL outcomes
  * fan out, with the counting principle spelled out (2 × 2 × 6 = 24). Each outcome
  * is drawn with the real coin/dice glyphs, so the abstract "sample space" is a
  * concrete board you can point at. Click outcomes to mark an EVENT and read its
- * probability as favourable ÷ total — the definition, built by hand.
+ * probability as favourable ÷ total, the definition, built by hand.
  *
  * Pure enumeration (cartesian product of the per-stage option lists); P uses the
  * gcd from the discrete kernel for a reduced fraction.
@@ -89,7 +89,7 @@ export function OutcomeBuilderLab({ stages: stages0 = ['coin', 'coin'], maxOutco
       {/* the sample space */}
       {tooMany ? (
         <p style={{ margin: '12px 0', padding: 12, borderRadius: 10, border: '1px dashed var(--stage-grid)', color: 'var(--stage-muted)' }}>
-          That's <b>{total}</b> equally-likely outcomes — too many to draw. The counting principle still gives the count without listing them all.
+          That's <b>{total}</b> equally-likely outcomes, too many to draw. The counting principle still gives the count without listing them all.
         </p>
       ) : (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, margin: '12px 0', padding: 10, borderRadius: 12, background: 'var(--stage-bg)', border: '1px solid var(--stage-grid)' }}>

@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * MonteCarloLab — the GENERAL "estimate a probability by running it many times"
+ * MonteCarloLab, the GENERAL "estimate a probability by running it many times"
  * engine. The whole of statistical ML rests on one idea this lab makes visible:
  * the empirical frequency of an event converges to its true probability as trials
- * pile up (the law of large numbers). You don't compute the answer — you SAMPLE
+ * pile up (the law of large numbers). You don't compute the answer, you SAMPLE
  * it, and watch the estimate settle onto the truth.
  *
  * It is general by construction: a creator supplies one or more SERIES, each just
@@ -12,10 +12,10 @@
  * estimates like π). The lab runs seeded batches per frame, tracks hits/total,
  * and draws either a convergence run-chart (empirical line homing onto the dashed
  * theoretical) or a dart scatter. Randomness is a SEEDED PRNG (mulberry32), so a
- * run is replayable — an agent can pin a seed and reproduce a lesson exactly.
+ * run is replayable, an agent can pin a seed and reproduce a lesson exactly.
  *
  * Ships a small library of named experiments (`montyHall`, `piDarts`, `diceSum`,
- * `bernoulli`) that expand to series — the Monty Hall paradox (switch ⇒ ⅔, stay
+ * `bernoulli`) that expand to series, the Monty Hall paradox (switch ⇒ ⅔, stay
  * ⇒ ⅓, two lines splitting apart) is the headline. Add an experiment by writing a
  * factory that returns series; the engine never changes.
  */
@@ -26,7 +26,8 @@ import { mulberry32, randInt, type Rng } from '../core/rng.js';
 import { Chip, Slider } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout, LiveRegion } from '../../kit/frame.js';
 import { useReducedMotionDeferred } from '../../kit/anim.js';
-import { useHints, HintLadder } from '../../kit/pedagogy.js';
+import { useHints, HintLadder, useCheckpoint } from '../../kit/pedagogy.js';
+import { catToken, catColor } from '../../kit/palette.js';
 
 export interface MCSeries {
   label: string;
@@ -37,7 +38,7 @@ export interface MCSeries {
   point?: (rng: Rng) => { x: number; y: number; hit: boolean };
   /** Map the hit-fraction to the reported quantity (default: the fraction itself). */
   estimate?: (frac: number) => number;
-  /** The value the estimate should converge to — drawn as a dashed guide. */
+  /** The value the estimate should converge to, drawn as a dashed guide. */
   theoretical?: number;
 }
 
@@ -62,7 +63,6 @@ export interface MonteCarloProps {
   height?: number;
 }
 
-const COLORS = ['#1c7ed6', '#e8590c', '#2f9e44', '#9c36b5'];
 
 // ── named experiment factories (expand to series + a default viz) ──
 function montyTrial(rng: Rng, doSwitch: boolean, doors: number): boolean {
@@ -127,7 +127,7 @@ export function MonteCarloLab({ series: seriesIn, experiment, viz: vizIn, seed =
   const cap = maxTrials ?? (viz === 'scatter' ? 5000 : 20000);
   const hints = useHints(hintList);
   const [speed, setSpeed] = useState(batch);
-  // start at REST — the point is to WATCH the samples pile up when you press run,
+  // start at REST, the point is to WATCH the samples pile up when you press run,
   // not to land on a finished result. (Also makes the speed control meaningful.)
   const [running, setRunning] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -150,7 +150,7 @@ export function MonteCarloLab({ series: seriesIn, experiment, viz: vizIn, seed =
 
   const reset = useCallback(() => { initRT(); setTick((t) => t + 1); setRunning(false); }, [initRT]);
   const reseed = useCallback((s: number) => { seedRef.current = s >>> 0; reset(); }, [reset]);
-  // ▶/⏸ toggle — if the run already finished, start it over fresh instead of no-op.
+  // ▶/⏸ toggle, if the run already finished, start it over fresh instead of no-op.
   const toggleRun = useCallback(() => {
     setRunning((r) => {
       if (!r && rt.current.every((st) => st.total >= cap)) { initRT(); setTick((t) => t + 1); }
@@ -187,7 +187,7 @@ export function MonteCarloLab({ series: seriesIn, experiment, viz: vizIn, seed =
     const css = getComputedStyle(ctx.canvas);
     const tok = (n: string, fb: string): string => css.getPropertyValue(n).trim() || fb;
     const fg = tok('--stage-fg', '#222'), grid = tok('--stage-grid', 'rgba(125,125,125,.25)'), muted = tok('--stage-muted', '#888'), good = tok('--stage-good', '#2f9e44');
-    const seriesColor = (i: number): string => series[i]!.color ?? COLORS[i % COLORS.length]!;
+    const seriesColor = (i: number): string => series[i]!.color ?? tok(catToken(i), `hsl(${(i * 47) % 360} 70% 50%)`);
     const W = ctx.canvas.clientWidth || 640, Hh = height;
     ctx.clearRect(0, 0, W, Hh);
 
@@ -235,8 +235,15 @@ export function MonteCarloLab({ series: seriesIn, experiment, viz: vizIn, seed =
 
   const view = useMemo(() => (viz === 'scatter' ? { xMin: -1.15, xMax: 1.15, yMin: -1.15, yMax: 1.15 } : { xMin: 0, xMax: 1, yMin: 0, yMax: 1 }), [viz]);
 
-  const stats = series.map((s, i) => { const st = rt.current[i]; const total = st?.total ?? 0; const frac = total ? st!.hits / total : 0; return { label: s.label, color: s.color ?? COLORS[i % COLORS.length]!, est: s.estimate ? s.estimate(frac) : frac, theoretical: s.theoretical, total }; });
+  const stats = series.map((s, i) => { const st = rt.current[i]; const total = st?.total ?? 0; const frac = total ? st!.hits / total : 0; return { label: s.label, color: s.color ?? catColor(i), est: s.estimate ? s.estimate(frac) : frac, theoretical: s.theoretical, total }; });
   const totalTrials = stats.reduce((a, b) => Math.max(a, b.total), 0);
+
+  // The lesson is LANDED when enough trials have piled up that every estimate has
+  // settled within tolerance of its theoretical value — the law of large numbers
+  // made measurable, not just watched. (Trial floor stops a trivial t=0 "solve".)
+  const converged = stats.length > 0 && totalTrials >= 300
+    && stats.every((s) => s.theoretical == null || Math.abs(s.est - s.theoretical) <= (viz === 'scatter' ? 0.05 : 0.02));
+  useCheckpoint({ solved: converged, activity: `monte-carlo:${title}`, hintsUsed: hints.count });
 
   useControlSurface(controlId, {
     run: { type: 'action', label: running ? 'pause' : 'run', invoke: toggleRun },
@@ -256,7 +263,7 @@ export function MonteCarloLab({ series: seriesIn, experiment, viz: vizIn, seed =
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontVariantNumeric: 'tabular-nums' }}>
         {stats.map((s) => (
           <span key={s.label} style={{ fontWeight: 700, color: s.color }}>
-            {s.label}: {s.total ? s.est.toFixed(viz === 'scatter' ? 4 : 3) : '—'}
+            {s.label}: {s.total ? s.est.toFixed(viz === 'scatter' ? 4 : 3) : ', '}
             {s.theoretical != null && <span style={{ color: 'var(--stage-muted)', fontWeight: 500 }}> (→ {s.theoretical.toFixed(viz === 'scatter' ? 4 : 3)})</span>}
           </span>
         ))}

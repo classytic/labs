@@ -15,7 +15,7 @@ import { statisticsBlocks, statisticsComponents } from '../dist/blocks/statistic
 
 describe('block registry', () => {
   it('the new domains are wired into the aggregate', () => {
-    expect(discreteBlocks.length).toBe(18);
+    expect(discreteBlocks.length).toBe(20); // + RuleCard (concept engine) + CombinationStudio (rule of product, felt)
     expect(statisticsBlocks.length).toBe(7);
     const keys = new Set(labsBlocks.map((b) => b.key));
     for (const b of [...discreteBlocks, ...statisticsBlocks]) expect(keys.has(b.key)).toBe(true);
@@ -29,7 +29,7 @@ describe('block registry', () => {
   it('each new lab has a render component', () => {
     expect(Object.values(discreteComponents).every((c) => typeof c === 'function')).toBe(true);
     expect(Object.values(statisticsComponents).every((c) => typeof c === 'function')).toBe(true);
-    expect(Object.keys(discreteComponents).length).toBe(18);
+    expect(Object.keys(discreteComponents).length).toBe(20); // + RuleCard + CombinationStudio
     expect(Object.keys(statisticsComponents).length).toBe(7);
   });
 

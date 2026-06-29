@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/blocks — geography lab block specs.
+ * @classytic/labs/blocks, geography lab block specs.
  *
  * `defineBlock` editor adapter for the general CycleLab. A creator/agent picks a
  * canned cycle (water / rock / carbon) OR pastes their own nodes + edges JSON, and

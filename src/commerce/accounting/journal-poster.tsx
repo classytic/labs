@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * JournalPosterLab — post the entry, fill the T-accounts, balance the trial.
+ * JournalPosterLab, post the entry, fill the T-accounts, balance the trial.
  *
  * For each authored business event the learner picks the DEBIT account (left) and
  * the CREDIT account (right) from the chart of accounts. On Post the lab gives
  * INSTANT feedback: a correct entry drops into the matching T-accounts' left/right
- * columns (green); a wrong pick is coached with the reason ("Cash is an Asset — it
+ * columns (green); a wrong pick is coached with the reason ("Cash is an Asset, it
  * increases with a DEBIT, the left side") instead of just "wrong". A live trial
  * balance sums ΣDebit vs ΣCredit and only reads level when they match.
  *
- * Reuses the shared accounting core (normalBalance / debit=credit) — no ledger dep.
+ * Reuses the shared accounting core (normalBalance / debit=credit), no ledger dep.
  * The DEALER mnemonic + trial-balance traps belong in a paired MathDerivation.
  */
 
@@ -52,7 +52,7 @@ interface Posting { debit: string; credit: string; amount: number }
 
 export function JournalPosterLab({
   accounts = DEMO_ACCOUNTS, transactions = DEMO_TXNS, showTrialBalance = true,
-  title = 'Post the entry — fill the T-accounts',
+  title = 'Post the entry: fill the T-accounts',
   prompt = 'Choose the debit (left) and credit (right) account for each event.',
   objectives,
 }: JournalPosterProps): ReactNode {
@@ -72,7 +72,7 @@ export function JournalPosterLab({
     const c = catOf(id);
     if (!c) return '';
     const article = /^[AEIOU]/.test(c) ? 'an' : 'a';   // an Asset / an Equity / a Liability
-    return `${nameOf(id)} is ${article} ${c} — it increases with a ${normalBalance(c).toUpperCase()} (${normalBalance(c) === 'debit' ? 'left' : 'right'}).`;
+    return `${nameOf(id)} is ${article} ${c}, it increases with a ${normalBalance(c).toUpperCase()} (${normalBalance(c) === 'debit' ? 'left' : 'right'}).`;
   };
 
   const txn = transactions[idx];
@@ -136,14 +136,14 @@ export function JournalPosterLab({
       <div style={{ borderRadius: 14, background: 'var(--stage-bg)', border: '1px solid var(--stage-grid)', padding: 16 }}>
         {/* prompt + pending entry */}
         {allDone ? (
-          <p style={{ fontWeight: 700, color: 'var(--stage-good)', margin: 0 }}>All entries posted ✓ — the trial balance is level.</p>
+          <p style={{ fontWeight: 700, color: 'var(--stage-good)', margin: 0 }}>All entries posted ✓, the trial balance is level.</p>
         ) : (
           <>
             <p style={{ margin: '0 0 4px', fontSize: 12, color: 'var(--stage-muted)', fontWeight: 700 }}>Event {idx + 1} of {transactions.length}</p>
             <p style={{ margin: '0 0 10px', fontWeight: 600 }}>{txn!.prompt} <span style={{ color: 'var(--stage-accent)' }}>(${money(txn!.amount)})</span></p>
             <div style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13 }}>
-              <span style={{ flex: 1, padding: '6px 10px', borderRadius: 8, border: '1px dashed var(--stage-grid)', background: debitId ? 'color-mix(in oklab, var(--stage-accent) 14%, transparent)' : 'transparent' }}>DEBIT (left): <b>{debitId ? nameOf(debitId) : '—'}</b></span>
-              <span style={{ flex: 1, padding: '6px 10px', borderRadius: 8, border: '1px dashed var(--stage-grid)', background: creditId ? 'color-mix(in oklab, var(--stage-accent-2) 14%, transparent)' : 'transparent' }}>CREDIT (right): <b>{creditId ? nameOf(creditId) : '—'}</b></span>
+              <span style={{ flex: 1, padding: '6px 10px', borderRadius: 8, border: '1px dashed var(--stage-grid)', background: debitId ? 'color-mix(in oklab, var(--stage-accent) 14%, transparent)' : 'transparent' }}>DEBIT (left): <b>{debitId ? nameOf(debitId) : ', '}</b></span>
+              <span style={{ flex: 1, padding: '6px 10px', borderRadius: 8, border: '1px dashed var(--stage-grid)', background: creditId ? 'color-mix(in oklab, var(--stage-accent-2) 14%, transparent)' : 'transparent' }}>CREDIT (right): <b>{creditId ? nameOf(creditId) : ', '}</b></span>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
               {accounts.map((a) => (
@@ -157,7 +157,7 @@ export function JournalPosterLab({
               <button type="button" className="lab-chip" onClick={() => { setDebitId(null); setCreditId(null); setFeedback(null); }}>clear</button>
               {feedback && <StatusPill ok={feedback.ok}>{feedback.msg}</StatusPill>}
             </div>
-            {/* shared escape hatch — appears once you've tried; reveals + fills the answer */}
+            {/* shared escape hatch, appears once you've tried; reveals + fills the answer */}
             <div style={{ marginTop: 10 }}>
               <RevealSolution key={idx} available={wrongHere} solution={solutionNode} onReveal={revealAnswer} buttonLabel="Show answer" />
             </div>

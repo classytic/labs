@@ -87,7 +87,7 @@ export interface Keyframe {
 /**
  * Pure multi-stage interpolation: build a `(t in [0,1]) => number` from
  * keyframes. The manim-style way to express richer programmatic animation
- * without a scheduler — drive `t` from `useTween`/`useFrameLoop`.
+ * without a scheduler, drive `t` from `useTween`/`useFrameLoop`.
  */
 export function keyframes(frames: Keyframe[]): (t: number) => number {
   const ks = [...frames].sort((a, b) => a.at - b.at);

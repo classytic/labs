@@ -1,5 +1,5 @@
 /**
- * Finite-set kernel — set algebra over arrays of primitives (the Venn /
+ * Finite-set kernel, set algebra over arrays of primitives (the Venn /
  * inclusion–exclusion labs run on these). De Morgan here mirrors the logic
  * kernel's De Morgan: ∩↔∧, ∪↔∨, complement↔¬ (the "trinity" spine). Order is
  * first-seen (insertion) and duplicates are collapsed, so results are clean sets.

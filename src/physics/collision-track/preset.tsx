@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * CollisionTrackLab — "Sticky or Bouncy?", momentum always survives, KE doesn't.
+ * CollisionTrackLab, "Sticky or Bouncy?", momentum always survives, KE doesn't.
  *
  * Two carts collide on a frictionless track. ONE elasticity slider morphs
  * continuously from perfectly inelastic (e=0, stick + KE drops) to perfectly
  * elastic (e=1, bounce, KE held). A momentum bar stays FULL through the collision
  * while the KE bar visibly leaks when e<1, and a constant-velocity centre-of-mass
- * marker sails dead-straight through the impact — the single-image proof that
+ * marker sails dead-straight through the impact, the single-image proof that
  * momentum is conserved no matter what. Kills the "momentum is lost" misconception.
  *
  * Tokenized SVG; time-dependent so the integrator lives here; honours reduced-motion.
@@ -18,7 +18,7 @@ import { Stage, Segment, Polygon, Dot, Vector, Label, useInView } from '@classyt
 import { Slider, CheckButton, StatusPill } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, MeterBar, LiveRegion } from '../../kit/frame.js';
 import { useReducedMotion, useFrameTick } from '../../kit/anim.js';
-import { useCheckpoint } from '../../kit/pedagogy.js';
+import { useCheckpoint, useChallenge, ChallengeCard, type ChallengeQuestion } from '../../kit/pedagogy.js';
 
 export interface CollisionTrackProps {
   m1?: number;
@@ -34,9 +34,24 @@ export interface CollisionTrackProps {
 
 const CART_W = 1.8, CART_H = 1.2, X0 = -9, X1 = 9;
 
+const PREDICT_Q: ChallengeQuestion[] = [
+  {
+    id: 'collision-track-conserved',
+    prompt: 'These carts collide and BOUNCE apart (elastic, e = 1). After the crash, which is conserved — total momentum, total kinetic energy, both, or neither?',
+    choices: [
+      { value: 'momentum', label: 'momentum only' },
+      { value: 'both', label: 'both' },
+      { value: 'ke', label: 'kinetic energy only' },
+      { value: 'neither', label: 'neither' },
+    ],
+    answer: 'both',
+    explain: 'Momentum is always conserved in a collision (no external force). In a perfectly elastic collision (e = 1) the carts bounce with no energy lost to heat or deformation, so kinetic energy is conserved too — hence both. Slide elasticity below 1 and the KE bar will start to leak.',
+  },
+];
+
 export function CollisionTrackLab({
   m1 = 1, m2 = 1, u1 = 4, u2 = -2, elasticity = 1, showCenterOfMass = true,
-  title = 'Sticky or Bouncy? — momentum always survives',
+  title = 'Sticky or Bouncy?: momentum always survives',
   prompt = 'Set the elasticity, launch, and watch: the momentum bar stays full; the KE bar leaks when sticky.',
   objectives,
 }: CollisionTrackProps): ReactNode {
@@ -55,7 +70,8 @@ export function CollisionTrackLab({
   const reduce = useReducedMotion();
   const { ref: viewRef, inView } = useInView<HTMLDivElement>();
 
-  useCheckpoint({ solved: stopped, activity: 'collision-track' });
+  const ch = useChallenge(PREDICT_Q);
+  useCheckpoint({ solved: ch.allCorrect && stopped, activity: 'collision-track' });
 
   const M = ma + mb;
   // 1-D collision with coefficient of restitution e
@@ -124,7 +140,7 @@ export function CollisionTrackLab({
           {[-8, -4, 0, 4, 8].map((mk) => <Segment key={mk} from={{ x: mk, y: -0.2 }} to={{ x: mk, y: 0 }} color="var(--stage-fg)" opacity={0.3} weight={1} />)}
           {Cart(xa.current, ma, v1, 'var(--stage-accent)', 'A')}
           {Cart(xb.current, mb, v2, 'var(--stage-accent-2)', 'B')}
-          {/* centre-of-mass marker — glides dead-straight at constant velocity through the impact */}
+          {/* centre-of-mass marker, glides dead-straight at constant velocity through the impact */}
           {showCenterOfMass && (
             <>
               <Segment from={{ x: xcom, y: -1.4 }} to={{ x: xcom, y: 4.4 }} color="var(--stage-good)" weight={1.5} dashed opacity={0.8} />
@@ -156,5 +172,7 @@ export function CollisionTrackLab({
     </ControlBar>
   );
 
-  return <LabFrame title={title} prompt={prompt} objectives={objectives} aside={aside} controls={controls}>{figure}</LabFrame>;
+  const footer = <ChallengeCard questions={PREDICT_Q} state={ch} title="Predict first" />;
+
+  return <LabFrame title={title} prompt={prompt} objectives={objectives} aside={aside} controls={controls} footer={footer}>{figure}</LabFrame>;
 }

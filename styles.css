@@ -77,7 +77,10 @@
 .lab-challenge-h { font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--muted-foreground, color-mix(in oklab, currentColor 60%, transparent)); }
 .lab-challenge-count { font-variant-numeric: tabular-nums; }
 .lab-challenge-q { display: flex; flex-direction: column; gap: 7px; align-items: flex-start; }
-.lab-challenge-prompt { font-size: 14px; font-weight: 600; color: var(--foreground, currentColor); }
+/* separate each question from the previous so prompt+choices read as one group */
+.lab-challenge-q + .lab-challenge-q { padding-top: 12px; border-top: 1px solid var(--border, color-mix(in oklab, currentColor 12%, transparent)); }
+.lab-challenge-prompt { display: flex; align-items: baseline; gap: 8px; font-size: 14px; font-weight: 600; color: var(--foreground, currentColor); }
+.lab-challenge-num { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--primary-foreground, #fff); background: var(--primary, oklch(0.59 0.22 261)); transform: translateY(1px); }
 .lab-choices { display: flex; flex-wrap: wrap; gap: 8px; }
 .lab-choice { padding: 7px 14px; border-radius: 999px; border: 1.5px solid var(--border, color-mix(in oklab, currentColor 22%, transparent)); background: var(--card, transparent); color: var(--foreground, currentColor); font-size: 13.5px; font-weight: 600; cursor: pointer; transition: border-color .12s, background .12s, color .12s; }
 .lab-choice:hover { border-color: var(--primary, oklch(0.59 0.22 261)); }

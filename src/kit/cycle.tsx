@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * CycleDiagram — the shared directed-cycle renderer (single source of truth for
+ * CycleDiagram, the shared directed-cycle renderer (single source of truth for
  * every "cycle" visual: water, rock, carbon, nitrogen…). Give it nodes + edges;
  * it lays the nodes evenly around a ring and draws each edge as a curved,
- * process-labelled arrow — ring-adjacent edges bow outward, shortcut/chord edges
+ * process-labelled arrow, ring-adjacent edges bow outward, shortcut/chord edges
  * bow to the left of travel so reciprocal arrows separate instead of overlapping.
  * Pure tokenized SVG, so it drops into any cycle lab. Highlight a node + its
  * outgoing edges via `activeId`; swap each process pill for a custom control via

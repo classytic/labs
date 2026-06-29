@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * StoppingDistanceLab — "Drive & Brake", the two-distance stopping tape.
+ * StoppingDistanceLab, "Drive & Brake", the two-distance stopping tape.
  *
  * A car cruises at v; a hazard appears; the driver REACTS (constant speed for
  * t_react → a blue THINKING stripe), then BRAKES at a (→ a red BRAKING stripe)
  * to a stop. The road paints the two stripes as the car passes, and stacked v–t
- * and s–t graphs draw underneath sharing ONE playhead with the car — so the
+ * and s–t graphs draw underneath sharing ONE playhead with the car, so the
  * v–t area visibly IS the distance. "Double the speed" keeps a ghost of the last
  * run so the learner sees thinking double (linear) while braking quadruples (v²).
  *
@@ -66,7 +66,7 @@ function Car({ x }: { x: number }): ReactNode {
 export function StoppingDistanceLab({
   speed = 20, reactionTime = 0.7, deceleration = 6, maxSpeed = 40,
   predict = false, showGraphs = false,
-  title = 'Drive & Brake — the two-distance stopping tape',
+  title = 'Drive & Brake: the two-distance stopping tape',
   prompt = 'A hazard appears: react, then brake. Watch the road paint thinking (blue) + braking (red).',
   objectives, hints = [],
 }: StoppingDistanceProps): ReactNode {
@@ -157,7 +157,7 @@ export function StoppingDistanceLab({
         </Stage>
       </div>
 
-      {/* graphs — an opt-in layer (off by default); stacked so they never overflow */}
+      {/* graphs, an opt-in layer (off by default); stacked so they never overflow */}
       {graphs && (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10, marginTop: 8 }}>
           <div style={{ borderRadius: 10, background: 'var(--stage-bg)', border: '1px solid var(--stage-grid)', padding: 4 }}>

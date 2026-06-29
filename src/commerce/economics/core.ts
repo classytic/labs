@@ -1,5 +1,5 @@
 /**
- * The simple linear supply/demand core — single source of truth shared by every
+ * The simple linear supply/demand core, single source of truth shared by every
  * economics lab (market equilibrium, shift-vs-move, elasticity). Pure functions,
  * no dependencies.
  *
@@ -20,7 +20,7 @@ export const supplyP = (s: Curve, q: number): number => s.intercept + s.slope * 
 export const demandQ = (d: Curve, p: number): number => Math.max(0, (d.intercept - p) / d.slope);
 export const supplyQ = (s: Curve, p: number): number => Math.max(0, (p - s.intercept) / s.slope);
 
-/** Where Qd = Qs — the market-clearing price + quantity. */
+/** Where Qd = Qs, the market-clearing price + quantity. */
 export function equilibrium(d: Curve, s: Curve): { q: number; p: number } {
   const q = (d.intercept - s.intercept) / (d.slope + s.slope);
   return { q, p: s.intercept + s.slope * q };

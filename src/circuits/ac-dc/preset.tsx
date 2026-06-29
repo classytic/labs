@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * AcDcLab — "AC or DC?", now the STANDARD data-driven way: a SceneDoc with one
+ * AcDcLab, "AC or DC?", now the STANDARD data-driven way: a SceneDoc with one
  * `wave` sim (meta.sims) and one `ac-dc` asset that reads the sim live via simBind.
  * `<Scene>` steps the sim each frame and the pure resolver re-evaluates, so the
- * whole lab is data — the glowing lamp, flowing electrons, water-pipe analogy and
+ * whole lab is data, the glowing lamp, flowing electrons, water-pipe analogy and
  * live scope are all one sim → three synced skins (see ./asset). Controls write the
  * sim's params; the runtime merges them without restarting the wave (time persists).
  */
@@ -15,7 +15,7 @@ import { Slider, Chip } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field } from '../../kit/frame.js';
 import { AC_DC_ASSET } from './asset.js';
 
-// Register here (a USED import, so the side-effect module is never tree-shaken — the
+// Register here (a USED import, so the side-effect module is never tree-shaken, the
 // circuit-network lab does the same). asset.js also self-registers; Map.set is idempotent.
 registerAsset('ac-dc', AC_DC_ASSET);
 

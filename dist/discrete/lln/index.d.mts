@@ -1,0 +1,1 @@
+import { LawOfLargeNumbersLab, LlnProps } from "./preset.mjs";

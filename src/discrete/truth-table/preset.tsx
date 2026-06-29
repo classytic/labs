@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * TruthTableEngine — the GENERAL authorable truth-table tool. A creator declares
+ * TruthTableEngine, the GENERAL authorable truth-table tool. A creator declares
  * any propositional formula (¬ ∧ ∨ ⊕ → ↔, unicode or ASCII) and a mode; the lab
  * derives EVERYTHING from the stage logic kernel (parse → truth table → classify
- * → equivalence). No per-problem widget — one tool covers all of propositional
+ * → equivalence). No per-problem widget, one tool covers all of propositional
  * logic, from "fill the implication table" to "are these two equivalent?".
  *
  * Modes:
- *   • show     — full reference table with sub-expression columns built up
+ *   • show    , full reference table with sub-expression columns built up
  *                textbook-style (vars → ¬p → q∧r → … → the whole formula).
- *   • fill     — learner toggles each output cell, then Check (graded per cell).
- *   • classify — learner judges tautology / contradiction / contingency.
+ *   • fill    , learner toggles each output cell, then Check (graded per cell).
+ *   • classify, learner judges tautology / contradiction / contingency.
  * Pass `compare` to put a second formula beside the first + an equivalence verdict
  * (De Morgan, contrapositive, p→q ≡ ¬p∨q …). Agent-drivable via `controlId`.
  */
@@ -45,6 +45,8 @@ export interface TruthTableProps {
 }
 
 const CLASSES: Classification[] = ['tautology', 'contradiction', 'contingency'];
+/** 2^n rows: past this a truth table is impractical to render and unsafe for 32-bit shifts. */
+const MAX_VARS = 12;
 
 /** Sub-expressions in build-up (post-order) order, deduped, vars/consts excluded;
  *  the root formula is last. */
@@ -93,8 +95,9 @@ export function TruthTableLab({
 
   // every assignment (MSB = first var), evaluated lazily per column
   const envs = useMemo(() => {
+    if (vars.length > MAX_VARS) return []; // guarded below; don't enumerate 2^n
     const rows: Record<string, boolean>[] = [];
-    for (let m = 0; m < (1 << vars.length); m++) {
+    for (let m = 0; m < 2 ** vars.length; m++) {
       const env: Record<string, boolean> = {};
       vars.forEach((v, i) => { env[v] = (m & (1 << (vars.length - 1 - i))) !== 0; });
       rows.push(env);
@@ -150,13 +153,21 @@ export function TruthTableLab({
     );
   }
 
+  if (vars.length > MAX_VARS) {
+    return (
+      <LabFrame title={title}>
+        <p className="lab-misconception" role="status"><span aria-hidden>⚠</span> This truth table has {vars.length} variables ({2 ** vars.length} rows). Keep it to {MAX_VARS} or fewer.</p>
+      </LabFrame>
+    );
+  }
+
   const th: React.CSSProperties = { padding: '6px 12px', fontWeight: 700, borderBottom: '2px solid var(--stage-grid)', textAlign: 'center', whiteSpace: 'nowrap' };
   const td: React.CSSProperties = { padding: '4px 12px', textAlign: 'center', borderBottom: '1px solid var(--stage-grid)' };
   const finalIdx = cols.length - 1;
 
   const figure = (
     <>
-      {/* live evaluator — flip the inputs, the output lamp lights, the row glows */}
+      {/* live evaluator, flip the inputs, the output lamp lights, the row glows */}
       {!compare && ast && vars.length >= 1 && vars.length <= 4 && (() => {
         const liveEnv = Object.fromEntries(vars.map((v) => [v, live[v] ?? false]));
         const liveOut = evalBool(ast, liveEnv);
@@ -237,7 +248,7 @@ export function TruthTableLab({
 
       {/* equivalence verdict (compare mode) */}
       {compare && equiv !== null && (
-        <div className="lab-bar"><StatusPill ok={equiv}>{equiv ? 'Equivalent ✓ — identical columns' : 'NOT equivalent — columns differ'}</StatusPill></div>
+        <div className="lab-bar"><StatusPill ok={equiv}>{equiv ? 'Equivalent ✓, identical columns' : 'NOT equivalent, columns differ'}</StatusPill></div>
       )}
     </>
   );
@@ -256,14 +267,14 @@ export function TruthTableLab({
         <>
           {CLASSES.map((k) => <Chip key={k} selected={guess === k} onClick={() => { setGuess(k); setChecked(false); }}>{k}</Chip>)}
           <CheckButton onClick={check} disabled={!guess}>Check</CheckButton>
-          {checked && <StatusPill ok={guess === cls}>{guess === cls ? `✓ ${cls}` : `Not quite — it’s a ${cls}`}</StatusPill>}
+          {checked && <StatusPill ok={guess === cls}>{guess === cls ? `✓ ${cls}` : `Not quite, it’s a ${cls}`}</StatusPill>}
         </>
       )}
       {/* fill mode controls */}
       {!compare && mode === 'fill' && (
         <>
           <CheckButton onClick={check} disabled={filled.filter((x) => x != null).length === 0}>Check</CheckButton>
-          {checked && <StatusPill ok={allFilledCorrect}>{allFilledCorrect ? 'All correct ✓' : 'Some cells are off — fix the red ones'}</StatusPill>}
+          {checked && <StatusPill ok={allFilledCorrect}>{allFilledCorrect ? 'All correct ✓' : 'Some cells are off, fix the red ones'}</StatusPill>}
         </>
       )}
     </ControlBar>

@@ -1,0 +1,1 @@
+import { BulletWallsLab, BulletWallsProps } from "./preset.mjs";

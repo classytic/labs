@@ -1,0 +1,1 @@
+import { GasBoxLab, GasBoxProps } from "./preset.mjs";

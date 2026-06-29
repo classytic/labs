@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * BohrAtom — the classic shell model of an atom, animated.
+ * BohrAtom, the classic shell model of an atom, animated.
  *
  * Nucleus (Z protons) ringed by electron shells filled 2, 8, 8, 18…; electrons
  * orbit at a steady clip via the engine clock. Drag the proton count to walk the
  * first 20 elements and watch shells fill and close.
  *
- * Now on the @classytic/stage engine (SVG, accessible, themed) — shells are
+ * Now on the @classytic/stage engine (SVG, accessible, themed), shells are
  * Circles, electrons are Dots, the nucleus is a labelled Circle.
  */
 
@@ -21,7 +21,7 @@ import { num, clamp } from '../core/util.js';
 const SYMBOLS = ['', 'H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar', 'K', 'Ca'];
 const SHELL_CAP = [2, 8, 8, 18];
 
-// A fixed packed nucleon cluster (p = proton/warm, else neutron/grey) — purely
+// A fixed packed nucleon cluster (p = proton/warm, else neutron/grey), purely
 // representational, so the nucleus reads as nucleons, not one flat disc.
 const NUCLEONS: { dx: number; dy: number; p: boolean }[] = [
   { dx: 0, dy: 0, p: true }, { dx: 0.6, dy: 0.25, p: false }, { dx: -0.55, dy: 0.35, p: true },
@@ -73,7 +73,7 @@ export function BohrAtom({ protons, title = 'Bohr model of the atom', height = 3
             return <Dot key={`e-${i}-${e}`} x={r * Math.cos(a)} y={r * Math.sin(a)} r={4} color="var(--stage-accent)" />;
           });
         })}
-        {/* nucleus — a packed cluster of protons (warm) + neutrons (grey) */}
+        {/* nucleus, a packed cluster of protons (warm) + neutrons (grey) */}
         {NUCLEONS.map((nuc, i) => (
           <Circle key={`nuc-${i}`} center={{ x: nuc.dx, y: nuc.dy }} r={0.62} color="none" fill={nuc.p ? 'var(--stage-warn)' : 'var(--stage-muted)'} fillOpacity={1} weight={0} />
         ))}
@@ -93,7 +93,7 @@ export function BohrAtom({ protons, title = 'Bohr model of the atom', height = 3
   const aside = (
     <Callout tone="result">
       <span style={{ display: 'grid', gap: 4, fontVariantNumeric: 'tabular-nums' }}>
-        <span>element {SYMBOLS[z] ?? '—'}</span>
+        <span>element {SYMBOLS[z] ?? ', '}</span>
         <span>Z {z}</span>
         <span>config {shells.join(', ')}</span>
       </span>
@@ -103,7 +103,7 @@ export function BohrAtom({ protons, title = 'Bohr model of the atom', height = 3
   return (
     <LabFrame
       title={title}
-      prompt="Drag the proton count to walk the first 20 elements — watch the shells fill (2, 8, 8, …)."
+      prompt="Drag the proton count to walk the first 20 elements, watch the shells fill (2, 8, 8, …)."
       aside={aside}
       controls={controls}
     >

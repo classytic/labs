@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * PunnettCrossLab — the 3:1 you can count. Now a thin MONOHYBRID preset of the
+ * PunnettCrossLab, the 3:1 you can count. Now a thin MONOHYBRID preset of the
  * general GeneticCrossLab (single source of truth for all cross logic): it just
  * builds a simple dominant/recessive model from its props and forwards. Multiple
  * alleles, codominance (blood groups) and incomplete dominance live in the same
- * engine — see GeneticCrossLab.
+ * engine, see GeneticCrossLab.
  */
 
 import { type ReactNode } from 'react';

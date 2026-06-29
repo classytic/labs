@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * DemandShiftVsMoveLab — shift the curve vs move along it.
+ * DemandShiftVsMoveLab, shift the curve vs move along it.
  *
  * The #1 micro misconception. Dragging the PRICE slider slides a dot ALONG a
- * fixed demand curve — a change in QUANTITY demanded (the curve never moves).
+ * fixed demand curve, a change in QUANTITY demanded (the curve never moves).
  * Clicking a non-price TRIBE factor (Tastes, Related-good prices, Income, Buyers,
- * Expectations) translates the WHOLE curve — a change in DEMAND — and the
+ * Expectations) translates the WHOLE curve, a change in DEMAND, and the
  * equilibrium moves along supply to a new P* and Q*. A predict-then-check asks
  * for the P/Q direction before the reveal. The decision rule: only the good's OWN
  * price (the axis variable) moves you along; anything else shifts the curve.
@@ -88,7 +88,7 @@ export function DemandShiftVsMoveLab({
     if (!pending) return;
     const truth = dirOf(pending);
     const ok = guess === truth;
-    setVerdict(ok ? `✓ Right — ${pending.label} shifts demand ${pending.delta > 0 ? 'right' : 'left'}, so P* and Q* both go ${truth}.` : `Not quite — ${pending.label} shifts demand ${pending.delta > 0 ? 'right' : 'left'}: P* and Q* both go ${truth}.`);
+    setVerdict(ok ? `✓ Right, ${pending.label} shifts demand ${pending.delta > 0 ? 'right' : 'left'}, so P* and Q* both go ${truth}.` : `Not quite, ${pending.label} shifts demand ${pending.delta > 0 ? 'right' : 'left'}: P* and Q* both go ${truth}.`);
     apply(pending);
     setPending(null);
     if (ok) setSolved(true);
@@ -154,8 +154,8 @@ export function DemandShiftVsMoveLab({
 
   const footer = (
     <>
-      {last === 'move' && <StatusPill ok={false}>MOVEMENT along the curve — Δ quantity demanded (own price changed)</StatusPill>}
-      {last === 'shift' && <StatusPill ok>SHIFT of the whole curve — Δ demand (a TRIBE factor)</StatusPill>}
+      {last === 'move' && <StatusPill ok={false}>MOVEMENT along the curve, Δ quantity demanded (own price changed)</StatusPill>}
+      {last === 'shift' && <StatusPill ok>SHIFT of the whole curve, Δ demand (a TRIBE factor)</StatusPill>}
       {!last && <p className="lab-prompt">Drag the price, or click a factor.</p>}
       {verdict && <StatusPill ok={verdict.startsWith('✓')}>{verdict}</StatusPill>}
     </>

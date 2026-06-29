@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * SequenceLab — arithmetic & geometric sequences you can watch grow. Each term is
+ * SequenceLab, arithmetic & geometric sequences you can watch grow. Each term is
  * a bar (the pattern: a steady ladder for arithmetic, an explosion or a fading
  * tail for geometric); a line traces the RUNNING TOTAL across them. The magic
  * moment is geometric convergence: when |r|<1 the running-total line flattens onto
- * a dashed S∞ guide — an infinite sum with a finite answer, seen, not just stated.
+ * a dashed S∞ guide, an infinite sum with a finite answer, seen, not just stated.
  *
  * Closed forms come from the sequences kernel and are shown (KaTeX) beside the
  * brute running total, so formula and picture are provably the same thing.
@@ -15,7 +15,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import { type SeqKind, type SeqSpec, nthTerm, terms, partialSum, partialSums, infiniteSum } from '../core/sequences.js';
 import { Tex } from '../../core/tex.js';
 import { Chip, Slider } from '../../kit/controls.js';
-import { useHints, HintLadder } from '../../kit/pedagogy.js';
+import { useHints, HintLadder, useChallenge, ChallengeCard, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
 import { LabFrame, ControlBar, Field } from '../../kit/frame.js';
 import { useControlSurface } from '@classytic/stage';
 
@@ -42,6 +42,25 @@ export function SequenceLab({ kind = 'geometric', first = 1, step = 0.5, count =
   const [d, setD] = useState(step);
   const [n, setN] = useState(count);
   const hints = useHints(hintList);
+
+  // Predict-first gate: does the DEFAULT series settle on a finite sum or grow forever?
+  // Default config decides the correct answer: arithmetic always diverges; geometric
+  // converges only when |r| < 1.
+  const defaultConverges = kind === 'geometric' && Math.abs(step) < 1;
+  const predictQ = useMemo<ChallengeQuestion[]>(() => [{
+    id: 'sequence-converge',
+    prompt: kind === 'geometric'
+      ? <>This geometric series has ratio <Tex tex={`r = ${fnum(step)}`} />. It adds infinitely many terms, does the total settle on a finite number, or grow without bound?</>
+      : <>This is an arithmetic series (each term adds a fixed <Tex tex={`d = ${fnum(step)}`} />). Summed over infinitely many terms, does the total settle on a finite number, or grow without bound?</>,
+    choices: [
+      { value: 'converges', label: 'settles on a finite sum' },
+      { value: 'diverges', label: 'grows forever' },
+    ],
+    answer: defaultConverges ? 'converges' : 'diverges',
+    explain: <>A geometric series converges only when <Tex tex="|r| < 1" /> (the terms shrink to nothing); an arithmetic series always grows without bound. Here <Tex tex={kind === 'geometric' ? `|r| ${defaultConverges ? '<' : '\\ge'} 1` : 'd \\ne 0'} />, so it {defaultConverges ? 'converges' : 'diverges'}.</>,
+  }], []);
+  const ch = useChallenge(predictQ);
+  useCheckpoint({ solved: ch.allCorrect, activity: 'sequence:predict' });
 
   const spec: SeqSpec = { kind: k, first: a1, step: d };
   const ts = useMemo(() => terms(spec, n), [k, a1, d, n]);
@@ -124,7 +143,8 @@ export function SequenceLab({ kind = 'geometric', first = 1, step = 0.5, count =
 
   const footer = (
     <>
-      <p style={{ fontSize: 12.5, color: 'var(--stage-muted)', marginTop: 4 }}><Tex tex={sumTex} />{!isArith && <> — with <Tex tex="|r| < 1" /> the tail shrinks to nothing, so the total converges.</>}</p>
+      <ChallengeCard questions={predictQ} state={ch} title="Predict first" />
+      <p style={{ fontSize: 12.5, color: 'var(--stage-muted)', marginTop: 4 }}><Tex tex={sumTex} />{!isArith && <>, with <Tex tex="|r| < 1" /> the tail shrinks to nothing, so the total converges.</>}</p>
       <HintLadder hints={hints} />
     </>
   );

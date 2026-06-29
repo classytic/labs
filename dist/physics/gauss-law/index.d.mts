@@ -1,0 +1,1 @@
+import { GaussLab, GaussProps } from "./preset.mjs";

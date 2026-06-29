@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * TransformLab — change one sentence into another and SEE what changed.
+ * TransformLab, change one sentence into another and SEE what changed.
  *
  * Shows the source sentence (read-only), an instruction ("Make it a question"),
  * and the learner rebuilds the target by tapping tiles. On success the words
- * that are NEW vs the source are ringed — so the rule (e.g. English injects
+ * that are NEW vs the source are ringed, so the rule (e.g. English injects
  * "Do" for a question; Bangla has no do-support) is visible, not just stated.
  */
 
@@ -19,9 +19,9 @@ import { seededShuffle, type Pos } from '../deck.js';
 export interface TransformTile { text: string; pos?: Pos; gloss?: string }
 
 export interface TransformProps {
-  /** Source sentence tiles (correct order) — shown read-only. */
+  /** Source sentence tiles (correct order), shown read-only. */
   from: TransformTile[];
-  /** Target sentence tiles (correct order) — the learner rebuilds these. */
+  /** Target sentence tiles (correct order), the learner rebuilds these. */
   to: TransformTile[];
   /** What to do, e.g. "Make it a question". */
   instruction?: string;
@@ -70,10 +70,10 @@ export function TransformLab({ from, to, instruction = 'Change the sentence.', n
       <div className="lang-line" data-state={checked ? (correct ? 'ok' : 'no') : 'idle'} aria-label="your sentence">
         {line.length === 0
           ? <span className="lang-line-empty">Tap the words to build it.</span>
-          : line.map((i) => <Tile key={i} pos={to[i]!.pos} text={to[i]!.text} gloss={to[i]!.gloss} dir={targetDir} selected={checked && correct && isNew(i)} onClick={() => take(i)} ariaLabel={`${to[i]!.text} — tap to remove`} />)}
+          : line.map((i) => <Tile key={i} pos={to[i]!.pos} text={to[i]!.text} gloss={to[i]!.gloss} dir={targetDir} selected={checked && correct && isNew(i)} onClick={() => take(i)} ariaLabel={`${to[i]!.text}, tap to remove`} />)}
       </div>
       <div className="lang-bank" aria-label="word bank">
-        {bank.map((i) => <Tile key={i} pos={to[i]!.pos} text={to[i]!.text} gloss={to[i]!.gloss} dir={targetDir} onClick={() => place(i)} ariaLabel={`${to[i]!.text} — tap to place`} />)}
+        {bank.map((i) => <Tile key={i} pos={to[i]!.pos} text={to[i]!.text} gloss={to[i]!.gloss} dir={targetDir} onClick={() => place(i)} ariaLabel={`${to[i]!.text}, tap to place`} />)}
       </div>
       {checked && correct && note ? <p className="lang-why" data-state="ok" aria-live="polite">{note}</p> : null}
     </div>
@@ -90,7 +90,7 @@ export function TransformLab({ from, to, instruction = 'Change the sentence.', n
     <LabFrame
       title={title}
       prompt={instruction}
-      aside={checked ? <StatusPill ok={correct}>{correct ? '✓ Done — see what changed' : 'Not the right order yet'}</StatusPill> : undefined}
+      aside={checked ? <StatusPill ok={correct}>{correct ? '✓ Done, see what changed' : 'Not the right order yet'}</StatusPill> : undefined}
       controls={controls}
     >
       {figure}

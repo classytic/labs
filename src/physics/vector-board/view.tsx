@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * VectorBoard — block/MDX adapter.
+ * VectorBoard, block/MDX adapter.
  *
  * Authors declare vectors as flat rows (label/dx/dy/color/drag) + a target
  * (goalX/goalY); this maps that ergonomic shape onto the lab's typed

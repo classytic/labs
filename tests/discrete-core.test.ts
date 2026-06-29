@@ -6,12 +6,16 @@
 import { describe, it, expect } from 'vitest';
 import {
   factorial, nPr, nCr, multinomial, starsAndBars, gcd, lcm,
+  ruleOfProduct, ruleOfSum, permutationsWithRepetition, circularPermutations, multichoose, combinationsWithRepetition,
   union, intersection, difference, symmetricDifference, powerset, cartesian, isSubset, setEqual,
   inclusionExclusion,
   probability, conditional, bayes, independent, expectedValue, atLeastOne,
   guaranteedOccupancy, minToGuaranteePair, minForOccupancy,
   mulberry32, shuffle, randInt,
 } from '../src/discrete/core/index.js';
+import {
+  explainFactorial, explainNPr, explainNCr, explainProduct, explainSum, explainPermWithRep, COUNTING_RULES,
+} from '../src/discrete/rules.js';
 
 describe('combinatorics', () => {
   it('factorial / nPr / nCr and the headline identity nCr = nPr/k!', () => {
@@ -30,6 +34,43 @@ describe('combinatorics', () => {
     expect(starsAndBars(5, 3)).toBe(nCr(7, 2));        // 5 items, 3 bins
     expect(gcd(12, 18)).toBe(6);
     expect(lcm(4, 6)).toBe(12);
+  });
+  it('the two principles: product (AND) and sum (OR)', () => {
+    expect(ruleOfProduct(4, 3, 2)).toBe(24);            // 3 ranked medals from 4
+    expect(ruleOfProduct(2, 2, 6)).toBe(24);            // coin × coin × die
+    expect(ruleOfSum(3, 5)).toBe(8);                    // 3 teas OR 5 coffees
+    expect(ruleOfProduct(...[5])).toBe(5);
+    expect(ruleOfSum(...[7])).toBe(7);
+  });
+  it('repetition + circular variants', () => {
+    expect(permutationsWithRepetition(10, 4)).toBe(10000);   // 4-digit PIN
+    expect(permutationsWithRepetition(2, 5)).toBe(32);       // 5-bit strings
+    expect(circularPermutations(5)).toBe(24);                // (5−1)! round table
+    expect(circularPermutations(1)).toBe(1);
+    expect(multichoose(3, 2)).toBe(6);                        // 2 scoops from 3 flavours, repeats ok
+    expect(combinationsWithRepetition(3, 2)).toBe(multichoose(3, 2));
+    expect(multichoose(5, 3)).toBe(nCr(7, 3));               // C(n+k−1, k)
+  });
+});
+
+describe('counting rulebook (concept engine: worked calculators)', () => {
+  it('explained calculators return the right value AND show working', () => {
+    expect(explainFactorial(5).value).toBe(120);
+    expect(explainNPr(5, 3).value).toBe(60);
+    expect(explainNCr(5, 3).value).toBe(10);
+    expect(explainProduct([4, 3, 2]).value).toBe(24);
+    expect(explainSum([3, 5]).value).toBe(8);
+    expect(explainPermWithRep(10, 4).value).toBe(10000);
+    expect(explainNCr(5, 3).steps.length).toBeGreaterThan(1);   // it shows steps, not just the answer
+  });
+  it('every rule in the book computes consistently at its defaults', () => {
+    expect(COUNTING_RULES.length).toBe(6);
+    for (const r of COUNTING_RULES) {
+      const defaults = Object.fromEntries((r.inputs ?? []).map((f) => [f.key, f.default]));
+      const w = r.compute?.(defaults);
+      expect(w && Number.isFinite(w.value)).toBe(true);
+      expect((w?.steps.length ?? 0)).toBeGreaterThan(0);
+    }
   });
 });
 

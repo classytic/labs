@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * StringReflectionLab — where standing waves COME FROM. Two lessons in one string:
- *   • pulse — send a single bump down the string and watch it bounce off the end.
+ * StringReflectionLab, where standing waves COME FROM. Two lessons in one string:
+ *   • pulse, send a single bump down the string and watch it bounce off the end.
  *     A FIXED end flips it (inverts); a FREE end sends it back upright. The string
  *     itself is always incident + reflected added together (both shown faint).
- *   • resonance — send a continuous wave; it reflects and superposes with itself.
+ *   • resonance, send a continuous wave; it reflects and superposes with itself.
  *     At most frequencies the ends won't sit still, but at the special resonant
  *     frequencies fₙ = n·c/2L the reflection locks in and a clean STANDING wave (the
- *     nth harmonic) appears — nodes pinned to both ends. That's how a string sings.
+ *     nth harmonic) appears, nodes pinned to both ends. That's how a string sings.
  *
  * Exact boundary behaviour via the image method; animated on <CanvasLayer>,
  * play-gated, reduced-motion aware. The standing-wave maths matches the wave kernel.
@@ -128,7 +128,7 @@ export function StringReflectionLab({ mode: mode0 = 'pulse', end: end0 = 'fixed'
         <span className="lab-callout-big" style={{ color: resonant ? 'var(--stage-good)' : 'var(--stage-fg)' }}>{resonant ? `n = ${nNear} ✓` : '…'}</span>
         <div style={{ fontSize: 12, color: 'var(--stage-muted)' }}>nearest harmonic <Tex tex={`f_{${nNear}}`} /> = {fRes.toFixed(2)}</div>
       </Callout>
-      <p className="lab-prompt" style={{ fontSize: 13 }}>{resonant ? `Resonance! The reflection locks in — a clean ${nNear}-loop standing wave with nodes on both ends.` : 'Off resonance: the ends won’t hold still. Nudge f toward a harmonic (or snap) until it locks.'}</p>
+      <p className="lab-prompt" style={{ fontSize: 13 }}>{resonant ? `Resonance! The reflection locks in, a clean ${nNear}-loop standing wave with nodes on both ends.` : 'Off resonance: the ends won’t hold still. Nudge f toward a harmonic (or snap) until it locks.'}</p>
     </>
   );
 

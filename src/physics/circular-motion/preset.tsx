@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * CircularMotionLab — "Whirl & cut", where centripetal force points and where the
+ * CircularMotionLab, "Whirl & cut", where centripetal force points and where the
  * ball REALLY goes when you let go.
  *
  * A ball on a string whirls at constant speed. The velocity arrow is always
- * TANGENT; the tension (centripetal force F = mv²/r) always points to the centre —
+ * TANGENT; the tension (centripetal force F = mv²/r) always points to the centre , 
  * it changes the direction of v, never its size. Then CUT THE STRING: the ball
- * flies off along the tangent in a straight line — NOT radially outward, the
+ * flies off along the tangent in a straight line, NOT radially outward, the
  * single most common misconception. Tune v, r, m and read F live (hammer throw,
  * a car cornering, the spin cycle).
  *
@@ -20,7 +20,22 @@ import { usePlayGate, PlayWrap } from '../../kit/play.js';
 import { Slider, CheckButton, Chip } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout, LiveRegion, type ControlConfig } from '../../kit/frame.js';
 import { useFrameTick } from '../../kit/anim.js';
+import { useChallenge, ChallengeCard, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
 import { clamp } from '../../core/util.js';
+
+const PREDICT: ChallengeQuestion[] = [
+  {
+    id: 'release',
+    prompt: 'You’re whirling a ball on a string in a circle. At the instant you LET GO, which way does the ball fly?',
+    choices: [
+      { value: 'tangent', label: 'straight, along the tangent (the way it was moving)' },
+      { value: 'radial', label: 'straight outward, away from the centre' },
+      { value: 'curve', label: 'it keeps curving for a bit' },
+    ],
+    answer: 'tangent',
+    explain: 'No force acts after release, so by Newton’s first law it travels in a straight line along its velocity — the tangent. It does NOT fly radially outward (that’s the common misconception) and does not keep curving.',
+  },
+];
 
 export interface CircularMotionProps {
   speed?: number;
@@ -35,8 +50,8 @@ export interface CircularMotionProps {
 
 export function CircularMotionLab({
   speed = 6, radius = 3, mass = 1,
-  title = 'Whirl & cut — where does it really go?',
-  prompt = 'The string’s tension is the centripetal force F = mv²/r — always toward the centre, bending the path without changing the speed. Cut the string and the ball leaves along the tangent, not outward.',
+  title = 'Whirl & cut: where does it really go?',
+  prompt = 'The string’s tension is the centripetal force F = mv²/r, always toward the centre, bending the path without changing the speed. Cut the string and the ball leaves along the tangent, not outward.',
   objectives,
   controlConfig,
 }: CircularMotionProps): ReactNode {
@@ -45,6 +60,8 @@ export function CircularMotionLab({
   const [m, setM] = useState(mass);
   const [cut, setCut] = useState(false);
   const gate = usePlayGate();
+  const ch = useChallenge(PREDICT);
+  useCheckpoint({ solved: ch.allCorrect, activity: 'circular-motion-predict' });
 
   const ang = useRef(0);           // current angle (CCW)
   const fly = useRef<{ x: number; y: number; vx: number; vy: number } | null>(null);
@@ -59,7 +76,7 @@ export function CircularMotionLab({
     } else if (fly.current) {
       fly.current.x += fly.current.vx * dt;
       fly.current.y += fly.current.vy * dt;
-      // it has flown clear in a straight line — stop (re-tie to run again) instead of teleporting back
+      // it has flown clear in a straight line, stop (re-tie to run again) instead of teleporting back
       if (Math.hypot(fly.current.x, fly.current.y) > 8.5) gate.setPlaying(false);
     }
   });
@@ -95,10 +112,10 @@ export function CircularMotionLab({
           {!cut && <Segment from={{ x: 0, y: 0 }} to={p} color="var(--stage-fg)" opacity={0.5} weight={1.5} />}
           {!cut && <Vector tail={p} tip={{ x: p.x - Math.cos(ang.current) * F * FSCALE, y: p.y - Math.sin(ang.current) * F * FSCALE }} color="var(--stage-warn)" weight={3} />}
           {!cut && <Label x={p.x - Math.cos(ang.current) * F * FSCALE} y={p.y - Math.sin(ang.current) * F * FSCALE} text="F" color="var(--stage-warn)" size={12} dy={-4} />}
-          {/* velocity (tangent) — green, always */}
+          {/* velocity (tangent), green, always */}
           <Vector tail={p} tip={{ x: p.x + tg.x * v * VSCALE, y: p.y + tg.y * v * VSCALE }} color="var(--stage-good)" weight={3} />
           <Label x={p.x + tg.x * v * VSCALE} y={p.y + tg.y * v * VSCALE} text="v" color="var(--stage-good)" size={12} dy={-4} />
-          {/* faint tangent guide line after the cut — proves "tangent, not outward" */}
+          {/* faint tangent guide line after the cut, proves "tangent, not outward" */}
           {cut && fly.current && <Segment from={{ x: fly.current.x - tg.x * 12, y: fly.current.y - tg.y * 12 }} to={{ x: fly.current.x + tg.x * 12, y: fly.current.y + tg.y * 12 }} color="var(--stage-good)" opacity={0.3} weight={1} dashed />}
           {/* the ball */}
           <Circle center={p} r={0.45} color="var(--stage-accent)" fill="var(--stage-accent)" fillOpacity={0.9} weight={1.5} />
@@ -122,7 +139,7 @@ export function CircularMotionLab({
         Cut the string → no inward pull → straight-line tangent flight (Newton’s 1st law). Hammer throw, a
         car cornering, the spin cycle.
       </p>
-      <LiveRegion>{cut ? 'String cut — the ball travels in a straight line along the tangent.' : `Centripetal force ${F.toFixed(0)} newtons toward the centre.`}</LiveRegion>
+      <LiveRegion>{cut ? 'String cut, the ball travels in a straight line along the tangent.' : `Centripetal force ${F.toFixed(0)} newtons toward the centre.`}</LiveRegion>
     </div>
   );
 
@@ -136,5 +153,7 @@ export function CircularMotionLab({
     </ControlBar>
   );
 
-  return <LabFrame title={title} prompt={prompt} objectives={objectives} aside={aside} controls={controls} controlConfig={controlConfig}>{figure}</LabFrame>;
+  const footer = <ChallengeCard questions={PREDICT} state={ch} title="Predict first" />;
+
+  return <LabFrame title={title} prompt={prompt} objectives={objectives} aside={aside} controls={controls} footer={footer} controlConfig={controlConfig}>{figure}</LabFrame>;
 }

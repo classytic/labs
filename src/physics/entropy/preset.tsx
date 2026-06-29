@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * EntropyLab — why heat only flows one way, and why a gas always spreads out.
+ * EntropyLab, why heat only flows one way, and why a gas always spreads out.
  * Entropy is the bookkeeping behind the second law: in any real (spontaneous)
  * process the TOTAL entropy of the universe increases.
  *
- *   • HEAT FLOW — move a chunk of heat Q from a hot body (Th) to a cold one (Tc).
+ *   • HEAT FLOW, move a chunk of heat Q from a hot body (Th) to a cold one (Tc).
  *     The hot body loses ΔS = −Q/Th; the cold body gains ΔS = +Q/Tc. Because
- *     Tc < Th, the gain outweighs the loss, so ΔS_total = Q(1/Tc − 1/Th) > 0 —
+ *     Tc < Th, the gain outweighs the loss, so ΔS_total = Q(1/Tc − 1/Th) > 0 , 
  *     hot→cold is spontaneous. Running it backwards would DECREASE total entropy,
  *     which never happens by itself. (Equal temperatures ⇒ ΔS_total = 0, reversible.)
- *   • FREE EXPANSION — let a gas spread into a vacuum. No heat, no work, but the gas
+ *   • FREE EXPANSION, let a gas spread into a vacuum. No heat, no work, but the gas
  *     can never un-mix: ΔS = nR·ln(Vf/Vi) > 0. Spreading out is simply overwhelmingly
  *     more likely than staying bunched up (more microstates).
  *
@@ -37,8 +37,8 @@ const W = 640, H = 340;
 
 export function EntropyLab({
   mode: mode0 = 'heat',
-  title = 'Entropy & the second law — the one-way arrow',
-  prompt = 'Real processes always increase the total entropy of the universe. See why heat flows hot→cold and why a gas spreads out — and never reverses on its own.',
+  title = 'Entropy & the second law: the one-way arrow',
+  prompt = 'Real processes always increase the total entropy of the universe. See why heat flows hot→cold and why a gas spreads out, and never reverses on its own.',
   objectives = [
     'Compute entropy change as ΔS = Q/T for heat moved at temperature T',
     'See ΔS_total > 0 for spontaneous heat flow (and = 0 only when Th = Tc)',
@@ -73,7 +73,7 @@ export function EntropyLab({
     figure = (
       <div style={fwrap}>
         <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={`Heat flow, total entropy change ${dST.toFixed(2)} joules per kelvin`}>
-          {/* two bodies + heat packet — vertically centred in the left panel */}
+          {/* two bodies + heat packet, vertically centred in the left panel */}
           <rect x={40} y={130} width={120} height={90} rx={10} fill={thermalColor(0.95)} opacity={0.85} />
           <text x={100} y={180} textAnchor="middle" fontSize={13} fontWeight={800} fill="var(--stage-bg)">HOT</text>
           <text x={100} y={200} textAnchor="middle" fontSize={12} fill="var(--stage-bg)">{Th} K</text>
@@ -102,7 +102,7 @@ export function EntropyLab({
         </Callout>
         <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
           <Tex tex={'\\Delta S_{tot} = \\dfrac{Q}{T_c} - \\dfrac{Q}{T_h} > 0'} block />
-          <span style={{ color: 'var(--stage-muted)' }}>The cold body gains <strong style={{ color: 'var(--stage-fg)' }}>more</strong> entropy than the hot body loses (same Q, smaller T). So heat flows hot→cold by itself; the reverse would lower total entropy — forbidden by the 2nd law.</span>
+          <span style={{ color: 'var(--stage-muted)' }}>The cold body gains <strong style={{ color: 'var(--stage-fg)' }}>more</strong> entropy than the hot body loses (same Q, smaller T). So heat flows hot→cold by itself; the reverse would lower total entropy, forbidden by the 2nd law.</span>
         </div>
       </>
     );
@@ -135,7 +135,7 @@ export function EntropyLab({
         <Callout tone="result"><span style={{ fontWeight: 800, fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>ΔS = +{dS.toFixed(2)} J/K</span></Callout>
         <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
           <Tex tex={'\\Delta S = nR\\,\\ln\\!\\dfrac{V_f}{V_i}'} block />
-          <span style={{ color: 'var(--stage-muted)' }}>No heat, no work — yet entropy still rises, because the gas now has far more ways to arrange itself. Fully open (Vf = 2Vi) gives <strong style={{ color: 'var(--stage-fg)' }}>nR·ln 2 ≈ 5.76 J/K</strong>. You’ll never see it pile back into one half on its own.</span>
+          <span style={{ color: 'var(--stage-muted)' }}>No heat, no work, yet entropy still rises, because the gas now has far more ways to arrange itself. Fully open (Vf = 2Vi) gives <strong style={{ color: 'var(--stage-fg)' }}>nR·ln 2 ≈ 5.76 J/K</strong>. You’ll never see it pile back into one half on its own.</span>
         </div>
       </>
     );

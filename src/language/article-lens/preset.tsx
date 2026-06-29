@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * ArticleLens — choose a / an / the / — (no article).
+ * ArticleLens, choose a / an / the /, (no article).
  *
  * Bangla has no articles, so this is the highest-novelty English error for
  * Bangla speakers. The "lens" framing: tap the article that fits, and on a
@@ -14,7 +14,7 @@ import { CheckButton, StatusPill } from '../../kit/controls.js';
 import { LabFrame, ControlBar } from '../../kit/frame.js';
 import { useCheckpoint, useHints, HintLadder } from '../../kit/pedagogy.js';
 
-export type Article = 'a' | 'an' | 'the' | '—';
+export type Article = 'a' | 'an' | 'the' | ', ';
 
 export interface ArticleItem {
   /** Text before the blank. */
@@ -36,15 +36,15 @@ export interface ArticleLensProps {
   prompt?: string;
 }
 
-const CHOICES: Article[] = ['a', 'an', 'the', '—'];
+const CHOICES: Article[] = ['a', 'an', 'the', ', '];
 const RULE: Record<Article, string> = {
   a: 'a → any one (new), before a consonant sound',
   an: 'an → any one (new), before a vowel sound',
   the: 'the → the specific one we both know',
-  '—': 'no article → general or uncountable',
+  ', ': 'no article → general or uncountable',
 };
 
-export function ArticleLensLab({ items, objectives, hints: hintList, title = 'Choose the article', prompt = 'Bangla has no a/an/the — pick what English needs.' }: ArticleLensProps): ReactNode {
+export function ArticleLensLab({ items, objectives, hints: hintList, title = 'Choose the article', prompt = 'Bangla has no a/an/the: pick what English needs.' }: ArticleLensProps): ReactNode {
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<Article | null>(null);
   const [solvedCount, setSolvedCount] = useState(0);
@@ -58,7 +58,7 @@ export function ArticleLensLab({ items, objectives, hints: hintList, title = 'Ch
   const hints = useHints(hintList);
   useCheckpoint({ solved: allDone, activity: 'article-lens', score: { raw: total, max: total }, hintsUsed: hints.count });
 
-  const blank = useMemo(() => (picked === null ? '▢' : picked === '—' ? '∅' : picked), [picked]);
+  const blank = useMemo(() => (picked === null ? '▢' : picked === ', ' ? '∅' : picked), [picked]);
 
   if (!item) return null;
 
@@ -88,16 +88,16 @@ export function ArticleLensLab({ items, objectives, hints: hintList, title = 'Ch
             data-state={picked === a ? (correct ? 'ok' : 'no') : 'idle'}
             disabled={correct}
             onClick={() => pick(a)}
-            aria-label={a === '—' ? 'no article' : a}
+            aria-label={a === ', ' ? 'no article' : a}
           >
-            {a === '—' ? 'no article' : a}
+            {a === ', ' ? 'no article' : a}
           </button>
         ))}
       </div>
 
       {picked !== null && (
         <p className="lang-why" data-state={correct ? 'ok' : 'no'} aria-live="polite">
-          {correct ? (item.why ?? RULE[item.answer]) : 'Not quite — try another.'}
+          {correct ? (item.why ?? RULE[item.answer]) : 'Not quite, try another.'}
         </p>
       )}
     </div>

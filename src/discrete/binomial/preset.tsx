@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * BinomialDistributionLab — the bridge from counting to the bell. P(X=k successes
+ * BinomialDistributionLab, the bridge from counting to the bell. P(X=k successes
  * in n trials) = C(n,k)·pᵏ·(1−p)ⁿ⁻ᵏ, drawn as bars you can interrogate: click a bar
- * and the formula DERIVES itself — k successes happen C(n,k) ways (the Pascal /
+ * and the formula DERIVES itself, k successes happen C(n,k) ways (the Pascal /
  * counting number), each way has probability pᵏ for the successes times (1−p)ⁿ⁻ᵏ for
  * the failures. Slide p to watch it skew and (at ½) turn symmetric; slide n and flip
  * on the normal overlay to watch the binomial become the Galton-board bell. Mean np

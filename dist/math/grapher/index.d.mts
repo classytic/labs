@@ -1,0 +1,1 @@
+import { GraphEquation, GraphParam, Grapher, GrapherProps } from "./preset.mjs";

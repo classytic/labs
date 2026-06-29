@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * CycleLab — ONE authorable lab for every cycle (water, rock, carbon, nitrogen,
+ * CycleLab, ONE authorable lab for every cycle (water, rock, carbon, nitrogen,
  * food chains…). The creator/agent declares the model (nodes + process-labelled
  * edges) and a challenge; the shared CycleDiagram renders it. Not a bespoke
- * WaterCycle/RockCycle widget — the cycle is data.
+ * WaterCycle/RockCycle widget, the cycle is data.
  *
- *  • challenge='trace' — click a stage; its outgoing arrows + the processes that
+ *  • challenge='trace', click a stage; its outgoing arrows + the processes that
  *    drive them light up. The branched rock/carbon cycles reveal that you don't
- *    have to go all the way around — any rock can melt or re-weather.
- *  • challenge='label-process' — the process names are stripped off the arrows
+ *    have to go all the way around, any rock can melt or re-weather.
+ *  • challenge='label-process', the process names are stripped off the arrows
  *    into a tray; match each one to the transition it drives. That IS the IGCSE
  *    skill, and it's unambiguous (clean rings like the water cycle).
  *
@@ -35,7 +35,7 @@ export interface CycleLabProps {
   objectives?: string[];
 }
 
-// deterministic shuffle (SSR-safe — no Math.random): order by a stable string hash
+// deterministic shuffle (SSR-safe, no Math.random): order by a stable string hash
 const hash = (s: string): number => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h >>> 0; };
 
 export function CycleLab({
@@ -76,7 +76,7 @@ function TraceCycle({ nodes, edges, size, title, prompt, objectives, activity }:
   const figure = (
     <>
       <div style={{ borderRadius: 14, background: 'var(--stage-bg)', border: '1px solid var(--stage-grid)', padding: 8 }}>
-        <CycleDiagram nodes={nodes} edges={edges} size={size} activeId={active} onNodeClick={click} ariaLabel={`${title} — click a stage to trace its transitions`} />
+        <CycleDiagram nodes={nodes} edges={edges} size={size} activeId={active} onNodeClick={click} ariaLabel={`${title}: a cycle diagram with ${nodes.length} stages (${nodes.map((nd) => nd.label).join(', ')}) connected by labelled process arrows. Activate a stage to trace its outgoing transitions and the processes that drive them.`} />
       </div>
       <LiveRegion>
         {active ? `${labelOf(active)} leads to ${out.map((e) => `${labelOf(e.to)} by ${e.label}`).join(', ') || 'nothing further'}.` : ''}
@@ -90,7 +90,7 @@ function TraceCycle({ nodes, edges, size, title, prompt, objectives, activity }:
         out.length ? out.map((e) => (
           <span key={edgeKey(e)} style={{ fontSize: 13 }}>
             <b style={{ color: 'var(--stage-accent)' }}>{labelOf(active)}</b>
-            <span style={{ color: 'var(--stage-muted)' }}> —{e.label}→ </span>
+            <span style={{ color: 'var(--stage-muted)' }}> , {e.label}→ </span>
             <b>{labelOf(e.to)}</b>
           </span>
         )) : <span style={{ color: 'var(--stage-muted)' }}>{labelOf(active)} is an end of this path here.</span>
@@ -99,7 +99,7 @@ function TraceCycle({ nodes, edges, size, title, prompt, objectives, activity }:
     </div>
   );
 
-  return <LabFrame title={title} prompt={prompt ?? 'Click each stage to trace where it goes — and which process drives the change.'} objectives={objectives} footer={footer}>{figure}</LabFrame>;
+  return <LabFrame title={title} prompt={prompt ?? 'Click each stage to trace where it goes, and which process drives the change.'} objectives={objectives} footer={footer}>{figure}</LabFrame>;
 }
 
 // ── label-process: match each process name to the arrow it drives ────────────
@@ -134,8 +134,20 @@ function LabelProcess({ nodes, edges, size, title, prompt, objectives, hash: h, 
     const w = (val ? val.length * 5.7 : 16) + 16;
     const stroke = ok ? 'var(--stage-good)' : bad ? 'var(--stage-danger)' : 'var(--stage-grid)';
     const fill = ok ? 'var(--stage-good)' : bad ? 'var(--stage-danger)' : 'var(--stage-muted)';
+    const ariaLabel = val
+      ? `${val}, ${ok ? 'correctly matched, activate to take it back' : 'incorrect, activate to clear'}`
+      : sel
+        ? `Empty process slot, activate to place ${sel} here`
+        : 'Empty process slot, pick a process first, then activate to place it here';
     return (
-      <g onClick={() => onSlot(key)} style={{ cursor: 'pointer' }} role="button" aria-label={val ? `${val}${ok ? ' correct' : ' wrong'}` : 'empty slot'}>
+      <g
+        onClick={() => onSlot(key)}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSlot(key); } }}
+        style={{ cursor: 'pointer' }}
+        role="button"
+        tabIndex={0}
+        aria-label={ariaLabel}
+      >
         <rect x={Math.round(mid.x - w / 2)} y={mid.y - 10} width={Math.round(w)} height={20} rx={10} fill="var(--stage-bg)" stroke={stroke} strokeWidth={1.6} />
         <text x={mid.x} y={mid.y} fontSize={10.5} fontWeight={700} textAnchor="middle" dominantBaseline="central" fill={fill}>{val ?? '?'}</text>
       </g>
@@ -145,7 +157,7 @@ function LabelProcess({ nodes, edges, size, title, prompt, objectives, hash: h, 
   const figure = (
     <>
       <div style={{ borderRadius: 14, background: 'var(--stage-bg)', border: '1px solid var(--stage-grid)', padding: 8 }}>
-        <CycleDiagram nodes={nodes} edges={edges} size={size} edgeSlot={edgeSlot} ariaLabel={`${title} — match each process to its arrow`} />
+        <CycleDiagram nodes={nodes} edges={edges} size={size} edgeSlot={edgeSlot} ariaLabel={`${title}: a cycle diagram with ${nodes.length} stages (${nodes.map((nd) => nd.label).join(', ')}) and ${labelEdges.length} arrows whose process labels have been removed. Pick a process from the tray, then activate the arrow slot it drives to match it.`} />
       </div>
       <LiveRegion>
         {solved ? 'All processes matched correctly.' : `${solvedCount} of ${labelEdges.length} processes matched.`}

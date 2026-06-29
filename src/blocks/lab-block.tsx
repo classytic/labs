@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * labBlock — wrap a plain lab component into a CMS block "on call", with ZERO
+ * labBlock, wrap a plain lab component into a CMS block "on call", with ZERO
  * per-lab boilerplate. The host passes the lab component + its zod prop-schema; this
  * returns a `defineBlock` spec whose Component:
  *   • in render mode  → spreads the block attributes straight into the lab, and
  *   • in editing mode → shows the generic, zod-driven `LabConfig` panel above it
- *     (one field per prop, derived from the schema — no hand-written ConfigPanel).
+ *     (one field per prop, derived from the schema, no hand-written ConfigPanel).
  * The MDX tag is auto-derived (PascalCase of the key) by `defineBlock`.
  *
- * This is the ONE shared factory for every domain (`./physics`, `./chem`, …) — a
+ * This is the ONE shared factory for every domain (`./physics`, `./chem`, …), a
  * domain file just declares `labBlock({ key, label, description, schema, Component })`
  * per lab instead of re-implementing the defineBlock + attribute-spread + editor
  * wiring each time. `commonLabProps` are the title/prompt/objectives/hints/controlId
@@ -39,7 +39,7 @@ export interface LabBlockDef<S extends z.ZodObject<any>> {
   schema: S;
   /**
    * Render the lab from its attributes. TYPED against the schema, so a prop the lab
-   * doesn't accept (or the wrong type) is a COMPILE error — the authoring schema can't
+   * doesn't accept (or the wrong type) is a COMPILE error, the authoring schema can't
    * silently drift from the component's real props (and every prop stays CMS-authorable).
    */
   Component: (attrs: z.infer<S>) => ReactNode;
@@ -49,7 +49,7 @@ export interface LabBlockDef<S extends z.ZodObject<any>> {
   omit?: string[];
 }
 
-/** PascalCase MDX tag from a kebab key — mirrors `defineBlock`'s default, for building a components map. */
+/** PascalCase MDX tag from a kebab key, mirrors `defineBlock`'s default, for building a components map. */
 export const pascalTag = (key: string): string => key.split('-').map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join('');
 
 /**
@@ -78,7 +78,7 @@ export function labBlock<S extends z.ZodObject<any>>({ key, label, description, 
 }
 
 /**
- * Derive the tag→component MDX render map from a domain's blocks — ONE source of truth.
+ * Derive the tag→component MDX render map from a domain's blocks, ONE source of truth.
  * Only `labBlock`-created blocks carry `.lab`; bespoke `defineBlock` blocks (custom editor
  * UI) are merged into the map by hand alongside this.
  */

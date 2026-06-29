@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * @classytic/labs/blocks — lesson / pedagogy blocks (domain-neutral).
+ * @classytic/labs/blocks, lesson / pedagogy blocks (domain-neutral).
  *
- * `PredictBlock` is the missing primitive that lets a CREATOR — not a developer —
+ * `PredictBlock` is the missing primitive that lets a CREATOR, not a developer , 
  * author a predict-first lesson: a multiple-choice question the learner commits to
  * before the reveal. A correct pick shows the "why" and reports completion through
  * the learner/step seam, so dropping one between or after any lab turns a sequence
  * of widgets into a gated, guided lesson. The creator authors the prompt, the
- * choices (mark the correct one), and the explanation — entirely in the editor.
+ * choices (mark the correct one), and the explanation, entirely in the editor.
  *
  * This is the authorable version of the predict-first card that the "Why ice floats"
  * reference lesson used in code: same ChallengeCard + useCheckpoint underneath, now
@@ -49,7 +49,7 @@ export const PredictBlock = defineBlock({
   tag: 'Predict',
   void: true,
   label: 'Predict / quiz question',
-  description: 'A predict-first multiple-choice question. The learner commits to an answer; a correct pick reveals the explanation and completes the step (so it can gate a guided lesson). Author your own prompt, choices and explanation — drop it before or after any lab.',
+  description: 'A predict-first multiple-choice question. The learner commits to an answer; a correct pick reveals the explanation and completes the step (so it can gate a guided lesson). Author your own prompt, choices and explanation, drop it before or after any lab.',
   category: 'interactive',
   schema: z.object({
     prompt: z.string().default('What do you predict?'),

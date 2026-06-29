@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * StatementSorterLab — sort the accounts into the two statements.
+ * StatementSorterLab, sort the accounts into the two statements.
  *
- * The financial statements aren't new objects — they're a SORTING of the ledger
+ * The financial statements aren't new objects, they're a SORTING of the ledger
  * accounts into their home: Income/Expense → Income Statement (this period's
  * "result"), Asset/Liability/Equity → Balance Sheet (the cumulative "standing").
  * The learner sends each account to a statement (wrong picks are coached, not just
@@ -54,7 +54,7 @@ export function StatementSorterLab({
   const send = (a: SortAccount, tray: Tray): void => {
     const correct: Tray = statementOf(a.category) === 'Income Statement' ? 'IS' : 'BS';
     if (tray === correct) { setPlace((p) => ({ ...p, [a.id]: tray })); setHint(null); }
-    else setHint(`${a.name} is ${a.category === 'Asset' || a.category === 'Income' ? 'an' : 'a'} ${a.category} — it belongs on the ${statementOf(a.category)}.`);
+    else setHint(`${a.name} is ${a.category === 'Asset' || a.category === 'Income' ? 'an' : 'a'} ${a.category}, it belongs on the ${statementOf(a.category)}.`);
   };
 
   const unsorted = accounts.filter((a) => !place[a.id]);
@@ -129,7 +129,7 @@ export function StatementSorterLab({
       ) : (
         <div className="lab-bar" style={{ gap: 10 }}>
           {showClosing && !closed && <CheckButton onClick={close}>Close the books → carry profit to Equity</CheckButton>}
-          {closed && <StatusPill ok={balanced}>{balanced ? 'Net profit carried to Equity — A = L + E holds ✓' : 'Equation does not balance'}</StatusPill>}
+          {closed && <StatusPill ok={balanced}>{balanced ? 'Net profit carried to Equity, A = L + E holds ✓' : 'Equation does not balance'}</StatusPill>}
         </div>
       )}
 

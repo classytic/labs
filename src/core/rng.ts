@@ -1,5 +1,5 @@
 /**
- * Seeded PRNG — deterministic randomness so a simulation is REPLAYABLE (same
+ * Seeded PRNG, deterministic randomness so a simulation is REPLAYABLE (same
  * seed → same run; an agent can pin a seed, a lesson reproduces exactly, SSR /
  * Remotion stays stable). mulberry32: tiny, fast, good enough for teaching. This
  * is the canonical home (generic numerics live in core, per the shared-math rule);
@@ -39,7 +39,7 @@ export function sample<T>(arr: readonly T[], k: number, rng: Rng): T[] {
   return shuffle(arr, rng).slice(0, Math.max(0, Math.min(k, arr.length)));
 }
 
-/** A normal (Gaussian) variate via Box–Muller — for sampling-distribution sims. */
+/** A normal (Gaussian) variate via Box–Muller, for sampling-distribution sims. */
 export function gaussian(rng: Rng, mu = 0, sigma = 1): number {
   let u = 0, v = 0;
   while (u === 0) u = rng();

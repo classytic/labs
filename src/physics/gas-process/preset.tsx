@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * GasProcessLab — the four ideal-gas processes on a P–V diagram, with the first law
+ * GasProcessLab, the four ideal-gas processes on a P–V diagram, with the first law
  * kept honest. Pick a process, push/pull the gas, and watch:
  *   • a piston cylinder (gas particles spread as V grows, colour tracks T),
  *   • the P–V curve with the WORK shaded as the area under it (∫P dV),
@@ -47,7 +47,7 @@ const J = (x: number): string => (x >= 0 ? '+' : '−') + Math.abs(x).toFixed(0)
 
 export function GasProcessLab({
   kind: kind0 = 'isothermal',
-  title = 'Gas processes — work is the area under P–V',
+  title = 'Gas processes: work is the area under P–V',
   prompt = 'Expand or compress an ideal gas four different ways. The shaded area under the P–V curve is the work; the first law ΔU = Q − W balances the books.',
   objectives = [
     'Read work as the area under the P–V curve (∫P dV)',
@@ -146,7 +146,7 @@ export function GasProcessLab({
         <Tex tex={'\\Delta U = Q - W'} block />
         <span style={{ color: 'var(--stage-muted)' }}>
           {kind === 'isothermal' && <>T fixed ⇒ ΔU = 0, so <strong style={{ color: 'var(--stage-fg)' }}>all the heat becomes work</strong>. PV = const.</>}
-          {kind === 'adiabatic' && <>No heat in (Q = 0), so the work comes straight out of internal energy — the gas <strong style={{ color: 'var(--stage-fg)' }}>cools as it expands</strong>. PVᵞ = const (steeper than the isotherm).</>}
+          {kind === 'adiabatic' && <>No heat in (Q = 0), so the work comes straight out of internal energy, the gas <strong style={{ color: 'var(--stage-fg)' }}>cools as it expands</strong>. PVᵞ = const (steeper than the isotherm).</>}
           {kind === 'isobaric' && <>P fixed ⇒ work is simply <strong style={{ color: 'var(--stage-fg)' }}>W = PΔV</strong> (a rectangle). Heat splits into work + internal energy.</>}
           {kind === 'isochoric' && <>V fixed ⇒ no work at all (<strong style={{ color: 'var(--stage-fg)' }}>W = 0</strong>); every joule of heat raises the internal energy (and temperature).</>}
         </span>

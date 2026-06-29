@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * CircuitBuilder — a circuit you BUILD and PLAY with, not a walkthrough.
+ * CircuitBuilder, a circuit you BUILD and PLAY with, not a walkthrough.
  *
  * A creator declares the components in a series loop (battery + any mix of
  * resistors, bulbs, switches); the learner flips switches, tunes the battery, and
@@ -13,15 +13,16 @@
  * are primitives (accessible, themed); switches toggle via real buttons (keyboard-
  * operable) instead of canvas hit-testing.
  *
- * (Single series loop — the canonical "flashlight" circuit. Parallel topologies
+ * (Single series loop, the canonical "flashlight" circuit. Parallel topologies
  * are a future extension of the same model.)
  */
 
 import { useEffect, useState, type ReactNode } from 'react';
-import { Stage, Segment, Polyline, Circle, Dot, Label, useFrameLoop, useInView, type Vec2 } from '@classytic/stage';
+import { Stage, Segment, Dot, Label, useFrameLoop, useInView, type Vec2 } from '@classytic/stage';
+import { solveDC, type Elem } from '@classytic/stage/circuit';
 import { Slider, Chip } from '../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout } from '../kit/frame.js';
-import { ResistorBox } from '../kit/diagram.js';
+import { ResistorBox, CellBox, BulbBox, SwitchBox } from '../kit/diagram.js';
 import { num, clamp } from '../core/util.js';
 
 export type CircuitComponent =
@@ -74,10 +75,22 @@ export function CircuitBuilder({ battery, components, title = 'Build a circuit',
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [compKey]);
 
-  // solve the series loop
+  // solve the series loop through the one circuit engine (stage/circuit) — a netlist,
+  // not a per-lab formula: battery + a chain of resistors/bulbs back to ground.
   const allClosed = comps.every((c, i) => c.type !== 'switch' || closed[i]);
   const totalR = comps.reduce((s, c) => s + ('ohms' in c ? c.ohms : 0), 0);
-  const current = allClosed ? emf / Math.max(totalR, 0.5) : 0; // amps
+  const current = (() => {
+    if (!allClosed) return 0;
+    const elems: Elem[] = [{ kind: 'V', n1: 1, n2: 0, value: emf, id: 'b' }];
+    let prev = 1; let node = 2;
+    const withR = comps.filter((c) => 'ohms' in c);
+    withR.forEach((c, idx) => {
+      const nb = idx === withR.length - 1 ? 0 : node++;
+      elems.push({ kind: 'R', n1: prev, n2: nb, value: Math.max(0.5, (c as { ohms: number }).ohms) });
+      prev = nb;
+    });
+    return Math.abs(solveDC(elems).current['b'] ?? 0); // amps
+  })();
 
   useFrameLoop((f) => setT((v) => v + f.dtMs / 1000), { running: current > 1e-4 && inView });
 
@@ -91,16 +104,14 @@ export function CircuitBuilder({ battery, components, title = 'Build a circuit',
 
   const figure = (
     <div ref={viewRef}>
-      <Stage view={VIEW} height={height} preserveAspect={false} ariaLabel={`Series circuit, ${emf}V battery, ${(current * 1000).toFixed(0)} mA${allClosed ? '' : ' — open, no current'}`}>
+      <Stage view={VIEW} height={height} preserveAspect={false} ariaLabel={`Series circuit, ${emf}V battery, ${(current * 1000).toFixed(0)} mA${allClosed ? '' : ', open, no current'}`}>
         {/* loop wires */}
         <Segment from={{ x: L, y: BOT }} to={{ x: R, y: BOT }} color="var(--stage-fg)" opacity={0.5} weight={2.5} />
         <Segment from={{ x: R, y: BOT }} to={{ x: R, y: TOP }} color="var(--stage-fg)" opacity={0.5} weight={2.5} />
         <Segment from={{ x: L, y: BOT }} to={{ x: L, y: cyMid - 6 }} color="var(--stage-fg)" opacity={0.5} weight={2.5} />
         <Segment from={{ x: L, y: cyMid + 6 }} to={{ x: L, y: TOP }} color="var(--stage-fg)" opacity={0.5} weight={2.5} />
-        {/* battery on the left edge */}
-        <Segment from={{ x: L - 5, y: cyMid + 6 }} to={{ x: L + 5, y: cyMid + 6 }} color="var(--stage-accent-2)" weight={2.5} />
-        <Segment from={{ x: L - 3, y: cyMid - 6 }} to={{ x: L + 3, y: cyMid - 6 }} color="var(--stage-accent-2)" weight={2.5} />
-        <Label x={L + 8} y={cyMid} text={`${emf.toFixed(0)} V`} color="var(--stage-accent-2)" anchor="start" size={12} />
+        {/* battery on the left edge (canonical cell glyph, vertical) */}
+        <CellBox center={{ x: L, y: cyMid }} half={6} orient="v" live={current > 1e-4} label={`${emf.toFixed(0)} V`} />
 
         {/* top-edge components, tiled L→R */}
         {comps.map((c, i) => {
@@ -115,34 +126,17 @@ export function CircuitBuilder({ battery, components, title = 'Build a circuit',
               <Segment from={{ x: cx + half, y: TOP }} to={{ x: rightX, y: TOP }} color="var(--stage-fg)" opacity={0.5} weight={2.5} />
             </>
           );
+          const energized = current > 1e-4;
           if (c.type === 'resistor') {
-            return <g key={i}>{wires}<ResistorBox center={{ x: cx, y: TOP }} w={2 * half} h={7} color="var(--stage-accent)" label={`${label} ${c.ohms}Ω`} /></g>;
+            return <g key={i}>{wires}<ResistorBox center={{ x: cx, y: TOP }} w={2 * half} h={7} live={energized} label={`${label} ${c.ohms}Ω`} /></g>;
           }
           if (c.type === 'bulb') {
             const bright = clamp(current * 1.2, 0, 1) * (c.ohms / Math.max(totalR, 1));
-            const lit = bright > 0.02;
-            const rad = half * 0.95;
-            return (
-              <g key={i}>
-                {wires}
-                {lit && <Circle center={{ x: cx, y: TOP }} r={rad * 2} color="none" fill="var(--stage-warn)" fillOpacity={0.5 * bright} weight={0} />}
-                <Circle center={{ x: cx, y: TOP }} r={rad} color={lit ? 'var(--stage-warn)' : 'var(--stage-fg)'} fill={lit ? 'var(--stage-warn)' : 'var(--stage-bg)'} fillOpacity={lit ? 0.25 + 0.5 * bright : 1} weight={2} />
-                <Polyline points={[{ x: cx - rad * 0.5, y: TOP }, { x: cx - rad * 0.15, y: TOP + rad * 0.4 }, { x: cx + rad * 0.15, y: TOP - rad * 0.4 }, { x: cx + rad * 0.5, y: TOP }]} color={lit ? 'var(--stage-warn)' : 'var(--stage-fg)'} weight={1.5} />
-                <Label x={cx} y={TOP} text={label} color="var(--stage-fg)" size={11} dy={-16} />
-              </g>
-            );
+            return <g key={i}>{wires}<BulbBox center={{ x: cx, y: TOP }} half={half} live={energized} brightness={bright} label={label} /></g>;
           }
-          // switch: terminals + lever (closed = horizontal, open = lifted)
+          // switch
           const open = !closed[i];
-          return (
-            <g key={i}>
-              {wires}
-              <Dot x={cx - half} y={TOP} r={3.5} color="var(--stage-good)" />
-              <Dot x={cx + half} y={TOP} r={3.5} color="var(--stage-good)" />
-              <Segment from={{ x: cx - half, y: TOP }} to={open ? { x: cx + half * 0.55, y: TOP + half * 0.9 } : { x: cx + half, y: TOP }} color={open ? 'var(--stage-warn)' : 'var(--stage-good)'} weight={2.5} />
-              <Label x={cx} y={TOP} text={`${label} (${open ? 'open' : 'closed'})`} color="var(--stage-fg)" size={11} dy={-16} />
-            </g>
-          );
+          return <g key={i}>{wires}<SwitchBox center={{ x: cx, y: TOP }} half={half} live={energized && !open} closed={!open} label={label} /></g>;
         })}
 
         {/* flowing current */}
@@ -170,7 +164,7 @@ export function CircuitBuilder({ battery, components, title = 'Build a circuit',
   const aside = (
     <Callout tone="result">
       <span style={{ display: 'grid', gap: 4, fontVariantNumeric: 'tabular-nums' }}>
-        <span>{allClosed ? 'closed' : 'open — no current'}</span>
+        <span>{allClosed ? 'closed' : 'open, no current'}</span>
         <span>R {totalR.toFixed(0)} Ω</span>
         <span>I {(current * 1000).toFixed(0)} mA</span>
       </span>
@@ -180,7 +174,7 @@ export function CircuitBuilder({ battery, components, title = 'Build a circuit',
   return (
     <LabFrame
       title={title}
-      prompt={switches.length ? 'Flip a switch to open/close it. Tune the battery and watch the current — and the bulb.' : 'Tune the battery and watch the current flow.'}
+      prompt={switches.length ? 'Flip a switch to open/close it. Tune the battery and watch the current, and the bulb.' : 'Tune the battery and watch the current flow.'}
       aside={aside}
       controls={controls}
     >

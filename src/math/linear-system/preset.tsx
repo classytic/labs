@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * LinearSystemLab — two unknowns, two clues, one answer. Each equation is drawn
+ * LinearSystemLab, two unknowns, two clues, one answer. Each equation is drawn
  * as a LINE: every point on it is an (x, y) pair that obeys that clue. The ONE
- * point that obeys BOTH clues is where the lines cross — the solution to the
+ * point that obeys BOTH clues is where the lines cross, the solution to the
  * system. The learner drags a marker to find it; live ✓/✗ tells them whether the
  * point currently satisfies each clue, so the crossing is "where both go green".
  *
- * SVG <Stage> + Plot + a draggable MovableDot — accessible, theme-aware, on the
+ * SVG <Stage> + Plot + a draggable MovableDot, accessible, theme-aware, on the
  * same engine as every other lab. (Lines in slope-intercept y = m·x + b; the
  * intersection is solved exactly.)
  */
@@ -43,14 +43,14 @@ export function LinearSystemLab({
   xRange = [-1, 7],
   yRange = [-1, 7],
   title = 'Two unknowns, one answer',
-  prompt = 'Drag the point to where BOTH lines cross — that (x, y) obeys both clues.',
+  prompt = 'Drag the point to where BOTH lines cross, that (x, y) obeys both clues.',
   height = 360,
 }: LinearSystemProps = {}): ReactNode {
   const [l1, l2] = lines;
   // exact intersection: m1·x + b1 = m2·x + b2
   const sol = useMemo(() => {
     const dm = l1.m - l2.m;
-    if (Math.abs(dm) < 1e-9) return null; // parallel — no unique solution
+    if (Math.abs(dm) < 1e-9) return null; // parallel, no unique solution
     const x = (l2.b - l1.b) / dm;
     return { x, y: l1.m * x + l1.b };
   }, [l1.m, l1.b, l2.m, l2.b]);

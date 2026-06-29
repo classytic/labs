@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * ProportionModel — a reusable area/proportion model: a unit square split into
+ * ProportionModel, a reusable area/proportion model: a unit square split into
  * COLUMNS (widths = a first proportion) and, within each column, stacked ROWS
  * (heights = a conditional proportion). Areas read as joint probabilities. The
  * shared visual under Bayes (prior × likelihood), fractions, ratios, and any
- * "part of a part" picture — authored as DATA, not re-hand-rolled per lab.
+ * "part of a part" picture, authored as DATA, not re-hand-rolled per lab.
  *
  * Pure pixel-space SVG figure (y-down), drops into any lab. Colours are tokens.
  * `lit` outlines a cell (e.g. the test-positive bands); `count` labels big cells.

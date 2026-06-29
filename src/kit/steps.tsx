@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * In-lab stepper — teach ONE idea at a time (Brilliant-style), instead of dumping
+ * In-lab stepper, teach ONE idea at a time (Brilliant-style), instead of dumping
  * a dense screen. A lab declares N steps and reveals layers/captions as the learner
  * hits Continue. Pure UI state; pair with `<StepNav>` (Back / dots / Continue).
- * (Distinct from stage's cross-block StepProgress — this is within a single lab.)
+ * (Distinct from stage's cross-block StepProgress, this is within a single lab.)
  */
 
 import { useState, type ReactNode } from 'react';

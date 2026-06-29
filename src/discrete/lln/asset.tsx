@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * lln asset — the Law of Large Numbers, clean: the running frequency of the first
+ * lln asset, the Law of Large Numbers, clean: the running frequency of the first
  * outcome (heads / a "1") plotted over draws, wiggling at first then settling onto
  * the dashed TRUE line. A big coin/die shows the latest flip; a one-line tally
  * gives every outcome's running %. One `sampler` sim drives it all (sim ≠ render).

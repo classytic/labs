@@ -1,5 +1,5 @@
 /**
- * Combinatorics kernel — the counting source-of-truth every discrete-math lab
+ * Combinatorics kernel, the counting source-of-truth every discrete-math lab
  * trusts (so an agent narrates these, never computes its own). Pure, integer,
  * dependency-free. The headline identity the Counting lab is built on:
  *   nCr(n,k) = nPr(n,k) / k!   ("overcount by order, then divide it out").
@@ -32,7 +32,7 @@ export function nCr(n: number, r: number): number {
   return Math.round(res);
 }
 
-/** Binomial coefficient — alias of nCr (the "n choose k"). */
+/** Binomial coefficient, alias of nCr (the "n choose k"). */
 export const binomial = nCr;
 
 /** Arrangements of a multiset: n! / (k1! k2! …), where Σki = n. */
@@ -49,6 +49,49 @@ export function starsAndBars(n: number, k: number): number {
   if (!isCount(n) || !isCount(k) || k < 1) return NaN;
   return nCr(n + k - 1, k - 1);
 }
+
+// ── the two fundamental counting PRINCIPLES (named, so a lab/agent reasons with
+//    them explicitly instead of hand-multiplying) ────────────────────────────
+
+/** Rule of PRODUCT (multiplication principle): a task done as a SEQUENCE of
+ *  independent stages — do stage 1 AND stage 2 AND … — multiplies the choice
+ *  counts. ruleOfProduct(4, 3, 2) = 24. The spine under nPr / nʳ / factorial. */
+export function ruleOfProduct(...stages: number[]): number {
+  if (!stages.length || stages.some((c) => !Number.isFinite(c))) return NaN;
+  return stages.reduce((p, c) => p * c, 1);
+}
+
+/** Rule of SUM (addition principle): MUTUALLY EXCLUSIVE cases — do this OR that,
+ *  with no overlap — add their counts. ruleOfSum(3, 5) = 8. If the cases can
+ *  overlap, use {@link inclusionExclusion} (sum, then subtract the double-count). */
+export function ruleOfSum(...cases: number[]): number {
+  if (!cases.length || cases.some((c) => !Number.isFinite(c))) return NaN;
+  return cases.reduce((s, c) => s + c, 0);
+}
+
+/** Permutations WITH repetition: r positions, each independently filled from n
+ *  options = nʳ. PIN codes, license plates, binary strings, functions A→B. */
+export function permutationsWithRepetition(n: number, r: number): number {
+  if (!isCount(n) || !isCount(r)) return NaN;
+  return n ** r;
+}
+
+/** Circular permutations: distinct arrangements of n around a round table where
+ *  only RELATIVE order matters = (n−1)!. (1 for n ≤ 1.) */
+export function circularPermutations(n: number): number {
+  if (!isCount(n)) return NaN;
+  return n <= 1 ? 1 : factorial(n - 1);
+}
+
+/** Combinations WITH repetition ("n multichoose k"): choose k from n types,
+ *  repetition allowed, order irrelevant = C(n+k−1, k). Same stars-and-bars
+ *  family as {@link starsAndBars}, re-parameterized for selection (e.g. k scoops
+ *  from n ice-cream flavours). */
+export function multichoose(n: number, k: number): number {
+  if (!isCount(n) || !isCount(k)) return NaN;
+  return nCr(n + k - 1, k);
+}
+export const combinationsWithRepetition = multichoose;
 
 export function gcd(a: number, b: number): number {
   a = Math.abs(a); b = Math.abs(b);

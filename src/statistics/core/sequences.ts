@@ -1,5 +1,5 @@
 /**
- * Sequences & series kernel — arithmetic and geometric, the two patterns every
+ * Sequences & series kernel, arithmetic and geometric, the two patterns every
  * series lesson rests on. Pure functions: the nth term, the first n terms, and
  * the partial sum (closed form), plus the geometric infinite-sum (|r|<1). The
  * lab draws bars/areas from `terms()` and proves the closed form against the

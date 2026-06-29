@@ -1,23 +1,23 @@
 'use client';
 
 /**
- * Pedagogy/assessment kit — the formative-feedback layer every lab shares.
+ * Pedagogy/assessment kit, the formative-feedback layer every lab shares.
  *
  * `LabMeta` (objectives, hints, misconceptions, successCriteria) was authored
  * but never rendered. This turns it into the Brilliant-style loop:
- *   • `useCheckpoint` — the ONE assessment seam: report once on first solve,
+ *   • `useCheckpoint`, the ONE assessment seam: report once on first solve,
  *     with a hint penalty folded into the score. Kills the per-lab
  *     `if (x === answer) report(...)` + done-ref boilerplate.
- *   • `useHints` + `<HintLadder>` — progressive reveal; each hint taken docks
+ *   • `useHints` + `<HintLadder>`, progressive reveal; each hint taken docks
  *     the score (pass `hints.count` to useCheckpoint).
- *   • `<Objectives>` — the learner-visible goal banner.
- *   • `<Feedback>` — unifies success / try-again / misconception note (the
+ *   • `<Objectives>`, the learner-visible goal banner.
+ *   • `<Feedback>`, unifies success / try-again / misconception note (the
  *     misconception is a boolean the lab computes from resolved state).
- *   • `<RevealSolution>` — the shared "Show answer" escape hatch every lab gets:
+ *   • `<RevealSolution>`, the shared "Show answer" escape hatch every lab gets:
  *     a button → a warned solution panel, firing `onReveal` once so the lab can
  *     dock the score (peeking ≠ solving). No more dead-end "wrong/right".
  *
- * Domain glue over stage's learner seam — stays in labs so stage is a pure
+ * Domain glue over stage's learner seam, stays in labs so stage is a pure
  * engine; imports only `useLearner` from @classytic/stage.
  */
 
@@ -64,7 +64,7 @@ export interface Hints {
   reset: () => void;
 }
 
-/** Progressive hint state — reveal one at a time. */
+/** Progressive hint state, reveal one at a time. */
 export function useHints(hints: string[] = []): Hints {
   const [n, setN] = useState(0);
   return {
@@ -87,7 +87,7 @@ export function Objectives({ items }: { items?: string[] }): ReactNode {
   );
 }
 
-/** The hint ladder — revealed hints + a "need a hint?" button while more remain. */
+/** The hint ladder, revealed hints + a "need a hint?" button while more remain. */
 export function HintLadder({ hints }: { hints: Hints }): ReactNode {
   if (hints.revealed.length === 0 && !hints.hasMore) return null;
   return (
@@ -152,13 +152,16 @@ export function ChallengeCard({ questions, state, title = 'Predict first' }: { q
   return (
     <div className="lab-challenge">
       {title && <span className="lab-challenge-h">{title}{state.total > 1 && <span className="lab-challenge-count"> · {state.solvedCount}/{state.total}</span>}</span>}
-      {questions.map((q) => {
+      {questions.map((q, i) => {
         const picked = state.picks[q.id];
         const answered = picked != null;
         const correct = picked === q.answer;
         return (
           <div className="lab-challenge-q" key={q.id}>
-            <span className="lab-challenge-prompt">{q.prompt}</span>
+            <span className="lab-challenge-prompt">
+              {questions.length > 1 && <span className="lab-challenge-num" aria-hidden>{i + 1}</span>}
+              <span>{q.prompt}</span>
+            </span>
             <div className="lab-choices" role="group" aria-label={typeof q.prompt === 'string' ? q.prompt : 'choices'}>
               {q.choices.map((c) => {
                 const isPicked = picked === c.value;
@@ -172,7 +175,7 @@ export function ChallengeCard({ questions, state, title = 'Predict first' }: { q
             </div>
             {answered && (correct
               ? <span className="lab-pill" data-state="ok" role="status">✓ {q.explain ?? 'Correct'}</span>
-              : <span className="lab-pill" data-state="no" role="status">Not yet — try again</span>)}
+              : <span className="lab-pill" data-state="no" role="status">Not yet, try again</span>)}
           </div>
         );
       })}
@@ -203,7 +206,7 @@ export function AskBox({ prompt, placeholder = 'your answer', check, activity }:
         />
         <button type="button" className="lab-btn" onClick={run}>Check</button>
         {verdict === true && <span className="lab-pill" data-state="ok" role="status">✓ Correct</span>}
-        {verdict === false && <span className="lab-pill" data-state="no" role="status">Not yet — try again</span>}
+        {verdict === false && <span className="lab-pill" data-state="no" role="status">Not yet, try again</span>}
       </div>
       <div aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clipPath: 'inset(50%)' }}>
         {verdict === true ? 'Correct.' : verdict === false ? 'Not yet.' : ''}
@@ -213,7 +216,7 @@ export function AskBox({ prompt, placeholder = 'your answer', check, activity }:
 }
 
 /** Unified success / misconception / try-again feedback. */
-export function Feedback({ ok, misconception, okText = 'Correct', tryText = 'Not yet — keep going' }: { ok: boolean; misconception?: string; okText?: string; tryText?: string }): ReactNode {
+export function Feedback({ ok, misconception, okText = 'Correct', tryText = 'Not yet, keep going' }: { ok: boolean; misconception?: string; okText?: string; tryText?: string }): ReactNode {
   if (ok) return <span className="lab-pill" data-state="ok">✓ {okText}</span>;
   if (misconception) return <span className="lab-misconception" role="status"><span aria-hidden>⚠</span> {misconception}</span>;
   return <span className="lab-pill" data-state="no">{tryText}</span>;
@@ -224,7 +227,7 @@ export interface RevealSolutionProps {
   solution: ReactNode;
   /** Gate the button (e.g. only after a wrong attempt). Default: always shown. */
   available?: boolean;
-  /** Fired ONCE when the learner reveals — let the lab dock the score (peek ≠ solve). */
+  /** Fired ONCE when the learner reveals, let the lab dock the score (peek ≠ solve). */
   onReveal?: () => void;
   buttonLabel?: string;
   /** The warning shown with the solution. */
@@ -232,11 +235,11 @@ export interface RevealSolutionProps {
 }
 
 /**
- * The shared "Show answer" escape hatch — so no lab is a dead-end "wrong/right".
+ * The shared "Show answer" escape hatch, so no lab is a dead-end "wrong/right".
  * Manages its own shown/hidden; `key` it (e.g. per step/event) to reset between
  * questions. Revealing is a deliberate peek: it warns and reports via `onReveal`.
  */
-export function RevealSolution({ solution, available = true, onReveal, buttonLabel = 'Show answer', note = 'Peeking — this one won’t count as solved on your own.' }: RevealSolutionProps): ReactNode {
+export function RevealSolution({ solution, available = true, onReveal, buttonLabel = 'Show answer', note = 'Peeking, this one won’t count as solved on your own.' }: RevealSolutionProps): ReactNode {
   const [shown, setShown] = useState(false);
   if (shown) {
     return (

@@ -1,22 +1,22 @@
 'use client';
 
 /**
- * GradientDescent — the calculus that powers machine learning, made visible.
+ * GradientDescent, the calculus that powers machine learning, made visible.
  *
  * Plots a 2-variable "loss surface" f(x, y) as a heatmap, then walks downhill by
  * the rule that trains every neural net: step opposite the gradient,
  *   (x, y) ← (x, y) − lr · ∇f,   ∇f = [∂f/∂x, ∂f/∂y].
  *
- * The gradient is the engine's EXACT symbolic differentiator —
- * `differentiate(ast, 'x')` and `differentiate(ast, 'y')` — proving the scalar
+ * The gradient is the engine's EXACT symbolic differentiator , 
+ * `differentiate(ast, 'x')` and `differentiate(ast, 'y')`, proving the scalar
  * expr engine already does multivariable partials (numerical fallback otherwise).
  *
  * This is a genuine HIGH-ELEMENT-COUNT figure (a per-pixel-cell heatmap), so it
  * renders on the engine's `<CanvasLayer>` (zero-dep raw Canvas2D, HiDPI, shares
- * the coordinate system + clock) instead of one SVG node per cell — and instead
+ * the coordinate system + clock) instead of one SVG node per cell, and instead
  * of a heavy GPU dependency. Everything ELSE (controls, KaTeX, theming) is the
  * same kit every other lab uses. Drag the start point, tune the rate, watch it
- * converge — or diverge.
+ * converge, or diverge.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
@@ -37,7 +37,7 @@ export interface GradientDescentProps {
   height?: number;
 }
 
-// Perceptual "viridis" colormap — low f = deep purple valley → high f = yellow hills.
+// Perceptual "viridis" colormap, low f = deep purple valley → high f = yellow hills.
 // Uniform lightness ramp, so the bowl reads cleanly instead of flooding to one colour.
 const VIRIDIS: [number, number, number][] = [[68, 1, 84], [59, 82, 139], [33, 145, 140], [94, 201, 98], [253, 231, 37]];
 function viridis(t: number): string {
@@ -144,7 +144,7 @@ export function GradientDescent({
   const draw = useCallback((ctx: CanvasRenderingContext2D, c: CoordinateSystem) => {
     if (!model.ok) return;
     const { f } = model;
-    // Canvas can't read CSS var() in fillStyle — resolve the one themed token we use.
+    // Canvas can't read CSS var() in fillStyle, resolve the one themed token we use.
     const css = getComputedStyle(ctx.canvas);
     const accent = (css.getPropertyValue('--stage-accent').trim() || '#5b8cff');
 
@@ -187,7 +187,7 @@ export function GradientDescent({
     ctx.stroke();
     ctx.restore();
 
-    // descent path — dark halo + white core so it reads on any colour
+    // descent path, dark halo + white core so it reads on any colour
     if (path.length > 1) {
       ctx.lineJoin = 'round'; ctx.lineCap = 'round';
       const trace = (): void => { ctx.beginPath(); path.forEach((p, i) => { const [px, py] = c.toPx(p[0], p[1]); if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py); }); ctx.stroke(); };
@@ -210,7 +210,7 @@ export function GradientDescent({
       drawArrow(ctx, c, cxx, cyy, cxx - gx * scale, cyy - gy * scale, '#ffffff');
       ctx.restore();
     }
-    // current point — white halo + accent core (a clear "ball")
+    // current point, white halo + accent core (a clear "ball")
     const [pcx, pcy] = c.toPx(cxx, cyy);
     ctx.beginPath(); ctx.arc(pcx, pcy, 7.5, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill();
     ctx.beginPath(); ctx.arc(pcx, pcy, 5, 0, Math.PI * 2); ctx.fillStyle = accent; ctx.fill();
@@ -253,7 +253,7 @@ export function GradientDescent({
     return (
       <div className="not-prose">
         {title && <p style={{ fontWeight: 600, marginBottom: 6 }}>{title}</p>}
-        <div style={{ padding: '12px', fontSize: 13, color: 'var(--stage-danger)' }}>“{equation}” — {model.error}</div>
+        <div style={{ padding: '12px', fontSize: 13, color: 'var(--stage-danger)' }}>“{equation}”, {model.error}</div>
       </div>
     );
   }

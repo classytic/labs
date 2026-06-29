@@ -1,26 +1,26 @@
 'use client';
 
 /**
- * RegressionLab — least squares you can FEEL, and gradient descent you can WATCH.
+ * RegressionLab, least squares you can FEEL, and gradient descent you can WATCH.
  *
  * Drag the line's two handles: every data point grows a SQUARE whose area is its
- * squared error, and the loss (mean squared error) updates live — "least squares"
+ * squared error, and the loss (mean squared error) updates live, "least squares"
  * is literally "make the total square area smallest". Then press Descend and watch
  * the line crawl downhill on its own, squares shrinking, loss tumbling. The
- * learning-rate slider lets you make it overshoot and DIVERGE — the #1 gradient-
+ * learning-rate slider lets you make it overshoot and DIVERGE, the #1 gradient-
  * descent intuition. Reveal snaps to the closed-form optimum to check yourself.
  *
  * The litmus test for ML/data labs on the stage engine: scatter + draggable fit +
  * frame-loop optimisation + live loss, all from the shared primitives. Isometric
  * view (preserveAspect + equal spans) so a data-unit square reads as a real
- * on-screen square — and stays SSR-deterministic.
+ * on-screen square, and stays SSR-deterministic.
  */
 
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { Stage, Grid, Axes, Dot, Segment, Polygon, Label, MovableDot, useFrameLoop, useInView, type Vec2 } from '@classytic/stage';
 import { Slider, CheckButton, StatusPill } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout, LiveRegion } from '../../kit/frame.js';
-import { useCheckpoint } from '../../kit/pedagogy.js';
+import { useCheckpoint, useChallenge, ChallengeCard, type ChallengeQuestion } from '../../kit/pedagogy.js';
 import { clamp } from '../../core/util.js';
 
 export interface RegressionProps {
@@ -43,14 +43,25 @@ const DEFAULT_DATA = [
   { x: 6, y: 5.1 }, { x: 7, y: 7.2 }, { x: 8, y: 7.0 }, { x: 9, y: 8.3 },
 ];
 
+// least-squares slope sign of the given points (so the prediction answer tracks the real data)
+const slopeSign = (data: { x: number; y: number }[]): 'up' | 'down' => {
+  const n = data.length;
+  if (n === 0) return 'up';
+  const xb = data.reduce((s, p) => s + p.x, 0) / n;
+  const yb = data.reduce((s, p) => s + p.y, 0) / n;
+  let num = 0;
+  for (const p of data) num += (p.x - xb) * (p.y - yb);
+  return num >= 0 ? 'up' : 'down';
+};
+
 export function RegressionLab({
   data = DEFAULT_DATA,
   showSquares = true,
   learnRate = 0.006,
   m0 = 0.3, b0 = 3.2,
   span = 10,
-  title = 'Least squares — drag the line, watch the error',
-  prompt = 'Each point grows a square of its squared error. Make the total area smallest — then press Descend and watch gradient descent do it for you.',
+  title = 'Least squares: drag the line, watch the error',
+  prompt = 'Each point grows a square of its squared error. Make the total area smallest, then press Descend and watch gradient descent do it for you.',
   objectives,
   height = 380,
 }: RegressionProps): ReactNode {
@@ -87,6 +98,22 @@ export function RegressionLab({
   const loss0 = mse({ m: m0, b: b0 });
   const closeEnough = loss <= optLoss * 1.05 + 1e-6;
   useCheckpoint({ solved: closeEnough, activity: 'regression' });
+
+  // predict-first gate: commit a hypothesis about the trend before fitting
+  const predictQ = useMemo<ChallengeQuestion[]>(() => {
+    const answer = slopeSign(data);
+    return [{
+      id: 'slope-sign',
+      prompt: 'Before you fit the line — looking at the cloud of points, will the best-fit line slope UP or DOWN?',
+      choices: [
+        { value: 'up', label: 'slope up (positive)' },
+        { value: 'down', label: 'slope down (negative)' },
+      ],
+      answer,
+      explain: 'Least squares follows the overall trend of the cloud: as x increases the points drift the same way, so the best-fit slope picks up that direction — no dragging needed to call its sign.',
+    }];
+  }, [data]);
+  const ch = useChallenge(predictQ);
 
   const lineRef = useRef(line); lineRef.current = line;
   const iterRef = useRef(0); iterRef.current = iter;
@@ -154,7 +181,7 @@ export function RegressionLab({
         </div>
         <StatusPill ok={closeEnough}>{closeEnough ? 'best fit!' : `optimum ${optLoss.toFixed(3)}`}</StatusPill>
       </Callout>
-      {/* loss-vs-step sparkline — the descent curve */}
+      {/* loss-vs-step sparkline, the descent curve */}
       {history.length > 1 && (
         <svg viewBox="0 0 240 44" width="100%" height={44} role="img" aria-label="loss decreasing over steps" style={{ display: 'block', maxWidth: 360, marginTop: 4 }}>
           <polyline
@@ -180,9 +207,12 @@ export function RegressionLab({
   );
 
   const footer = (
-    <LiveRegion>
-      {`Line y = ${line.m.toFixed(2)}x + ${line.b.toFixed(2)}. Mean squared error ${loss.toFixed(2)}. ${closeEnough ? 'This is the best fit.' : ''}`}
-    </LiveRegion>
+    <>
+      <ChallengeCard questions={predictQ} state={ch} title="Predict first" />
+      <LiveRegion>
+        {`Line y = ${line.m.toFixed(2)}x + ${line.b.toFixed(2)}. Mean squared error ${loss.toFixed(2)}. ${closeEnough ? 'This is the best fit.' : ''}`}
+      </LiveRegion>
+    </>
   );
 
   return (

@@ -17,6 +17,17 @@ export const clamp = (v: number, lo: number, hi: number): number =>
 
 export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
 
+/** Round to `dp` decimal places (default 2), as a number. The shared rounding
+ *  the part-whole bar labs (percent / fraction / ratio) all need for readouts. */
+export const round = (n: number, dp = 2): number => Math.round(n * 10 ** dp) / 10 ** dp;
+
+/** Greatest common divisor (Euclid), 0→1 so a ratio/fraction can always reduce. */
+export const gcd = (a: number, b: number): number => {
+  a = Math.abs(a); b = Math.abs(b);
+  while (b) { [a, b] = [b, a % b]; }
+  return a || 1;
+};
+
 const DEG = Math.PI / 180;
 /** Degrees → radians. */
 export const toRad = (deg: number): number => deg * DEG;

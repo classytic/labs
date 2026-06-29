@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * IntegralExplorer — the integral as "area under the curve," on @classytic/stage.
+ * IntegralExplorer, the integral as "area under the curve," on @classytic/stage.
  * Shades f(x) over [a,b] with n Riemann rectangles (SVG Polygons); drag the
  * endpoints, crank n, switch left/mid/right, and watch the estimate converge to
  * the Simpson reference. Reuses the pure `riemannSum`/`integrate` helpers.
@@ -46,7 +46,7 @@ export function IntegralExplorer({ equation = '0.4*x^2 + 0.5', xRange = [-1, 4],
   }, [equation]);
 
   if (!model.ok) {
-    return <div className="not-prose"><p style={{ fontWeight: 600 }}>{title}</p><div style={{ padding: 12, fontSize: 13, color: 'var(--stage-danger)' }}>“{equation}” — {model.error}</div></div>;
+    return <div className="not-prose"><p style={{ fontWeight: 600 }}>{title}</p><div style={{ padding: 12, fontSize: 13, color: 'var(--stage-danger)' }}>“{equation}”, {model.error}</div></div>;
   }
   const { f, fLatex } = model;
 

@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * EnzymeRateLab — the optimum, then the cliff: enzymes denature.
+ * EnzymeRateLab, the optimum, then the cliff: enzymes denature.
  *
  * Drag temperature: the rate climbs to an optimum (more kinetic energy → more
  * successful enzyme–substrate collisions) then CRASHES as the lock-and-key active
- * site is mangled — and crucially, cooling back down does NOT restore it
+ * site is mangled, and crucially, cooling back down does NOT restore it
  * (thermal denaturation is irreversible). The bell is BUILT from plotted dots as
  * you sweep, never pre-drawn. pH mode shows the same optimum but reversibly; a
  * "fresh enzyme" reset is the only way back from a denatured run.
  *
- * Reuses core/util + kit/controls; tokenized; reduced-motion safe (no autoplay —
+ * Reuses core/util + kit/controls; tokenized; reduced-motion safe (no autoplay , 
  * the learner drags). The collision-theory vs denaturation split → a MathDerivation.
  */
 
@@ -60,8 +60,8 @@ function Enzyme({ denat }: { denat: number }): ReactNode {
 
 export function EnzymeRateLab({
   factor = 'temperature', optimum = 40, factorMin = 0, factorMax = 80,
-  title = 'The optimum, then the cliff — enzymes denature',
-  prompt = 'Drag the temperature. Past the optimum the enzyme denatures — and cooling back down won’t fix it.',
+  title = 'The optimum, then the cliff: enzymes denature',
+  prompt = 'Drag the temperature. Past the optimum the enzyme denatures, and cooling back down won’t fix it.',
   height = 240, objectives,
 }: EnzymeRateProps): ReactNode {
   const reversible = factor === 'pH';
@@ -120,7 +120,7 @@ export function EnzymeRateLab({
   const aside = (
     <Callout tone={state === 'optimum' ? 'result' : 'info'}>
       <div style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>{reversible ? 'pH' : 'temperature'} {f.toFixed(0)}{unit} · rate {(rate * 100).toFixed(0)}</div>
-      <StatusPill ok={state === 'optimum'}>{state === 'optimum' ? 'at the optimum ✓' : state === 'denatured' ? 'denatured — no recovery' : state === 'falling' ? (reversible ? 'past optimum' : 'denaturing…') : 'climbing (more collisions)'}</StatusPill>
+      <StatusPill ok={state === 'optimum'}>{state === 'optimum' ? 'at the optimum ✓' : state === 'denatured' ? 'denatured, no recovery' : state === 'falling' ? (reversible ? 'past optimum' : 'denaturing…') : 'climbing (more collisions)'}</StatusPill>
     </Callout>
   );
 

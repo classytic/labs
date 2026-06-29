@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * HistogramBoxLab — the SHAPE of data. A histogram (adjustable bins) sits above a
+ * HistogramBoxLab, the SHAPE of data. A histogram (adjustable bins) sits above a
  * box-and-whisker on a SHARED axis, so the two views of the same numbers line up:
  * the histogram shows the distribution's shape, the box plot its five-number summary
  * (min · Q1 · median · Q3 · max) and outliers (beyond 1.5·IQR). Click in the plot to
@@ -128,11 +128,11 @@ export function HistogramBoxLab({ data = PRESETS.symmetric, bins = 8, min = 0, m
 
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', margin: '10px 0', padding: '8px 0', borderTop: '1px solid var(--stage-grid)', borderBottom: '1px solid var(--stage-grid)' }}>
         {stat('n', String(vals.length))}
-        {stat('mean', vals.length ? mean(vals).toFixed(1) : '—')}
-        {stat('median', vals.length ? String(median(vals)) : '—')}
-        {stat('Q1', vals.length ? String(fn.q1) : '—')}
-        {stat('Q3', vals.length ? String(fn.q3) : '—')}
-        {stat('IQR', vals.length ? String(fn.iqr) : '—')}
+        {stat('mean', vals.length ? mean(vals).toFixed(1) : ', ')}
+        {stat('median', vals.length ? String(median(vals)) : ', ')}
+        {stat('Q1', vals.length ? String(fn.q1) : ', ')}
+        {stat('Q3', vals.length ? String(fn.q3) : ', ')}
+        {stat('IQR', vals.length ? String(fn.iqr) : ', ')}
         {stat('outliers', String(outliers.length))}
       </div>
     </>

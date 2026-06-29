@@ -1,0 +1,1 @@
+import { GasProcessLab, GasProcessProps } from "./preset.mjs";

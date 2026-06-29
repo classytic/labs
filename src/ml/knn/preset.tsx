@@ -1,19 +1,19 @@
 'use client';
 
 /**
- * KNNBoundaryLab — the answer to "a line can't split XOR." k-nearest-neighbours
+ * KNNBoundaryLab, the answer to "a line can't split XOR." k-nearest-neighbours
  * paints the whole plane by asking, at every point, "what are my k closest
  * labelled neighbours, and which class wins the vote?" The boundary it carves is
- * CURVY — it shrugs off XOR and even concentric rings that no straight line could
+ * CURVY, it shrugs off XOR and even concentric rings that no straight line could
  * touch. Drag the ✦ test point to watch its k neighbours light up and cast their
  * votes; slide k to feel the trade-off: k=1 memorises every island (jagged,
  * overfit), big k smooths everything (and starts ignoring real structure).
  *
- * The decision regions are a CanvasLayer heatmap (one vote per cell — exactly the
+ * The decision regions are a CanvasLayer heatmap (one vote per cell, exactly the
  * high-element-count job canvas is for); points + neighbour spokes draw on top.
  */
 
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useMemo, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { CanvasLayer, type CoordinateSystem } from '@classytic/stage';
 import { mulberry32, gaussian } from '../../core/rng.js';
 import { Chip, Slider } from '../../kit/controls.js';
@@ -83,7 +83,7 @@ export function KNNBoundaryLab({ dataset = 'circles', k = 5, seed = 7, title = '
     const fg = tok('--stage-fg', '#222'), bg = tok('--stage-bg', '#fff');
     const W = ctx.canvas.clientWidth || 640, H = height, CELL = 7;
     ctx.clearRect(0, 0, W, H);
-    // decision heatmap — one majority vote per cell
+    // decision heatmap, one majority vote per cell
     for (let px = 0; px < W; px += CELL) for (let py = 0; py < H; py += CELL) {
       const [mx, my] = c.toMath(px + CELL / 2, py + CELL / 2);
       ctx.fillStyle = vote(nearest(mx, my, kk)) ? A1 : A0; ctx.globalAlpha = 0.16; ctx.fillRect(px, py, CELL + 1, CELL + 1);
@@ -110,8 +110,36 @@ export function KNNBoundaryLab({ dataset = 'circles', k = 5, seed = 7, title = '
 
   const vw = useMemo(() => view, []);
 
+  const clampX = (x: number): number => Math.max(view.xMin, Math.min(view.xMax, x));
+  const clampY = (y: number): number => Math.max(view.yMin, Math.min(view.yMax, y));
+  // Keyboard nudge for the query point: a CanvasLayer has no DOM children to tab
+  // to, so the wrapper below is the focusable target. Arrow keys move ✦ by 0.25
+  // math units (= 1/40 of the 10-unit view span), clamped to the view, via the
+  // SAME setQuery the drag handler uses.
+  const KEY_STEP = 0.25;
+  const onKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
+    let dx = 0, dy = 0;
+    if (e.key === 'ArrowLeft') dx = -KEY_STEP;
+    else if (e.key === 'ArrowRight') dx = KEY_STEP;
+    else if (e.key === 'ArrowUp') dy = KEY_STEP; // math-up is +y
+    else if (e.key === 'ArrowDown') dy = -KEY_STEP;
+    else return;
+    e.preventDefault();
+    setQuery((q) => ({ x: clampX(q.x + dx), y: clampY(q.y + dy) }));
+  }, []);
+
   const figure = (
-    <CanvasLayer view={vw} height={height} draw={draw} onPointerMath={(m) => setQuery({ x: Math.max(-R, Math.min(R, m[0])), y: Math.max(-R, Math.min(R, m[1])) })} ariaLabel={`k-NN boundary, k ${kk}, accuracy ${(acc * 100).toFixed(0)}%`} />
+    <div
+      tabIndex={0}
+      role="application"
+      aria-label={`k-NN decision boundary, k ${kk}. Test point predicts class ${qCls ? 'B' : 'A'}. Accuracy ${(acc * 100).toFixed(0)} percent. Use arrow keys to move the test point.`}
+      onKeyDown={onKeyDown}
+      style={{ outline: 'none', borderRadius: 6, position: 'relative' }}
+      onFocus={(e) => { e.currentTarget.style.outline = '2px solid var(--stage-accent, #1c7ed6)'; e.currentTarget.style.outlineOffset = '2px'; }}
+      onBlur={(e) => { e.currentTarget.style.outline = 'none'; }}
+    >
+      <CanvasLayer view={vw} height={height} draw={draw} onPointerMath={(m) => setQuery({ x: clampX(m[0]), y: clampY(m[1]) })} ariaLabel={`k-NN boundary, k ${kk}, accuracy ${(acc * 100).toFixed(0)}%`} />
+    </div>
   );
 
   const aside = (

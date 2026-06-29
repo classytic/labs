@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * TrigExplorer — the unit circle ↔ sine wave connection (3Blue1Brown style),
+ * TrigExplorer, the unit circle ↔ sine wave connection (3Blue1Brown style),
  * but interactive: drag the angle (or press play) and watch sin/cos trace out.
  *
- * Now on the @classytic/stage engine (SVG, accessible, themed) — the unit circle,
+ * Now on the @classytic/stage engine (SVG, accessible, themed), the unit circle,
  * radius, projections, and unrolled wave are real primitives, the angle handle is
  * a `MovableDot` (keyboard + aria), and animation runs on the engine clock.
  *
- * Deliberately FOCUSED on one idea — "sin and cos are the shadows of a point
+ * Deliberately FOCUSED on one idea, "sin and cos are the shadows of a point
  * going around a circle." Plotting arbitrary trig (tan, y=a·sin(b·x), …) is the
  * job of the general `Grapher`; this widget stays clean. Configurable only in
  * which of sin/cos to show.
@@ -114,7 +114,7 @@ export function TrigExplorer({ functions, startDeg = 30 }: TrigExplorerProps = {
   return (
     <LabFrame
       title="Trig Explorer"
-      prompt="Drag the angle on the circle (or press play) — sin and cos are just its shadows."
+      prompt="Drag the angle on the circle (or press play), sin and cos are just its shadows."
       controls={controls}
     >
       {figure}

@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * WorkEnergyLab — "work done" you can SEE: work is the AREA under the force–distance
- * graph. Two situations on one figure — a SPRING (F = kx, so W = ½kx², the triangle)
+ * WorkEnergyLab, "work done" you can SEE: work is the AREA under the force–distance
+ * graph. Two situations on one figure, a SPRING (F = kx, so W = ½kx², the triangle)
  * and a CONSTANT force (W = Fx, the rectangle). Drag the distance and the shaded area
  * (the work) grows with it; the equation updates in real maths (KaTeX). Interactive,
- * not a timed sim — the graph recomputes as you drag.
+ * not a timed sim, the graph recomputes as you drag.
  */
 
 import { useState, type ReactNode } from 'react';
@@ -56,7 +56,7 @@ function Picture({ mode, x }: { mode: 'spring' | 'constant'; x: number }): React
 
 export function WorkEnergyLab({
   mode: mode0 = 'spring',
-  title = 'Work done — it’s the area under the force',
+  title = 'Work done: it’s the area under the force',
   prompt = 'Pull the distance up and watch the work (the shaded area) grow. A spring fights back harder the further you go, so its work grows as x².',
   objectives = ['Read work as the area under a force–distance graph', 'Spring: W = ½kx² (the triangle)', 'Constant force: W = Fx (the rectangle)'],
 }: WorkEnergyProps = {}): ReactNode {

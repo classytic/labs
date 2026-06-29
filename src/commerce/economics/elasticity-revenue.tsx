@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * ElasticityRevenueLab — the stretch test: elasticity is NOT slope.
+ * ElasticityRevenueLab, the stretch test: elasticity is NOT slope.
  *
- * Rotate one demand line about a pivot from steep (inelastic — few substitutes,
- * e.g. insulin) to flat (elastic — many substitutes, e.g. one water brand). Drag
+ * Rotate one demand line about a pivot from steep (inelastic, few substitutes,
+ * e.g. insulin) to flat (elastic, many substitutes, e.g. one water brand). Drag
  * the price down the line and the total-revenue rectangle (P×Q) grows on the
- * elastic upper half and shrinks on the inelastic lower half — the revenue
+ * elastic upper half and shrinks on the inelastic lower half, the revenue
  * see-saw. The point-elasticity pill flips ELASTIC → UNIT → INELASTIC down a
  * SINGLE straight line, killing the "slope = elasticity" error.
  *
@@ -39,7 +39,7 @@ const PRESETS = [
 
 export function ElasticityRevenueLab({
   pivot = { p: 5, q: 5 }, priceMax = 11, qtyMax = 13, anchorPresets = PRESETS,
-  title = 'The stretch test — elasticity is not slope',
+  title = 'The stretch test: elasticity is not slope',
   prompt = 'Rotate the curve (substitutes), then drag the price: watch the revenue box + the elasticity flip.',
   height = 320, objectives,
 }: ElasticityRevenueProps): ReactNode {
@@ -81,7 +81,7 @@ export function ElasticityRevenueLab({
         </Stage>
       </div>
       <LiveRegion>
-        {`At price ${price.toFixed(1)}, quantity ${q.toFixed(1)}, revenue ${revenue.toFixed(1)}. Elasticity ${E === Infinity ? 'infinite' : E.toFixed(2)} — ${kind}.`}
+        {`At price ${price.toFixed(1)}, quantity ${q.toFixed(1)}, revenue ${revenue.toFixed(1)}. Elasticity ${E === Infinity ? 'infinite' : E.toFixed(2)}, ${kind}.`}
       </LiveRegion>
     </>
   );

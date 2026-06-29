@@ -1,11 +1,11 @@
 /**
- * @classytic/labs/schemas — the validation contract for every authorable lab.
+ * @classytic/labs/schemas, the validation contract for every authorable lab.
  *
  * Real zod schemas for the lab DATA shapes (decks, tiles, items, vectors) that the
  * language + physics blocks reuse to validate authored arrays (no `z.any()`). zod is
  * isolated to this subpath + `/blocks`.
  *
- * Per-lab PROP schemas are NOT here — each lives on its own `defineBlock({ schema })`
+ * Per-lab PROP schemas are NOT here, each lives on its own `defineBlock({ schema })`
  * (the single source of truth), so there's no parallel registry to drift. A consuming
  * app builds LLM tools straight from the block schemas if it wants.
  *
@@ -29,7 +29,7 @@ import type { ControlConfig } from '../kit/frame.js';
 // ── shared scalars ──────────────────────────────────────────────────────────
 export const posSchema = z.enum(['noun', 'verb', 'article', 'adjective', 'preposition', 'pronoun', 'conjunction', 'adverb', 'other']);
 export const relationSchema = z.enum(['in', 'on', 'over', 'above', 'under', 'below', 'beside', 'between', 'behind', 'infront', 'at']);
-export const articleAnswerSchema = z.enum(['a', 'an', 'the', '—']);
+export const articleAnswerSchema = z.enum(['a', 'an', 'the', ', ']);
 export const vec2Schema = z.object({ x: z.number(), y: z.number() });
 
 /** A durable visual-asset reference (emoji / registered SVG id / image URL). */

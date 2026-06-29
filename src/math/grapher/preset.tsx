@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * Grapher — a creator-authored equation/function plotter on the @classytic/stage
+ * Grapher, a creator-authored equation/function plotter on the @classytic/stage
  * engine. A creator types one or more formulas in `x` (and named params), optionally
  * exposes params as sliders, and gets a clean auto-scaled multi-curve plot.
  *
- * Framed, labelled axes (NOT through-origin) so it reads cleanly for ANY window —
+ * Framed, labelled axes (NOT through-origin) so it reads cleanly for ANY window , 
  * including off-origin ranges like x∈[250,400] where a 0-axis would sit off-screen.
  * Supports a LOG y-scale: essential for exponentials (e.g. Arrhenius rate ∝ e^(−Eₐ/RT)),
  * where a linear axis collapses the curve onto the baseline but a log axis makes it a
@@ -36,7 +36,7 @@ export interface GrapherProps {
   params?: GraphParam[];
   xRange?: [number, number];
   yRange?: [number, number] | 'auto';
-  /** `log` plots log₁₀(y) with decade ticks — for exponentials/rates. */
+  /** `log` plots log₁₀(y) with decade ticks, for exponentials/rates. */
   yScale?: 'linear' | 'log';
   title?: string;
   subtitle?: string;
@@ -66,7 +66,7 @@ function niceTicks(min: number, max: number, target = 6): number[] {
   for (let v = Math.ceil(min / step) * step; v <= max + step * 1e-6; v += step) out.push(Math.abs(v) < step * 1e-6 ? 0 : v);
   return out;
 }
-/** Integer (decade) ticks for a log axis — falls back to nice ticks for a sub-decade window. */
+/** Integer (decade) ticks for a log axis, falls back to nice ticks for a sub-decade window. */
 function decadeTicks(min: number, max: number): number[] {
   const lo = Math.ceil(min - 1e-9), hi = Math.floor(max + 1e-9);
   const out: number[] = [];
@@ -175,7 +175,7 @@ export function Grapher({ equations, params = [], xRange = [-6.5, 6.5], yRange =
       </div>
       {errors.length > 0 && (
         <div style={{ padding: '2px', fontSize: 12, color: 'var(--stage-danger)' }}>
-          {errors.map((e, i) => <div key={i}>“{e.expr}” — {e.error}</div>)}
+          {errors.map((e, i) => <div key={i}>“{e.expr}”, {e.error}</div>)}
         </div>
       )}
     </>

@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * Vertex-form parabola — drag the vertex (h,k); the curve y = a(x−h)²+k and its
+ * Vertex-form parabola, drag the vertex (h,k); the curve y = a(x−h)²+k and its
  * equation update live. A direct composition of @classytic/stage primitives
- * (Plot + a draggable handle + KaTeX), no scene DAG needed — shows the
+ * (Plot + a draggable handle + KaTeX), no scene DAG needed, shows the
  * primitives are usable on their own, not only through <Scene>.
  */
 
@@ -37,13 +37,13 @@ export function VertexParabolaLab({ a = 1, height = 380 }: ParabolaProps): React
       <Axes />
       <Plot.OfX y={y} color="var(--stage-accent)" weight={3} />
       <Tex x={3.5} y={6} tex={equationTex(a, h, k)} size={18} />
-      <MovableDot value={vertex} onMove={(p) => setVertex({ x: Math.round(p.x), y: Math.round(p.y) })} color="var(--stage-good)" ariaLabel="parabola vertex" />
+      <MovableDot value={vertex} onMove={(p) => setVertex({ x: Math.round(p.x), y: Math.round(p.y) })} snap={1} color="var(--stage-good)" ariaLabel="parabola vertex" />
     </Stage>
   );
 
   const footer = (
     <p className="lab-prompt">
-      Drag the <strong>vertex</strong> — the curve and the equation update. Vertex form <TexHtml tex="y = a(x-h)^2 + k" />.
+      Drag the <strong>vertex</strong>, the curve and the equation update. Vertex form <TexHtml tex="y = a(x-h)^2 + k" />.
     </p>
   );
 

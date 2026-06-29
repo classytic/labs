@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * balance-lever asset — a GENERAL torque balance ("balance the mobile"), built
+ * balance-lever asset, a GENERAL torque balance ("balance the mobile"), built
  * on @classytic/stage. Weights hang at chosen DISTANCES along an arm and
  * balance when net torque Σ(w·d) is equal each side. The resolver lays each
  * weight at its distance on the (tilted) beam and draws it via the SHARED kit
- * glyphs (XBlockGlyph for an unknown, WeightGlyph for a known mass) — the same
+ * glyphs (XBlockGlyph for an unknown, WeightGlyph for a known mass), the same
  * vocabulary as balance-algebra, no copy-paste. Physics (torque, tilt,
  * balanced) is computed in the scene DAG and bound in.
  */

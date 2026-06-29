@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * SelectionLab — "draw from the bag": counting (and probability) when you SELECT a
+ * SelectionLab, "draw from the bag": counting (and probability) when you SELECT a
  * handful from groups, the pattern behind colored-ball urns and card hands. Pick how
  * many of each colour you want in the draw; the lab counts the favourable selections
  * as a product of per-group choices and divides by the total selections:
@@ -18,6 +18,7 @@ import { nCr } from '../core/combinatorics.js';
 import { Chip, Stepper, CheckButton, StatusPill } from '../../kit/controls.js';
 import { LabFrame, ControlBar, Field, Callout } from '../../kit/frame.js';
 import { useHints, HintLadder, RevealSolution, useCheckpoint } from '../../kit/pedagogy.js';
+import { CATEGORICAL } from '../../kit/palette.js';
 import { useControlSurface } from '@classytic/stage';
 import { Tex } from '../../core/tex.js';
 
@@ -35,7 +36,7 @@ export interface SelectionProps {
   controlId?: string;
 }
 
-const PALETTE = ['#e03131', '#1c7ed6', '#2f9e44', '#f59f00', '#9c36b5', '#0ca678'];
+const PALETTE = CATEGORICAL;
 const NAMED: Record<string, string> = { red: '#e03131', blue: '#1c7ed6', green: '#2f9e44', yellow: '#f59f00', purple: '#9c36b5', teal: '#0ca678', black: '#343a40', orange: '#e8590c' };
 const colorOf = (g: SelectionGroup, i: number): string => g.color ?? NAMED[g.label.toLowerCase()] ?? PALETTE[i % PALETTE.length]!;
 const frac = (w: number): string => { for (let d = 2; d <= 200; d++) { const x = w * d; if (Math.abs(x - Math.round(x)) < 1e-9) return `${Math.round(x)}/${d}`; } return w.toFixed(4); };
@@ -77,7 +78,7 @@ export function SelectionLab({
   const figure = (
     <div style={{ display: 'grid', gap: 16 }}>
       <div>
-        <p className="lab-field-label">the bag — {N} total</p>
+        <p className="lab-field-label">the bag, {N} total</p>
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
           {groups.map((g, i) => (
             <div key={g.label} style={{ display: 'grid', gap: 4, justifyItems: 'start' }}>
@@ -93,7 +94,7 @@ export function SelectionLab({
       </div>
 
       <div>
-        <p className="lab-field-label">draw {k} — you want: {groups.map((g, i) => `${pick[i] ?? 0} ${g.label}`).join(' + ')}</p>
+        <p className="lab-field-label">draw {k}, you want: {groups.map((g, i) => `${pick[i] ?? 0} ${g.label}`).join(' + ')}</p>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', minHeight: 26 }}>
           {groups.flatMap((g, i) => Array.from({ length: pick[i] ?? 0 }, (_, j) => <span key={`${i}-${j}`} style={{ width: 22, height: 22, borderRadius: '50%', background: colorOf(g, i) }} />))}
           {!valid && <span style={{ fontSize: 13, color: 'var(--stage-danger, #e03131)', fontWeight: 600 }}>← must total exactly {k} (now {sumPick})</span>}
@@ -107,7 +108,7 @@ export function SelectionLab({
             <div><Tex tex={`\\text{ways} = ${groups.map((g, i) => `C(${g.count},${pick[i]})`).join(' \\cdot ')} = ${groups.map((g, i) => nCr(g.count, pick[i]!)).join(' \\cdot ')} =`} /> <span style={{ color: 'var(--stage-good)' }}>{ways}</span></div>
             {mode === 'probability' && <div style={{ marginTop: 4 }}><Tex tex={`P = ${ways} / C(${N},${k}) = ${ways}/${total} =`} /> <span style={{ color: 'var(--stage-good)' }}>{frac(prob)}</span> <Tex tex={`\\approx ${prob.toFixed(3)}`} /></div>}
           </>
-        ) : <span style={{ color: 'var(--stage-muted)', fontWeight: 500, fontSize: 14 }}>Set how many of each colour to draw — they must add up to {k}.</span>}
+        ) : <span style={{ color: 'var(--stage-muted)', fontWeight: 500, fontSize: 14 }}>Set how many of each colour to draw, they must add up to {k}.</span>}
       </div>
     </div>
   );
@@ -116,7 +117,7 @@ export function SelectionLab({
     <>
       <Callout tone="result">
         <span style={{ fontSize: 12, color: 'var(--stage-muted)', fontWeight: 600 }}>{mode === 'probability' ? 'probability' : 'favourable ways'}</span>
-        <span className="lab-callout-big">{mode === 'probability' ? (valid ? frac(prob) : '—') : ways.toLocaleString()}</span>
+        <span className="lab-callout-big">{mode === 'probability' ? (valid ? frac(prob) : ', ') : ways.toLocaleString()}</span>
         <span style={{ fontSize: 12, color: 'var(--stage-muted)' }}>of C({N},{k}) = {total.toLocaleString()} total draws</span>
       </Callout>
       <div>

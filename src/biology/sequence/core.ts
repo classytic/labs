@@ -1,9 +1,9 @@
 /**
- * Molecular-sequence core — the base-pairing rules that drive SequenceLab. One
+ * Molecular-sequence core, the base-pairing rules that drive SequenceLab. One
  * tool covers three topics by swapping the rule:
- *   • replication   — DNA template → new DNA strand   (A–T, G–C)
- *   • transcription — DNA template → mRNA             (A–U, T–A, G–C, C–G)
- *   • translation   — mRNA codons → amino acids       (the genetic code)
+ *   • replication  , DNA template → new DNA strand   (A–T, G–C)
+ *   • transcription, DNA template → mRNA             (A–U, T–A, G–C, C–G)
+ *   • translation  , mRNA codons → amino acids       (the genetic code)
  *
  * Pure data + a builder; the UI lives in the preset. The "unit" is a base for
  * replication/transcription and a 3-letter codon for translation, so the same
@@ -29,7 +29,7 @@ export const BASE_COLOR: Record<string, string> = {
   C: 'var(--stage-accent)',
 };
 
-/** standard genetic code — mRNA codon → amino acid (3-letter), Stop for terminators. */
+/** standard genetic code, mRNA codon → amino acid (3-letter), Stop for terminators. */
 export const CODON_TABLE: Record<string, string> = {
   UUU: 'Phe', UUC: 'Phe', UUA: 'Leu', UUG: 'Leu', CUU: 'Leu', CUC: 'Leu', CUA: 'Leu', CUG: 'Leu',
   AUU: 'Ile', AUC: 'Ile', AUA: 'Ile', AUG: 'Met', GUU: 'Val', GUC: 'Val', GUA: 'Val', GUG: 'Val',
@@ -51,7 +51,7 @@ export interface SequenceModel {
   options: string[];               // palette of possible partners
   topLabel: string;
   bottomLabel: string;
-  /** true when the partner is itself a base (replication/transcription) — colour it. */
+  /** true when the partner is itself a base (replication/transcription), colour it. */
   partnerIsBase: boolean;
 }
 

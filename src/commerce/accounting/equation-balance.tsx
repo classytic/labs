@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * EquationBalanceLab — the balance sheet that must stay LEVEL.
+ * EquationBalanceLab, the balance sheet that must stay LEVEL.
  *
  * Apply each authored transaction one at a time; weights slide onto a two-pan
- * scale (left = Assets, right = Liabilities + Equity) and the beam re-levels —
+ * scale (left = Assets, right = Liabilities + Equity) and the beam re-levels , 
  * because every balanced entry changes both sides equally, "Assets = Liabilities
  * + Equity" stops being a formula and becomes a felt constraint. A free-post mode
  * lets the learner nudge ONE side and watch the books visibly tip (the #1
  * misconception drill). Reuses the shared ScaleFrame; tokenized; reduced-motion safe.
  *
  * The A = L + E rearrangement (Equity = Assets − Liabilities) belongs in a paired
- * MathDerivation — this lab only makes the constraint felt.
+ * MathDerivation, this lab only makes the constraint felt.
  */
 
 import { useMemo, useState, type ReactNode } from 'react';
@@ -56,7 +56,7 @@ const HB = 4.2, PAN_HANG = 1.35, PAN_R = 1.75, BASE_Y = -3.6;
 export function EquationBalanceLab({
   accounts = DEMO_ACCOUNTS, transactions = DEMO_TXNS, freePost = false,
   start = 0, title = 'The balance sheet that must stay level',
-  prompt = 'Apply each transaction — Assets must always equal Liabilities + Equity.',
+  prompt = 'Apply each transaction, Assets must always equal Liabilities + Equity.',
   height = 320, objectives,
 }: EquationBalanceProps): ReactNode {
   const [applied, setApplied] = useState(clamp(start, 0, transactions.length));
@@ -76,7 +76,7 @@ export function EquationBalanceLab({
   const imbalance = assets - rhs;
   const balanced = Math.abs(imbalance) < 0.005;
   const ref = Math.max(assets, rhs, 1);
-  // A real scale tips CLEARLY to the heavy side — level only when truly balanced.
+  // A real scale tips CLEARLY to the heavy side, level only when truly balanced.
   // Map any non-zero imbalance to an unmistakable tilt (≥ ~7°), saturating to a
   // full tip; tiny `imbalance/ref` ratios were leaving the beam looking level.
   const frac = clamp(Math.abs(imbalance) / ref, 0, 1);
@@ -152,7 +152,7 @@ export function EquationBalanceLab({
   );
 
   const footer = (
-    <StatusPill ok={balanced}>{balanced ? 'Books balance ✓' : `Off by ${money(Math.abs(imbalance))} — not balanced`}</StatusPill>
+    <StatusPill ok={balanced}>{balanced ? 'Books balance ✓' : `Off by ${money(Math.abs(imbalance))}, not balanced`}</StatusPill>
   );
 
   return <LabFrame title={title} prompt={prompt} objectives={objectives} controls={controls} footer={footer}>{figure}</LabFrame>;

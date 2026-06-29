@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/blocks — discrete-math & probability lab block specs.
+ * @classytic/labs/blocks, discrete-math & probability lab block specs.
  *
  * `defineBlock` editor adapters for the discrete labs (logic, counting, sets,
  * probability, distributions). Each pairs a Zod schema with a `Component` that, in
@@ -16,8 +16,9 @@ import {
   TruthTableLab, CountingTreeLab, VennSetBoardLab, SampleSpaceBoardLab, BooleanCircuitLab,
   KarnaughMapLab, MonteCarloLab, MontyHallLab, OutcomeBuilderLab, BayesLab, CountingSlotsLab,
   SelectionLab, ArrangementsLab, PascalTriangleLab, BinomialDistributionLab, HypergeometricLab,
-  ExpectedValueLab, LawOfLargeNumbersLab,
+  ExpectedValueLab, LawOfLargeNumbersLab, CombinationStudioLab, COUNTING_RULES,
 } from '../discrete/index.js';
+import { RuleLab, type RuleDef } from '../kit/rule.js';
 
 const common = { title: z.string().optional(), prompt: z.string().optional(), objectives: z.array(z.string()).optional(), hints: z.array(z.string()).optional(), controlId: z.string().optional() };
 
@@ -58,10 +59,15 @@ const mcSchema = z.object({ experiment: z.object({ kind: z.enum(['montyHall', 'p
 export const MonteCarloBlock = lab('monte-carlo', 'MonteCarlo', 'Monte Carlo (law of large numbers)', 'Estimate a probability by sampling: π-darts (scatter) or a convergence run-chart (Monty Hall, dice-sum, Bernoulli) homing onto the true value.', mcSchema, (a) => <MonteCarloLab {...a} />);
 
 const montySchema = z.object({ doors: z.number().optional(), seed: z.number().optional(), ...common });
-export const MontyHallBlock = lab('monty-hall', 'MontyHall', 'Monty Hall game', 'Play the paradox: pick a door, Monty opens a goat, stay or switch — every game grows the switch/stay win-rate bars to 2/3 vs 1/3.', montySchema, (a) => <MontyHallLab {...a} />);
+export const MontyHallBlock = lab('monty-hall', 'MontyHall', 'Monty Hall game', 'Play the paradox: pick a door, Monty opens a goat, stay or switch, every game grows the switch/stay win-rate bars to 2/3 vs 1/3.', montySchema, (a) => <MontyHallLab {...a} />);
 
 const outcomeSchema = z.object({ stages: z.array(z.enum(['coin', 'die'])).optional(), maxOutcomes: z.number().optional(), ...common });
 export const OutcomeBuilderBlock = lab('outcome-builder', 'OutcomeBuilder', 'Sample-space builder (coins & dice)', 'Add coins/dice and watch every outcome fan out with the counting principle; click outcomes to mark an event → P = favourable ÷ total.', outcomeSchema, (a) => <OutcomeBuilderLab {...a} />);
+
+const comboOptionSchema = z.object({ id: z.string(), label: z.string(), emoji: z.string().optional(), color: z.string().optional() });
+const comboCatSchema = z.object({ id: z.string(), label: z.string(), slot: z.enum(['top', 'bottom', 'hat', 'hold', 'none']).optional(), options: z.array(comboOptionSchema) });
+const studioSchema = z.object({ scenario: z.string().optional(), categories: z.array(comboCatSchema).optional(), figure: z.enum(['character', 'card']).optional(), startActive: z.number().optional(), maxWall: z.number().optional(), ...common });
+export const CombinationStudioBlock = lab('combination-studio', 'CombinationStudio', 'Combination studio (rule of product, felt)', 'The multiplication principle made tactile: pick from each rack, assemble each outcome (a dressed character or an emoji card), fill a rows × columns wall, then add a variable and watch the total multiply. Predict-first. Any authored scenario (outfits, sundaes, plates, routes).', studioSchema, (a) => <CombinationStudioLab {...a} />);
 
 const bayesSchema = z.object({ prior: z.number().default(0.01), sensitivity: z.number().default(0.9), falsePositive: z.number().default(0.09), population: z.number().default(1000), conditionLabels: z.tuple([z.string(), z.string()]).optional(), testLabels: z.tuple([z.string(), z.string()]).optional(), predict: z.boolean().optional(), ...common });
 export const BayesBlock = lab('bayes', 'Bayes', 'Bayes / base-rate trap', 'Conditional probability via an area model + natural-frequency tree: a rare-disease positive test is usually a false alarm. Sliders for prevalence/sensitivity/false-positive.', bayesSchema, (a) => <BayesLab {...a} />);
@@ -90,10 +96,36 @@ export const ExpectedValueBlock = lab('expected-value', 'ExpectedValue', 'Expect
 const llnSchema = z.object({ experiment: z.enum(['coin', 'die']).optional(), ...common });
 export const LawOfLargeNumbersBlock = lab('lln', 'LawOfLargeNumbers', 'Law of large numbers', 'A coin/die sampler: running frequencies converge onto the true probabilities as draws pile up.', llnSchema, (a) => <LawOfLargeNumbersLab {...a} />);
 
+// The concept engine as an authorable block: pick a built-in counting rule (with
+// its live worked calculator) OR author any concept's static card (formula +
+// analogy + derivation + tricks, all data — no code).
+const ruleSchema = z.object({
+  preset: z.enum(['none', 'rule-of-product', 'rule-of-sum', 'factorial', 'permutation', 'combination', 'perm-with-rep']).default('none'),
+  name: z.string().default('My rule'),
+  formula: z.string().default('a^2 + b^2 = c^2'),
+  analogy: z.string().optional(),
+  tricks: z.array(z.string()).optional(),
+  derivation: z.array(z.object({ tex: z.string(), note: z.string().optional() })).optional(),
+  title: z.string().optional(),
+  prompt: z.string().optional(),
+});
+function ruleComp(a: z.infer<typeof ruleSchema>): ReactNode {
+  const builtin = a.preset && a.preset !== 'none' ? COUNTING_RULES.find((r) => r.id === a.preset) : undefined;
+  const rule: RuleDef = builtin ?? {
+    id: 'custom', name: a.name ?? 'Rule', formula: a.formula ?? 'a^2 + b^2 = c^2',
+    ...(a.analogy ? { analogy: a.analogy } : {}),
+    ...(a.derivation?.length ? { derivation: a.derivation } : {}),
+    ...(a.tricks?.length ? { tricks: a.tricks } : {}),
+  };
+  return <RuleLab rule={rule} title={a.title} prompt={a.prompt} />;
+}
+export const RuleCardBlock = lab('rule-card', 'RuleCard', 'Rule card (concept)', 'A formula taught properly: an analogy, a live worked calculator, a revealable derivation, and tricks. Pick a built-in counting rule (with its calculator), or author your own concept (formula + analogy + derivation + tricks, as data).', ruleSchema, ruleComp);
+
 export const discreteBlocks = [
   TruthTableBlock, CountingTreeBlock, VennBlock, SampleSpaceBlock, BooleanCircuitBlock, KarnaughBlock,
   MonteCarloBlock, MontyHallBlock, OutcomeBuilderBlock, BayesBlock, CountingSlotsBlock, SelectionBlock,
   ArrangementsBlock, PascalBlock, BinomialBlock, HypergeometricBlock, ExpectedValueBlock, LawOfLargeNumbersBlock,
+  CombinationStudioBlock, RuleCardBlock,
 ] as const;
 export const discreteComponents = {
   TruthTable: TruthTableLab, CountingTree: CountingTreeLab, VennSetBoard: VennSetBoardLab, SampleSpaceBoard: SampleSpaceBoardLab,
@@ -101,4 +133,5 @@ export const discreteComponents = {
   OutcomeBuilder: OutcomeBuilderLab, Bayes: BayesLab, CountingSlots: CountingSlotsLab, Selection: SelectionLab,
   Arrangements: ArrangementsLab, PascalTriangle: PascalTriangleLab, Binomial: BinomialDistributionLab,
   Hypergeometric: HypergeometricLab, ExpectedValue: ExpectedValueLab, LawOfLargeNumbers: LawOfLargeNumbersLab,
+  CombinationStudio: CombinationStudioLab, RuleCard: ruleComp,
 } as const;

@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * AtwoodLab — "Which way, and how fast?", two masses over a pulley.
+ * AtwoodLab, "Which way, and how fast?", two masses over a pulley.
  *
  * The classic Atwood machine: link two masses over a frictionless pulley and the
  * WHOLE system shares one acceleration. Gravity pulls each side (m·g), but only
@@ -39,7 +39,7 @@ const TRAVEL = 2.6;    // max travel before a mass hits floor/pulley
 
 export function AtwoodLab({
   m1 = 3, m2 = 2,
-  title = 'Atwood machine — which way, and how fast?',
+  title = 'Atwood machine: which way, and how fast?',
   prompt = 'Two masses share one rope over a pulley. Only the difference in weight drives them, while the total mass resists: a = (m₁ − m₂)g / (m₁ + m₂). Predict which side falls, then release.',
   objectives,
   controlConfig,
@@ -120,10 +120,10 @@ export function AtwoodLab({
           <span>speed now = <strong>{v.toFixed(1)} m/s</strong></span>
         </span>
       </Callout>
-      <StatusPill ok={!balanced}>{balanced ? 'balanced — no motion' : `${ma > mb ? 'left' : 'right'} side falls`}</StatusPill>
+      <StatusPill ok={!balanced}>{balanced ? 'balanced, no motion' : `${ma > mb ? 'left' : 'right'} side falls`}</StatusPill>
       <p style={{ fontSize: 12, opacity: 0.75, margin: 0 }}>
         Only the <strong>difference</strong> (m₁−m₂)g drives it; the <strong>total</strong> (m₁+m₂) resists.
-        Big equal masses with a tiny difference give a slow, measurable a — how Atwood weighed gravity.
+        Big equal masses with a tiny difference give a slow, measurable a, how Atwood weighed gravity.
       </p>
       <LiveRegion>{balanced ? 'Balanced, no motion.' : `${ma > mb ? 'Left' : 'Right'} side falls at ${Math.abs(a).toFixed(2)} metres per second squared.`}</LiveRegion>
     </div>

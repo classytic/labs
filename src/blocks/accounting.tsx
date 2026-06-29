@@ -1,5 +1,5 @@
 /**
- * @classytic/labs/blocks — accounting (commerce) lab block specs.
+ * @classytic/labs/blocks, accounting (commerce) lab block specs.
  *
  * `defineBlock` editor adapters for the accounting labs. A creator/agent authors
  * the chart of accounts + the transactions; the lab enforces the simple

@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * CountingSlotsLab — counting made concrete, the FUN way (the tree drowns past ~8
+ * CountingSlotsLab, counting made concrete, the FUN way (the tree drowns past ~8
  * leaves; this scales and reads friendly). The multiplication principle as filling
- * a row of POSITIONS: fill slot 1 from the whole pool, slot 2 from what's left, … —
+ * a row of POSITIONS: fill slot 1 from the whole pool, slot 2 from what's left, … , 
  * the pool shrinks, the product builds (4 × 3 × 2). It covers the whole family from
  * one model:
  *   • arrange (order matters)      → permutations nPr  (k = n ⇒ factorial n!)
@@ -80,7 +80,7 @@ export function CountingSlotsLab({
   const figure = (
     <div style={{ display: 'grid', gap: 16 }}>
       <div>
-        <p className="lab-field-label">the pool — {n} to pick from{!repl && ', each used once'}</p>
+        <p className="lab-field-label">the pool, {n} to pick from{!repl && ', each used once'}</p>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {items.map((it, i) => (
             <span key={i} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 34, height: 34, padding: '0 8px', borderRadius: 9, fontSize: 17, fontWeight: 700,
@@ -91,7 +91,7 @@ export function CountingSlotsLab({
       </div>
 
       <div>
-        <p className="lab-field-label">{k} position{k === 1 ? '' : 's'} to fill {mode === 'choose' ? '(a group — order won\'t matter)' : '(in order)'}</p>
+        <p className="lab-field-label">{k} position{k === 1 ? '' : 's'} to fill {mode === 'choose' ? '(a group, order won\'t matter)' : '(in order)'}</p>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end' }}>
           {Array.from({ length: k }, (_, i) => {
             const done = i < step, here = i === step;
@@ -114,7 +114,7 @@ export function CountingSlotsLab({
 
       {/* the product builds as slots fill */}
       <div style={{ fontSize: 18, fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
-        {step === 0 ? <span style={{ color: 'var(--stage-muted)', fontWeight: 500, fontSize: 14 }}>Fill the first slot — how many choices?</span> : (
+        {step === 0 ? <span style={{ color: 'var(--stage-muted)', fontWeight: 500, fontSize: 14 }}>Fill the first slot, how many choices?</span> : (
           <>
             <Tex tex={Array.from({ length: step }, (_, i) => choices(i)).join(' \\times ')} />
             {step < k && <span style={{ color: 'var(--stage-muted)' }}> <Tex tex={'\\times \\ldots'} /></span>}
@@ -127,14 +127,14 @@ export function CountingSlotsLab({
       {/* combination collapse: k! orderings of one group → 1 */}
       {collapse && (
         <div style={{ padding: '10px 12px', borderRadius: 10, background: 'color-mix(in oklab, var(--stage-warn) 10%, transparent)', border: '1px solid var(--stage-grid)' }}>
-          <p className="lab-field-label">order doesn't matter — these are all the SAME group</p>
+          <p className="lab-field-label">order doesn't matter, these are all the SAME group</p>
           {factorial(k) <= 8 ? (
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
               {allPerms(sample).map((p, i) => <span key={i} style={{ fontWeight: 700, fontSize: 13, padding: '2px 7px', borderRadius: 7, background: 'color-mix(in oklab, var(--stage-muted) 14%, transparent)' }}>{p.join('')}</span>)}
               <span style={{ margin: '0 4px', color: 'var(--stage-muted)' }}>→</span>
               <span style={{ fontWeight: 800, padding: '2px 9px', borderRadius: 7, background: 'color-mix(in oklab, var(--stage-good) 18%, transparent)', color: 'var(--stage-good)' }}>{`{${sample.join(', ')}}`} = 1</span>
             </div>
-          ) : <p style={{ fontSize: 13 }}>Each group of {k} can be ordered in {k}! = {factorial(k)} ways — all the same selection.</p>}
+          ) : <p style={{ fontSize: 13 }}>Each group of {k} can be ordered in {k}! = {factorial(k)} ways, all the same selection.</p>}
           <p style={{ marginTop: 8, fontSize: 16, fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
             <Tex tex={`${arrangeTotal} \\div ${k}! = ${arrangeTotal} \\div ${factorial(k)} =`} /> <span style={{ color: 'var(--stage-good)' }}>{total}</span> groups
           </p>
@@ -171,7 +171,7 @@ export function CountingSlotsLab({
         <ControlBar>
           <Field label="your answer"><Stepper value={guess} onChange={(v) => { setGuess(v); setChecked(false); }} min={0} max={Math.max(50, total * 2)} /></Field>
           <CheckButton onClick={() => setChecked(true)}>Check</CheckButton>
-          {checked && <StatusPill ok={guess === total}>{guess === total ? '✓ right!' : 'not yet — fill the slots'}</StatusPill>}
+          {checked && <StatusPill ok={guess === total}>{guess === total ? '✓ right!' : 'not yet, fill the slots'}</StatusPill>}
         </ControlBar>
       </div>
     </>

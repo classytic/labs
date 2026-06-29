@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * TitrationLab — add base to an acid drop by drop and watch the pH curve build, on
+ * TitrationLab, add base to an acid drop by drop and watch the pH curve build, on
  * the shared `@classytic/stage/chem` acid–base kernel (pH solved exactly from the
  * charge balance at every volume).
  *
@@ -10,7 +10,7 @@
  * signature shape: a gentle start, then for a WEAK acid a flat BUFFER region whose
  * midpoint sits at pH = pKa, a steep jump through the equivalence point, and a
  * levelling-off in excess base. A strong acid skips the buffer and crosses pH 7 at
- * equivalence; a weak acid's equivalence point is basic (pH > 7). Interactive — drag
+ * equivalence; a weak acid's equivalence point is basic (pH > 7). Interactive, drag
  * the volume, no simulation loop.
  */
 
@@ -71,7 +71,7 @@ export function TitrationLab({
   volAcidMl = 25,
   concBase = 0.1,
   pKa: pKa0 = 4.76,
-  title = 'Acid–base titration — build the pH curve',
+  title = 'Acid–base titration: build the pH curve',
   prompt = 'Drip strong base into the acid and track the pH. Watch the buffer region, the steep jump at the equivalence point, and the indicator flip pink.',
   objectives = [
     'Read a titration curve: start, buffer, equivalence jump, excess base',
@@ -128,7 +128,7 @@ export function TitrationLab({
         {/* Erlenmeyer flask with indicator solution */}
         <path d={`M ${flaskCx - 10} ${flaskTop} L ${flaskCx - 10} ${flaskTop + 14} L ${flaskCx - 44} ${flaskBot - 6} Q ${flaskCx - 46} ${flaskBot} ${flaskCx - 40} ${flaskBot} L ${flaskCx + 40} ${flaskBot} Q ${flaskCx + 46} ${flaskBot} ${flaskCx + 44} ${flaskBot - 6} L ${flaskCx + 10} ${flaskTop + 14} L ${flaskCx + 10} ${flaskTop} Z`}
           fill={`color-mix(in oklab, ${PINK} ${(pink * 70).toFixed(0)}%, color-mix(in oklab, var(--stage-accent) 8%, var(--stage-bg)))`} stroke="var(--stage-metal)" strokeWidth={2} strokeLinejoin="round" />
-        <text x={flaskCx} y={flaskBot + 16} textAnchor="middle" fontSize={11} fill="var(--stage-muted)">{pink > 0.5 ? 'pink — past end point' : 'colourless'}</text>
+        <text x={flaskCx} y={flaskBot + 16} textAnchor="middle" fontSize={11} fill="var(--stage-muted)">{pink > 0.5 ? 'pink, past end point' : 'colourless'}</text>
 
         {/* titration curve */}
         <line x1={GX0} y1={GY0} x2={GX0} y2={GY1} stroke="var(--stage-fg)" strokeWidth={1.5} />
@@ -164,7 +164,7 @@ export function TitrationLab({
       </Callout>
       <div style={{ display: 'grid', gap: 8, padding: '8px 2px 0', fontSize: 13 }}>
         {weak
-          ? <><Tex tex={'\\text{pH} = \\text{p}K_a + \\log\\dfrac{[\\mathrm{A^-}]}{[\\mathrm{HA}]}'} block /><span style={{ color: 'var(--stage-muted)' }}>In the buffer region the pH barely moves — at the half-equivalence point [A⁻] = [HA] so <strong style={{ color: 'var(--stage-fg)' }}>pH = pKa = {pKa.toFixed(2)}</strong>. The equivalence point is <strong style={{ color: 'var(--stage-fg)' }}>basic (pH {curve.pHEq.toFixed(1)})</strong> because the conjugate base hydrolyses.</span></>
+          ? <><Tex tex={'\\text{pH} = \\text{p}K_a + \\log\\dfrac{[\\mathrm{A^-}]}{[\\mathrm{HA}]}'} block /><span style={{ color: 'var(--stage-muted)' }}>In the buffer region the pH barely moves, at the half-equivalence point [A⁻] = [HA] so <strong style={{ color: 'var(--stage-fg)' }}>pH = pKa = {pKa.toFixed(2)}</strong>. The equivalence point is <strong style={{ color: 'var(--stage-fg)' }}>basic (pH {curve.pHEq.toFixed(1)})</strong> because the conjugate base hydrolyses.</span></>
           : <><Tex tex={'\\text{pH} = -\\log[\\mathrm{H^+}]'} block /><span style={{ color: 'var(--stage-muted)' }}>A strong acid is fully dissociated, so the pH climbs slowly then leaps through <strong style={{ color: 'var(--stage-fg)' }}>pH 7</strong> at the equivalence point and levels off in excess base.</span></>}
       </div>
     </>

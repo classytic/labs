@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * RampForcesLab — "Tilt the Ramp", where gravity gets a share (F = ma) AND you
+ * RampForcesLab, "Tilt the Ramp", where gravity gets a share (F = ma) AND you
  * can push/pull the crate.
  *
  * Tilt the incline and the weight SPLITS into a down-slope share (mg sinθ) and a
- * press-in share (mg cosθ = the normal N, which visibly shrinks as you tilt — the
+ * press-in share (mg cosθ = the normal N, which visibly shrinks as you tilt, the
  * headline misconception). Add an applied force (push up-slope / pull down) and
  * watch the SUM of forces: static friction holds it (adjusting up to μs·N) until
  * the drive exceeds that grip, then kinetic friction (μk·N, weaker) takes over
- * and it accelerates — a = net/m. A force-ledger bar shows every along-slope
+ * and it accelerates, a = net/m. A force-ledger bar shows every along-slope
  * force adding to the net, so "the forces add up" is visual, not just stated.
  *
  * Up-slope is the POSITIVE axis throughout. Tokenized SVG; reuses the diagram kit;
@@ -75,7 +75,7 @@ function LedgerBar({ label, v, max, color, bold }: { label: string; v: number; m
 
 export function RampForcesLab({
   angleDeg = 25, mass = 2, friction = 0.4, frictionKinetic = 0.3, appliedN = 0, g = 9.8, showComponents = false,
-  title = 'Tilt the Ramp — split the weight, add a push, sum the forces',
+  title = 'Tilt the Ramp: split the weight, add a push, sum the forces',
   prompt = 'Tilt it, then push or pull: static friction holds until the forces win, then it slides at a = net/m.',
   objectives, controlConfig,
 }: RampForcesProps): ReactNode {
@@ -178,13 +178,13 @@ export function RampForcesLab({
           <AngleArc at={{ x: 0, y: 0 }} from={{ x: 1, y: 0 }} to={u} rPx={30} label={`${deg}°`} color="var(--stage-fg)" />
           <Polygon points={crate} color="color-mix(in oklab, var(--stage-accent-2) 60%, black)" fill="var(--stage-accent-2)" fillOpacity={0.9} weight={1.5} />
 
-          {/* weight mg (down) + normal N (out) — non-collinear with the slope */}
+          {/* weight mg (down) + normal N (out), non-collinear with the slope */}
           <Vector tail={O} tip={mgTip} color={C_MG} weight={2.5} />
           <Label {...beyond(mgTip, { x: 0, y: -1 })} text={`mg ${W.toFixed(0)}N`} color={C_MG} size={11} />
           <Vector tail={surf} tip={nTip} color={C_N} weight={2.5} />
           <Label {...beyond(nTip, nrm)} text={comps ? `N = mg cosθ ${N.toFixed(0)}N` : `N ${N.toFixed(0)}N`} color={C_N} size={11} />
 
-          {/* gravity's down-slope share (components mode) — centre lane */}
+          {/* gravity's down-slope share (components mode), centre lane */}
           {comps && gravAlong > 0.5 && (
             <>
               <Vector tail={O} tip={gravTip} color={C_GRAV} weight={2.5} />
@@ -193,7 +193,7 @@ export function RampForcesLab({
             </>
           )}
 
-          {/* friction — its own lane below the box (direction = whichever way it resists) */}
+          {/* friction, its own lane below the box (direction = whichever way it resists) */}
           {Math.abs(frictionUp) > 0.5 && (
             <>
               <Vector tail={fricTail} tip={fricTip} color={C_FRIC} weight={2.5} />
@@ -201,7 +201,7 @@ export function RampForcesLab({
             </>
           )}
 
-          {/* applied push/pull — its own lane above the box */}
+          {/* applied push/pull, its own lane above the box */}
           {Math.abs(applied) > 0.5 && (
             <>
               <Vector tail={appTail} tip={appTip} color={C_APPLIED} weight={3} />
@@ -235,7 +235,7 @@ export function RampForcesLab({
       <ControlBar>
         <Control name="release"><CheckButton onClick={release} disabled={held}>▶ Release</CheckButton></Control>
         <Control name="components"><Chip selected={comps} onClick={() => setComps((c) => !c)}>components</Chip></Control>
-        <StatusPill ok={!held}>{held ? 'balanced — friction holds it' : `slides ${slidesUp ? 'up' : 'down'} · a = ${a.toFixed(1)} m/s²`}</StatusPill>
+        <StatusPill ok={!held}>{held ? 'balanced, friction holds it' : `slides ${slidesUp ? 'up' : 'down'} · a = ${a.toFixed(1)} m/s²`}</StatusPill>
         <span style={{ marginLeft: 'auto', display: 'inline-flex', gap: 14, fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>
           <span style={{ color: C_N }}>N {N.toFixed(0)}</span>
           <span style={{ color: C_FRIC }}>fₛ max {fsMax.toFixed(0)}</span>

@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * RichText — render `_`/`^` notation as real HTML <sub>/<sup> in lab readouts /
+ * RichText, render `_`/`^` notation as real HTML <sub>/<sup> in lab readouts /
  * control bars (the DOM counterpart of stage's SVG `<Label>`). Both share the
- * ONE grammar, `parseRichText` from @classytic/stage — so "V_C" never reads as a
+ * ONE grammar, `parseRichText` from @classytic/stage, so "V_C" never reads as a
  * dirty underscore and the parsing rule lives in a single source of truth.
  */
 

@@ -1,18 +1,18 @@
 'use client';
 
 /**
- * BulletWallsLab — "How many planks?", the classic penetration problem made
+ * BulletWallsLab, "How many planks?", the classic penetration problem made
  * watchable and PREDICT-FIRST.
  *
  * A bullet fires into a stack of identical planks. Each plank pushes back with a
  * constant retarding force over its thickness, so it drains a FIXED chunk of
- * kinetic energy — equivalently a fixed Δ(v²) per plank. The bullet free-flies
+ * kinetic energy, equivalently a fixed Δ(v²) per plank. The bullet free-flies
  * between planks (constant v) and decelerates linearly in v² while inside one
  * (v²(x) = v²ₑ − (cost/width)·depth), the textbook v² = u² − 2as. It stops the
- * instant its kinetic energy runs out — embedding partway through a plank.
+ * instant its kinetic energy runs out, embedding partway through a plank.
  *
  * The learner GUESSES how many planks it punches through, then fires and watches
- * it slow plank-by-plank while the KE bar drains — turning "N = u²/(2as)" from a
+ * it slow plank-by-plank while the KE bar drains, turning "N = u²/(2as)" from a
  * formula into a bet you can win.
  *
  * Tokenized SVG; time-dependent integrator here; honours reduced-motion.
@@ -34,7 +34,7 @@ export interface BulletWallsProps {
   title?: string;
   prompt?: string;
   objectives?: string[];
-  /** Lock/hide any knob — e.g. `{ lock: ['plank toughness'] }` to fix the toughness. */
+  /** Lock/hide any knob, e.g. `{ lock: ['plank toughness'] }` to fix the toughness. */
   controlConfig?: ControlConfig;
 }
 
@@ -45,7 +45,7 @@ const STACK_X0 = 0;         // x of the first plank's near face
 
 export function BulletWallsLab({
   speed = 30, toughness = 160, planks = 6, mass = 0.02,
-  title = 'How many planks? — bet, then fire',
+  title = 'How many planks?: bet, then fire',
   prompt = 'Each plank steals the same chunk of energy. Guess how many the bullet smashes through, then fire and watch the speed (and the energy bar) drain plank by plank.',
   objectives,
   controlConfig,
@@ -160,7 +160,7 @@ export function BulletWallsLab({
         {/* ground */}
         <Segment from={{ x: view.xMin, y: -1.6 }} to={{ x: view.xMax, y: -1.6 }} color="var(--stage-fg)" opacity={0.4} weight={1.5} />
         {Array.from({ length: n }, (_, i) => Plank(i))}
-        {/* the bullet — a little pointed slug; its NOSE sits at bx (the physics entry point) */}
+        {/* the bullet, a little pointed slug; its NOSE sits at bx (the physics entry point) */}
         <Polygon
           points={[{ x: bx - 1.0, y: -0.22 }, { x: bx - 0.32, y: -0.22 }, { x: bx, y: 0 }, { x: bx - 0.32, y: 0.22 }, { x: bx - 1.0, y: 0.22 }]}
           color="color-mix(in oklab, var(--stage-metal) 55%, black)"
@@ -176,7 +176,7 @@ export function BulletWallsLab({
   );
 
   const verdict = settled
-    ? (guess === fullPenetrated ? `🎯 Spot on — ${fullPenetrated} planks` : `It broke ${fullPenetrated}, you guessed ${guess}`)
+    ? (guess === fullPenetrated ? `🎯 Spot on, ${fullPenetrated} planks` : `It broke ${fullPenetrated}, you guessed ${guess}`)
     : null;
 
   const aside = (
@@ -192,7 +192,7 @@ export function BulletWallsLab({
       <MeterBar label="kinetic energy" frac={ke0 > 0 ? keNow / ke0 : 0} color="var(--stage-accent)" value={`${keNow.toFixed(1)} J`} />
       {verdict && <StatusPill ok={guess === fullPenetrated}>{verdict}</StatusPill>}
       <p style={{ fontSize: 12, opacity: 0.75, margin: 0 }}>
-        Predict with <strong>N = u² / (Δv² per plank)</strong> — then watch v² fall by the same step each plank
+        Predict with <strong>N = u² / (Δv² per plank)</strong>, then watch v² fall by the same step each plank
         (v² = u² − 2as). It lodges when the energy hits zero.
       </p>
       <LiveRegion>{settled ? `The bullet broke ${fullPenetrated} of ${n} planks. You guessed ${guess}.` : ''}</LiveRegion>

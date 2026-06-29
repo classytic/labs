@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * LabConfig — the schema→form primitive. Give it a lab's Zod prop schema (already
+ * LabConfig, the schema→form primitive. Give it a lab's Zod prop schema (already
  * the source of truth) + the current attributes + an `updateAttributes`-shaped
- * patch callback, and it introspects the schema and renders a friendly form — NO
+ * patch callback, and it introspects the schema and renders a friendly form, NO
  * raw JSON for the common cases:
  *   string→TextField · number→NumField · boolean→toggle · enum→chips
  *   array<object>→RowsEditor (columns auto-derived from the element shape)
  *   array<string>→tag input · nested object→a nested sub-form (recursion)
  * Only genuinely un-introspectable shapes (unions, records, arrays of arrays)
- * fall back to a raw-JSON box — an explicit last resort, not the default.
+ * fall back to a raw-JSON box, an explicit last resort, not the default.
  *
  * So a block can drop its whole hand-built panel and do
  *   <LabConfig schema={SCHEMA} value={attributes} onChange={updateAttributes} />
@@ -40,7 +40,7 @@ function elementOf(arr: z.ZodType): z.ZodType | null {
 
 const GROW_KEYS = new Set(['name', 'label', 'prompt', 'text', 'title', 'description']);
 
-/** Map a ZodObject's fields to RowsEditor columns — null if any field is too complex to flatten. */
+/** Map a ZodObject's fields to RowsEditor columns, null if any field is too complex to flatten. */
 function columnsFor(obj: z.ZodObject): RowCol[] | null {
   const cols: RowCol[] = [];
   for (const [k, f] of Object.entries(obj.shape as Record<string, z.ZodType>)) {
@@ -68,7 +68,7 @@ function blankFor(obj: z.ZodObject): Record<string, unknown> {
 export interface LabConfigProps {
   schema: z.ZodType;
   value: Record<string, unknown>;
-  /** Patch callback — same shape as a block's `updateAttributes`. */
+  /** Patch callback, same shape as a block's `updateAttributes`. */
   onChange: (patch: Record<string, unknown>) => void;
   /** Props to skip (e.g. ones a bespoke panel already handles). */
   omit?: string[];

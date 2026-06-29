@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * RiverBoat — the classic "boat crossing a flowing river" vector problem, the one
+ * RiverBoat, the classic "boat crossing a flowing river" vector problem, the one
  * that trips students on component resolution. A boat aims across the current at a
  * heading θ; the river carries it downstream. Walk the steps to SEE why you add
  * the boat and current velocities tip-to-tail, then resolve the resultant into
  * an "across" component (v_b·cosθ, sets crossing time) and a "downstream"
  * component (v_c − v_b·sinθ, sets the drift). Aim upstream at θ = arcsin(v_c/v_b)
- * and the drift cancels — you land straight across.
+ * and the drift cancels, you land straight across.
  *
  * Now on the @classytic/stage engine (SVG vectors via the shared `LabeledVector`
  * helper, accessible, themed); keeps the agent `useControlSurface` seam.
@@ -24,7 +24,7 @@ import { num, clamp, toRad, toDeg } from '../core/util.js';
 /**
  * A small boat anchored at the launch point (math origin), heading `thetaDeg`
  * upstream from straight-across. Fixed on-screen size (a constant glyph, like an
- * angle mark), rotated via a transform with static local coordinates — nose
+ * angle mark), rotated via a transform with static local coordinates, nose
  * points along +across, so rotate(−θ) aims it upstream. SSR-safe: no
  * transcendental-derived coordinate is serialized.
  */
@@ -40,7 +40,7 @@ function BoatGlyph({ thetaDeg }: { thetaDeg: number }): ReactNode {
       <path d="M -2.4 10 L -3.6 18 M 2.4 10 L 3.6 18" fill="none" stroke={sheen} strokeWidth={1.1} strokeDasharray="2 3" opacity={0.6} strokeLinecap="round" />
       {/* contact shadow on the water */}
       <ellipse cx={0} cy={2} rx={6.5} ry={9} fill="color-mix(in oklab, black 60%, transparent)" opacity={0.12} />
-      {/* hull — nose up (+across) */}
+      {/* hull, nose up (+across) */}
       <path d="M 0 -12 C 4.6 -5 5.6 4 4 10 L -4 10 C -5.6 4 -4.6 -5 0 -12 Z" fill={hull} stroke={edge} strokeWidth={1} strokeLinejoin="round" />
       {/* port-side specular */}
       <path d="M -3.2 7 C -4.4 2 -3.4 -3 0 -8.5" fill="none" stroke={sheen} strokeWidth={0.9} opacity={0.55} />
@@ -54,7 +54,7 @@ function BoatGlyph({ thetaDeg }: { thetaDeg: number }): ReactNode {
 
 /**
  * Wave streaks drifting downstream, illustrating the current. Drift speed scales
- * with `current` (vᵧ) — a still river is calm, a fast one streams. Animated with
+ * with `current` (vᵧ), a still river is calm, a fast one streams. Animated with
  * a CSS keyframe (declarative, SSR-safe, honours prefers-reduced-motion); the
  * dash period equals the keyframe translate, so the loop is seamless.
  */
@@ -76,7 +76,7 @@ function RiverWaves({ view, W, current }: { view: ViewBox; W: number; current: n
 }
 
 const STEPS = [
-  'Aim the boat across — this is its velocity through the water.',
+  'Aim the boat across, this is its velocity through the water.',
   'The river flows, pushing the boat downstream at vᵧ.',
   'Add them tip-to-tail: the resultant is the boat’s true path over the ground.',
   'Resolve the resultant: across = vᵦ·cos θ, downstream = vᵧ − vᵦ·sin θ.',
@@ -160,7 +160,7 @@ export function RiverBoat({ boatSpeed, current, riverWidth, title = 'Crossing a 
     <>
       <Callout tone="result">
         <span style={{ fontSize: 12, color: 'var(--stage-muted)', fontWeight: 600 }}>{cross ? 'crossing' : 'no progress across'}</span>
-        <span style={{ fontSize: 15, fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>{cross ? `lands ${drift.toFixed(1)} m downstream` : '—'}</span>
+        <span style={{ fontSize: 15, fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>{cross ? `lands ${drift.toFixed(1)} m downstream` : ', '}</span>
         <span style={{ fontSize: 12, color: 'var(--stage-muted)' }}>{cross ? `t = ${tCross.toFixed(1)} s` : 'aim less upstream'}</span>
       </Callout>
       <div style={{ display: 'grid', gap: 4, fontSize: 13 }}>

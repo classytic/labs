@@ -1,18 +1,18 @@
 'use client';
 
 /**
- * LabGallery — the visual lab PICKER primitive. Instead of a 80-item slash menu,
+ * LabGallery, the visual lab PICKER primitive. Instead of a 80-item slash menu,
  * a host shows ONE "Insert lab" affordance that opens this gallery in a sheet: a
  * searchable, domain-grouped grid where each card is a LIVE mini-preview of the lab
  * (the block spec rendered in `preview` mode with default props), mounted lazily as
- * it scrolls into view. Picking a card calls `onPick(item)` — the host then inserts
+ * it scrolls into view. Picking a card calls `onPick(item)`, the host then inserts
  * that lab's concrete block. Editor-agnostic: it only needs the block metadata +
  * each spec's render `Component`.
  */
 
 import { Component as ReactComponent, createElement, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
-/** The minimum a gallery card needs — structurally satisfied by a cms-ui BlockSpec. */
+/** The minimum a gallery card needs, structurally satisfied by a cms-ui BlockSpec. */
 export interface LabPickItem {
   key: string;
   /** MDX tag / Plate node type the host inserts on pick. */
@@ -91,7 +91,7 @@ export function LabGallery({ blocks, onPick }: LabGalleryProps): ReactNode {
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
           {items.map((b) => (
-            // a div (not <button>) — the live preview contains the lab's own buttons,
+            // a div (not <button>), the live preview contains the lab's own buttons,
             // and button-inside-button is invalid HTML. role+keydown keep it accessible.
             <div
               key={b.key} role="button" tabIndex={0} onClick={() => onPick?.(b)}
