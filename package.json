@@ -367,7 +367,7 @@
     "@changesets/cli": "^2.27.9",
     "@classytic/cms-ui": "^0.3.1",
     "@classytic/dev-tools": "^0.2.0",
-    "@classytic/stage": "^0.2.0",
+    "@classytic/stage": "^0.3.0",
     "@react-three/fiber": "^9.7.0",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^22.0.0",

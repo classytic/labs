@@ -1,5 +1,30 @@
 # @classytic/labs
 
+## 0.3.0
+
+### Minor changes
+
+- **Authorable activity contracts** for goals, staged gates, misconception feedback, datasets and transfer cases, with misconception-safe challenge feedback.
+- **Commerce runtime.** Canonical Commerce compositions, direct-manipulation finance charts, and consequential experiences across EOQ, ratios, apportionment, break-even, depreciation, limited liability and linked financial statements. Finance, Accounting and Economics now converge on the shared Commerce runtime, while the authored compound-interest, reorder-point and business-simulation scripts are preserved.
+- **One shell.** The legacy `LabFrame` shell converges on the shared Activity runtime.
+- **Independently importable CSS layers** (core and per-subject) alongside the aggregate stylesheet, so a page loads only the sheets its labs need.
+- **Design system v2.** One typographic scale, a 2px spacing grid, motion durations chosen by cause, a single focus ring and a single reduced-motion policy, all as `--lab-*` tokens; documented in `docs/DESIGN-SYSTEM.md`, exported as W3C design tokens in `design-tokens.json`, and enforced by the `css-scale` and `css-system` tests.
+- **Label placement.** Figures declare keep-clear zones (`PlaneAxes`, `kit/ticks`, cycle pill placement), so axis numbers and process labels are placed rather than drawn blind. Every gallery scene is now free of label collisions and of phone-width overflow, both gated by `npm run collisions:check` and `overflow-check`.
+
+### Patch changes
+
+- Emit every declared math engine and explorer subpath.
+- Validate exports, SSR imports, published files and CSS budgets before publishing.
+- Standardize ML evidence, prediction semantics and activity transport composition.
+- Remove unreachable legacy barrels and an unregistered lab implementation.
+- Correct peer-installation and release documentation.
+
+## 0.2.0
+
+### Minor changes
+
+- New circuit, math and physics labs, plus the kit components behind them. Requires `@classytic/stage` >= 0.2.0.
+
 ## 0.1.0
 
 ### Initial release
