@@ -1,0 +1,297 @@
+'use client';
+
+/**
+ * CircuitLab, two resistors driven by a battery, in series or parallel, with the
+ * voltage- and current-divider rules made visible. Drag V, R₁, R₂; flip series
+ * ↔ parallel; step through: total resistance → total current → how it divides.
+ *
+ * Series: same current, voltage splits (VDR  Vᵢ = V·Rᵢ/ΣR).
+ * Parallel: same voltage, current splits (CDR  Iᵢ = I·R_other/ΣR).
+ *
+ * Now on the @classytic/stage engine: the schematic is SVG wires + `ResistorBox`
+ * glyphs + labels (accessible, themed) instead of a canvas blit.
+ */
+
+import { useEffect, useState, type ReactNode } from 'react';
+import { Stage, Segment, Label, type Vec2 } from '@classytic/stage';
+import { solveDC, type Elem } from '@classytic/stage/circuit';
+import { Slider, Chip } from '../kit/controls.js';
+import { Field, StatList, Stat } from '../kit/frame.js';
+import { AuthoredActivityRuntime, AuthoredMetricGate } from '../kit/authored-activity-runtime.js';
+import type { AuthoredActivity } from '../kit/activity-authoring.js';
+import { circuitDividerActivity } from './circuit-divider-activity-plan.js';
+import { ResistorBox, CellBox } from '../kit/diagram/circuit-box.js';
+import { Tex } from '../core/tex.js';
+import { num, clamp } from '../core/util.js';
+
+export interface CircuitLabProps {
+  voltage?: number | string;
+  r1?: number | string;
+  r2?: number | string;
+  mode?: 'series' | 'parallel';
+  title?: string;
+  prompt?: string;
+  height?: number;
+  activity?: string | AuthoredActivity;
+}
+
+// Normalized schematic view (units, not px); preserveAspect=false fills the box.
+const VIEW = { xMin: 0, xMax: 100, yMin: 0, yMax: 60 };
+const TOP = 46,
+  BOT = 12,
+  BX = 9,
+  RIGHT = 93;
+
+export function CircuitLab({
+  voltage,
+  r1,
+  r2,
+  mode: modeInit = 'series',
+  height = 320,
+  title = 'Series and parallel: how voltage and current divide',
+  prompt = 'Change the topology and component values, then use what stays equal to explain what divides.',
+  activity = 'circuit-lab',
+}: CircuitLabProps = {}): ReactNode {
+  const activityId = typeof activity === 'string' ? activity : 'circuit-lab';
+  const authoredActivity = typeof activity === 'string' ? circuitDividerActivity : activity;
+  const [V, setV] = useState(clamp(num(voltage, 12), 1, 24));
+  const [R1, setR1] = useState(clamp(num(r1, 100), 10, 1000));
+  const [R2, setR2] = useState(clamp(num(r2, 200), 10, 1000));
+  const [parallel, setParallel] = useState(modeInit === 'parallel');
+  useEffect(() => {
+    setV(clamp(num(voltage, 12), 1, 24));
+  }, [voltage]);
+  useEffect(() => {
+    setR1(clamp(num(r1, 100), 10, 1000));
+  }, [r1]);
+  useEffect(() => {
+    setR2(clamp(num(r2, 200), 10, 1000));
+  }, [r2]);
+  useEffect(() => {
+    setParallel(modeInit === 'parallel');
+  }, [modeInit]);
+
+  // solved by the one circuit engine (stage/circuit), not a per-lab divider formula:
+  // series  V(1)-R1->(2)-R2->gnd ;  parallel  both R1,R2 from node 1 to gnd.
+  const elems: Elem[] = parallel
+    ? [
+        { kind: 'V', n1: 1, n2: 0, value: V, id: 'b' },
+        { kind: 'R', n1: 1, n2: 0, value: R1 },
+        { kind: 'R', n1: 1, n2: 0, value: R2 },
+      ]
+    : [
+        { kind: 'V', n1: 1, n2: 0, value: V, id: 'b' },
+        { kind: 'R', n1: 1, n2: 2, value: R1 },
+        { kind: 'R', n1: 2, n2: 0, value: R2 },
+      ];
+  const sol = solveDC(elems);
+  const Itot = Math.abs(sol.current['b'] ?? 0);
+  const Rtot = Itot > 1e-12 ? V / Itot : Infinity;
+  const v1 = parallel ? V : (sol.nodeV[1] ?? 0) - (sol.nodeV[2] ?? 0); // drop across R1
+  const v2 = parallel ? V : (sol.nodeV[2] ?? 0); // drop across R2
+  const i1 = v1 / R1;
+  const i2 = v2 / R2;
+
+  const W = (a: Vec2, b: Vec2, key: string): ReactNode => (
+    <Segment key={key} from={a} to={b} color="var(--stage-fg)" opacity={0.5} weight={2} />
+  );
+  const cyMid = (TOP + BOT) / 2;
+
+  const figure = (showReadings: boolean): ReactNode => (
+    <Stage
+      view={VIEW}
+      height={height}
+      preserveAspect={false}
+      ariaLabel={`${parallel ? 'Parallel' : 'Series'} circuit: ${V}V battery with R1 ${R1.toFixed(0)} and R2 ${R2.toFixed(0)} ohms`}
+    >
+      {/* battery (canonical cell glyph, vertical on the left rail) */}
+      {W({ x: BX, y: cyMid + 6 }, { x: BX, y: TOP }, 'b-up')}
+      {W({ x: BX, y: cyMid - 6 }, { x: BX, y: BOT }, 'b-dn')}
+      <CellBox center={{ x: BX, y: cyMid }} half={6} orient="v" live label={`${V.toFixed(0)} V`} />
+
+      {!parallel ? (
+        <>
+          {W({ x: BX, y: TOP }, { x: 26, y: TOP }, 's1')}
+          <ResistorBox
+            center={{ x: 34, y: TOP }}
+            w={16}
+            h={7}
+            color="var(--stage-accent)"
+            label={`R₁ ${R1.toFixed(0)}Ω`}
+            reading={showReadings ? `${v1.toFixed(2)} V` : undefined}
+          />
+          {W({ x: 42, y: TOP }, { x: 58, y: TOP }, 's2')}
+          <ResistorBox
+            center={{ x: 66, y: TOP }}
+            w={16}
+            h={7}
+            color="var(--stage-good)"
+            label={`R₂ ${R2.toFixed(0)}Ω`}
+            reading={showReadings ? `${v2.toFixed(2)} V` : undefined}
+          />
+          {W({ x: 74, y: TOP }, { x: RIGHT, y: TOP }, 's3')}
+          {W({ x: RIGHT, y: TOP }, { x: RIGHT, y: BOT }, 's4')}
+          {W({ x: RIGHT, y: BOT }, { x: BX, y: BOT }, 's5')}
+        </>
+      ) : (
+        <>
+          {/* left + right rails */}
+          {W({ x: BX, y: TOP }, { x: 30, y: TOP }, 'p1')}
+          {W({ x: 30, y: TOP }, { x: 30, y: BOT }, 'pl')}
+          {W({ x: BX, y: BOT }, { x: 30, y: BOT }, 'p2')}
+          {W({ x: 72, y: TOP }, { x: RIGHT, y: TOP }, 'p3')}
+          {W({ x: RIGHT, y: TOP }, { x: RIGHT, y: BOT }, 'pr-out')}
+          {W({ x: 72, y: BOT }, { x: RIGHT, y: BOT }, 'p4')}
+          {W({ x: 72, y: TOP }, { x: 72, y: BOT }, 'pr')}
+          {/* branch 1 (upper) */}
+          {W({ x: 30, y: TOP }, { x: 43, y: TOP }, 'b1a')}
+          <ResistorBox
+            center={{ x: 51, y: TOP }}
+            w={16}
+            h={7}
+            color="var(--stage-accent)"
+            label={`R₁ ${R1.toFixed(0)}Ω`}
+            reading={showReadings ? `${(i1 * 1000).toFixed(1)} mA` : undefined}
+          />
+          {W({ x: 59, y: TOP }, { x: 72, y: TOP }, 'b1b')}
+          {/* branch 2 (lower) */}
+          {W({ x: 30, y: BOT }, { x: 43, y: BOT }, 'b2a')}
+          <ResistorBox
+            center={{ x: 51, y: BOT }}
+            w={16}
+            h={7}
+            color="var(--stage-good)"
+            label={`R₂ ${R2.toFixed(0)}Ω`}
+            reading={showReadings ? `${(i2 * 1000).toFixed(1)} mA` : undefined}
+          />
+          {W({ x: 59, y: BOT }, { x: 72, y: BOT }, 'b2b')}
+        </>
+      )}
+    </Stage>
+  );
+
+  const controls = (
+    <div className="lab-activity-fields">
+      <Chip selected={parallel} onClick={() => setParallel((p) => !p)}>
+        {parallel ? 'parallel' : 'series'}
+      </Chip>
+      <Field label="V">
+        <Slider
+          value={V}
+          min={1}
+          max={24}
+          step={1}
+          onChange={setV}
+          ariaLabel="battery voltage"
+          className="electronics-slider-compact"
+        />
+      </Field>
+      <Field label="R₁">
+        <Slider
+          value={R1}
+          min={10}
+          max={1000}
+          step={10}
+          onChange={setR1}
+          ariaLabel="resistor 1"
+          className="electronics-slider-compact"
+        />
+      </Field>
+      <Field label="R₂">
+        <Slider
+          value={R2}
+          min={10}
+          max={1000}
+          step={10}
+          onChange={setR2}
+          ariaLabel="resistor 2"
+          className="electronics-slider-compact"
+        />
+      </Field>
+    </div>
+  );
+
+  const aside = (
+    <>
+      <StatList>
+        <Stat label="R" value={`${Rtot.toFixed(0)} Ω`} />
+        <Stat label="I" value={`${(Itot * 1000).toFixed(1)} mA`} />
+      </StatList>
+      <div className="electronics-equation-stack">
+        {parallel ? (
+          <>
+            <Tex
+              tex={`\\frac{1}{R}=\\frac{1}{R_1}+\\frac{1}{R_2}\\Rightarrow R=${Rtot.toFixed(1)}\\,\\Omega`}
+            />
+            <Tex tex={`I_1=I\\cdot\\frac{R_2}{R_1+R_2}=${(i1 * 1000).toFixed(1)}\\,\\text{mA}`} />
+          </>
+        ) : (
+          <>
+            <Tex
+              tex={`R=R_1+R_2=${Rtot.toFixed(0)}\\,\\Omega,\\quad I=\\frac{V}{R}=${(Itot * 1000).toFixed(1)}\\,\\text{mA}`}
+            />
+            <Tex tex={`V_1=V\\cdot\\frac{R_1}{R_1+R_2}=${v1.toFixed(2)}\\,\\text{V}`} />
+          </>
+        )}
+      </div>
+    </>
+  );
+
+  const initialV = clamp(num(voltage, 12), 1, 24);
+  const initialR1 = clamp(num(r1, 100), 10, 1000);
+  const initialR2 = clamp(num(r2, 200), 10, 1000);
+  return (
+    <AuthoredActivityRuntime
+      focusLayout="immersive"
+      activity={authoredActivity}
+      activityId={activityId}
+      eyebrow="Electric circuits"
+      title={title}
+      description={prompt}
+      status={
+        <>
+          <span>{parallel ? 'parallel' : 'series'}</span>
+          <span>{V.toFixed(0)} V</span>
+          <span>{Rtot.toFixed(0)} Ω</span>
+          <span>{(Itot * 1000).toFixed(1)} mA</span>
+        </>
+      }
+      evidence={aside}
+      controls={controls}
+      observation={
+        parallel
+          ? 'Parallel branches share voltage; the lower-resistance branch carries more current.'
+          : 'Series components share current; the larger resistance receives the larger voltage drop.'
+      }
+      transcript={
+        <p>
+          {parallel ? 'Parallel' : 'Series'} circuit. Supply {V.toFixed(0)} volts, equivalent resistance{' '}
+          {Rtot.toFixed(1)} ohms, total current {(Itot * 1000).toFixed(1)} milliamps. R1 {R1.toFixed(0)} ohms
+          and R2 {R2.toFixed(0)} ohms.
+        </p>
+      }
+    >
+      {({ sequence, complete }) => (
+        <>
+          <AuthoredMetricGate
+            conditionId="value-changed"
+            met={V !== initialV || R1 !== initialR1 || R2 !== initialR2}
+            complete={complete}
+            outcome={`${V} V, ${R1}/${R2} ohms`}
+          />
+          <AuthoredMetricGate
+            conditionId="topology-changed"
+            met={parallel !== (modeInit === 'parallel')}
+            complete={complete}
+            outcome={parallel ? 'parallel' : 'series'}
+          />
+          {figure(
+            sequence.current.phase === 'observe' ||
+              sequence.current.phase === 'explain' ||
+              sequence.current.phase === 'transfer',
+          )}
+        </>
+      )}
+    </AuthoredActivityRuntime>
+  );
+}

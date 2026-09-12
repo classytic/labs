@@ -1,0 +1,522 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "@classytic/labs design tokens, exported from styles/core.css. Colours are semantic and resolve to the host theme (shadcn) at runtime; the fallback here is the calm default.",
+  "color": {
+    "surface": {
+      "$type": "color",
+      "$value": "var(--background, oklch(1 0 0))",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--card"
+        }
+      }
+    },
+    "sunken": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, currentColor 5%, transparent)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--muted"
+        }
+      }
+    },
+    "fg": {
+      "$type": "color",
+      "$value": "currentColor",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--foreground"
+        }
+      }
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, currentColor 55%, transparent)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--muted-foreground"
+        }
+      }
+    },
+    "border": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, currentColor 13%, transparent)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--border"
+        }
+      }
+    },
+    "border-strong": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, currentColor 22%, transparent)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--border"
+        }
+      }
+    },
+    "accent": {
+      "$type": "color",
+      "$value": "oklch(0.55 0.16 262)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--primary"
+        }
+      }
+    },
+    "accent-fg": {
+      "$type": "color",
+      "$value": "oklch(1 0 0)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--primary-foreground"
+        }
+      }
+    },
+    "good": {
+      "$type": "color",
+      "$value": "oklch(0.58 0.15 152)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--success"
+        }
+      }
+    },
+    "warn": {
+      "$type": "color",
+      "$value": "oklch(0.72 0.14 75)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--warning"
+        }
+      }
+    },
+    "warn-fg": {
+      "$type": "color",
+      "$value": "oklch(0.42 0.1 75)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--warning-foreground"
+        }
+      }
+    },
+    "danger": {
+      "$type": "color",
+      "$value": "oklch(0.58 0.19 25)",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--destructive"
+        }
+      }
+    },
+    "ring": {
+      "$type": "color",
+      "$value": "var(--lab-accent)",
+      "$description": "── radius scale ─────────────────────────────────────────────────────────",
+      "$extensions": {
+        "com.classytic.labs": {
+          "hostVariable": "--ring"
+        }
+      }
+    },
+    "accent-faint": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, var(--lab-accent) 5%, var(--lab-surface))",
+      "$description": "hover"
+    },
+    "accent-soft": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, var(--lab-accent) 12%, var(--lab-surface))",
+      "$description": "picked"
+    },
+    "accent-edge": {
+      "$type": "color",
+      "$value": "color-mix( in oklab, var(--lab-accent) 45%, var(--lab-border) )",
+      "$description": "hover border"
+    },
+    "good-soft": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, var(--lab-good) 14%, var(--lab-surface))"
+    },
+    "good-ink": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, var(--lab-good) 80%, var(--lab-fg))"
+    },
+    "warn-soft": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, var(--lab-warn) 16%, var(--lab-surface))"
+    },
+    "warn-ink": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, var(--lab-warn-fg) 85%, var(--lab-fg))"
+    },
+    "danger-soft": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, var(--lab-danger) 12%, var(--lab-surface))"
+    },
+    "danger-ink": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, var(--lab-danger) 80%, var(--lab-fg))"
+    },
+    "hairline": {
+      "$type": "color",
+      "$value": "color-mix(in oklab, var(--lab-border) 60%, transparent)",
+      "$description": "row dividers"
+    },
+    "ink": {
+      "$type": "color",
+      "$value": "oklch(0.29 0.045 262)"
+    }
+  },
+  "radius": {
+    "xs": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "pill": {
+      "$type": "dimension",
+      "$value": {
+        "value": 999,
+        "unit": "px"
+      },
+      "$description": "── spacing scale ──────────────────────────────────────────────────────────\n     A 2px grid, and the number in the name IS the pixel value, so a reader can\n     size a gap by eye and an author cannot invent 0.35rem by accident. The old\n     scale ran 6/10/14/18 while the values actually used were 4/8/12/16, which is\n     why almost nothing referenced it."
+    }
+  },
+  "space": {
+    "2": {
+      "$type": "dimension",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      }
+    },
+    "4": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    },
+    "6": {
+      "$type": "dimension",
+      "$value": {
+        "value": 6,
+        "unit": "px"
+      }
+    },
+    "8": {
+      "$type": "dimension",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "10": {
+      "$type": "dimension",
+      "$value": {
+        "value": 10,
+        "unit": "px"
+      }
+    },
+    "12": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "14": {
+      "$type": "dimension",
+      "$value": {
+        "value": 14,
+        "unit": "px"
+      }
+    },
+    "16": {
+      "$type": "dimension",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "20": {
+      "$type": "dimension",
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      }
+    },
+    "24": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      }
+    },
+    "32": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      },
+      "$description": "── type scale ───────────────────────────────────────────────────────────"
+    }
+  },
+  "type": {
+    "size": {
+      "micro": {
+        "$type": "dimension",
+        "$value": {
+          "value": 10,
+          "unit": "px"
+        }
+      },
+      "eyebrow": {
+        "$type": "dimension",
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        }
+      },
+      "sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 14,
+          "unit": "px"
+        }
+      },
+      "body": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": {
+          "value": 18,
+          "unit": "px"
+        }
+      },
+      "title": {
+        "$type": "dimension",
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        }
+      },
+      "hero": {
+        "$type": "dimension",
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        },
+        "$description": "── type roles: weight, leading, tracking ───────────────────────────────────\n     Four weights, four leadings, two trackings. A size on its own does not make\n     a hierarchy; the pairing does. The sheets carried ten weights (400 to 850)\n     and seventeen line-heights, which read as no hierarchy at all."
+      }
+    },
+    "weight": {
+      "regular": {
+        "$type": "fontWeight",
+        "$value": 450,
+        "$description": "prose, answer text"
+      },
+      "medium": {
+        "$type": "fontWeight",
+        "$value": 550,
+        "$description": "the step lead, labels, picked answers"
+      },
+      "semibold": {
+        "$type": "fontWeight",
+        "$value": 650,
+        "$description": "control text, chips, stat labels"
+      },
+      "bold": {
+        "$type": "fontWeight",
+        "$value": 750,
+        "$description": "titles, eyebrows, headline values"
+      }
+    },
+    "leading": {
+      "tight": {
+        "$type": "number",
+        "$value": 1,
+        "$description": "a numeral on its own"
+      },
+      "title": {
+        "$type": "number",
+        "$value": 1.25,
+        "$description": "headings, readout values"
+      },
+      "ui": {
+        "$type": "number",
+        "$value": 1.45,
+        "$description": "everything a learner acts on"
+      },
+      "prose": {
+        "$type": "number",
+        "$value": 1.55,
+        "$description": "explanations, observe text"
+      }
+    },
+    "tracking": {
+      "caps": {
+        "$type": "dimension",
+        "$value": {
+          "value": 0.06,
+          "unit": "em"
+        },
+        "$description": "small uppercase labels only"
+      },
+      "tight": {
+        "$type": "dimension",
+        "$value": {
+          "value": -0.015,
+          "unit": "em"
+        },
+        "$description": "large numerals only"
+      }
+    }
+  },
+  "target": {
+    "default": {
+      "$type": "dimension",
+      "$value": {
+        "value": 44,
+        "unit": "px"
+      }
+    },
+    "compact": {
+      "$type": "dimension",
+      "$value": {
+        "value": 36,
+        "unit": "px"
+      },
+      "$description": "── state tints ─────────────────────────────────────────────────────────────\n     Every surface that reacts uses the SAME four steps, so \"picked\" looks like\n     picked everywhere and \"right\" is one green, not twenty. The mix is toward\n     the surface, not transparent, so the result is identical on a card and on\n     the sunken dock. Ink variants keep 4.5:1 for text on those tints."
+    }
+  },
+  "motion": {
+    "duration": {
+      "fast": {
+        "$type": "duration",
+        "$value": {
+          "value": 120,
+          "unit": "ms"
+        }
+      },
+      "base": {
+        "$type": "duration",
+        "$value": {
+          "value": 180,
+          "unit": "ms"
+        }
+      },
+      "slow": {
+        "$type": "duration",
+        "$value": {
+          "value": 260,
+          "unit": "ms"
+        }
+      }
+    },
+    "easing": {
+      "default": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.2,
+          0.8,
+          0.2,
+          1
+        ],
+        "$description": "decelerating: things arrive"
+      },
+      "in-out": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.4,
+          0,
+          0.2,
+          1
+        ],
+        "$description": "things move between two places"
+      },
+      "spring": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.34,
+          1.56,
+          0.64,
+          1
+        ],
+        "$description": "one landing pop, sparingly"
+      }
+    }
+  },
+  "focus": {
+    "ring": {
+      "$type": "string",
+      "$value": "2px solid var(--lab-ring)"
+    },
+    "offset": {
+      "$type": "string",
+      "$value": "2px",
+      "$description": "── layering ──────────────────────────────────────────────────────────────"
+    }
+  },
+  "layer": {
+    "raised": {
+      "$type": "number",
+      "$value": 1,
+      "$description": "a dragged handle, a lit edge"
+    },
+    "overlay": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "a lock, a tooltip, a floating readout inside the scene"
+    },
+    "top": {
+      "$type": "number",
+      "$value": 50,
+      "$description": "focus-mode chrome"
+    }
+  },
+  "elevation": {
+    "sm": {
+      "$type": "shadow",
+      "$value": "0 1px 2px -1px color-mix(in oklab, var(--lab-ink) 14%, transparent), 0 1px 2px color-mix(in oklab, var(--lab-ink) 8%, transparent)"
+    },
+    "md": {
+      "$type": "shadow",
+      "$value": "0 2px 5px -2px color-mix(in oklab, var(--lab-ink) 12%, transparent), 0 10px 24px -8px color-mix(in oklab, var(--lab-ink) 16%, transparent)"
+    },
+    "lg": {
+      "$type": "shadow",
+      "$value": "0 4px 12px -4px color-mix(in oklab, var(--lab-ink) 14%, transparent), 0 22px 46px -12px color-mix(in oklab, var(--lab-ink) 18%, transparent)"
+    }
+  }
+}

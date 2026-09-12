@@ -1,0 +1,148 @@
+.logic-truth-value {
+  color: var(--stage-muted);
+  font-weight: var(--lab-w-semibold);
+}
+.logic-truth-value[data-value="true"] {
+  color: var(--stage-good);
+}
+.logic-live-evaluator {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lab-sp-12);
+  margin: var(--lab-sp-8) 0;
+  padding: var(--lab-sp-6) var(--lab-sp-12);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--stage-accent) 5%, var(--stage-bg));
+}
+.logic-live-label {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-medium);
+}
+.logic-live-svg {
+  width: auto;
+  max-width: 100%;
+  height: 3.25rem;
+}
+.logic-live-toggle {
+  cursor: pointer;
+  outline: none;
+}
+.logic-live-toggle:focus-visible {
+  filter: drop-shadow(0 0 4px var(--stage-accent));
+}
+.logic-live-output {
+  color: var(--stage-muted);
+  font-weight: var(--lab-w-bold);
+}
+.logic-live-output[data-value="true"] {
+  color: var(--stage-good);
+}
+.logic-table-scroll {
+  overflow-x: auto;
+  margin: var(--lab-sp-6) 0 0;
+  border-top: 1px solid var(--stage-grid);
+  overscroll-behavior-inline: contain;
+}
+.logic-truth-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.logic-truth-table th {
+  padding: var(--lab-sp-6) var(--lab-sp-12);
+  border-bottom: 2px solid var(--stage-grid);
+  font-weight: var(--lab-w-semibold);
+  text-align: center;
+  white-space: nowrap;
+}
+.logic-truth-table th[data-output] {
+  color: var(--stage-accent);
+}
+.logic-truth-table th[data-matched] {
+  color: var(--stage-good);
+}
+.logic-truth-table td {
+  padding: var(--lab-sp-6) var(--lab-sp-12);
+  border-bottom: 1px solid color-mix(in oklab, var(--stage-grid) 60%, transparent);
+  text-align: center;
+  color: var(--stage-muted);
+}
+.logic-truth-table tr:last-child td {
+  border-bottom: 0;
+}
+.logic-truth-table td[data-value] {
+  color: var(--stage-good);
+  font-weight: var(--lab-w-bold);
+}
+.logic-truth-table tr[data-current] {
+  background: color-mix(in oklab, var(--stage-accent) 12%, transparent);
+}
+.logic-truth-table th[data-variable] {
+  color: var(--stage-accent);
+}
+.logic-truth-table [data-expression-start="true"] {
+  border-inline-start: 2px solid var(--stage-grid);
+}
+.logic-truth-table [data-final="true"] {
+  background: color-mix(in oklab, var(--stage-accent) 6%, transparent);
+}
+.logic-truth-table tr[data-highlighted="true"] {
+  background: color-mix(in oklab, var(--stage-accent) 12%, transparent);
+}
+.logic-lab-inspector,
+.logic-table-panel {
+  display: flex;
+  flex-direction: column;
+}
+.logic-lab-inspector {
+  gap: var(--lab-sp-10);
+}
+.logic-lab-status {
+  align-self: flex-start;
+}
+.logic-table-panel {
+  gap: var(--lab-sp-6);
+}
+.logic-table-panel > span {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.logic-answer-cell {
+  min-width: 1.875rem;
+  padding: 2px var(--lab-sp-8);
+  border: 1.5px solid var(--stage-grid);
+  border-radius: var(--lab-r-sm);
+  background: transparent;
+  color: var(--stage-fg);
+  font-weight: var(--lab-w-semibold);
+  cursor: pointer;
+}
+.logic-answer-cell[data-state="empty"] {
+  color: var(--stage-muted);
+}
+.logic-answer-cell[data-state="true"] {
+  color: var(--stage-good);
+}
+.logic-answer-cell[data-state="correct"] {
+  border-color: var(--stage-good);
+  background: color-mix(in oklab, var(--stage-good) 16%, transparent);
+  color: var(--stage-good);
+}
+.logic-answer-cell[data-state="wrong"] {
+  border-color: var(--stage-danger);
+  background: color-mix(in oklab, var(--stage-danger) 14%, transparent);
+}
+.logic-answer-cell:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+@media (max-width: 36rem) {
+  .logic-truth-table th,
+  .logic-truth-table td {
+    padding-inline: var(--lab-sp-8);
+  }
+}

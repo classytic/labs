@@ -1,0 +1,168 @@
+/* Rule figures: concrete representations shared by the counting rulebook. */
+.count-rule-product,
+.count-rule-slots,
+.count-rule-repeat {
+  display: grid;
+  justify-items: center;
+  gap: var(--lab-sp-8);
+}
+.count-rule-axis,
+.count-rule-layers,
+.count-rule-slots > span,
+.count-rule-repeat small {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+}
+.count-rule-grid {
+  display: grid;
+  width: min(100%, 24rem);
+  gap: var(--lab-sp-4);
+}
+.count-rule-grid > span {
+  display: grid;
+  min-height: 1.75rem;
+  place-items: center;
+  border: 1px solid
+    color-mix(in oklab, var(--primary, var(--stage-accent)) 38%, var(--border, var(--stage-grid)));
+  border-radius: var(--lab-r-xs);
+  background: color-mix(
+    in oklab,
+    var(--primary, var(--stage-accent)) 9%,
+    var(--card, var(--stage-bg))
+  );
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+}
+.count-rule-sum {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--lab-sp-10);
+  width: min(100%, 30rem);
+  margin-inline: auto;
+}
+.count-rule-sum section {
+  display: grid;
+  justify-items: center;
+  gap: var(--lab-sp-8);
+  min-height: 8rem;
+  padding: var(--lab-sp-12);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--radius, 0.65rem);
+  background: var(--card, var(--stage-bg));
+}
+.count-rule-sum section > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--lab-sp-4);
+}
+.count-rule-sum section > div > span {
+  display: grid;
+  width: 1.45rem;
+  height: 1.45rem;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(
+    in oklab,
+    var(--primary, var(--stage-accent)) 14%,
+    var(--card, var(--stage-bg))
+  );
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+}
+.count-rule-sum small,
+.count-rule-or {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.count-rule-or {
+  font-weight: var(--lab-w-bold);
+  text-transform: uppercase;
+}
+.count-rule-slots > div,
+.count-rule-repeat {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--lab-sp-8);
+}
+.count-rule-slots > div > span,
+.count-rule-repeat > span {
+  display: grid;
+  min-width: 4rem;
+  min-height: 4rem;
+  place-items: center;
+  gap: var(--lab-sp-2);
+  padding: var(--lab-sp-6);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--radius, 0.6rem);
+  background: var(--card, var(--stage-bg));
+}
+.count-rule-slots small,
+.count-rule-repeat small {
+  font-size: var(--lab-t-micro);
+}
+.count-rule-slots strong,
+.count-rule-repeat strong {
+  font-size: var(--lab-t-sm);
+}
+.count-rule-repeat i {
+  color: var(--primary, var(--stage-accent));
+  font-style: normal;
+}
+.count-rule-set {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--lab-sp-8);
+  width: min(100%, 28rem);
+  margin-inline: auto;
+}
+.count-rule-set > span {
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: 50%;
+  background: var(--card, var(--stage-bg));
+  font-weight: var(--lab-w-bold);
+}
+.count-rule-set > span[data-selected] {
+  border-color: var(--primary, var(--stage-accent));
+  background: color-mix(
+    in oklab,
+    var(--primary, var(--stage-accent)) 12%,
+    var(--card, var(--stage-bg))
+  );
+  color: var(--primary, var(--stage-accent));
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary, var(--stage-accent)) 18%, transparent);
+}
+.complex-rule-pair {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+@container rule-card (min-width: 32rem) {
+  .complex-rule-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@container rule-card (min-width: 34rem) {
+  .trig-rule-figures {
+    grid-template-columns: minmax(12rem, 0.85fr) minmax(15rem, 1.15fr);
+    align-items: center;
+  }
+}
+.math-signed-value[data-sign="zero"] {
+  color: var(--stage-muted);
+}
+
+.math-trig-values {
+  display: flex;
+  justify-content: center;
+  gap: var(--lab-sp-14);
+  margin-top: 2px;
+  font-size: var(--lab-t-eyebrow);
+}

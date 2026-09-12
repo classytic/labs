@@ -1,0 +1,29 @@
+/** GENERATED — real-schema discrete authoring blocks. */
+import { manifestToBlock } from '../../lab-def/to-block.js';
+import arrangements from '../discrete/arrangements/manifest.js';
+import bayes from '../discrete/bayes/manifest.js';
+import binomial from '../discrete/binomial/manifest.js';
+import combinationStudio from '../discrete/combination-studio/manifest.js';
+import countingSlots from '../discrete/counting-slots/manifest.js';
+import countingTree from '../discrete/counting-tree/manifest.js';
+import expectedValue from '../discrete/expected-value/manifest.js';
+import hypergeometric from '../discrete/hypergeometric/manifest.js';
+import inductionLadder from '../discrete/induction-ladder/manifest.js';
+import invariantDetective from '../discrete/invariant-detective/manifest.js';
+import karnaugh from '../discrete/karnaugh/manifest.js';
+import lln from '../discrete/lln/manifest.js';
+import modularClock from '../discrete/modular-clock/manifest.js';
+import monteCarlo from '../discrete/monte-carlo/manifest.js';
+import montyHall from '../discrete/monty-hall/manifest.js';
+import outcomeBuilder from '../discrete/outcome-builder/manifest.js';
+import pascal from '../discrete/pascal/manifest.js';
+import pigeonholeAdversary from '../discrete/pigeonhole-adversary/manifest.js';
+import proofBuilder from '../discrete/proof-builder/manifest.js';
+import recurrenceBuilder from '../discrete/recurrence-builder/manifest.js';
+import ruleCard from '../discrete/rule-card/manifest.js';
+import sampleSpace from '../discrete/sample-space/manifest.js';
+import selection from '../discrete/selection/manifest.js';
+import truthTable from '../discrete/truth-table/manifest.js';
+import venn from '../discrete/venn/manifest.js';
+
+export const blocks = [arrangements, bayes, binomial, combinationStudio, countingSlots, countingTree, expectedValue, hypergeometric, inductionLadder, invariantDetective, karnaugh, lln, modularClock, monteCarlo, montyHall, outcomeBuilder, pascal, pigeonholeAdversary, proofBuilder, recurrenceBuilder, ruleCard, sampleSpace, selection, truthTable, venn].map(manifestToBlock);

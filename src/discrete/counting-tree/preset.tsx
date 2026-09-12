@@ -1,0 +1,558 @@
+'use client';
+
+/**
+ * CountingTree, the GENERAL sequential-counting + probability-tree tool. One
+ * model covers the multiplication principle, permutations (draw without
+ * replacement → n·(n−1)·…), with-replacement counts (nᵏ), the
+ * permutation→combination collapse (÷k!), AND probability trees (multiply the
+ * weights down a path). The creator declares the stages (or a pool to draw
+ * from); the kernel (`@classytic/labs/discrete/core`) computes every number, so
+ * an agent narrates and never invents.
+ *
+ * Two authoring forms:
+ *   • `stages` , explicit uniform-per-stage branches (general multiplication /
+ *                 independent probability, e.g. flip a coin 3×).
+ *   • `pool`+`draws`+`replacement`, draw k items from a pool; replacement off
+ *                 ⇒ a permutation tree (5·4·3), on ⇒ nᵏ.
+ */
+
+import { Fragment, useMemo, useState, type ReactNode } from 'react';
+import { RotateCcw } from 'lucide-react';
+import { Stage, Segment, Dot, Label, useControlSurface, useLearner } from '@classytic/stage';
+import { Stepper, Chip, CheckButton, StatusPill, IconButton } from '../../kit/controls.js';
+import { Field } from '../../kit/frame.js';
+import { Activity } from '../../kit/activity.js';
+import {
+  useHints,
+  HintLadder,
+  RevealSolution,
+  useCheckpoint,
+  useChallenge,
+  ChallengeCard,
+  type ChallengeQuestion,
+} from '../../kit/pedagogy.js';
+import { factorial } from '../core/combinatorics.js';
+import { Tex } from '../../core/tex.js';
+
+export interface TreeBranch {
+  label: string;
+  weight?: number;
+}
+export interface TreeStage {
+  label?: string;
+  branches: TreeBranch[];
+}
+export type CountAsk = 'ordered' | 'unordered';
+
+export interface CountingTreeProps {
+  stages?: TreeStage[];
+  /** Draw-from-a-pool form (generates the stages). */
+  pool?: string[];
+  draws?: number;
+  replacement?: boolean;
+  mode?: 'count' | 'probability';
+  /** count mode: ask for the ordered total, or the unordered (÷k!) count. */
+  ask?: CountAsk;
+  title?: string;
+  prompt?: string;
+  objectives?: string[];
+  hints?: string[];
+  controlId?: string;
+  height?: number;
+}
+
+interface TNode {
+  id: number;
+  depth: number;
+  y: number;
+  label: string;
+  leaf: boolean;
+}
+interface TEdge {
+  from: number;
+  to: number;
+  label: string;
+  weight: number;
+}
+const MAX_LEAVES = 28; // keep trees legible; lessons are small
+const DEFAULT_STAGES: TreeStage[] = [
+  { label: 'first choice', branches: [{ label: 'A' }, { label: 'B' }] },
+  { label: 'second choice', branches: [{ label: '1' }, { label: '2' }] },
+];
+
+/** A readable fraction for small denominators, else 2dp. */
+function frac(w: number): string {
+  for (let d = 2; d <= 12; d++) {
+    const n = w * d;
+    if (Math.abs(n - Math.round(n)) < 1e-6) return `${Math.round(n)}/${d}`;
+  }
+  return w.toFixed(2);
+}
+
+export function CountingTreeLab({
+  stages = DEFAULT_STAGES,
+  pool,
+  draws = 2,
+  replacement = false,
+  mode = 'count',
+  ask = 'ordered',
+  title = 'Counting tree',
+  prompt,
+  objectives,
+  hints: hintList,
+  controlId,
+  height = 320,
+}: CountingTreeProps): ReactNode {
+  const [guess, setGuess] = useState(0);
+  const [checked, setChecked] = useState(false);
+  const [peeked, setPeeked] = useState(false);
+  const [sel, setSel] = useState(-1); // selected leaf (probability path) / spotlight
+  const [hasTraced, setHasTraced] = useState(false);
+  const hints = useHints(hintList);
+  const learner = useLearner();
+
+  // ── build the tree (nodes + edges + leaf paths) from either form ──
+  const built = useMemo(() => {
+    const nodes: TNode[] = [];
+    const edges: TEdge[] = [];
+    const leafPaths: { id: number; path: string; prob: number; edges: number[] }[] = [];
+    let id = 0,
+      leafY = 0,
+      overflow = false;
+
+    const kidsAt = (
+      depth: number,
+      remaining: string[],
+    ): { label: string; weight: number; item?: string }[] => {
+      if (pool) {
+        if (depth >= draws) return [];
+        const items = replacement ? pool : remaining;
+        return items.map((it) => ({ label: it, weight: items.length ? 1 / items.length : 0, item: it }));
+      }
+      const st = stages?.[depth];
+      if (!st) return [];
+      const tot = st.branches.reduce((s, b) => s + (b.weight ?? 1), 0) || 1;
+      return st.branches.map((b) => ({
+        label: b.label,
+        weight: mode === 'probability' ? (b.weight ?? 1) / tot : 1,
+      }));
+    };
+    const depthCount = pool ? draws : (stages?.length ?? 0);
+
+    const rec = (
+      depth: number,
+      remaining: string[],
+      pathLabel: string,
+      prob: number,
+      edgeIds: number[],
+    ): TNode => {
+      const myId = id++;
+      const node: TNode = { id: myId, depth, y: 0, label: '', leaf: false };
+      const kids = kidsAt(depth, remaining);
+      if (kids.length === 0 || depth >= depthCount) {
+        node.leaf = true;
+        node.y = leafY++;
+        node.label = pathLabel;
+        leafPaths.push({ id: myId, path: pathLabel, prob, edges: edgeIds });
+        nodes.push(node);
+        return node;
+      }
+      const ys: number[] = [];
+      for (const k of kids) {
+        if (leafY > MAX_LEAVES) {
+          overflow = true;
+          break;
+        }
+        const eId = edges.length;
+        const child = rec(
+          depth + 1,
+          replacement || !pool ? remaining : remaining.filter((r) => r !== k.item),
+          pathLabel ? `${pathLabel}${k.label}` : k.label,
+          prob * k.weight,
+          [...edgeIds, eId],
+        );
+        edges.push({ from: myId, to: child.id, label: k.label, weight: k.weight });
+        ys.push(child.y);
+      }
+      node.y = ys.length ? ys.reduce((a, b) => a + b, 0) / ys.length : leafY++;
+      nodes.push(node);
+      return node;
+    };
+    rec(0, pool ? [...pool] : [], '', 1, []);
+    return { nodes, edges, leafPaths, leaves: leafY, maxDepth: depthCount, overflow };
+  }, [stages, pool, draws, replacement, mode]);
+
+  const byId = useMemo(() => new Map(built.nodes.map((n) => [n.id, n])), [built]);
+
+  // ── kernel answers (the source of truth) ──
+  const orderedTotal = built.leafPaths.length;
+  const k = pool ? draws : (stages?.length ?? 0);
+  const unorderedTotal = Math.round(orderedTotal / factorial(k)); // ÷k! (only meaningful when each leaf is one ordering of a chosen set)
+  const factorStr = useMemo(() => {
+    if (pool) {
+      const n = pool.length;
+      const parts = Array.from({ length: draws }, (_, i) => (replacement ? n : n - i));
+      return parts.join(' \\times ');
+    }
+    return (stages ?? []).map((s) => s.branches.length).join(' \\times ');
+  }, [pool, draws, replacement, stages]);
+
+  const target = ask === 'unordered' ? unorderedTotal : orderedTotal;
+
+  // ── PREDICT-FIRST: commit to a count before the multiplication is explained ──
+  // Authored from the ACTUAL config: correct = target; distractors are the
+  // classic traps (with-replacement nᵏ, the ÷k! confusion, "add the pool" n·k).
+  const predictQ = useMemo<ChallengeQuestion[]>(() => {
+    if (mode === 'probability')
+      return [
+        {
+          id: 'predict-path-probability',
+          prompt: 'How do you find the probability of one complete path through a probability tree?',
+          choices: [
+            { value: 'multiply', label: 'multiply the branch probabilities' },
+            { value: 'add', label: 'add the branch probabilities' },
+            { value: 'last', label: 'use only the final branch' },
+          ],
+          answer: 'multiply',
+          explain: 'A path is a sequence of events that all occur, so its branch probabilities multiply.',
+        },
+      ];
+    const n = pool ? pool.length : 0;
+    const withRepl = pool ? Math.pow(n, draws) : 0; // nᵏ trap (forgets the pool shrinks)
+    const kFact = factorial(k); // ÷k! / ×k! confusion
+    const addTrap = pool ? n * draws : 0; // adds instead of multiplies
+    const prompt = pool
+      ? `Filling ${draws} ranked ${draws === 1 ? 'spot' : 'spots'} from ${n} ${n === 1 ? 'option' : 'options'}, ${replacement ? 'reuse allowed' : 'with no repeats'}, how many ${ask === 'unordered' ? 'unordered selections' : 'ordered outcomes'} are there?`
+      : `Working down ${k} ${k === 1 ? 'stage' : 'stages'} of choices, how many ${ask === 'unordered' ? 'unordered selections' : 'ordered paths'} does the tree end with?`;
+    const distractors = [withRepl, kFact, addTrap, target + 1, target * 2].filter(
+      (v) => Number.isFinite(v) && v > 0 && v !== target,
+    );
+    const seen = new Set<number>([target]);
+    const choiceVals = [target];
+    for (const v of distractors) {
+      if (!seen.has(v)) {
+        seen.add(v);
+        choiceVals.push(v);
+      }
+      if (choiceVals.length >= 3) break;
+    }
+    choiceVals.sort((a, b) => a - b);
+    return [
+      {
+        id: 'predict-count',
+        prompt,
+        choices: choiceVals.map((v) => ({ value: String(v), label: String(v) })),
+        answer: String(target),
+        explain: (
+          <>
+            Multiply a <b>shrinking pool</b>:{' '}
+            <Tex tex={`${factorStr}${ask === 'unordered' ? ` \\div ${k}!` : ''} = ${target}`} />.
+          </>
+        ),
+      },
+    ];
+  }, [mode, pool, draws, replacement, ask, k, target, orderedTotal, factorStr]);
+  const ch = useChallenge(predictQ);
+
+  const solved =
+    mode === 'count'
+      ? checked && guess === target && !peeked && hasTraced && ch.allCorrect
+      : sel >= 0 && hasTraced && ch.allCorrect;
+  useCheckpoint({ solved, activity: `counting-tree:${title}`, hintsUsed: hints.count });
+
+  const check = (): void => setChecked(true);
+  const reset = (): void => {
+    setGuess(0);
+    setChecked(false);
+    setPeeked(false);
+    setSel(-1);
+    setHasTraced(false);
+    ch.reset();
+  };
+  const reveal = (): void => {
+    setPeeked(true);
+    setGuess(target);
+    setChecked(true);
+    learner?.report({
+      activity: `counting-tree:${title}`,
+      correct: false,
+      completion: true,
+      score: { raw: 0, max: 1 },
+    });
+  };
+
+  useControlSurface(controlId, {
+    highlight: {
+      type: 'number',
+      label: 'spotlight a path (leaf index, −1 clears)',
+      min: -1,
+      max: Math.max(0, built.leafPaths.length - 1),
+      get: () => sel,
+      set: (v) => {
+        setSel(Math.round(v));
+        setHasTraced(v >= 0);
+      },
+    },
+    step: {
+      type: 'action',
+      label: 'walk to the next path',
+      invoke: () => {
+        setSel((s) => (s + 1) % Math.max(1, built.leafPaths.length));
+        setHasTraced(true);
+      },
+    },
+    reveal: { type: 'action', label: 'reveal the answer', invoke: reveal },
+    check: { type: 'action', label: 'grade the count', invoke: check },
+    reset: { type: 'action', label: 'clear', invoke: reset },
+  });
+
+  const selPath = sel >= 0 ? built.leafPaths[sel] : undefined;
+  const selEdges = new Set(selPath?.edges ?? []);
+  const view = {
+    xMin: -0.4,
+    xMax: built.maxDepth + 1.3,
+    yMin: -0.7,
+    yMax: Math.max(0.7, built.leaves - 1 + 0.7),
+  };
+
+  // One row per leaf path. Below about 20px a row, the branch letters of neighbouring paths print
+  // on each other, so a tree with many paths makes the figure taller rather than tighter.
+  const stageHeight = Math.max(height, built.leaves * 22 + 40);
+
+  const figure = (
+    <>
+      <div className="discrete-stage-scene">
+        <Stage
+          view={view}
+          height={stageHeight}
+          preserveAspect={false}
+          ariaLabel={`Counting tree with ${orderedTotal} paths`}
+        >
+          {built.edges.map((e, i) => {
+            const a = byId.get(e.from)!,
+              b = byId.get(e.to)!;
+            const on = selEdges.has(i);
+            return (
+              <Fragment key={i}>
+                <Segment
+                  from={{ x: a.depth, y: a.y }}
+                  to={{ x: b.depth, y: b.y }}
+                  color={on ? 'var(--stage-good)' : 'var(--stage-muted)'}
+                  weight={on ? 3 : 1.5}
+                  opacity={on ? 1 : 0.6}
+                />
+                <Label
+                  x={(a.depth + b.depth) / 2}
+                  y={(a.y + b.y) / 2}
+                  text={mode === 'probability' ? `${e.label} ${frac(e.weight)}` : e.label}
+                  color={on ? 'var(--stage-good)' : 'var(--stage-fg)'}
+                  size={11}
+                  dy={-7}
+                />
+              </Fragment>
+            );
+          })}
+          {built.nodes.map((n) => (
+            <Fragment key={n.id}>
+              <Dot
+                x={n.depth}
+                y={n.y}
+                r={n.leaf ? 4 : 3}
+                color={n.leaf ? 'var(--stage-accent)' : 'var(--stage-fg)'}
+                opacity={n.leaf ? 1 : 0.6}
+              />
+              {n.leaf && (
+                <Label
+                  x={n.depth}
+                  y={n.y}
+                  text={
+                    mode === 'probability'
+                      ? `${n.label} = ${frac(built.leafPaths.find((p) => p.id === n.id)?.prob ?? 0)}`
+                      : n.label
+                  }
+                  color="var(--stage-accent)"
+                  size={11}
+                  dx={10}
+                  anchor="start"
+                />
+              )}
+            </Fragment>
+          ))}
+        </Stage>
+      </div>
+
+      {built.overflow && (
+        <p className="lab-prompt">
+          Tree truncated at {MAX_LEAVES} paths, shrink the pool/draws to see it all.
+        </p>
+      )}
+    </>
+  );
+
+  const controls =
+    mode === 'count' ? (
+      <div className="lab-activity-fields">
+        <Field label={ask === 'unordered' ? 'How many unordered selections?' : 'How many paths (outcomes)?'}>
+          <Stepper
+            value={guess}
+            onChange={(v) => {
+              setGuess(v);
+              setChecked(false);
+            }}
+            min={0}
+            max={Math.max(20, orderedTotal * 2)}
+            label="outcome count"
+          />
+        </Field>
+        <CheckButton onClick={check}>Check</CheckButton>
+        {checked && (
+          <StatusPill ok={guess === target}>
+            {guess === target ? `✓ ${target}` : `Not yet, count the branches`}
+          </StatusPill>
+        )}
+        {built.leafPaths.length <= 16 && (
+          <Field label="Trace each path">
+            {built.leafPaths.map((p, i) => (
+              <Chip
+                key={i}
+                selected={sel === i}
+                onClick={() => {
+                  setSel(sel === i ? -1 : i);
+                  setHasTraced(true);
+                }}
+              >
+                {p.path}
+              </Chip>
+            ))}
+            {sel >= 0 && (
+              <span className="discrete-path-status">
+                path {sel + 1} of {orderedTotal}
+              </span>
+            )}
+          </Field>
+        )}
+      </div>
+    ) : (
+      <div className="lab-activity-fields">
+        <Field label="Trace a path">
+          {built.leafPaths.map((p, i) => (
+            <Chip
+              key={i}
+              selected={sel === i}
+              onClick={() => {
+                setSel(i);
+                setHasTraced(true);
+              }}
+            >
+              {p.path}
+            </Chip>
+          ))}
+        </Field>
+        {selPath && (
+          <StatusPill ok>
+            P({selPath.path}) = {frac(selPath.prob)} = {selPath.prob.toFixed(3)}
+          </StatusPill>
+        )}
+      </div>
+    );
+
+  const footer = (
+    <>
+      {predictQ.length > 0 && (
+        <ChallengeCard
+          questions={predictQ}
+          state={ch}
+          title={mode === 'count' ? 'Predict first' : 'Explain the path rule'}
+        />
+      )}
+      {mode === 'count' && checked && (
+        <p className="lab-prompt">
+          Multiplication principle:{' '}
+          <b>
+            <Tex tex={`${factorStr} = ${orderedTotal}`} />
+          </b>{' '}
+          ordered outcomes.
+          {ask === 'unordered' && (
+            <>
+              {' '}
+              Order doesn’t matter, so divide by {k}! = {factorial(k)}:{' '}
+              <b>
+                <Tex tex={`${orderedTotal} / ${factorial(k)} = ${unorderedTotal}`} />
+              </b>
+              .
+            </>
+          )}
+        </p>
+      )}
+      {mode === 'count' && (
+        <RevealSolution
+          available={checked && !solved}
+          solution={
+            <>
+              The count is <b>{target}</b>,{' '}
+              <Tex tex={`${factorStr}${ask === 'unordered' ? ` \\div ${k}!` : ''}`} />.
+            </>
+          }
+          onReveal={reveal}
+        />
+      )}
+      <HintLadder hints={hints} />
+    </>
+  );
+
+  return (
+    <Activity.Root className="discrete-counting-tree-activity">
+      <Activity.Header>
+        <Activity.Heading
+          eyebrow={mode === 'probability' ? 'Probability trees' : 'Multiplication principle'}
+          title={title}
+          description={
+            prompt ?? 'Trace complete branches and connect each path to the product that counts or weighs it.'
+          }
+        />
+        <Activity.FocusButton />
+      </Activity.Header>
+      <Activity.Status>
+        <strong>
+          {mode === 'count'
+            ? `${orderedTotal} paths`
+            : selPath
+              ? `P(${selPath.path}) = ${frac(selPath.prob)}`
+              : 'Choose a path'}
+        </strong>
+        <span>{built.maxDepth} stages</span>
+        <span>{hasTraced ? 'path traced' : 'trace pending'}</span>
+      </Activity.Status>
+      <Activity.Workspace>
+        <Activity.Canvas label="Counting tree">{figure}</Activity.Canvas>
+        <Activity.Inspector label="Path tracing and count controls">{controls}</Activity.Inspector>
+      </Activity.Workspace>
+      <Activity.Feedback>
+        <span>Observe</span>
+        <div>
+          {selPath
+            ? `Path ${selPath.path} follows one branch at every stage${mode === 'probability' ? ` and has probability ${frac(selPath.prob)}.` : '.'}`
+            : 'A complete outcome is one uninterrupted route from the root to a leaf.'}
+        </div>
+      </Activity.Feedback>
+      <section className="lab-authored-task" aria-label="Counting-tree prediction and support">
+        {footer}
+      </section>
+      <Activity.LiveRegion>
+        {selPath
+          ? `Selected path ${selPath.path}; probability ${frac(selPath.prob)}.`
+          : `${orderedTotal} complete paths are available to trace.`}
+        {checked ? (guess === target ? ' The count is correct.' : ' The count is not correct yet.') : ''}
+      </Activity.LiveRegion>
+      <Activity.Transport>
+        <IconButton label="Reset counting tree" onClick={reset}>
+          <RotateCcw aria-hidden="true" />
+        </IconButton>
+        <div className="lab-transport-state">
+          <strong>{hasTraced ? 'Path inspected' : 'Trace a path'}</strong>
+          <span>{orderedTotal} complete paths</span>
+        </div>
+      </Activity.Transport>
+    </Activity.Root>
+  );
+}

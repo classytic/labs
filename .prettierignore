@@ -1,0 +1,31 @@
+# Build output and dependencies
+dist/
+node_modules/
+coverage/
+
+# Generated registries — produced by `npm run labs:generate`; formatting them creates drift.
+src/domains/manifests.ts
+src/domains/render-map.ts
+src/domains/activity-map.ts
+src/domains/block-loaders.ts
+src/domains/catalog.ts
+src/domains/catalog-map.ts
+src/domains/block-sets/
+
+# Visual-harness artefacts (snapshots are compared byte-for-byte)
+tests/gallery/__svg__/
+tests/gallery/png/
+tests/gallery/live/
+tests/gallery/montage/
+
+# Lockfiles, changesets, third-party skill payloads
+package-lock.json
+pnpm-lock.yaml
+.changeset/
+.claude/skills/ui-ux-pro-max/
+.claude/skills/react-three-fiber/
+.claude/skills/creating-svg-illustrations/
+.agents/
+
+# exported by scripts/export-tokens.mjs; its own formatting is canonical
+design-tokens.json

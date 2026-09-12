@@ -1,0 +1,240 @@
+.ict-digit-glyph {
+  flex: 0 0 auto;
+  cursor: default;
+}
+.ict-digit-glyph[data-interactive="true"] {
+  cursor: pointer;
+}
+.ict-digit-content {
+  pointer-events: none;
+}
+.ict-wheel-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--lab-sp-8);
+}
+.ict-wheel-place {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--lab-sp-4);
+}
+.ict-place-weight {
+  line-height: var(--lab-lh-title);
+  text-align: center;
+}
+.ict-place-power {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+.ict-place-value {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.6;
+}
+.ict-place-value[data-active="true"] {
+  color: var(--lab-good, var(--stage-good));
+  opacity: 1;
+}
+.ict-number-scene,
+.ict-odometer-scene {
+  overflow: auto;
+  min-width: 0;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+  color: var(--foreground, var(--stage-fg));
+}
+.ict-number-scene {
+  padding: var(--lab-sp-16) var(--lab-sp-14);
+}
+.ict-bit-groups {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--lab-sp-16);
+}
+.ict-bit-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--lab-sp-6);
+}
+.ict-bit-group-cells {
+  display: flex;
+  gap: var(--lab-sp-4);
+  padding: var(--lab-sp-6);
+  border: 1px dashed var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-sm);
+}
+.ict-bit-group-cells[data-partial="true"] {
+  background: color-mix(in oklab, var(--muted-foreground, var(--stage-muted)) 14%, transparent);
+}
+.ict-group-digit {
+  color: var(--primary, var(--stage-accent));
+  font-size: var(--lab-t-hero);
+  font-weight: var(--lab-w-bold);
+  font-variant-numeric: tabular-nums;
+}
+.ict-group-digit[data-partial="true"] {
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.ict-number-equation {
+  margin-top: var(--lab-sp-12);
+  color: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.ict-number-note {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+  text-align: center;
+}
+.ict-color-preview,
+.ict-wheel-centered {
+  display: flex;
+  justify-content: center;
+}
+.ict-color-preview {
+  align-items: center;
+  gap: var(--lab-sp-10);
+  margin: var(--lab-sp-10) 0 0;
+}
+.ict-color-swatch {
+  width: 4rem;
+  height: 1.5rem;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-xs);
+  background: var(--ict-swatch);
+}
+.ict-color-preview figcaption {
+  display: grid;
+  gap: 2px;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+}
+.ict-color-preview figcaption span {
+  color: var(--foreground, var(--stage-fg));
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-weight: var(--lab-w-regular);
+}
+.ict-odometer-scene {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-16) var(--lab-sp-14);
+}
+.ict-odometer-row {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-12);
+  border-radius: var(--lab-r-sm);
+}
+.ict-odometer-row[data-highlighted="true"] {
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  background: color-mix(in oklab, var(--lab-good, var(--stage-good)) 12%, transparent);
+}
+.ict-base-label {
+  width: 2.625rem;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+}
+.ict-odometer-row[data-highlighted="true"] .ict-base-label {
+  color: var(--lab-good, var(--stage-good));
+}
+.ict-base-value {
+  margin-inline-start: auto;
+  color: var(--foreground, var(--stage-fg));
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.ict-transport-actions {
+  display: flex;
+  gap: var(--lab-sp-6);
+}
+.ict-transport-state {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--lab-sp-8);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+.ict-transport-state span {
+  overflow: hidden;
+  color: var(--muted-foreground, var(--stage-muted));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ict-race-action {
+  display: inline-flex;
+  min-width: 6.5rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-6);
+}
+.ict-race-action svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+.ict-wheel-centered,
+.ict-odometer-row {
+  min-width: max-content;
+}
+@container lab-activity (max-width: 34rem) {
+  .ict-number-scene,
+  .ict-odometer-scene {
+    border-inline: 0;
+    border-radius: var(--lab-r-md);
+  }
+  .ict-odometer-row {
+    gap: var(--lab-sp-8);
+  }
+  .ict-base-value {
+    padding-inline-end: var(--lab-sp-4);
+  }
+  .ict-transport-state span {
+    display: none;
+  }
+  .ict-race-action {
+    min-width: 5.5rem;
+    padding-inline: var(--lab-sp-16);
+  }
+}
+@media (max-width: 40rem) {
+  .finance-statement-grid {
+    grid-template-columns: 1fr;
+  }
+  .finance-ratio-list {
+    padding: var(--lab-sp-12);
+  }
+  .finance-ratio-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--lab-sp-4) var(--lab-sp-8);
+  }
+  .finance-ratio-name {
+    width: auto;
+  }
+  .finance-ratio-row .finance-meter-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .finance-ratio-value {
+    width: auto;
+  }
+}

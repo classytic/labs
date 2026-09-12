@@ -1,0 +1,604 @@
+@container lab-activity (max-width: 42.5rem) {
+  .physics-imaging .physics-controls {
+    grid-template-columns: 1fr;
+  }
+  .physics-imaging .physics-controls > * {
+    grid-column: 1;
+  }
+  .physics-imaging .physics-optics-scene svg {
+    height: 20rem;
+  }
+}
+.physics-magnetism-scene {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, currentColor 9%, transparent) 1px,
+        transparent 0
+      )
+      0 0 / 20px 20px,
+    var(--card, var(--stage-bg));
+}
+.physics-magnetism-scene > div {
+  width: 100%;
+}
+.physics-cut-button {
+  min-width: 6.5rem;
+}
+.physics-force-ledger {
+  padding: var(--lab-sp-10) var(--lab-sp-12);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: color-mix(in oklab, currentColor 3%, transparent);
+}
+.physics-force-ledger-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--lab-sp-8);
+  margin-bottom: var(--lab-sp-6);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-micro);
+}
+.physics-force-ledger-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-4);
+}
+.physics-force-row {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  font-size: var(--lab-t-eyebrow);
+}
+.physics-force-label {
+  width: 4.875rem;
+  color: var(--stage-muted);
+  font-weight: var(--lab-w-regular);
+}
+.physics-force-track {
+  position: relative;
+  height: 0.75rem;
+  flex: 1;
+}
+.physics-force-row[data-bold="true"] .physics-force-track {
+  height: 1rem;
+}
+.physics-force-zero {
+  position: absolute;
+  top: -0.125rem;
+  bottom: -0.125rem;
+  left: 50%;
+  width: 1px;
+  background: var(--stage-grid);
+}
+.physics-force-fill {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: var(--force-width);
+  border-radius: var(--lab-r-xs);
+  background: var(--force-color);
+  opacity: 0.85;
+}
+.physics-force-fill[data-direction="up"] {
+  left: 50%;
+}
+.physics-force-fill[data-direction="down"] {
+  right: 50%;
+}
+.physics-force-value {
+  width: 3.75rem;
+  font-weight: var(--lab-w-medium);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.physics-force-row[data-bold="true"] .physics-force-label,
+.physics-force-row[data-bold="true"] .physics-force-value {
+  font-weight: var(--lab-w-semibold);
+}
+.physics-force-row[data-bold="true"] .physics-force-fill {
+  opacity: 1;
+}
+.physics-terminal-velocity .physics-trace-card > div {
+  width: 100%;
+}
+.physics-stopping-graphs {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+.physics-orbit-space {
+  --stage-bg: #07111f;
+  --stage-fg: #e7eefb;
+  --stage-muted: #9aabc4;
+  --stage-grid: rgba(148, 163, 184, 0.2);
+  color: var(--stage-fg);
+  background:
+    radial-gradient(circle at 18% 24%, rgba(125, 211, 252, 0.9) 0 1px, transparent 1.6px) 0 0 /
+      137px 137px,
+    radial-gradient(circle at 73% 18%, rgba(255, 255, 255, 0.8) 0 1px, transparent 1.5px) 0 0 /
+      181px 181px,
+    radial-gradient(circle at 62% 48%, rgba(59, 130, 246, 0.14), transparent 34%),
+    linear-gradient(145deg, #091526, #050b15 72%);
+}
+.physics-orbit-simulator canvas {
+  display: block;
+  width: 100%;
+}
+/* Height follows the viewBox aspect instead of a clamp. A fixed height narrower than the box's
+   own ratio makes the SVG letterbox itself: it scaled to the height and centred, leaving ~100px
+   of dead gutter down each side while the apparatus and the chart fought over what was left. */
+.physics-heating-scene svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 36rem;
+}
+.physics-water-density-scene svg,
+.physics-carnot-scene svg,
+.physics-gas-process-scene svg,
+.physics-expansion-scene svg {
+  display: block;
+  width: 100%;
+  min-height: 22rem;
+}
+.physics-temperature-scales-scene svg {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  height: auto;
+  /* clears this scene's natural height at a full-width column, so it does not letterbox */
+  max-height: 34rem;
+}
+.physics-thermal-model {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+.physics-thermal-laws {
+  display: grid;
+  gap: var(--lab-sp-6);
+  padding-block: var(--lab-sp-10);
+  font-size: var(--lab-t-eyebrow);
+}
+.physics-thermal-equation {
+  font-size: var(--lab-t-eyebrow);
+}
+.physics-water-density .physics-controls,
+.physics-carnot .physics-controls,
+.physics-gas-process .physics-controls,
+.physics-expansion .physics-controls,
+.physics-temperature-scales .physics-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-12) var(--lab-sp-16);
+}
+.physics-water-density .physics-controls > .lab-field:first-child {
+  grid-column: 1 / -1;
+}
+.physics-gas-process .physics-controls > .lab-field:first-child {
+  grid-column: 1 / -1;
+}
+.physics-expansion .physics-controls > .lab-field:first-child,
+.physics-temperature-scales .physics-controls > .lab-field:first-child {
+  grid-column: 1 / -1;
+}
+.physics-efficiency .lab-activity-workspace {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+}
+.physics-efficiency-scene {
+  background:
+    radial-gradient(
+      circle at 22% 35%,
+      color-mix(in oklab, var(--primary, var(--stage-accent)) 7%, transparent),
+      transparent 42%
+    ),
+    var(--card, var(--stage-bg));
+}
+.physics-efficiency-scene svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 30rem;
+}
+.physics-efficiency[data-focus] .physics-efficiency-scene svg {
+  height: clamp(23rem, 55vh, 34rem);
+}
+.physics-efficiency .physics-controls {
+  display: grid;
+}
+.physics-efficiency .physics-controls > .lab-field {
+  width: 100%;
+}
+.physics-efficiency .physics-device-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-6);
+  width: 100%;
+}
+.physics-efficiency .physics-device-grid .lab-chip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  min-height: 3rem;
+  padding: var(--lab-sp-8) var(--lab-sp-10);
+  text-align: left;
+}
+.physics-efficiency .physics-device-grid .lab-chip span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.physics-efficiency .physics-device-grid .lab-chip strong {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+.physics-efficiency .physics-device-grid .lab-chip[data-sel="true"] strong {
+  color: var(--primary, var(--stage-accent));
+}
+.physics-efficiency-ledger {
+  display: grid;
+  gap: var(--lab-sp-6);
+  padding-block: var(--lab-sp-12);
+}
+.physics-efficiency-ledger > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lab-sp-12);
+  font-size: var(--lab-t-eyebrow);
+}
+.physics-efficiency-ledger span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.physics-efficiency-ledger i {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--lab-r-pill);
+  background: var(--stage-good, #16a34a);
+}
+.physics-efficiency-ledger i[data-kind="waste"] {
+  background: var(--stage-danger, #d65a3c);
+}
+.physics-efficiency-ledger progress {
+  width: 100%;
+  height: 0.45rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--lab-r-pill);
+  background: var(--muted, var(--stage-grid));
+  accent-color: var(--stage-good, #16a34a);
+}
+.physics-efficiency-ledger progress[data-kind="waste"] {
+  accent-color: var(--stage-danger, #d65a3c);
+}
+.physics-efficiency-ledger progress::-webkit-progress-bar {
+  background: var(--muted, var(--stage-grid));
+}
+.physics-efficiency-ledger progress::-webkit-progress-value {
+  border-radius: var(--lab-r-pill);
+  background: var(--stage-good, #16a34a);
+}
+.physics-efficiency-ledger progress[data-kind="waste"]::-webkit-progress-value {
+  background: var(--stage-danger, #d65a3c);
+}
+.physics-efficiency-ledger progress::-moz-progress-bar {
+  border-radius: var(--lab-r-pill);
+  background: var(--stage-good, #16a34a);
+}
+.physics-efficiency-ledger progress[data-kind="waste"]::-moz-progress-bar {
+  background: var(--stage-danger, #d65a3c);
+}
+.physics-efficiency-model {
+  display: grid;
+  gap: var(--lab-sp-8);
+  padding: var(--lab-sp-2) var(--lab-sp-4) 0;
+  font-size: var(--lab-t-eyebrow);
+}
+.physics-efficiency-model p {
+  margin: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  line-height: var(--lab-lh-ui);
+}
+.physics-electric-flux .physics-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-12) var(--lab-sp-16);
+}
+.physics-electric-flux-scene > div,
+.physics-gauss-scene > div {
+  width: 100%;
+}
+.physics-vector-board-scene > div,
+.physics-vector-scene > div {
+  width: 100%;
+}
+.physics-vector-types-scene {
+  padding: var(--lab-sp-10);
+}
+.physics-vector-type-grid {
+  margin: 0;
+}
+.physics-vector-type-grid .lang-typecard {
+  background: var(--card, var(--stage-bg));
+}
+.physics-river-boat-scene > div {
+  width: 100%;
+}
+.physics-rain-relative-scene {
+  position: relative;
+  width: 100%;
+}
+/* CanvasLayer renders <div><canvas></div>, so match the canvas at any depth and make ONLY the
+   labelled overlay absolute. `> div { position: absolute }` also caught the canvas wrapper,
+   which took every child out of flow and collapsed the scene to zero height. */
+.physics-rain-relative-scene canvas {
+  display: block;
+  width: 100%;
+}
+.physics-rain-relative-scene > .physics-canvas-overlay {
+  width: 100%;
+}
+.physics-river-boat .physics-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-12) var(--lab-sp-16);
+}
+.physics-river-boat .physics-controls > .lab-chip {
+  grid-column: 1 / -1;
+}
+.physics-step-transport {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--lab-sp-8);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+.physics-step-transport span {
+  overflow: hidden;
+  color: var(--muted-foreground, var(--stage-muted));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.physics-step-actions {
+  display: inline-flex;
+  gap: var(--lab-sp-6);
+}
+.physics-gravity-drop-scene > div,
+.physics-exponential-scene > div,
+.physics-optics-target-scene > div {
+  width: 100%;
+}
+.physics-exponential .physics-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-12) var(--lab-sp-16);
+}
+.physics-power-context,
+.physics-work-energy-context {
+  display: flex;
+  min-height: 4.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lab-sp-16);
+  padding: var(--lab-sp-8) var(--lab-sp-14) 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.physics-power-context svg,
+.physics-work-energy-context svg {
+  flex: 1 1 18rem;
+  margin: 0 !important;
+}
+.physics-equation-result {
+  font-size: clamp(1rem, 3cqw, 1.35rem) !important;
+}
+.physics-torque-ledger {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--border, var(--stage-grid));
+}
+.physics-torque-ledger > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--lab-sp-16);
+  padding: var(--lab-sp-10) var(--lab-sp-12);
+  background: var(--card, var(--stage-bg));
+}
+.physics-torque-ledger span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.physics-torque-ledger strong {
+  font-size: var(--lab-t-sm);
+  font-variant-numeric: tabular-nums;
+}
+.physics-torque-ledger [data-balanced] {
+  background: color-mix(in oklab, var(--stage-good) 10%, var(--card, var(--stage-bg)));
+}
+/* Flat inside the inspector, which already supplies the frame: 13 thermal and waves labs render
+   a probe (often beside a second readout), and each carrying its own border, radius and tint
+   turned the panel into a stack of cards. Hairlines separate stacked readouts instead. */
+.physics-probe {
+  display: grid;
+  gap: var(--lab-sp-4);
+  padding-block: var(--lab-sp-12);
+}
+.physics-probe + .physics-probe,
+.physics-probe + .physics-wave-readings,
+.physics-probe + .physics-thermal-laws {
+  border-top: 1px solid color-mix(in oklab, var(--border, var(--stage-grid)) 65%, transparent);
+}
+.physics-probe span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--lab-ls-caps);
+}
+.physics-probe strong {
+  font-size: var(--lab-t-body);
+  text-transform: capitalize;
+}
+.physics-probe small {
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.physics-work-potential-scene > div {
+  width: 100%;
+}
+.physics-wave-scene {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, currentColor 8%, transparent) 1px,
+        transparent 0
+      )
+      0 0 / 20px 20px,
+    var(--card, var(--stage-bg));
+}
+.physics-wave-scene canvas {
+  display: block;
+  width: 100%;
+  min-height: 19rem;
+}
+.physics-wave .physics-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-12);
+  align-items: end;
+}
+.physics-wave .physics-controls > .lab-field:first-child {
+  grid-column: 1 / -1;
+}
+.physics-wave .physics-controls > .lab-chip,
+.physics-wave .physics-control-hint {
+  grid-column: 1 / -1;
+}
+.physics-wave .physics-controls .lab-field-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+  gap: var(--lab-sp-6);
+  width: 100%;
+}
+.physics-wave .physics-controls .lab-field-row .lab-chip {
+  min-height: 2.55rem;
+}
+.physics-wave-relations > div {
+  display: grid;
+  gap: var(--lab-sp-8);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+}
+/* Real hairlines between rows, not a 1px gap over a background-coloured box. */
+.physics-wave-readings {
+  display: grid;
+  padding-block: var(--lab-sp-4);
+}
+.physics-wave-readings > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-8) 0;
+}
+.physics-wave-readings > div + div {
+  border-top: 1px solid color-mix(in oklab, var(--border, var(--stage-grid)) 65%, transparent);
+}
+.physics-wave-readings span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.physics-wave-readings strong {
+  font-size: var(--lab-t-sm);
+  font-variant-numeric: tabular-nums;
+}
+.physics-control-hint {
+  margin: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.physics-wave .lab-activity-status span {
+  white-space: nowrap;
+}
+@container lab-activity (min-width: 60rem) {
+}
+@container lab-activity (max-width: 42.5rem) {
+  .physics-transport-state span {
+    display: none;
+  }
+  .physics-play-button {
+    min-width: 3rem;
+  }
+  .physics-play-button span {
+    display: none;
+  }
+  .physics-power-context > span,
+  .physics-work-energy-context > span {
+    display: none;
+  }
+  .physics-wave .physics-controls {
+    grid-template-columns: 1fr;
+  }
+  .physics-wave .physics-controls > * {
+    grid-column: 1;
+  }
+  .physics-wave-scene canvas {
+    min-height: 16rem;
+  }
+  .physics-heat-transfer .physics-controls,
+  .physics-entropy .physics-controls {
+    grid-template-columns: 1fr;
+  }
+  .physics-heat-transfer .physics-controls > .lab-field:first-child,
+  .physics-entropy .physics-controls > .lab-field:first-child {
+    grid-column: auto;
+  }
+  .physics-water-density .physics-controls,
+  .physics-carnot .physics-controls,
+  .physics-gas-process .physics-controls,
+  .physics-expansion .physics-controls,
+  .physics-temperature-scales .physics-controls {
+    grid-template-columns: 1fr;
+  }
+  .physics-water-density .physics-controls > .lab-field:first-child {
+    grid-column: auto;
+  }
+  .physics-gas-process .physics-controls > .lab-field:first-child {
+    grid-column: auto;
+  }
+  .physics-expansion .physics-controls > .lab-field:first-child,
+  .physics-temperature-scales .physics-controls > .lab-field:first-child {
+    grid-column: auto;
+  }
+  .physics-efficiency .physics-controls .lab-field-row {
+    grid-template-columns: 1fr;
+  }
+  .physics-electric-flux .physics-controls,
+  .physics-gauss-law .physics-controls {
+    grid-template-columns: 1fr;
+  }
+  .physics-river-boat .physics-controls {
+    grid-template-columns: 1fr;
+  }
+  .physics-river-boat .physics-controls > .lab-chip {
+    grid-column: auto;
+  }
+  .physics-step-transport span {
+    display: none;
+  }
+  .physics-exponential .physics-controls {
+    grid-template-columns: 1fr;
+  }
+}

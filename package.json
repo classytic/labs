@@ -1,0 +1,415 @@
+{
+  "name": "@classytic/labs",
+  "version": "0.3.0",
+  "description": "Interactive learning lab — authorable, domain-organized interactive lessons (math, physics, chemistry, circuits, geometry…) built on the @classytic/stage engine. Per-domain subpaths; lesson blocks + presets creators compose and sell.",
+  "author": "Classytic",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./core": {
+      "types": "./dist/core/index.d.mts",
+      "default": "./dist/core/index.mjs"
+    },
+    "./physics": {
+      "types": "./dist/physics/index.d.mts",
+      "default": "./dist/physics/index.mjs"
+    },
+    "./physics/linear-pursuit": {
+      "types": "./dist/physics/linear-pursuit/index.d.mts",
+      "default": "./dist/physics/linear-pursuit/index.mjs"
+    },
+    "./physics/modern": {
+      "types": "./dist/physics/modern/index.d.mts",
+      "default": "./dist/physics/modern/index.mjs"
+    },
+    "./math": {
+      "types": "./dist/math/index.d.mts",
+      "default": "./dist/math/index.mjs"
+    },
+    "./math/calculus": {
+      "types": "./dist/math/calculus/index.d.mts",
+      "default": "./dist/math/calculus/index.mjs"
+    },
+    "./math/derivative-explorer": {
+      "types": "./dist/math/derivative-explorer/index.d.mts",
+      "default": "./dist/math/derivative-explorer/index.mjs"
+    },
+    "./math/integral-explorer": {
+      "types": "./dist/math/integral-explorer/index.d.mts",
+      "default": "./dist/math/integral-explorer/index.mjs"
+    },
+    "./math/fundamental-theorem": {
+      "types": "./dist/math/fundamental-theorem/index.d.mts",
+      "default": "./dist/math/fundamental-theorem/index.mjs"
+    },
+    "./math/optimization": {
+      "types": "./dist/math/optimization/index.d.mts",
+      "default": "./dist/math/optimization/index.mjs"
+    },
+    "./math/root-finding": {
+      "types": "./dist/math/root-finding/index.d.mts",
+      "default": "./dist/math/root-finding/index.mjs"
+    },
+    "./math/newton-method": {
+      "types": "./dist/math/newton-method/index.d.mts",
+      "default": "./dist/math/newton-method/index.mjs"
+    },
+    "./math/taylor": {
+      "types": "./dist/math/taylor/index.d.mts",
+      "default": "./dist/math/taylor/index.mjs"
+    },
+    "./math/taylor-series": {
+      "types": "./dist/math/taylor-series/index.d.mts",
+      "default": "./dist/math/taylor-series/index.mjs"
+    },
+    "./math/ode": {
+      "types": "./dist/math/ode/index.d.mts",
+      "default": "./dist/math/ode/index.mjs"
+    },
+    "./math/differential-equation": {
+      "types": "./dist/math/differential-equation/index.d.mts",
+      "default": "./dist/math/differential-equation/index.mjs"
+    },
+    "./math/phase-portrait": {
+      "types": "./dist/math/phase-portrait/index.d.mts",
+      "default": "./dist/math/phase-portrait/index.mjs"
+    },
+    "./math/limit-explorer": {
+      "types": "./dist/math/limit-explorer/index.d.mts",
+      "default": "./dist/math/limit-explorer/index.mjs"
+    },
+    "./chem": {
+      "types": "./dist/chem/index.d.mts",
+      "default": "./dist/chem/index.mjs"
+    },
+    "./circuits": {
+      "types": "./dist/circuits/index.d.mts",
+      "default": "./dist/circuits/index.mjs"
+    },
+    "./geometry": {
+      "types": "./dist/geometry/index.d.mts",
+      "default": "./dist/geometry/index.mjs"
+    },
+    "./language": {
+      "types": "./dist/language/index.d.mts",
+      "default": "./dist/language/index.mjs"
+    },
+    "./ict": {
+      "types": "./dist/ict/index.d.mts",
+      "default": "./dist/ict/index.mjs"
+    },
+    "./commerce": {
+      "types": "./dist/commerce/index.d.mts",
+      "default": "./dist/commerce/index.mjs"
+    },
+    "./exam": {
+      "types": "./dist/exam/index.d.mts",
+      "default": "./dist/exam/index.mjs"
+    },
+    "./biology": {
+      "types": "./dist/biology/index.d.mts",
+      "default": "./dist/biology/index.mjs"
+    },
+    "./geography": {
+      "types": "./dist/geography/index.d.mts",
+      "default": "./dist/geography/index.mjs"
+    },
+    "./discrete": {
+      "types": "./dist/discrete/index.d.mts",
+      "default": "./dist/discrete/index.mjs"
+    },
+    "./statistics": {
+      "types": "./dist/statistics/index.d.mts",
+      "default": "./dist/statistics/index.mjs"
+    },
+    "./ml": {
+      "types": "./dist/ml/index.d.mts",
+      "default": "./dist/ml/index.mjs"
+    },
+    "./networking": {
+      "types": "./dist/networking/index.d.mts",
+      "default": "./dist/networking/index.mjs"
+    },
+    "./algorithms": {
+      "types": "./dist/algorithms/index.d.mts",
+      "default": "./dist/algorithms/index.mjs"
+    },
+    "./algorithms/core": {
+      "types": "./dist/algorithms/core/index.d.mts",
+      "default": "./dist/algorithms/core/index.mjs"
+    },
+    "./algorithms/graph": {
+      "types": "./dist/algorithms/graph/index.d.mts",
+      "default": "./dist/algorithms/graph/index.mjs"
+    },
+    "./algorithms/dp": {
+      "types": "./dist/algorithms/dp/index.d.mts",
+      "default": "./dist/algorithms/dp/index.mjs"
+    },
+    "./algorithms/heap": {
+      "types": "./dist/algorithms/heap/index.d.mts",
+      "default": "./dist/algorithms/heap/index.mjs"
+    },
+    "./algorithms/tree": {
+      "types": "./dist/algorithms/tree/index.d.mts",
+      "default": "./dist/algorithms/tree/index.mjs"
+    },
+    "./algorithms/react": {
+      "types": "./dist/algorithms/react/index.d.mts",
+      "default": "./dist/algorithms/react/index.mjs"
+    },
+    "./catalog": {
+      "types": "./dist/catalog/index.d.mts",
+      "default": "./dist/catalog/index.mjs"
+    },
+    "./pathways": {
+      "types": "./dist/pathways/index.d.mts",
+      "default": "./dist/pathways/index.mjs"
+    },
+    "./kit": {
+      "types": "./dist/kit/index.d.mts",
+      "default": "./dist/kit/index.mjs"
+    },
+    "./build": {
+      "types": "./dist/build/index.d.mts",
+      "default": "./dist/build/index.mjs"
+    },
+    "./build/runtime": {
+      "types": "./dist/build/runtime/index.d.mts",
+      "default": "./dist/build/runtime/index.mjs"
+    },
+    "./build/editor": {
+      "types": "./dist/build/editor/index.d.mts",
+      "default": "./dist/build/editor/index.mjs"
+    },
+    "./logic": {
+      "types": "./dist/logic/index.d.mts",
+      "default": "./dist/logic/index.mjs"
+    },
+    "./logic/sequential": {
+      "types": "./dist/logic/sequential.d.mts",
+      "default": "./dist/logic/sequential.mjs"
+    },
+    "./logic/runtime": {
+      "types": "./dist/logic/runtime/index.d.mts",
+      "default": "./dist/logic/runtime/index.mjs"
+    },
+    "./logic/editor": {
+      "types": "./dist/logic/editor/index.d.mts",
+      "default": "./dist/logic/editor/index.mjs"
+    },
+    "./blocks": {
+      "types": "./dist/blocks/index.d.mts",
+      "default": "./dist/blocks/index.mjs"
+    },
+    "./blocks/attrs": {
+      "types": "./dist/lab-def/attrs.d.mts",
+      "default": "./dist/lab-def/attrs.mjs"
+    },
+    "./blocks/catalog": {
+      "types": "./dist/blocks/catalog.d.mts",
+      "default": "./dist/blocks/catalog.mjs"
+    },
+    "./blocks/domains": {
+      "types": "./dist/blocks/domains.d.mts",
+      "default": "./dist/blocks/domains.mjs"
+    },
+    "./blocks/gallery": {
+      "types": "./dist/blocks/gallery.d.mts",
+      "default": "./dist/blocks/gallery.mjs"
+    },
+    "./blocks/lazy": {
+      "types": "./dist/blocks/lazy.d.mts",
+      "default": "./dist/blocks/lazy.mjs"
+    },
+    "./blocks/lesson": {
+      "types": "./dist/blocks/lesson.d.mts",
+      "default": "./dist/blocks/lesson.mjs"
+    },
+    "./blocks/render": {
+      "types": "./dist/domains/render.d.mts",
+      "default": "./dist/domains/render.mjs"
+    },
+    "./schemas": {
+      "types": "./dist/schemas/index.d.mts",
+      "default": "./dist/schemas/index.mjs"
+    },
+    "./authoring": {
+      "types": "./dist/authoring/index.d.mts",
+      "default": "./dist/authoring/index.mjs"
+    },
+    "./three": {
+      "types": "./dist/three/index.d.mts",
+      "default": "./dist/three/index.mjs"
+    },
+    "./three/chemistry": {
+      "types": "./dist/three/chemistry/index.d.mts",
+      "default": "./dist/three/chemistry/index.mjs"
+    },
+    "./three/physics": {
+      "types": "./dist/three/physics/index.d.mts",
+      "default": "./dist/three/physics/index.mjs"
+    },
+    "./three/biology": {
+      "types": "./dist/three/biology/index.d.mts",
+      "default": "./dist/three/biology/index.mjs"
+    },
+    "./styles.css": "./styles.css",
+    "./styles/core.css": "./styles/core.css",
+    "./styles/figure.css": "./styles/figure.css",
+    "./styles/domains.css": "./styles/domains.css",
+    "./styles/domains/*.css": "./styles/domains/*.css",
+    "./styles/domains/parts/*.css": "./styles/domains/parts/*.css",
+    "./styles/commerce.css": "./styles/commerce.css",
+    "./styles/exam.css": "./styles/exam.css",
+    "./styles/three.css": "./styles/three.css",
+    "./styles/modern-physics.css": "./styles/modern-physics.css",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist",
+    "styles.css",
+    "styles",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/classytic/labs.git"
+  },
+  "homepage": "https://github.com/classytic/labs#readme",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "postinstall": "node scripts/sync-stage.mjs",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"tests/**/*.{ts,tsx,mjs}\" \"scripts/**/*.mjs\" \"styles/**/*.css\" \"*.{ts,mjs,json,css}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"tests/**/*.{ts,tsx,mjs}\" \"scripts/**/*.mjs\" \"styles/**/*.css\" \"*.{ts,mjs,json,css}\"",
+    "typecheck": "tsc --noEmit",
+    "typecheck:conformance": "tsc -p tsconfig.conformance.json",
+    "ui:check": "node scripts/check-host-ui.mjs",
+    "test:unit": "vitest run tests/core.test.ts tests/catalog.test.ts tests/stage-templates.test.ts",
+    "test:package": "vitest run tests/widgets.test.tsx",
+    "pretest": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "gallery": "npm run build && node tests/gallery/rasterize.mjs",
+    "gallery:svg": "vitest run tests/gallery.test.tsx",
+    "experience:check": "npm run build && node scripts/experience-check.mjs",
+    "lint": "tsc --noEmit",
+    "lab:create": "node scripts/lab-create.mjs",
+    "labs:generate": "node scripts/gen-manifests.mjs && node scripts/gen-render-map.mjs && node scripts/gen-activity-map.mjs && node scripts/gen-catalog.mjs && node scripts/gen-domain-blocks.mjs",
+    "labs:check": "node scripts/labs-check.mjs",
+    "labs:quality": "npm run build && node scripts/labs-quality.mjs",
+    "labs:quality:strict": "npm run build && node scripts/labs-quality.mjs --strict",
+    "package:check": "node scripts/package-check.mjs",
+    "styles:split": "node scripts/split-domains.mjs",
+    "styles:check": "node scripts/split-domains.mjs --check",
+    "tokens:export": "node scripts/export-tokens.mjs",
+    "tokens:check": "node scripts/export-tokens.mjs --check",
+    "collisions:check": "node tests/gallery/collision-check.mjs --strict",
+    "verify": "npm run format:check && npm run labs:check && npm run styles:check && npm run tokens:check && npm run typecheck && npm test",
+    "verify:release": "npm run labs:check && npm run ui:check && npm run typecheck && npm run typecheck:conformance && npm run build && node scripts/labs-quality.mjs --strict && npm run package:check && npm run styles:check && npm run tokens:check && npm run collisions:check && vitest run",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run build && changeset publish",
+    "push": "classytic-push",
+    "prepublishOnly": "npm run verify:release"
+  },
+  "peerDependencies": {
+    "@classytic/cms": ">=0.3.0",
+    "@classytic/cms-ui": ">=0.4.0",
+    "@classytic/stage": ">=0.3.0",
+    "@react-three/fiber": ">=9.7",
+    "clsx": ">=2.1",
+    "katex": ">=0.18",
+    "lucide-react": ">=1.41",
+    "react": ">=19.2",
+    "react-dom": ">=19.2",
+    "tailwind-merge": ">=3.6",
+    "three": ">=0.185",
+    "zod": ">=4.5"
+  },
+  "peerDependenciesMeta": {
+    "zod": {
+      "optional": true
+    },
+    "@classytic/cms-ui": {
+      "optional": true
+    },
+    "@classytic/cms": {
+      "optional": true
+    },
+    "@react-three/fiber": {
+      "optional": true
+    },
+    "three": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.9",
+    "@classytic/cms-ui": "^0.3.1",
+    "@classytic/dev-tools": "^0.2.0",
+    "@classytic/stage": "^0.2.0",
+    "@react-three/fiber": "^9.7.0",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/three": "0.186.0",
+    "clsx": "^2.1.1",
+    "happy-dom": "^20.0.0",
+    "lucide-react": "^0.563.0",
+    "playwright": "^1.61.0",
+    "prettier": "^3.9.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.5.0",
+    "three": "0.186.0",
+    "tsdown": "^0.22.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.0",
+    "zod": "^4.1.0"
+  },
+  "keywords": [
+    "react",
+    "visualization",
+    "interactive",
+    "education",
+    "learning",
+    "math",
+    "calculus",
+    "derivative",
+    "integral",
+    "limit",
+    "gradient-descent",
+    "physics",
+    "chemistry",
+    "equation",
+    "graph",
+    "plot",
+    "symbolic-math",
+    "katex",
+    "canvas",
+    "manim",
+    "desmos",
+    "science"
+  ]
+}

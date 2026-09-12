@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "creating-svg-illustrations": {
+      "source": "narumiruna/skills",
+      "sourceType": "github",
+      "skillPath": "skills/creating-svg-illustrations/SKILL.md",
+      "computedHash": "f7c70f319661cb4b8b9cfd5ec32b1120949c2fb22fcce67e882b08e4f320b927"
+    },
+    "react-three-fiber": {
+      "source": "freshtechbro/claudedesignskills",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/react-three-fiber/SKILL.md",
+      "computedHash": "d672dfba48620140185d451bc9b6841833eed4306277776efab2e2a82c7b8fbf"
+    }
+  }
+}

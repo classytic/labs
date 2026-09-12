@@ -1,0 +1,267 @@
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-10);
+  padding: var(--lab-sp-12);
+  border: 1px solid var(--border, oklch(0.92 0.004 286));
+  border-radius: var(--radius, 0.625rem);
+  background: var(--card, #fff);
+  color: var(--foreground, oklch(0.21 0.006 286));
+}
+.editor-panel-title,
+.logic-editor-goal > span {
+  color: var(--muted-foreground, oklch(0.55 0.01 286));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.editor-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-6);
+  min-height: 2.25rem;
+  padding: var(--lab-sp-6) var(--lab-sp-10);
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius, 0.625rem) - 2px);
+  background: var(--secondary, oklch(0.97 0.001 286));
+  color: var(--foreground, oklch(0.21 0.006 286));
+  font: inherit;
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  line-height: var(--lab-lh-tight);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--lab-dur-fast),
+    color var(--lab-dur-fast),
+    opacity var(--lab-dur-fast);
+}
+.editor-button:hover {
+  background: var(--accent, oklch(0.95 0.004 286));
+}
+.editor-button[data-active],
+.editor-button[data-variant="primary"] {
+  background: var(--primary, oklch(0.21 0.006 286));
+  color: var(--primary-foreground, oklch(0.98 0 0));
+}
+.editor-button[data-variant="ghost"] {
+  border-color: var(--border, oklch(0.92 0.004 286));
+  background: transparent;
+}
+.editor-button[data-variant="danger"] {
+  background: var(--destructive, oklch(0.58 0.22 27));
+  color: var(--destructive-foreground, #fff);
+}
+.editor-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.editor-button svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+.editor-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  color: var(--foreground, oklch(0.21 0.006 286));
+  font-size: var(--lab-t-eyebrow);
+}
+.editor-field > span {
+  color: var(--muted-foreground, oklch(0.55 0.01 286));
+}
+.editor-number-input,
+.editor-text-input {
+  min-height: 2rem;
+  padding: var(--lab-sp-4) var(--lab-sp-8);
+  border: 1px solid var(--border, oklch(0.92 0.004 286));
+  border-radius: calc(var(--radius, 0.625rem) - 3px);
+  background: var(--background, #fff);
+  color: var(--foreground, oklch(0.21 0.006 286));
+  font: inherit;
+  font-size: var(--lab-t-eyebrow);
+}
+.editor-number-input {
+  width: 5.75rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.editor-text-input {
+  width: min(7.5rem, 100%);
+}
+.editor-number-input:focus-visible,
+.editor-text-input:focus-visible,
+.editor-button:focus-visible,
+.editor-zoom-bar button:focus-visible,
+.logic-palette-item:focus-visible {
+  outline: 2px solid var(--ring, var(--stage-accent));
+  outline-offset: 2px;
+}
+.editor-zoom-bar {
+  position: absolute;
+  bottom: 0.625rem;
+  left: 0.625rem;
+  z-index: var(--lab-z-raised);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border, oklch(0.92 0.004 286));
+  border-radius: var(--radius, 0.625rem);
+  background: color-mix(in oklab, var(--card, #fff) 88%, transparent);
+  box-shadow: 0 1px 4px color-mix(in oklab, #000 8%, transparent);
+  backdrop-filter: blur(6px);
+}
+.editor-zoom-bar button {
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: calc(var(--radius, 0.625rem) - 4px);
+  background: transparent;
+  color: var(--foreground, oklch(0.21 0.006 286));
+  font: inherit;
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-semibold);
+  cursor: pointer;
+}
+.editor-zoom-bar button:hover {
+  background: var(--accent, oklch(0.95 0.004 286));
+}
+.editor-zoom-bar .editor-zoom-fit {
+  width: 3rem;
+  color: var(--muted-foreground, oklch(0.55 0.01 286));
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+.block-rows-editor {
+  display: grid;
+  width: 100%;
+  gap: var(--lab-sp-6);
+}
+.block-row-editor {
+  display: flex;
+  flex-wrap: wrap;
+  /* `end`: the captioned first row is taller, and this keeps its controls on one baseline. */
+  align-items: end;
+  gap: var(--lab-sp-6);
+  padding: var(--lab-sp-6);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: calc(var(--radius, 0.625rem) - 2px);
+  background: color-mix(in oklab, var(--background, var(--stage-bg)) 92%, transparent);
+}
+.block-row-number,
+.block-row-bool {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-4);
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+}
+/* A real basis: with `flex: 0 1 auto` a plain column (sized by the input's ~20ch intrinsic
+   width) out-measured a `flex: 1` one (basis 0), so rows read backwards. */
+.block-row-field {
+  display: flex;
+  min-width: 6.5rem;
+  flex: 1 1 7rem;
+  flex-direction: column;
+  gap: var(--lab-sp-4);
+}
+.block-row-field[data-grow] {
+  flex: 2 1 9rem;
+}
+/* Sentence-length column: its own line in EVERY row, else it is the one that gets clipped. */
+.block-row-field[data-wide] {
+  flex: 1 1 100%;
+}
+/* An icon picker is a fixed-size button, so it opts out of the shared basis. */
+.block-row-field[data-fit] {
+  min-width: 0;
+  flex: 0 0 auto;
+}
+/* Column name, on the first row only, so it heads the table. */
+.block-row-caption {
+  overflow: hidden;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-medium);
+  letter-spacing: var(--lab-ls-caps);
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.block-row-input {
+  width: 100%;
+  min-width: 0;
+  font-size: var(--lab-t-eyebrow);
+}
+.block-row-feedback {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-basis: 100%;
+  flex-direction: column;
+  gap: var(--lab-sp-4);
+  padding-top: var(--lab-sp-6);
+  border-top: 1px solid var(--border, var(--stage-grid));
+}
+.block-row-feedback-label {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-medium);
+}
+.block-row-actions {
+  display: inline-flex;
+  gap: 2px;
+  margin-inline-start: auto;
+}
+.block-row-actions button {
+  display: inline-grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border: 0;
+  border-radius: calc(var(--radius, 0.625rem) - 4px);
+  background: transparent;
+  color: var(--muted-foreground, var(--stage-muted));
+  font: inherit;
+  cursor: pointer;
+}
+.block-row-actions button:hover:not(:disabled) {
+  background: var(--accent, color-mix(in oklab, currentColor 6%, transparent));
+  color: var(--foreground, var(--stage-fg));
+}
+.block-row-actions button[data-variant="danger"] {
+  color: var(--destructive, var(--stage-danger));
+}
+.block-row-actions button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.block-row-actions button:focus-visible,
+.block-row-add:focus-visible {
+  outline: 2px solid var(--ring, var(--stage-accent));
+  outline-offset: 2px;
+}
+.block-row-add {
+  width: fit-content;
+  min-height: 2rem;
+  padding: var(--lab-sp-6) var(--lab-sp-10);
+  border: 1px dashed var(--border, var(--stage-grid));
+  border-radius: calc(var(--radius, 0.625rem) - 2px);
+  background: transparent;
+  color: var(--muted-foreground, var(--stage-muted));
+  font: inherit;
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  cursor: pointer;
+}
+.block-row-add:hover {
+  border-color: var(--primary, var(--stage-accent));
+  color: var(--foreground, var(--stage-fg));
+}

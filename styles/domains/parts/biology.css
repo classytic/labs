@@ -1,0 +1,345 @@
+.biology-sequence-scene {
+  overflow-x: auto;
+  padding: var(--lab-sp-14);
+}
+.biology-molecule-row {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  align-items: center;
+  gap: var(--lab-sp-4);
+}
+.biology-molecule-label {
+  min-width: 5.75rem;
+  color: var(--stage-muted);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+}
+.biology-base-tile,
+.biology-sequence-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--lab-r-sm);
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-bold);
+}
+.biology-base-tile {
+  min-width: 2.125rem;
+  height: 2.125rem;
+  border: 0;
+  background: var(--biology-base-color);
+  color: var(--stage-bg);
+}
+.biology-flow-arrow {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  margin: var(--lab-sp-6) 0;
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+}
+.biology-flow-arrow-icon {
+  font-size: var(--lab-t-body);
+}
+.biology-sequence-slot {
+  min-width: var(--lab-target);
+  height: var(--lab-target);
+  border: 2px dashed var(--stage-grid);
+  background: var(--stage-bg);
+  color: var(--stage-muted);
+  cursor: pointer;
+}
+.biology-sequence-slot[data-filled="true"] {
+  border-style: solid;
+}
+.biology-sequence-slot[data-correct="true"] {
+  border-color: var(--stage-good);
+  background: var(--biology-base-color, var(--stage-good));
+  color: var(--stage-bg);
+}
+.biology-sequence-slot[data-incorrect="true"] {
+  border-color: var(--stage-danger);
+  color: var(--stage-danger);
+}
+.biology-sequence-slot[data-codon-start="true"] {
+  margin-inline-start: var(--lab-sp-8);
+}
+.biology-protein-row[data-locked="true"],
+.biology-protein-controls[data-locked="true"] {
+  opacity: 0.5;
+}
+.biology-protein-slot {
+  min-width: 6rem;
+  margin-inline-end: var(--lab-sp-8);
+  font-size: var(--lab-t-eyebrow);
+}
+.biology-protein-slot:disabled {
+  cursor: not-allowed;
+}
+.biology-codon-label {
+  font-size: var(--lab-t-micro);
+  opacity: 0.85;
+}
+.biology-base-choice {
+  color: var(--biology-base-color);
+  font-weight: var(--lab-w-bold);
+}
+.biology-sequence-scene[data-wide="true"]
+  :is(.biology-base-tile, .biology-sequence-slot, .biology-rung) {
+  min-width: 3.25rem;
+  font-size: var(--lab-t-eyebrow);
+}
+.biology-template-row {
+  margin-bottom: var(--lab-sp-4);
+}
+.biology-partner-row {
+  margin-top: var(--lab-sp-4);
+}
+.biology-rung {
+  min-width: 2.125rem;
+  color: var(--stage-grid);
+  font-size: var(--lab-t-eyebrow);
+  line-height: 0.75rem;
+  text-align: center;
+}
+.biology-sequence-controls,
+.biology-palette-group {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+.biology-sequence-controls {
+  align-content: start;
+}
+.biology-palette-group + .biology-palette-group {
+  padding-top: var(--lab-sp-12);
+  border-top: 1px solid var(--stage-grid);
+}
+.biology-sequence-guidance,
+.biology-evidence-summary p {
+  margin: 0;
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.biology-evidence-summary {
+  display: grid;
+  gap: var(--lab-sp-10);
+  padding-bottom: var(--lab-sp-14);
+  border-bottom: 1px solid var(--stage-grid);
+}
+.biology-evidence-summary > strong {
+  font-size: var(--lab-t-body);
+}
+.genetic-cross-scene {
+  overflow-x: auto;
+  padding: var(--lab-sp-16);
+}
+.genetic-cross-grid {
+  display: inline-grid;
+  grid-template-columns: var(--genetic-cell-size) repeat(
+      var(--genetic-columns),
+      var(--genetic-cell-size)
+    );
+  gap: var(--lab-sp-4);
+  font-size: var(--genetic-font-size);
+}
+.genetic-cross-row {
+  display: contents;
+}
+.genetic-cross-corner {
+  pointer-events: none;
+}
+.genetic-cross-column-header {
+  color: var(--stage-fg);
+  font-weight: var(--lab-w-bold);
+  text-align: center;
+}
+.genetic-cross-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--stage-fg);
+  font-weight: var(--lab-w-bold);
+}
+.genetic-cross-cell {
+  width: var(--genetic-cell-size);
+  height: var(--genetic-cell-size);
+  padding: 0;
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-xs);
+  background: var(--genetic-cell-bg);
+  color: var(--stage-fg);
+  font-weight: var(--lab-w-semibold);
+  cursor: default;
+}
+.genetic-cross-cell[data-revealed="true"] {
+  cursor: pointer;
+}
+.genetic-cross-note {
+  margin: var(--lab-sp-8) 0 0;
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.genetic-phenotype {
+  color: var(--genetic-color);
+}
+.genetic-tally-stack {
+  display: grid;
+  align-items: stretch;
+  gap: var(--lab-sp-16);
+}
+.genetic-tally {
+  flex: 1;
+  min-width: 12.5rem;
+}
+.genetic-tally-label {
+  margin-bottom: var(--lab-sp-2);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+}
+.genetic-tally-bar {
+  display: flex;
+  height: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-xs);
+}
+.genetic-tally-segment {
+  display: flex;
+  flex: var(--genetic-share);
+  align-items: center;
+  justify-content: center;
+  background: var(--genetic-color);
+  color: var(--stage-bg);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+}
+.genetic-parent-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lab-sp-16);
+  margin-bottom: var(--lab-sp-12);
+}
+.genetic-parent-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lab-sp-8);
+}
+.genetic-allele-pair {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px var(--lab-sp-4);
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--stage-fg) 6%, transparent);
+}
+.genetic-allele-button {
+  min-width: 1.625rem;
+  color: var(--genetic-color);
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-bold);
+}
+.genetic-allele-button-wide {
+  min-width: 2.125rem;
+}
+.genetic-control-hint,
+.genetic-legend {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.genetic-legend {
+  margin: 0 0 var(--lab-sp-8);
+}
+.genetic-y-token {
+  color: var(--stage-muted);
+  font-weight: var(--lab-w-bold);
+}
+.biology-process-scene {
+  padding: var(--lab-sp-12);
+}
+.biology-figure-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--lab-sp-12);
+  min-width: 0;
+  background: radial-gradient(
+    circle at 10% 50%,
+    color-mix(in oklab, var(--stage-accent) 5%, transparent),
+    transparent 32%
+  );
+}
+.biology-plot-region,
+.biology-chart-scene {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--lab-r-md);
+}
+.biology-model-surface {
+  min-width: 0;
+  /* Was `overflow: hidden`, which on a 360px phone cut 480px off the central-dogma model and
+     260px off replication: the right-hand end of the strand simply did not exist for a phone
+     user, with no way to reach it. These models have a natural minimum width (bases have to stay
+     legible), so scrolling is the honest answer and hiding was never one. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+}
+.biology-oxygen-rate {
+  margin: 0 0 var(--lab-sp-8);
+  color: var(--stage-good);
+  font-size: var(--lab-t-eyebrow);
+  text-align: center;
+}
+.biology-oxygen-rate span {
+  color: var(--stage-muted);
+}
+.biology-process-stack {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+.biology-process-card {
+  padding: var(--lab-sp-8) var(--lab-sp-10);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+  opacity: 0.5;
+  transition: opacity var(--lab-dur-base);
+}
+.biology-process-card[data-active="true"] {
+  border-color: var(--biology-process-accent);
+  background: color-mix(in oklab, var(--biology-process-accent) 8%, var(--stage-bg));
+  opacity: 1;
+}
+.biology-process-heading {
+  margin: 0 0 2px;
+  color: var(--biology-process-accent);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+}
+.biology-process-heading span {
+  color: var(--stage-muted);
+  font-weight: var(--lab-w-regular);
+}
+.biology-process-note {
+  margin: 0;
+  color: var(--stage-muted);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-medium);
+  text-align: center;
+}
+@media (max-width: 34rem) {
+  .biology-figure-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .biology-figure-row > svg {
+    justify-self: center;
+  }
+}

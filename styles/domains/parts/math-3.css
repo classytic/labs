@@ -1,0 +1,247 @@
+.math-pattern-table {
+  margin: var(--lab-sp-8) 0;
+  border-collapse: collapse;
+  font-size: var(--lab-t-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.math-pattern-table caption {
+  margin-bottom: var(--lab-sp-4);
+  color: var(--stage-muted);
+  text-align: left;
+}
+
+.math-pattern-table th,
+.math-pattern-table td {
+  padding: var(--lab-sp-4) var(--lab-sp-10);
+}
+
+.math-pattern-table th {
+  color: var(--stage-muted);
+  text-align: right;
+}
+
+.math-pattern-table td {
+  text-align: center;
+}
+
+.math-pattern-table td[data-state="correct"] {
+  color: var(--stage-good);
+  font-weight: var(--lab-w-semibold);
+}
+
+.math-pattern-table td[data-state="wrong"] {
+  color: var(--stage-warn);
+}
+
+.math-pattern-table td[data-state="future"] {
+  color: var(--stage-muted);
+}
+
+.math-area-expansion {
+  margin-inline-start: var(--lab-sp-4);
+  color: var(--stage-muted);
+}
+
+.math-harmonic-layout {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1fr) minmax(18.75rem, 2fr);
+  gap: var(--lab-sp-12);
+  align-items: stretch;
+}
+
+.math-harmonic-phasor,
+.math-harmonic-waves {
+  min-width: 0;
+}
+
+.math-grapher-subtitle {
+  margin: var(--lab-sp-4) 0 0;
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  text-align: center;
+}
+
+.math-grapher-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-4) var(--lab-sp-16);
+  padding: var(--lab-sp-6) 2px;
+  font-size: var(--lab-t-eyebrow);
+}
+
+.math-grapher-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  color: var(--stage-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.math-grapher-swatch {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 2px;
+  background: var(--curve-color);
+}
+
+.math-grapher-errors {
+  padding: 2px;
+  color: var(--stage-danger);
+  font-size: var(--lab-t-eyebrow);
+}
+
+@media (max-width: 45rem) {
+  .math-harmonic-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.physics-emphasis {
+  color: var(--stage-fg);
+  font-weight: var(--lab-w-semibold);
+}
+
+.physics-thermal-hot {
+  color: var(--stage-danger, #e03131);
+}
+
+.physics-thermal-cold {
+  color: var(--stage-accent, #3b82f6);
+}
+
+.physics-thermal-sensible {
+  color: var(--stage-accent);
+  font-weight: var(--lab-w-bold);
+}
+
+.physics-thermal-latent {
+  color: var(--stage-warn);
+  font-weight: var(--lab-w-bold);
+}
+
+.physics-svg-numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+.physics-svg-halo {
+  paint-order: stroke;
+  stroke: var(--card, var(--stage-bg));
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
+}
+.math-explain {
+  color: var(--stage-muted);
+}
+
+.math-success {
+  margin: 0;
+  color: var(--stage-good);
+  font-weight: var(--lab-w-semibold);
+}
+
+.math-control-heading {
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-semibold);
+}
+
+.math-aside-stack {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+
+.math-rate-readout {
+  display: grid;
+  gap: var(--lab-sp-6);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+
+.math-rate-equation {
+  font-weight: var(--lab-w-semibold);
+}
+
+.math-rate-equation strong[data-solved="true"] {
+  color: var(--stage-good);
+}
+
+.math-transform-instruction {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-semibold);
+}
+
+.math-transform-footer {
+  display: grid;
+  justify-items: center;
+  gap: var(--lab-sp-12);
+  margin-top: var(--lab-sp-4);
+}
+
+.math-coordinate-readout {
+  font-weight: var(--lab-w-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.math-condition {
+  color: var(--stage-muted);
+}
+
+.math-condition[data-met="true"] {
+  color: var(--stage-good);
+}
+
+.math-status-start {
+  align-self: start;
+}
+
+.math-trunk-value {
+  color: oklch(0.46 0.06 60);
+}
+
+.math-domain-label {
+  color: var(--stage-accent);
+}
+
+.math-range-label {
+  color: var(--stage-accent-2);
+}
+
+.math-sign-chip {
+  padding: 2px var(--lab-sp-6);
+  border-radius: var(--lab-r-pill);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+  line-height: var(--lab-lh-tight);
+}
+
+.math-sign-chip[data-sign="positive"] {
+  color: var(--stage-good);
+  background: color-mix(in oklab, var(--stage-good) 16%, transparent);
+}
+
+.math-sign-chip[data-sign="negative"] {
+  color: var(--stage-danger);
+  background: color-mix(in oklab, var(--stage-danger) 16%, transparent);
+}
+
+.math-sign-chip[data-sign="zero"] {
+  color: var(--stage-muted);
+  background: color-mix(in oklab, var(--stage-muted) 16%, transparent);
+}
+
+.math-signed-value[data-sign="positive"] {
+  color: var(--stage-good);
+}
+.math-signed-value[data-sign="negative"] {
+  color: var(--stage-danger);
+}
+.trig-rule-figures {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  justify-items: center;
+  gap: var(--lab-sp-8);
+}

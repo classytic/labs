@@ -1,0 +1,426 @@
+/* Algorithm lessons share one semantic trace UI across CS and networking. */
+.algorithm-graph {
+  min-height: 21rem;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, currentColor 10%, transparent) 1px,
+        transparent 0
+      )
+      0 0 / 20px 20px,
+    var(--card, var(--stage-bg));
+}
+.algorithm-graph svg {
+  display: block;
+  width: 100%;
+  height: clamp(21rem, 42cqw, 34rem);
+  overflow: visible;
+}
+.algorithm-edge line {
+  stroke: var(--border, var(--stage-grid));
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+  transition:
+    stroke var(--lab-dur-base) var(--lab-ease),
+    stroke-width var(--lab-dur-base) var(--lab-ease);
+}
+.algorithm-edge text {
+  fill: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+  paint-order: stroke;
+  stroke: var(--card, var(--stage-bg));
+  stroke-width: 2px;
+}
+.algorithm-edge marker path,
+.algorithm-graph marker path {
+  fill: var(--muted-foreground, var(--stage-muted));
+}
+.algorithm-edge[data-active] line {
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 3;
+}
+.algorithm-edge[data-path] line {
+  stroke: var(--stage-success, #16a34a);
+  stroke-width: 3;
+}
+.algorithm-node circle {
+  fill: var(--card, var(--stage-bg));
+  stroke: var(--border, var(--stage-grid));
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill var(--lab-dur-base) var(--lab-ease),
+    stroke var(--lab-dur-base) var(--lab-ease);
+}
+.algorithm-node > text:not(.algorithm-distance) {
+  fill: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+}
+.algorithm-node[data-discovered] circle {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 10%, var(--card, var(--stage-bg)));
+  stroke: var(--primary, var(--stage-accent));
+}
+.algorithm-node[data-visited] circle {
+  fill: color-mix(in oklab, var(--stage-success, #16a34a) 14%, var(--card, var(--stage-bg)));
+  stroke: var(--stage-success, #16a34a);
+}
+.algorithm-node[data-current] circle {
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 3;
+}
+.algorithm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.algorithm-legend span::before {
+  content: "";
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-inline-end: var(--lab-sp-6);
+  border: 2px solid var(--border, var(--stage-grid));
+  border-radius: 50%;
+  vertical-align: -0.05rem;
+}
+.algorithm-legend span[data-tone="current"]::before {
+  border-color: var(--primary, var(--stage-accent));
+}
+.algorithm-legend span[data-tone="frontier"]::before {
+  background: color-mix(in oklab, var(--primary, var(--stage-accent)) 18%, transparent);
+}
+.algorithm-legend span[data-tone="visited"]::before {
+  border-color: var(--stage-success, #16a34a);
+  background: color-mix(in oklab, var(--stage-success, #16a34a) 16%, transparent);
+}
+.algorithm-decision {
+  display: grid;
+  gap: var(--lab-sp-8);
+  margin: 0 var(--lab-sp-12) var(--lab-sp-12);
+  padding: var(--lab-sp-12);
+  border-top: 1px solid var(--border, var(--stage-grid));
+  text-align: center;
+}
+.algorithm-decision > strong {
+  font-size: var(--lab-t-sm);
+}
+.algorithm-decision > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--lab-sp-6);
+}
+.algorithm-decision small {
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.algorithm-transfer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--lab-sp-12) var(--lab-sp-16);
+  margin: var(--lab-sp-12);
+  padding: var(--lab-sp-14) var(--lab-sp-16);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--radius, 0.75rem);
+  background: color-mix(
+    in oklab,
+    var(--primary, var(--stage-accent)) 5%,
+    var(--card, var(--stage-bg))
+  );
+}
+.algorithm-transfer > div:first-child {
+  display: grid;
+  gap: var(--lab-sp-4);
+}
+.algorithm-transfer small {
+  color: var(--primary, var(--stage-accent));
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.algorithm-transfer strong,
+.algorithm-transfer p {
+  margin: 0;
+  font-size: var(--lab-t-sm);
+}
+.algorithm-transfer p {
+  grid-column: 1 / -1;
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.algorithm-transfer-actions {
+  display: flex;
+  gap: var(--lab-sp-6);
+}
+@media (max-width: 36rem) {
+  .algorithm-transfer {
+    grid-template-columns: 1fr;
+  }
+}
+.algorithm-distance {
+  fill: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+}
+.algorithm-inspector {
+  display: grid;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-12);
+  font-size: var(--lab-t-eyebrow);
+}
+.algorithm-inspector h4,
+.algorithm-inspector p {
+  margin: 0;
+}
+.algorithm-inspector code {
+  overflow-x: auto;
+  padding: var(--lab-sp-10);
+  border-radius: var(--lab-r-sm);
+  background: var(--muted, color-mix(in oklab, currentColor 5%, transparent));
+  font-size: var(--lab-t-eyebrow);
+}
+.algorithm-order {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6);
+  min-height: 1.8rem;
+}
+.algorithm-order span {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border-radius: var(--lab-r-pill);
+  background: color-mix(in oklab, var(--primary, var(--stage-accent)) 12%, transparent);
+  font-weight: var(--lab-w-bold);
+}
+.algorithm-inspector dl {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  background: var(--border, var(--stage-grid));
+}
+.algorithm-inspector dl div {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  background: var(--card, var(--stage-bg));
+}
+.algorithm-inspector dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--lab-w-bold);
+}
+.algorithm-playback {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+}
+.algorithm-speed {
+  gap: var(--lab-sp-4);
+  min-width: 3.5rem;
+  padding-inline: var(--lab-sp-8);
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+  font-variant-numeric: tabular-nums;
+}
+.algorithm-next {
+  gap: var(--lab-sp-4);
+  white-space: nowrap;
+}
+.algorithm-next svg {
+  width: 1rem;
+  height: 1rem;
+}
+.algorithm-transport-message {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--foreground, var(--stage-fg));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.algorithm-step-count {
+  flex: none;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-weight: var(--lab-w-bold);
+  font-variant-numeric: tabular-nums;
+}
+.algorithm-activity .lab-activity-progress > div {
+  justify-content: flex-start;
+}
+.dp-board {
+  display: grid;
+  gap: var(--lab-sp-8);
+  width: min(100%, 38rem);
+  margin: auto;
+}
+.dp-mission {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lab-sp-10);
+  padding: var(--lab-sp-12) var(--lab-sp-16) 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.dp-mission strong {
+  color: var(--foreground, var(--stage-fg));
+}
+.dp-grid {
+  display: grid;
+  gap: var(--lab-sp-8);
+  width: min(100%, 36rem);
+  margin: auto;
+  padding: var(--lab-sp-16);
+}
+.dp-grid > div {
+  display: grid;
+  aspect-ratio: 1;
+  min-width: 0;
+  place-items: center;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+.dp-grid small {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+}
+.dp-grid strong {
+  font-size: clamp(0.85rem, 2cqw, 1.25rem);
+  font-variant-numeric: tabular-nums;
+}
+.dp-grid > div > span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--lab-ls-caps);
+}
+.dp-grid > div[data-goal] {
+  border-style: dashed;
+}
+.dp-grid > div[data-dependency] {
+  border-color: var(--stage-success, #16a34a);
+  background: color-mix(in oklab, var(--stage-success, #16a34a) 9%, var(--card, var(--stage-bg)));
+}
+.dp-grid > div[data-current] {
+  border-color: var(--primary, var(--stage-accent));
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary, var(--stage-accent)) 25%, transparent);
+}
+.graph-authoring {
+  display: grid;
+  gap: var(--lab-sp-12);
+  container: graph-authoring / inline-size;
+}
+.graph-authoring-preview {
+  display: grid;
+  gap: var(--lab-sp-8);
+  align-content: start;
+}
+.graph-authoring-preview .algorithm-graph {
+  min-height: 16rem;
+}
+.graph-authoring-preview .algorithm-graph svg {
+  height: 16rem;
+}
+.graph-authoring-preview > button {
+  justify-self: end;
+}
+.graph-authoring-panel {
+  display: grid;
+  gap: var(--lab-sp-10);
+  min-width: 0;
+}
+.graph-authoring fieldset {
+  display: grid;
+  gap: var(--lab-sp-8);
+  min-width: 0;
+  margin: 0;
+  padding: var(--lab-sp-12);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+}
+.graph-authoring legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-inline: var(--lab-sp-4);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+}
+.graph-authoring legend .lab-icon-button {
+  float: right;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: var(--lab-sp-6);
+}
+.graph-authoring fieldset:first-child {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.graph-authoring label {
+  display: grid;
+  gap: var(--lab-sp-4);
+  min-width: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+}
+.graph-authoring input:not([type="checkbox"]),
+.graph-authoring select {
+  width: 100%;
+  min-height: 2.25rem;
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  border: 1px solid var(--input, var(--border, var(--stage-grid)));
+  border-radius: var(--lab-r-sm);
+  background: var(--background, var(--stage-bg));
+  color: var(--foreground, var(--stage-fg));
+  font: inherit;
+}
+@media (min-width: 48rem) {
+  .graph-authoring {
+    grid-template-columns: minmax(18rem, 1fr) minmax(22rem, 1fr);
+    align-items: start;
+  }
+}
+@container lab-activity (max-width: 42.5rem) {
+  .algorithm-graph {
+    min-height: 15rem;
+  }
+  .algorithm-graph svg {
+    height: 15rem;
+  }
+  .dp-grid {
+    gap: var(--lab-sp-4);
+    padding: var(--lab-sp-8);
+  }
+  .dp-grid > div {
+    border-radius: var(--lab-r-sm);
+  }
+  .algorithm-speed {
+    min-width: 2.5rem;
+  }
+  .algorithm-speed span {
+    display: none;
+  }
+  .algorithm-next span {
+    display: none;
+  }
+  .algorithm-next {
+    width: 2.5rem;
+    min-width: 2.5rem;
+    padding: 0;
+  }
+  .algorithm-activity .lab-activity-transport {
+    grid-template-columns: auto minmax(5rem, 1fr) auto;
+  }
+}

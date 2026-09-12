@@ -1,0 +1,64 @@
+.probability-glyph {
+  display: block;
+}
+.probability-glyph-row {
+  display: inline-flex;
+  gap: var(--lab-sp-2);
+}
+.probability-outcome-cell {
+  display: flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  padding: var(--lab-sp-4);
+  border: 1.5px solid var(--stage-grid);
+  border-radius: var(--lab-r-sm);
+  background: transparent;
+  color: var(--stage-fg);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.probability-outcome-cell[data-dice="true"] {
+  font-size: var(--lab-t-lg);
+}
+.probability-outcome-cell[data-state="selected"] {
+  border-color: var(--stage-accent);
+  background: color-mix(in oklab, var(--stage-accent) 18%, transparent);
+}
+.probability-outcome-cell[data-state="correct"] {
+  border-color: var(--stage-good);
+  background: color-mix(in oklab, var(--stage-good) 20%, transparent);
+}
+.probability-outcome-cell[data-state="wrong"] {
+  border-color: var(--stage-danger);
+  background: color-mix(in oklab, var(--stage-danger) 16%, transparent);
+}
+.probability-outcome-cell[data-state="missed"] {
+  border-color: var(--stage-good);
+  color: var(--stage-good);
+}
+.probability-outcome-cell:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--stage-accent) 35%, transparent);
+  outline-offset: 2px;
+}
+.probability-result {
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.probability-result-value {
+  color: var(--stage-accent);
+}
+.discrete-stage-scene {
+  overflow: hidden;
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+}
+.discrete-path-status {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}

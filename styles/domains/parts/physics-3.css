@@ -1,0 +1,310 @@
+.physics-svg-passive {
+  pointer-events: none;
+}
+
+.physics-formula-lead {
+  font-size: var(--lab-t-body);
+}
+
+.physics-probe-verdict {
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-medium);
+}
+
+.physics-probe-detail {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+
+.physics-vector-velocity,
+.physics-vector-force,
+.physics-vector-force-secondary {
+  font-weight: var(--lab-w-semibold);
+}
+
+.physics-vector-velocity {
+  color: var(--stage-good);
+}
+.physics-vector-force {
+  color: var(--stage-warn, #d97706);
+}
+.physics-vector-force-secondary {
+  color: var(--stage-warn);
+}
+
+.physics-signed-field[data-sign="out"] {
+  color: var(--stage-good);
+}
+.physics-signed-field[data-sign="in"] {
+  color: var(--stage-danger);
+}
+.physics-signed-field[data-sign="zero"] {
+  color: var(--stage-muted);
+}
+
+.physics-wave-constructive {
+  color: var(--stage-good);
+}
+.physics-wave-destructive {
+  color: var(--stage-accent);
+}
+.physics-vector-readout {
+  display: grid;
+  gap: var(--lab-sp-4);
+  font-weight: var(--lab-w-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.physics-vector-readout > span {
+  color: var(--vector-color);
+}
+.physics-lever-slider {
+  flex: 1 1 10rem;
+}
+
+.physics-work-icon {
+  display: block;
+  width: 100%;
+  max-width: 22.5rem;
+  margin: 0 auto var(--lab-sp-6);
+}
+
+.physics-trace-label {
+  margin: 2px 0 0 var(--lab-sp-8);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+}
+
+.math-equation-line {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+}
+
+.math-equation-label {
+  color: var(--stage-muted);
+}
+
+.math-equation-derivative {
+  color: var(--stage-good);
+}
+.physics-canvas-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.physics-field-thread-value {
+  color: var(--stage-good);
+}
+
+.math-svg-passive {
+  pointer-events: none;
+}
+
+.math-reading-value[data-state="correct"] {
+  color: var(--stage-good);
+}
+.math-reading-value[data-state="moved"] {
+  color: var(--stage-warn);
+}
+.math-reading-value[data-state="idle"] {
+  color: var(--stage-fg);
+}
+.cmos-scene {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+
+.cmos-scene-centered,
+.electronics-scene-centered {
+  width: 100%;
+  max-width: 60rem;
+  margin-inline: auto;
+}
+
+.cmos-visual-stack,
+.cmos-inspector-stack {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+
+.cmos-truth-table {
+  border-collapse: collapse;
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+
+.cmos-truth-table th,
+.cmos-truth-table td {
+  padding: var(--lab-sp-4) var(--lab-sp-14) var(--lab-sp-4) 0;
+  text-align: left;
+}
+
+.cmos-truth-table tr[data-current="true"] {
+  background: color-mix(in oklab, var(--stage-accent) 12%, transparent);
+  font-weight: var(--lab-w-bold);
+}
+
+.cmos-truth-table td[data-high="true"] {
+  color: var(--stage-good);
+}
+
+.cmos-output-readout {
+  margin-top: var(--lab-sp-6);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+
+.cmos-explanation {
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.electronics-svg-passive {
+  pointer-events: none;
+}
+
+.semiconductor-scene {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+
+.semiconductor-evidence {
+  display: grid;
+  gap: var(--lab-sp-14);
+}
+
+.semiconductor-state {
+  width: fit-content;
+  max-width: 100%;
+  gap: var(--lab-sp-6);
+  white-space: normal;
+  line-height: var(--lab-lh-ui);
+}
+
+.semiconductor-state-dot {
+  width: 0.4375rem;
+  height: 0.4375rem;
+  flex: 0 0 auto;
+  border-radius: var(--lab-r-pill);
+  background: var(--stage-muted);
+}
+
+.semiconductor-state-dot[data-active] {
+  background: var(--stage-good);
+}
+
+.semiconductor-metrics {
+  display: grid;
+  margin: 0;
+  border-block: 1px solid var(--border, var(--stage-grid));
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+
+.semiconductor-metrics > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--lab-sp-16);
+  padding-block: var(--lab-sp-8);
+}
+
+.semiconductor-metrics > div + div {
+  border-top: 1px solid var(--border, var(--stage-grid));
+}
+
+.semiconductor-metrics dt {
+  min-width: 0;
+  color: var(--stage-muted);
+}
+
+.semiconductor-metrics dd {
+  margin: 0;
+  color: var(--stage-fg);
+  font-weight: var(--lab-w-semibold);
+  text-align: right;
+}
+
+.semiconductor-explanation {
+  margin: 0;
+  max-width: 66ch;
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-prose);
+}
+
+.semiconductor-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6);
+}
+.electronics-scene {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+
+.electronics-visual-stack,
+.electronics-inspector,
+.electronics-readout {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+
+.electronics-readout {
+  gap: var(--lab-sp-6);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+
+.electronics-readout-relaxed {
+  line-height: var(--lab-lh-prose);
+}
+
+.electronics-explanation {
+  color: var(--stage-muted);
+  line-height: var(--lab-lh-ui);
+}
+
+.electronics-note-small {
+  font-size: var(--lab-t-eyebrow);
+}
+
+.electronics-invalid {
+  color: var(--stage-danger);
+  font-weight: var(--lab-w-semibold);
+}
+
+.electronics-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-10);
+}
+.electronics-slider-compact {
+  width: min(100%, 7rem);
+}
+
+.electronics-slider-medium {
+  width: min(100%, 10rem);
+}
+
+.electronics-equation-stack {
+  display: grid;
+  gap: var(--lab-sp-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.electronics-equation-stack {
+  gap: var(--lab-sp-6);
+  padding: var(--lab-sp-8) 2px 0;
+  font-size: var(--lab-t-sm);
+}

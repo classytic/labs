@@ -1,0 +1,286 @@
+.logic-editor-activity .lab-activity-workspace {
+  align-items: stretch;
+}
+.logic-editor-activity .lab-activity-canvas {
+  min-height: 0;
+}
+.logic-editor-activity .lab-activity-canvas > div:last-child {
+  height: clamp(26rem, 62cqw, 42rem);
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  touch-action: none;
+}
+.logic-editor-activity[data-focus] .lab-activity-canvas > div:last-child {
+  height: clamp(32rem, 70dvh, 64rem);
+}
+.logic-editor-activity .lab-activity-inspector-body > div:not(.circuit-editor-panel-head) {
+  padding: var(--lab-sp-8);
+}
+.logic-editor-activity .lab-activity-inspector button {
+  min-height: 2.5rem;
+}
+.logic-editor-viewport {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--stage-bg);
+}
+.logic-palette-list,
+.logic-editor-form,
+.logic-editor-goal {
+  display: flex;
+  flex-direction: column;
+}
+.logic-palette-list {
+  gap: var(--lab-sp-4);
+}
+.logic-palette-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  min-height: 2.5rem;
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius, 0.6rem) - 2px);
+  background: transparent;
+  color: var(--foreground, var(--stage-fg));
+  font: inherit;
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  text-align: left;
+  cursor: grab;
+}
+.logic-palette-item:hover {
+  border-color: var(--border, var(--stage-grid));
+  background: var(--accent, color-mix(in oklab, currentColor 5%, transparent));
+}
+.logic-palette-item > span:not(.logic-palette-dot) {
+  min-width: 0;
+  flex: 1;
+}
+.logic-palette-dot {
+  width: 1.875rem;
+  font-size: var(--lab-t-body);
+  text-align: center;
+}
+.logic-palette-glyph {
+  flex-shrink: 0;
+}
+.logic-palette-add {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex: none;
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.logic-editor-empty {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.logic-editor-form {
+  gap: var(--lab-sp-12);
+}
+.logic-editor-goal {
+  gap: var(--lab-sp-8);
+}
+.logic-editor-goal > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6);
+}
+.logic-editor-divider {
+  height: 1px;
+  background: var(--border, var(--stage-grid));
+}
+.logic-scene-frame {
+  overflow: hidden;
+  width: 100%;
+  max-width: min(100%, max(var(--logic-scene-width), 34rem));
+  margin-inline: auto;
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+}
+.logic-scene-control {
+  cursor: default;
+}
+.logic-scene-control[data-interactive] {
+  cursor: pointer;
+  outline: none;
+}
+.logic-scene-control[data-interactive]:focus-visible {
+  filter: drop-shadow(0 0 4px var(--stage-accent));
+}
+.logic-edit-scene {
+  display: block;
+  width: 100%;
+  max-width: var(--logic-edit-width);
+  height: var(--logic-edit-height, auto);
+  border-radius: var(--lab-r-sm);
+  background: var(--stage-bg);
+  touch-action: none;
+}
+.logic-edit-scene[data-pannable] {
+  max-width: none;
+  height: var(--logic-edit-height, 100%);
+}
+.logic-port-target {
+  cursor: crosshair;
+}
+.logic-node-drag {
+  cursor: grab;
+}
+.logic-node-drag:active,
+.logic-palette-item:active {
+  cursor: grabbing;
+}
+.logic-display {
+  display: block;
+  max-width: var(--logic-display-width);
+  margin-inline: auto;
+}
+.logic-display-bit {
+  cursor: pointer;
+  outline: none;
+}
+.logic-display-bit:focus-visible {
+  filter: drop-shadow(0 0 4px var(--stage-accent));
+}
+.logic-display-readout {
+  font-variant-numeric: tabular-nums;
+}
+.sequential-signal-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(12rem, 1.25fr) auto minmax(0, 1fr);
+  gap: var(--lab-sp-12);
+  align-items: stretch;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+}
+.sequential-bank {
+  display: grid;
+  align-content: start;
+  gap: var(--lab-sp-10);
+  min-width: 0;
+}
+.sequential-bank-label {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.sequential-bit-row,
+.sequential-cell-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-8);
+}
+.sequential-bit-row button[data-active] {
+  border-color: var(--primary, var(--stage-accent));
+  background: color-mix(in oklab, var(--primary, var(--stage-accent)) 10%, transparent);
+}
+.sequential-cell {
+  display: grid;
+  min-width: 8.5rem;
+  gap: var(--lab-sp-6);
+  padding: var(--lab-sp-14);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--radius, 0.75rem);
+  background: var(--card, var(--stage-bg));
+  box-shadow: 0 0.25rem 1rem color-mix(in oklab, var(--foreground, var(--stage-fg)) 6%, transparent);
+}
+.sequential-cell > span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  text-transform: capitalize;
+}
+.sequential-cell > strong {
+  color: var(--primary, var(--stage-accent));
+  font-size: var(--lab-t-lg);
+  font-variant-numeric: tabular-nums;
+}
+.sequential-output {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  padding: var(--lab-sp-10) var(--lab-sp-12);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--radius, 0.75rem);
+}
+.sequential-output[data-high] {
+  border-color: var(--stage-success);
+  color: var(--stage-success);
+}
+.sequential-flow-arrow {
+  align-self: center;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-title);
+}
+.sequential-trace {
+  display: grid;
+  gap: var(--lab-sp-8);
+  padding: var(--lab-sp-12) var(--lab-sp-16);
+  border-top: 1px solid var(--border, var(--stage-grid));
+}
+.sequential-trace p {
+  margin: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.sequential-trace ol {
+  display: flex;
+  gap: var(--lab-sp-6);
+  overflow-x: auto;
+  margin: 0;
+  padding: 0 0 var(--lab-sp-4);
+  list-style: none;
+}
+.sequential-trace li {
+  display: grid;
+  min-width: 3.25rem;
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  border-radius: calc(var(--radius, 0.75rem) * 0.7);
+  background: var(--muted, color-mix(in oklab, var(--stage-grid) 35%, transparent));
+  font-variant-numeric: tabular-nums;
+}
+.sequential-trace li span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+}
+.sequential-transport-state {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+@media (max-width: 44rem) {
+  .sequential-signal-flow {
+    grid-template-columns: 1fr;
+  }
+  .sequential-flow-arrow {
+    display: none;
+  }
+}
+.logic-build-brief {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--lab-sp-16);
+  padding: var(--lab-sp-12);
+  border-bottom: 1px solid var(--border, var(--stage-grid));
+  background: color-mix(in oklab, var(--primary, var(--stage-accent)) 4%, transparent);
+}
+.logic-build-brief > div:last-child {
+  display: grid;
+  gap: var(--lab-sp-4);
+  min-width: 0;
+  overflow-x: auto;
+}
+.logic-build-brief > div:last-child > span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.logic-build-target {
+  display: grid;
+  gap: var(--lab-sp-4);
+}

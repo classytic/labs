@@ -1,0 +1,111 @@
+.monty-narration {
+  min-height: 1.5rem;
+  margin: var(--lab-sp-4) 0 var(--lab-sp-8);
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-regular);
+  text-align: center;
+}
+.monty-stage {
+  padding: var(--lab-sp-8);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-lg);
+  background: color-mix(in oklab, var(--stage-accent) 6%, var(--stage-bg));
+}
+.monty-door-svg {
+  display: block;
+  width: 100%;
+  max-width: 56rem;
+  height: auto;
+  margin-inline: auto;
+}
+.monty-door-target {
+  cursor: default;
+  outline: none;
+}
+.monty-door-target[data-interactive="true"] {
+  cursor: pointer;
+}
+.monty-door-target:focus-visible {
+  filter: drop-shadow(0 0 5px var(--stage-accent));
+}
+.monty-action-row,
+.monty-auto-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lab-sp-10);
+}
+.monty-action-row {
+  justify-content: center;
+}
+.monty-auto-label {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.monty-auto-label {
+  font-weight: var(--lab-w-medium);
+}
+.monty-tally {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+.monty-tally-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--lab-sp-12);
+  margin-bottom: var(--lab-sp-2);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+}
+.monty-tally-heading > span:first-child {
+  text-transform: capitalize;
+}
+.monty-tally-heading [data-strategy="switch"] {
+  color: var(--stage-good);
+}
+.monty-tally-heading [data-strategy="stay"] {
+  color: var(--stage-muted);
+}
+.monty-tally-heading > span:last-child {
+  color: var(--stage-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.monty-target-copy {
+  opacity: 0.7;
+}
+.monty-rate-track {
+  position: relative;
+  overflow: hidden;
+  height: 1rem;
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--stage-grid) 60%, transparent);
+}
+.monty-rate-fill {
+  width: var(--rate);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--stage-muted);
+  transition: width var(--lab-dur-fast) linear;
+}
+.monty-rate-track[data-strategy="switch"] .monty-rate-fill {
+  background: var(--stage-good);
+}
+.monty-rate-target {
+  position: absolute;
+  top: -0.125rem;
+  bottom: -0.125rem;
+  left: var(--target);
+  width: 2px;
+  background: var(--stage-fg);
+  opacity: 0.5;
+}
+
+@media (max-width: 36rem) {
+  .monty-auto-row .lab-btn {
+    flex: 1 1 auto;
+  }
+  .monty-tally-heading {
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,247 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Figure art direction. One visual language for every hand-drawn scene.
+
+   Every SVG figure (src/kit/figure/*) draws with these tokens and classes only.
+   A lab never picks a stroke width, a radius, a hex colour or a font size for
+   scene content; it picks a ROLE (edge / line / hair, hue-1 / hue-2 / hue-3,
+   label / note / measure) and the sheet resolves it for the theme and domain.
+
+   Scale (in SVG user units, figures render at ~1 unit ≈ 1 px at 640–720 wide):
+     hair 1      guides, grids, ticks
+     line 1.75   plots, connectors, arrows
+     edge 2.5    object outlines, glass walls
+     bold 3.5    the one emphasised path in a figure
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.lab-figure {
+  /* strokes */
+  --fig-hair: 1;
+  --fig-line: 1.75;
+  --fig-edge: 2.5;
+  --fig-bold: 3.5;
+  /* radii (user units) */
+  --fig-r-sm: 3;
+  --fig-r: 6;
+  --fig-r-lg: 12;
+  /* neutral materials, all derived from the stage so both themes work */
+  --fig-ink: var(--stage-fg);
+  --fig-ink-soft: var(--stage-muted);
+  --fig-paper: var(--stage-bg);
+  --fig-outline: color-mix(in oklab, var(--stage-fg) 55%, transparent);
+  --fig-glass: color-mix(in oklab, var(--stage-fg) 26%, transparent);
+  --fig-glass-fill: color-mix(in oklab, var(--stage-fg) 4%, transparent);
+  --fig-metal: var(--stage-metal);
+  --fig-wood: oklch(0.61 0.105 67);
+  --fig-sheen: var(--stage-sheen);
+  --fig-shadow: color-mix(in oklab, var(--stage-fg) 16%, transparent);
+  --fig-ground: color-mix(in oklab, var(--stage-fg) 9%, var(--stage-bg));
+  --fig-surface: color-mix(in oklab, var(--stage-fg) 5%, var(--stage-bg));
+  --fig-surface-strong: color-mix(in oklab, var(--stage-fg) 10%, var(--stage-bg));
+  --fig-grid: var(--stage-grid);
+  --fig-axis: var(--stage-axis);
+  /* the three hues a figure may use (plus neutrals). Domains re-map them below. */
+  --fig-hue-1: var(--stage-accent);
+  --fig-hue-2: var(--stage-accent-2);
+  --fig-hue-3: var(--stage-good);
+  /* semantic tones, shared by every domain */
+  --fig-hot: var(--stage-danger);
+  --fig-cold: var(--stage-cat-5);
+  --fig-good: var(--stage-good);
+  --fig-warn: var(--stage-warn);
+  --fig-danger: var(--stage-danger);
+  --fig-liquid: var(--stage-liquid);
+
+  /* ── Hardware, the one family that must NOT invert ──────────────────────────
+     Every token above derives from --stage-fg / --stage-bg, so all of them swap
+     with the theme. That is exactly right for a DIAGRAM: ink on paper, dark on
+     light and light on dark. It is wrong for an OBJECT. A network switch drawn in
+     ink turns white in dark mode, along with the inside of its every port, and a
+     photo-negative of a piece of equipment does not read as equipment.
+
+     These four are absolute rather than derived. Reach for them when the figure
+     shows a real thing with a body, case or cavity, and for nothing else: labels,
+     leaders and measurements stay on the palette above so they keep adapting.
+
+     They are nudged, not inverted, between themes. On a near-black ground a
+     charcoal body needs a lift to keep its silhouette; the cavity stays darker
+     than the body in both, because a hole is darker than the thing it is in.
+
+     The four form a depth ladder, and reading them in order is how to pick one:
+     device-soft (a face catching light) over device (the body) over device-edge
+     (a recess in that body) over cavity (the dark inside of a hole). Cavity is for
+     a hole you look INTO. An empty slot in a face wants device-edge instead: eight
+     RJ45 channels all set to cavity stop reading as eight slots and become one
+     black brick. */
+  --fig-device: oklch(0.42 0.012 260);
+  --fig-device-soft: oklch(0.52 0.012 260);
+  --fig-device-edge: oklch(0.3 0.012 260);
+  --fig-cavity: oklch(0.22 0.01 260);
+
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-variant-numeric: tabular-nums;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Domain palettes: three hues each, chosen so hue-1 is the "subject", hue-2 the
+   "other party / heat / product" and hue-3 the medium (liquid, field, tissue). */
+.lab-figure[data-fig-domain="chem"] {
+  --fig-hue-1: var(--stage-accent);
+  --fig-hue-2: var(--stage-accent-2);
+  --fig-hue-3: var(--stage-cat-5);
+}
+.lab-figure[data-fig-domain="physics"] {
+  --fig-hue-1: var(--stage-accent);
+  --fig-hue-2: var(--stage-cat-6);
+  --fig-hue-3: var(--stage-cat-3);
+}
+.lab-figure[data-fig-domain="biology"] {
+  --fig-hue-1: var(--stage-cat-3);
+  --fig-hue-2: var(--stage-cat-8);
+  --fig-hue-3: var(--stage-cat-5);
+}
+.lab-figure[data-fig-domain="math"] {
+  --fig-hue-1: var(--stage-accent);
+  --fig-hue-2: var(--stage-accent-2);
+  --fig-hue-3: var(--stage-cat-4);
+}
+.lab-figure[data-fig-domain="commerce"] {
+  --fig-hue-1: var(--stage-accent);
+  --fig-hue-2: var(--stage-cat-7);
+  --fig-hue-3: var(--stage-cat-3);
+}
+
+/* Type. Sizes are user units; the figure's viewBox decides the on-screen size
+   (rule: ≥ 12 px on screen at the narrowest layout the figure renders in).
+   Every label carries a paper-coloured halo so it stays legible across strokes. */
+.fig-text {
+  fill: var(--fig-ink);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-medium);
+  line-height: var(--lab-lh-tight);
+  paint-order: stroke;
+  stroke: var(--fig-paper);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.fig-text[data-size="note"] {
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-regular);
+}
+.fig-text[data-size="title"] {
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: 0;
+}
+.fig-text[data-size="measure"] {
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-semibold);
+}
+.fig-text[data-size="eyebrow"] {
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.fig-text[data-tone="soft"] {
+  fill: var(--fig-ink-soft);
+}
+.fig-text[data-tone="hue-1"] {
+  fill: color-mix(in oklab, var(--fig-hue-1) 78%, var(--fig-ink));
+}
+.fig-text[data-tone="hue-2"] {
+  fill: color-mix(in oklab, var(--fig-hue-2) 78%, var(--fig-ink));
+}
+.fig-text[data-tone="hue-3"] {
+  fill: color-mix(in oklab, var(--fig-hue-3) 78%, var(--fig-ink));
+}
+.fig-text[data-tone="hot"] {
+  fill: color-mix(in oklab, var(--fig-hot) 82%, var(--fig-ink));
+}
+.fig-text[data-tone="good"] {
+  fill: color-mix(in oklab, var(--fig-good) 82%, var(--fig-ink));
+}
+.fig-text[data-tone="inverse"] {
+  fill: var(--fig-paper);
+  stroke: none;
+}
+.fig-text[data-halo="false"] {
+  stroke: none;
+}
+
+/* Motion: figure primitives animate geometry through CSS transitions so a
+   changed value glides instead of jumping; reduced motion snaps. */
+.fig-ease {
+  transition:
+    transform 0.45s var(--lab-ease),
+    opacity var(--lab-dur-slow) var(--lab-ease);
+}
+/* Hero illustration slot (raster/vector art the host ships; see docs/ILLUSTRATIONS.md).
+   Renders the light or dark asset, keeps the aspect box so nothing reflows on load. */
+.lab-illustration {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--lab-radius, 0.75rem);
+  background: var(--fig-ground, color-mix(in oklab, var(--stage-fg) 9%, var(--stage-bg)));
+}
+.lab-illustration > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.lab-illustration > img[data-scheme="dark"] {
+  display: none;
+}
+.lab-illustration > figcaption {
+  padding: var(--lab-sp-8) 2px 0;
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light)
+    .lab-illustration
+    > img[data-scheme="light"]:not(:only-of-type) {
+    display: none;
+  }
+  :root:not([data-theme="light"]):not(.light) .lab-illustration > img[data-scheme="dark"] {
+    display: block;
+  }
+}
+:root:is([data-theme="dark"], .dark)
+  .lab-illustration
+  > img[data-scheme="light"]:not(:only-of-type) {
+  display: none;
+}
+:root:is([data-theme="dark"], .dark) .lab-illustration > img[data-scheme="dark"] {
+  display: block;
+}
+
+/* Hardware in dark mode: lifted, never inverted. A charcoal body on a near-black
+   page loses its silhouette, so the body and its edge gain a little lightness while
+   keeping their order (edge darker than body, cavity darker than both). Both theme
+   signals are covered, the OS preference and an explicit choice, matching the
+   illustration rules below. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .lab-figure {
+    --fig-device: oklch(0.46 0.012 260);
+    --fig-device-soft: oklch(0.56 0.012 260);
+    --fig-device-edge: oklch(0.34 0.012 260);
+    --fig-cavity: oklch(0.16 0.01 260);
+  }
+}
+:root:is([data-theme="dark"], .dark) .lab-figure {
+  --fig-device: oklch(0.46 0.012 260);
+  --fig-device-soft: oklch(0.56 0.012 260);
+  --fig-device-edge: oklch(0.34 0.012 260);
+  --fig-cavity: oklch(0.16 0.01 260);
+}

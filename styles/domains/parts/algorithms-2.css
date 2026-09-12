@@ -1,0 +1,136 @@
+/* Tree Quest authoring: intent first, topology generated automatically. */
+.tree-authoring {
+  display: grid;
+  gap: var(--lab-sp-12);
+}
+.tree-authoring-preview,
+.tree-authoring-controls {
+  display: grid;
+  align-content: start;
+  gap: var(--lab-sp-10);
+  min-width: 0;
+}
+.tree-authoring-preview .tree-scene {
+  min-height: 18rem;
+}
+.tree-authoring-preview .tree-scene svg {
+  height: 18rem;
+}
+.tree-authoring-preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lab-sp-12);
+}
+.tree-authoring-preview-head span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+}
+.tree-authoring-preview-head svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--primary, var(--stage-accent));
+}
+.tree-authoring-preview-head small {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+}
+.tree-authoring fieldset {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-10);
+  min-width: 0;
+  margin: 0;
+  padding: var(--lab-sp-12);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+.tree-authoring legend {
+  padding-inline: var(--lab-sp-4);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+}
+.tree-authoring label {
+  display: grid;
+  align-content: start;
+  gap: var(--lab-sp-4);
+  min-width: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+}
+.tree-authoring input:not([type="checkbox"]),
+.tree-authoring select,
+.tree-authoring textarea {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: var(--lab-sp-8) var(--lab-sp-8);
+  border: 1px solid var(--input, var(--border, var(--stage-grid)));
+  border-radius: var(--lab-r-sm);
+  background: var(--background, var(--stage-bg));
+  color: var(--foreground, var(--stage-fg));
+  font: inherit;
+  line-height: var(--lab-lh-ui);
+  resize: vertical;
+}
+.tree-authoring input:focus-visible,
+.tree-authoring select:focus-visible,
+.tree-authoring textarea:focus-visible {
+  outline: 2px solid var(--ring, var(--stage-accent));
+  outline-offset: 1px;
+}
+.tree-authoring [aria-invalid="true"] {
+  border-color: var(--destructive, var(--stage-danger));
+}
+.tree-authoring fieldset:last-child label:last-child {
+  grid-column: 1 / -1;
+}
+.tree-authoring-preview-note {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+}
+.tree-authoring-learner {
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  padding: var(--lab-sp-8);
+  background: var(--card, var(--stage-bg));
+}
+@media (min-width: 56rem) {
+  .tree-authoring {
+    grid-template-columns: minmax(22rem, 1.1fr) minmax(21rem, 0.9fr);
+    align-items: start;
+  }
+  .tree-authoring-preview {
+    position: sticky;
+    top: 1rem;
+  }
+  .tree-authoring-preview[data-mode="learner"] {
+    position: static;
+  }
+}
+@media (max-width: 35rem) {
+  .tree-authoring fieldset {
+    grid-template-columns: 1fr;
+  }
+  .tree-authoring fieldset:last-child label:last-child {
+    grid-column: auto;
+  }
+}
+@container lab-activity (min-width: 60rem) {
+  .circuit-editor-activity .lab-activity-workspace {
+    grid-template-columns: 11rem minmax(28rem, 1fr) 16rem;
+  }
+  .circuit-editor-activity[data-focus] .lab-activity-workspace {
+    grid-template-columns: 12rem minmax(32rem, 1fr) 18rem;
+  }
+  .logic-editor-activity .lab-activity-workspace {
+    grid-template-columns: 11.5rem minmax(28rem, 1fr) 15rem;
+  }
+  .logic-editor-activity[data-focus] .lab-activity-workspace {
+    grid-template-columns: 12rem minmax(32rem, 1fr) 17rem;
+  }
+}

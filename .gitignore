@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+
+# build output. Tracked by accident since the 0.2.0 checkpoint commit: 2113 files and 9.5 MB that
+# churn on every build, so every source change carried a few hundred unrelated diffs. Nothing needs
+# it in git — `pretest` builds before the tests that import it, `prepublishOnly` builds before the
+# tarball is packed, and the consumer sync scripts copy the freshly built dist from the working tree.
+dist/
+
+# generated gallery raster output — regenerate with `npm run gallery`.
+# NOTE: tests/gallery/__svg__/ is intentionally NOT ignored — those are the
+# committed, approved geometry snapshots that tests/gallery.test.tsx asserts against.
+tests/gallery/png/
+tests/gallery/montage/
+
+# browser-automation scratch (Playwright MCP screenshots, rasterize temp)
+.playwright-mcp/
+
+# misc local/test noise
+coverage/
+*.log
+.DS_Store
+
+# live (dev-server) screenshots — regenerate with `node tests/gallery/live.mjs <route>`
+tests/gallery/live/
+# one-off hero stills from scripts/render-hero.mjs, and any before/after capture taken
+# while reviewing a change — working artifacts, regenerate them rather than commit them.
+tests/gallery/hero/
+tests/gallery/live-*/

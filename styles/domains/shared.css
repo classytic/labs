@@ -1,0 +1,3 @@
+/* Rules that belong to no single domain; every domain sheet imports this. */
+@import "./parts/shared-1.css";
+@import "./parts/shared-2.css";

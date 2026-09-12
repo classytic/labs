@@ -1,0 +1,398 @@
+@media (max-width: 35rem) {
+  .compound-snowball {
+    max-width: none;
+  }
+}
+.sample-space-scene {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-block: var(--lab-sp-8);
+  padding: var(--lab-sp-12);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+  overscroll-behavior-inline: contain;
+}
+.sample-space-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--sample-space-columns), minmax(2.75rem, 1fr));
+  gap: var(--lab-sp-4);
+  min-width: max-content;
+}
+.sample-space-grid[data-dimensional="2"] {
+  grid-template-columns: auto repeat(var(--sample-space-columns), minmax(2.75rem, 1fr));
+}
+.sample-space-axis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  color: var(--stage-accent-2);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+}
+.sample-space-axis[data-axis="row"] {
+  justify-content: flex-end;
+  padding-inline-end: var(--lab-sp-4);
+  color: var(--stage-accent);
+}
+.outcome-product {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  margin-block: var(--lab-sp-6);
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-semibold);
+}
+.outcome-factor {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-4);
+}
+.outcome-operator {
+  color: var(--stage-muted);
+}
+.outcome-factor-value {
+  color: var(--stage-accent);
+}
+.outcome-factor-label {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-regular);
+}
+.outcome-total {
+  color: var(--stage-good);
+}
+.outcome-total-label {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-regular);
+}
+.outcome-overflow-note {
+  margin-block: var(--lab-sp-12);
+  padding: var(--lab-sp-12);
+  border: 1px dashed var(--stage-grid);
+  border-radius: var(--lab-r-sm);
+  color: var(--stage-muted);
+}
+.outcome-space {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6);
+  margin-block: var(--lab-sp-12);
+  padding: var(--lab-sp-10);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+}
+.outcome-option {
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: var(--lab-sp-4) var(--lab-sp-6);
+  border: 1.5px solid var(--stage-grid);
+  border-radius: var(--lab-r-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.outcome-option:hover {
+  border-color: color-mix(in oklab, var(--stage-accent) 58%, var(--stage-grid));
+  background: color-mix(in oklab, var(--stage-accent) 7%, transparent);
+}
+.outcome-option[aria-pressed="true"] {
+  border-color: var(--stage-good);
+  background: color-mix(in oklab, var(--stage-good) 16%, transparent);
+}
+.outcome-option:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--stage-accent) 35%, transparent);
+  outline-offset: 2px;
+}
+.outcome-probability {
+  color: var(--stage-good);
+  font-weight: var(--lab-w-semibold);
+}
+@media (max-width: 35rem) {
+  .outcome-space {
+    gap: var(--lab-sp-8);
+    padding: var(--lab-sp-8);
+  }
+  .outcome-option {
+    flex: 1 1 auto;
+  }
+}
+.probability-chart-scene {
+  padding: var(--lab-sp-8);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+}
+.probability-chart-svg {
+  display: block;
+  width: 100%;
+  max-width: 33.75rem;
+  height: auto;
+  margin-inline: auto;
+}
+.probability-chart-column {
+  cursor: pointer;
+  outline: none;
+}
+.probability-chart-column:focus-visible {
+  filter: drop-shadow(0 0 4px var(--stage-accent));
+}
+.probability-series[data-series="with"] {
+  color: var(--stage-accent);
+}
+.probability-series[data-series="without"] {
+  color: var(--stage-warn);
+}
+.probability-inspector {
+  display: grid;
+  gap: var(--lab-sp-4);
+  padding: var(--lab-sp-8) var(--lab-sp-10);
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--stage-fg) 5%, transparent);
+  font-size: var(--lab-t-eyebrow);
+}
+.probability-inspector[data-tone="success"] {
+  background: color-mix(in oklab, var(--stage-good) 10%, transparent);
+}
+.probability-equation {
+  font-size: var(--lab-t-sm);
+}
+.probability-prompt {
+  font-size: var(--lab-t-eyebrow);
+}
+.expected-value-axis-number {
+  font-variant-numeric: tabular-nums;
+}
+.expected-value-fulcrum {
+  transition: transform var(--lab-dur-fast);
+}
+.expected-value-verdict {
+  color: var(--stage-danger);
+  font-weight: var(--lab-w-semibold);
+}
+.expected-value-verdict[data-fair="true"] {
+  color: var(--stage-good);
+}
+.expected-value-equation {
+  display: grid;
+  gap: 2px;
+  font-size: var(--lab-t-eyebrow);
+}
+.expected-value-prompt {
+  font-size: var(--lab-t-eyebrow);
+}
+.expected-value-run {
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.probability-contribution-board {
+  display: grid;
+  gap: var(--lab-sp-16);
+  width: min(100%, 46rem);
+  margin-inline: auto;
+  padding: clamp(0.875rem, 2vw, 1.25rem);
+}
+.probability-board-heading,
+.probability-benchmark-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--lab-sp-8) var(--lab-sp-16);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.probability-outcome-strip {
+  display: flex;
+  min-height: 5.5rem;
+  overflow: hidden;
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: color-mix(in oklab, var(--stage-fg) 4%, transparent);
+}
+.probability-outcome-segment {
+  display: grid;
+  /* Shrinkable: at 0 0 the segments could not give way, so their 44px floors
+     summed past the strip and the last slice was clipped by its overflow. */
+  flex: 0 1 var(--probability-width);
+  place-content: center;
+  min-width: 2.75rem;
+  container-type: inline-size;
+  padding: var(--lab-sp-8) var(--lab-sp-4);
+  border-inline-end: 1px solid color-mix(in oklab, var(--stage-bg) 75%, transparent);
+  background: color-mix(in oklab, var(--probability-color) 72%, var(--stage-bg));
+  color: var(--stage-fg);
+  text-align: center;
+}
+.probability-outcome-segment strong {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-variant-numeric: tabular-nums;
+}
+.probability-outcome-segment span {
+  color: color-mix(in oklab, var(--stage-fg) 76%, var(--stage-bg));
+  font-size: var(--lab-t-eyebrow);
+}
+/* A 5% slice cannot hold the word "jackpot". Keep the number, drop the name, and
+   let the row below do the naming: half a clipped word teaches nothing, and the
+   learner reads the proportion from the width in any case. */
+@container (max-width: 5.5rem) {
+  .probability-outcome-segment span {
+    display: none;
+  }
+}
+.probability-contribution-list {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+.probability-contribution-row {
+  display: grid;
+  grid-template-columns: minmax(4rem, 0.65fr) minmax(5rem, 2fr) minmax(8rem, 1fr);
+  align-items: center;
+  gap: var(--lab-sp-12);
+}
+.probability-contribution-label,
+.probability-contribution-math {
+  font-size: var(--lab-t-eyebrow);
+}
+.probability-contribution-label {
+  overflow: hidden;
+  font-weight: var(--lab-w-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.probability-contribution-math {
+  color: var(--stage-muted);
+  font-variant-numeric: tabular-nums;
+}
+.probability-contribution-track,
+.probability-benchmark-track {
+  position: relative;
+  display: block;
+  height: 0.625rem;
+  overflow: hidden;
+  border-radius: var(--lab-r-pill);
+  background: color-mix(in oklab, var(--stage-fg) 10%, transparent);
+}
+.probability-contribution-fill,
+.probability-expectation-fill {
+  display: block;
+  width: var(--contribution-width, var(--benchmark-width));
+  height: 100%;
+  border-radius: inherit;
+  background: var(--probability-color, var(--stage-good));
+  transition: width var(--lab-dur-base) var(--lab-ease);
+}
+.probability-benchmark {
+  display: grid;
+  gap: var(--lab-sp-10);
+  padding-top: var(--lab-sp-4);
+}
+.probability-benchmark-track {
+  height: 1rem;
+  overflow: visible;
+}
+.probability-cost-marker,
+.probability-average-marker {
+  position: absolute;
+  inset-block: -0.3rem;
+  left: var(--marker-position);
+  width: 2px;
+  border-radius: var(--lab-r-pill);
+  background: var(--stage-danger);
+  transform: translateX(-1px);
+}
+.probability-average-marker {
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-top: var(--lab-sp-8);
+  border: 2px solid var(--stage-bg);
+  background: var(--stage-accent);
+  box-shadow: 0 0 0 1px var(--stage-accent);
+  transform: translate(-50%, -50%);
+}
+.probability-benchmark-legend {
+  justify-content: flex-start;
+  text-transform: none;
+}
+.probability-benchmark-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+}
+.probability-benchmark-legend i {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: var(--lab-r-pill);
+  background: var(--stage-good);
+}
+.probability-benchmark-legend i[data-kind="cost"] {
+  border-radius: 2px;
+  background: var(--stage-danger);
+}
+.probability-benchmark-legend i[data-kind="average"] {
+  background: var(--stage-accent);
+}
+@media (max-width: 35rem) {
+  .probability-contribution-row {
+    grid-template-columns: minmax(3.5rem, 0.65fr) minmax(4rem, 1.5fr);
+  }
+  .probability-contribution-math {
+    grid-column: 1 / -1;
+    padding-inline-start: calc(35% + 0.25rem);
+  }
+}
+.bayes-sample-status {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.bayes-positive-result {
+  margin-top: var(--lab-sp-12);
+}
+.bayes-positive-caption {
+  margin-bottom: var(--lab-sp-4);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.bayes-positive-bar {
+  display: flex;
+  height: 2.375rem;
+  overflow: hidden;
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-sm);
+}
+.bayes-positive-segment {
+  display: flex;
+  flex: var(--bayes-weight) 0 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--stage-warn);
+  color: var(--stage-bg);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+}
+.bayes-positive-segment[data-kind="true"] {
+  min-width: 0;
+  background: var(--stage-danger);
+  font-weight: var(--lab-w-bold);
+}
+.bayes-positive-segment[data-kind="true"][data-visible="true"] {
+  min-width: 1.625rem;
+}
+.bayes-positive-verdict {
+  margin-top: var(--lab-sp-4);
+  color: var(--stage-danger);
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-bold);
+}

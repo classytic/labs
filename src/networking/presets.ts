@@ -1,0 +1,178 @@
+import type { NetworkDoc } from './contract.js';
+
+export const HOME_NETWORK: NetworkDoc = {
+  schemaVersion: 1,
+  type: 'network',
+  title: 'From a home laptop to a web server',
+  devices: [
+    {
+      id: 'laptop',
+      kind: 'client',
+      label: 'Laptop',
+      at: { x: 80, y: 150 },
+      interfaces: [{ id: 'wifi0', mac: '02:00:00:00:00:10', addresses: ['192.168.1.20/24'] }],
+    },
+    {
+      id: 'wifi',
+      kind: 'access-point',
+      label: 'Wi-Fi AP',
+      at: { x: 230, y: 150 },
+      interfaces: [{ id: 'lan1' }, { id: 'lan2' }],
+    },
+    {
+      id: 'router',
+      kind: 'router',
+      label: 'Home router',
+      at: { x: 390, y: 150 },
+      interfaces: [
+        { id: 'lan', addresses: ['192.168.1.1/24'] },
+        { id: 'wan', addresses: ['203.0.113.2/30'] },
+      ],
+    },
+    {
+      id: 'internet',
+      kind: 'cloud',
+      label: 'Internet',
+      at: { x: 550, y: 150 },
+      interfaces: [{ id: 'edge1' }, { id: 'edge2' }],
+    },
+    {
+      id: 'web',
+      kind: 'server',
+      label: 'Web server',
+      at: { x: 710, y: 150 },
+      interfaces: [{ id: 'eth0', addresses: ['198.51.100.20/24'] }],
+      services: [{ kind: 'http', port: 80 }],
+    },
+  ],
+  links: [
+    {
+      id: 'wifi-link',
+      a: { deviceId: 'laptop', interfaceId: 'wifi0' },
+      b: { deviceId: 'wifi', interfaceId: 'lan1' },
+      label: 'Wi-Fi',
+      latencyMs: 4,
+      bandwidthMbps: 300,
+    },
+    {
+      id: 'lan-link',
+      a: { deviceId: 'wifi', interfaceId: 'lan2' },
+      b: { deviceId: 'router', interfaceId: 'lan' },
+      label: 'LAN',
+      latencyMs: 1,
+      bandwidthMbps: 1000,
+    },
+    {
+      id: 'isp-link',
+      a: { deviceId: 'router', interfaceId: 'wan' },
+      b: { deviceId: 'internet', interfaceId: 'edge1' },
+      label: 'ISP',
+      latencyMs: 14,
+      bandwidthMbps: 100,
+    },
+    {
+      id: 'server-link',
+      a: { deviceId: 'internet', interfaceId: 'edge2' },
+      b: { deviceId: 'web', interfaceId: 'eth0' },
+      label: 'datacenter',
+      latencyMs: 18,
+      bandwidthMbps: 1000,
+    },
+  ],
+};
+
+export const COMPANY_NETWORK: NetworkDoc = {
+  schemaVersion: 1,
+  type: 'network',
+  title: 'Company network with redundant routes',
+  devices: [
+    {
+      id: 'employee',
+      kind: 'client',
+      label: 'Employee',
+      at: { x: 70, y: 150 },
+      interfaces: [{ id: 'eth0', addresses: ['10.20.1.25/24'] }],
+    },
+    {
+      id: 'access',
+      kind: 'switch',
+      label: 'Access switch',
+      at: { x: 210, y: 150 },
+      interfaces: [{ id: 'p1' }, { id: 'p2' }, { id: 'p3' }],
+    },
+    {
+      id: 'r1',
+      kind: 'router',
+      label: 'Router A',
+      at: { x: 380, y: 80 },
+      interfaces: [{ id: 'lan' }, { id: 'wan' }],
+    },
+    {
+      id: 'r2',
+      kind: 'router',
+      label: 'Router B',
+      at: { x: 380, y: 220 },
+      interfaces: [{ id: 'lan' }, { id: 'wan' }],
+    },
+    {
+      id: 'firewall',
+      kind: 'firewall',
+      label: 'Firewall',
+      at: { x: 550, y: 150 },
+      interfaces: [{ id: 'inside1' }, { id: 'inside2' }, { id: 'dmz' }],
+    },
+    {
+      id: 'api',
+      kind: 'server',
+      label: 'API server',
+      at: { x: 720, y: 150 },
+      interfaces: [{ id: 'eth0', addresses: ['10.30.0.10/24'] }],
+      services: [
+        { kind: 'https', port: 443 },
+        { kind: 'websocket', port: 443 },
+      ],
+    },
+  ],
+  links: [
+    {
+      id: 'employee-access',
+      a: { deviceId: 'employee', interfaceId: 'eth0' },
+      b: { deviceId: 'access', interfaceId: 'p1' },
+      latencyMs: 1,
+    },
+    {
+      id: 'access-r1',
+      a: { deviceId: 'access', interfaceId: 'p2' },
+      b: { deviceId: 'r1', interfaceId: 'lan' },
+      latencyMs: 2,
+      cost: 2,
+    },
+    {
+      id: 'access-r2',
+      a: { deviceId: 'access', interfaceId: 'p3' },
+      b: { deviceId: 'r2', interfaceId: 'lan' },
+      latencyMs: 4,
+      cost: 4,
+    },
+    {
+      id: 'r1-fw',
+      a: { deviceId: 'r1', interfaceId: 'wan' },
+      b: { deviceId: 'firewall', interfaceId: 'inside1' },
+      latencyMs: 2,
+      cost: 2,
+    },
+    {
+      id: 'r2-fw',
+      a: { deviceId: 'r2', interfaceId: 'wan' },
+      b: { deviceId: 'firewall', interfaceId: 'inside2' },
+      latencyMs: 2,
+      cost: 2,
+    },
+    {
+      id: 'fw-api',
+      a: { deviceId: 'firewall', interfaceId: 'dmz' },
+      b: { deviceId: 'api', interfaceId: 'eth0' },
+      latencyMs: 1,
+    },
+  ],
+};

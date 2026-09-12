@@ -1,0 +1,372 @@
+.physics-visual-stack {
+  display: grid;
+  gap: var(--lab-sp-10);
+  min-width: 0;
+}
+.physics-trace-card {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+.physics-scene-surface {
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid color-mix(in oklab, var(--border, var(--stage-grid)) 82%, transparent);
+  border-radius: var(--lab-r-lg);
+  background: var(--card, var(--stage-bg));
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--foreground, var(--stage-fg)) 7%, transparent);
+}
+/* Inside an authored activity the scene is NOT a card: the activity root is the one
+   container, and a bordered, rounded, shadowed box around the figure is the
+   card-in-card fault. The surface keeps its texture and its clipping, and drops
+   the chrome (the same treatment .lab-authored-evidence gives evidence). */
+.lab-authored-activity .physics-scene-surface {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.physics-scene-surface[data-tone="grid"] {
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, currentColor 8%, transparent) 1px,
+        transparent 0
+      )
+      0 0 / 20px 20px,
+    var(--card, var(--stage-bg));
+}
+.physics-scene-surface[data-tone="space"] {
+  --stage-bg: #07111f;
+  --stage-fg: #e7eefb;
+  --stage-muted: #9aabc4;
+  --stage-grid: rgba(148, 163, 184, 0.2);
+  --stage-metal: #94a3b8;
+  color: var(--stage-fg);
+  border-color: color-mix(in oklab, var(--primary, #60a5fa) 28%, transparent);
+  background:
+    radial-gradient(circle at 18% 24%, rgba(125, 211, 252, 0.9) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 73% 18%, rgba(255, 255, 255, 0.8) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 86% 72%, rgba(196, 181, 253, 0.75) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 34% 78%, rgba(255, 255, 255, 0.65) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 62% 48%, rgba(59, 130, 246, 0.14), transparent 34%),
+    linear-gradient(145deg, #091526, #050b15 72%);
+  background-size:
+    137px 137px,
+    181px 181px,
+    223px 223px,
+    167px 167px,
+    100% 100%,
+    100% 100%;
+  box-shadow:
+    inset 0 0 4rem rgba(15, 23, 42, 0.68),
+    0 1px 2px rgba(15, 23, 42, 0.24);
+}
+.physics-scene-surface > div {
+  width: 100%;
+}
+.physics-trace-card > div {
+  width: 100%;
+}
+.physics-trace-heading {
+  display: flex;
+  gap: var(--lab-sp-14);
+  align-items: start;
+  justify-content: space-between;
+  padding: var(--lab-sp-14) var(--lab-sp-16) 0;
+}
+.physics-trace-heading > div:first-child {
+  display: grid;
+  gap: 2px;
+}
+.physics-trace-heading strong {
+  font-size: var(--lab-t-sm);
+}
+.physics-trace-heading span {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.physics-trace-legend,
+.physics-trace-legend > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-10);
+}
+.physics-trace-legend span::before {
+  content: "";
+  display: inline-block;
+  inline-size: 1.25rem;
+  margin-inline-end: var(--lab-sp-6);
+  border-block-start: 2px solid var(--lab-accent);
+  vertical-align: middle;
+}
+.physics-trace-legend span[data-kind="hard"]::before {
+  border-color: var(--lab-muted);
+  border-style: dashed;
+}
+@media (max-width: 40rem) {
+  .physics-trace-heading {
+    display: grid;
+  }
+}
+.physics-instrument-stack {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+.physics-explain {
+  margin: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-prose);
+}
+.physics-controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+.physics-controls .lab-field {
+  min-width: 0;
+}
+.physics-controls .lab-field-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.physics-transport-state {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--lab-sp-8);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+.physics-transport-state span {
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.physics-simulation-actions {
+  display: grid;
+  flex: 1 0 100%;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--lab-sp-12);
+  width: 100%;
+  padding-top: var(--lab-sp-12);
+  border-top: 1px solid color-mix(in oklab, var(--border, var(--stage-grid)) 72%, transparent);
+}
+.physics-simulation-actions[data-reset-only="true"] {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+.physics-simulation-actions[data-stepper="true"] {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+.physics-transport-state-wide {
+  justify-content: flex-start;
+}
+@media (max-width: 30rem) {
+  .physics-simulation-actions {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .physics-simulation-actions > .physics-play-button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .physics-simulation-actions[data-stepper="true"] {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}
+.physics-play-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-6);
+  min-width: 6.5rem;
+}
+.physics-play-button svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.physics-play-button svg path[d$="Z"] {
+  fill: currentColor;
+  stroke: none;
+}
+.physics-scene-surface text {
+  font-family: inherit;
+  paint-order: stroke fill;
+  stroke: var(--card, var(--stage-bg));
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.physics-scene-surface :is(.physics-svg-no-halo, .physics-svg-on-fill) {
+  paint-order: normal;
+  stroke: none;
+}
+.physics-scene-surface .physics-svg-on-fill {
+  fill: var(--primary-foreground, var(--stage-bg));
+}
+.physics-heat-transfer-scene svg,
+.physics-entropy-scene svg {
+  display: block;
+  width: 100%;
+  min-height: 21rem;
+}
+.physics-heat-transfer-scene {
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--stage-danger) 4%, transparent),
+      transparent 32%,
+      transparent 68%,
+      color-mix(in oklab, var(--stage-accent) 4%, transparent)
+    ),
+    var(--card, var(--stage-bg));
+}
+.physics-heat-transfer-scene svg {
+  min-height: 0;
+}
+.physics-heat-transfer .physics-controls,
+.physics-entropy .physics-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-12) var(--lab-sp-16);
+}
+.physics-heat-transfer .physics-controls > .lab-field:first-child,
+.physics-entropy .physics-controls > .lab-field:first-child {
+  grid-column: 1 / -1;
+}
+.physics-optics-scene {
+  overflow: hidden;
+  min-height: 20rem;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+.physics-optics-scene svg {
+  display: block;
+  width: 100%;
+  /* aspect from the viewBox, not a fixed height: a fixed height wider than the box's own ratio
+     letterboxes the drawing and wastes ~18% of the width down both gutters. */
+  height: auto;
+  max-height: 34rem;
+}
+@container lab-activity (max-width: 34rem) {
+}
+.physics-imaging .physics-optics-scene {
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      color-mix(in oklab, var(--primary, var(--stage-accent)) 5%, transparent),
+      transparent 55%
+    ),
+    var(--card, var(--stage-bg));
+}
+.physics-imaging .physics-optics-scene svg {
+  height: clamp(20rem, 44cqw, 28rem);
+}
+.physics-imaging[data-focus] .physics-optics-scene svg {
+  height: clamp(24rem, 55vh, 34rem);
+}
+.physics-imaging .physics-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-12);
+}
+.physics-imaging .physics-controls > .lab-field:first-child {
+  grid-column: 1 / -1;
+}
+.physics-imaging .physics-controls .lab-field-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-6);
+  width: 100%;
+}
+:is(
+  .physics-imaging-ledger,
+  .physics-orbital-ledger,
+  .physics-dynamics-ledger,
+  .physics-field-ledger,
+  .physics-thermal-ledger
+) {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--border, var(--stage-grid));
+}
+:is(
+    .physics-imaging-ledger,
+    .physics-orbital-ledger,
+    .physics-dynamics-ledger,
+    .physics-field-ledger,
+    .physics-thermal-ledger
+  )
+  > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-10) var(--lab-sp-10);
+  background: var(--card, var(--stage-bg));
+}
+:is(
+    .physics-imaging-ledger,
+    .physics-orbital-ledger,
+    .physics-dynamics-ledger,
+    .physics-field-ledger,
+    .physics-thermal-ledger
+  )
+  > div[data-highlight="true"] {
+  background: color-mix(in oklab, var(--stage-good) 9%, var(--card, var(--stage-bg)));
+}
+:is(
+    .physics-imaging-ledger,
+    .physics-orbital-ledger,
+    .physics-dynamics-ledger,
+    .physics-field-ledger,
+    .physics-thermal-ledger
+  )
+  > div[data-alert="true"] {
+  background: color-mix(
+    in oklab,
+    var(--destructive, var(--stage-danger)) 9%,
+    var(--card, var(--stage-bg))
+  );
+}
+:is(
+    .physics-imaging-ledger,
+    .physics-orbital-ledger,
+    .physics-dynamics-ledger,
+    .physics-field-ledger,
+    .physics-thermal-ledger
+  )
+  span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+:is(
+    .physics-imaging-ledger,
+    .physics-orbital-ledger,
+    .physics-dynamics-ledger,
+    .physics-field-ledger,
+    .physics-thermal-ledger
+  )
+  strong {
+  font-size: var(--lab-t-eyebrow);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.physics-thermal-law {
+  display: grid;
+  gap: var(--lab-sp-8);
+  padding: var(--lab-sp-4) var(--lab-sp-2) 0;
+}
+.physics-thermal-law p {
+  margin: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}

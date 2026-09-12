@@ -1,0 +1,84 @@
+@container lab-activity (max-width: 59.99rem) {
+  /* In a stacked lab, keep the transport at the thumb-friendly bottom edge. */
+  .lab-activity-header {
+    order: 1;
+  }
+  .lab-activity-status {
+    order: 2;
+  }
+  /* A task section (question / response) keeps its DOM position relative to the figure.
+     Without an explicit order it defaulted to 0 and jumped ABOVE the title on every narrow
+     layout. Sharing the workspace's value means ties fall back to source order: a predict
+     task authored before the figure stays before it, an explain task after it stays after. */
+  .lab-authored-task {
+    order: 3;
+  }
+  .lab-activity-workspace {
+    order: 3;
+  }
+  .lab-activity-feedback {
+    order: 4;
+  }
+  .lab-activity-transcript {
+    order: 5;
+  }
+  .lab-activity-transport {
+    position: sticky;
+    bottom: 0;
+    z-index: var(--lab-z-overlay);
+    order: 6;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    background: color-mix(in oklab, var(--background, var(--stage-bg)) 88%, transparent);
+    box-shadow: 0 -8px 18px color-mix(in oklab, currentColor 7%, transparent);
+    backdrop-filter: blur(12px);
+  }
+  .circuit-editor-activity .lab-activity-canvas,
+  .logic-editor-activity .lab-activity-canvas {
+    order: -1;
+  }
+  .circuit-editor-activity .lab-activity-inspector > summary,
+  .logic-editor-activity .lab-activity-inspector > summary {
+    display: list-item;
+  }
+  .circuit-editor-activity .lab-activity-inspector[open] > summary,
+  .logic-editor-activity .lab-activity-inspector[open] > summary {
+    border-bottom: 1px solid var(--border, var(--stage-grid));
+  }
+  .circuit-editor-panel-head {
+    display: none;
+  }
+}
+@container lab-activity (max-width: 42.5rem) {
+  .circuit-editor-activity .lab-activity-canvas > div:last-child,
+  .logic-editor-activity .lab-activity-canvas > div:last-child {
+    height: min(65dvh, 32rem);
+    min-height: 22rem;
+  }
+  .circuit-editor-guidance {
+    font-size: var(--lab-t-micro);
+  }
+  .circuit-editor-status-hint {
+    display: none;
+  }
+  .circuit-editor-history button {
+    padding-inline: var(--lab-sp-8) !important;
+  }
+  .circuit-editor-history button span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+.lab-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-8);
+}
+
+.lab-numeric-tertiary {
+  color: var(--stage-muted);
+  font-variant-numeric: tabular-nums;
+}

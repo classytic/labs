@@ -1,0 +1,143 @@
+@layer components {
+  :root {
+    --stage-primary: var(--stage-accent, var(--primary));
+    --stage-info: var(--stage-accent, var(--primary));
+    --stage-info-soft: color-mix(
+      in oklab,
+      var(--stage-accent, var(--primary)) 12%,
+      var(--stage-bg, var(--card))
+    );
+    --stage-success: var(--stage-good, var(--success));
+    --stage-success-soft: color-mix(
+      in oklab,
+      var(--stage-good, var(--success)) 12%,
+      var(--stage-bg, var(--card))
+    );
+    --stage-warn-soft: color-mix(
+      in oklab,
+      var(--stage-warn, var(--warning)) 12%,
+      var(--stage-bg, var(--card))
+    );
+    --stage-border: var(--stage-grid, var(--border));
+    --stage-border-strong: var(--stage-axis, var(--foreground));
+    --stage-muted-fg: var(--stage-muted, var(--muted-foreground));
+  }
+  .modern-linked-scene {
+    display: grid;
+    overflow: hidden;
+    background: var(--stage-bg);
+  }
+  /* "linked" STACKS the experiment over the spacetime diagram. Side-by-side halved each
+     figure's width, which pushed every scene label under ~8px on screen — unreadable. */
+  .modern-linked-scene--linked {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .modern-linked-scene > section {
+    min-width: 0;
+    padding: clamp(0.25rem, 1vw, 0.75rem);
+  }
+  .modern-linked-scene--linked > section + section {
+    border-block-start: 1px solid var(--stage-grid);
+  }
+  .modern-linked-scene svg {
+    display: block;
+    /* 25rem cut in below these scenes' natural height at a full-width column, so the drawing
+       letterboxed itself and lost ~20% of the width to side gutters. The cap only guards very
+       wide viewports now. */
+    max-height: 34rem;
+  }
+  /* Scene type floor: these sizes are in viewBox units (620–720 wide), rendered at roughly
+     full column width, so 15px lands ≈ 13–15px on screen. Never below 12px on screen. */
+  .modern-scene-label {
+    fill: var(--stage-fg);
+    font-size: var(--lab-t-sm);
+    font-weight: var(--lab-w-bold);
+    letter-spacing: 0;
+  }
+  .modern-clock-ledger {
+    fill: var(--stage-fg);
+    font-size: var(--lab-t-body);
+    font-weight: var(--lab-w-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .modern-scene-note {
+    fill: var(--stage-muted);
+    font-size: var(--lab-t-eyebrow);
+    font-weight: var(--lab-w-medium);
+  }
+  .modern-scene-measure {
+    fill: var(--stage-fg);
+    font-size: var(--lab-t-body);
+    font-weight: var(--lab-w-semibold);
+    font-variant-numeric: tabular-nums;
+  }
+  .modern-experiment-transport {
+    display: grid;
+    grid-template-columns: auto auto minmax(7rem, 1fr) auto;
+    align-items: center;
+    gap: var(--lab-sp-8);
+    width: 100%;
+  }
+  /* The scrubber spans its own row under the buttons. It moved from a raw range input to the
+     shared Slider (a div), so matching only `input[type="range"]` left it as a 4th grid item
+     squeezed into an `auto` column: a ~30px stub floating under the transport buttons. */
+  .modern-experiment-transport > :is(input[type="range"], .lab-slider, [data-slot="slider"]) {
+    grid-column: 1 / -1;
+    width: 100%;
+    accent-color: var(--stage-primary);
+  }
+  .modern-fission-workspace {
+    display: grid;
+    gap: var(--lab-sp-10);
+  }
+  .modern-fission-workspace > svg {
+    display: block;
+    width: 100%;
+    min-height: 18rem;
+    border-radius: var(--lab-r-md);
+    background: var(--stage-bg);
+  }
+  .modern-fission-ledger {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--stage-border);
+    border-radius: var(--lab-r-md);
+    background: var(--stage-border);
+  }
+  .modern-fission-ledger > div {
+    display: grid;
+    gap: var(--lab-sp-4);
+    padding: var(--lab-sp-8) var(--lab-sp-10);
+    background: var(--stage-bg);
+  }
+  .modern-fission-ledger span {
+    color: var(--stage-muted-fg);
+    font-size: var(--lab-t-eyebrow);
+  }
+  .modern-fission-ledger strong {
+    font-size: var(--lab-t-sm);
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 640px) {
+    /* The SHRINKABLE column goes first, where the wordy control is: with `auto` leading, a long
+       label took 229px of a 246px row and squeezed the trailing icon button to a 1px column that
+       then overhung the card. Icon buttons keep their size; the label gives way. */
+    .modern-experiment-transport {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .modern-experiment-transport > * {
+      min-width: 0;
+    }
+    /* The scrubber keeps its own row (grid-column does nothing in a flex row). */
+    .modern-experiment-transport > :is(input[type="range"], .lab-slider, [data-slot="slider"]) {
+      flex: 1 0 100%;
+    }
+    .modern-fission-ledger {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}

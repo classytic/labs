@@ -1,0 +1,206 @@
+/*!
+ * Exam practice layer.
+ *
+ * A question paper has a visual grammar of its own: parts hanging off a margin rule, marks in
+ * square brackets at the right, the mark scheme set apart as something an examiner reads rather
+ * than something the candidate reads. The rules below imitate that grammar with the lab tokens,
+ * so the surface still adopts the host theme.
+ *
+ * Kept out of domains.css deliberately: this layer belongs to one domain and one lab, and a sheet
+ * that only loads with the exam bundle is easier to budget than another 2 KiB in the shared one.
+ */
+
+.lab-exam-parts {
+  display: flex;
+  flex-direction: column;
+  /* Wide enough that the margin rules read as separate parts rather than one long rule. */
+  gap: var(--lab-sp-16);
+}
+
+.lab-exam-part {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-6);
+  /* The margin rule of a printed paper: enough to group the part, cheaper than a card. */
+  border-inline-start: 2px solid var(--lab-border);
+  padding-inline-start: var(--lab-sp-14);
+}
+
+.lab-exam-part-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--lab-sp-10);
+  font-size: var(--lab-t-body);
+}
+
+.lab-exam-marks {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.lab-exam-prompt {
+  margin: 0;
+  font-size: var(--lab-t-body);
+  line-height: var(--lab-lh-prose);
+  color: var(--lab-fg);
+}
+
+.lab-exam-command {
+  margin: 0;
+  font-size: var(--lab-t-eyebrow);
+  color: var(--lab-muted);
+}
+.lab-exam-command strong {
+  color: var(--lab-fg);
+  text-transform: uppercase;
+  letter-spacing: var(--lab-ls-caps);
+}
+
+.lab-exam-part .lab-field-row {
+  margin-block-start: var(--lab-sp-6);
+}
+.lab-exam-input {
+  /* Wide enough for a value with units and a power of ten, narrow enough to read as an answer
+     box rather than a comment field. */
+  max-width: 16rem;
+  font-variant-numeric: tabular-nums;
+}
+.lab-exam-unit {
+  font-size: var(--lab-t-sm);
+  color: var(--lab-muted);
+}
+
+.lab-exam-note,
+.lab-exam-verdict {
+  margin: 0;
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+.lab-exam-note {
+  color: var(--lab-muted);
+}
+.lab-exam-verdict[data-tone="good"] {
+  color: var(--lab-good);
+  font-weight: var(--lab-w-semibold);
+}
+.lab-exam-verdict[data-tone="warn"] {
+  color: var(--lab-warn-fg, var(--lab-warn));
+}
+.lab-exam-verdict[data-tone="bad"] {
+  color: var(--lab-danger);
+}
+
+.lab-exam-scheme {
+  margin-block-start: var(--lab-sp-6);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-sm);
+  background: var(--lab-sunken);
+  padding: var(--lab-sp-10);
+  font-size: var(--lab-t-sm);
+}
+.lab-exam-scheme > summary {
+  cursor: pointer;
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: var(--lab-ls-caps);
+}
+.lab-exam-scheme[open] > summary {
+  margin-block-end: var(--lab-sp-10);
+}
+.lab-exam-scheme ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-6);
+  margin: 0;
+  padding-inline-start: var(--lab-sp-14);
+}
+.lab-exam-scheme li {
+  line-height: var(--lab-lh-ui);
+}
+
+/* The workspace default padding is sized for a figure; a question is read, so it gets a
+   reading measure and a little more room around it. */
+.lab-exam-question .lab-activity-workspace {
+  padding: var(--lab-sp-16) var(--lab-sp-16) var(--lab-sp-14);
+}
+.lab-exam-question .lab-exam-prompt {
+  max-width: 46rem;
+}
+
+/*
+ * Identity proving.
+ *
+ * The working is a numbered column of LaTeX lines with the move that produced each one set beside
+ * it, which is the layout of a marked-up proof in a textbook margin. Lives here rather than in
+ * domains.css for the same reason as the rest of this sheet: it belongs to one lab.
+ */
+.lab-proof-claim {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-6);
+  padding-block-end: var(--lab-sp-14);
+  border-block-end: 1px solid var(--lab-border);
+}
+
+.lab-proof-working {
+  list-style: none;
+  margin: 0;
+  padding: var(--lab-sp-14) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-10);
+}
+
+.lab-proof-working li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--lab-sp-10);
+  /* Lines already established recede, so the eye lands on the one just produced. */
+  opacity: 0.6;
+}
+
+.lab-proof-working li[data-latest="true"] {
+  opacity: 1;
+}
+
+/* The reason the line exists, set small beside it the way a margin annotation is. */
+.lab-proof-move {
+  font-size: var(--lab-t-eyebrow);
+  color: var(--lab-muted);
+}
+
+.lab-proof-qed {
+  margin: var(--lab-sp-14) 0 0;
+  color: var(--lab-fg);
+}
+
+/* The prompt belongs ABOVE the menu, not beside it: dropped into the dock's own row it rendered
+   inline with the first chip and read as a broken label. */
+.lab-proof-choice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-10);
+  width: 100%;
+}
+
+/* Menu chips stack: a move label is a sentence, not a word, so a row of them would squeeze each
+   one to two characters at narrow widths. */
+.lab-proof-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--lab-sp-10);
+}
+
+.lab-proof-menu .lab-chip {
+  justify-content: flex-start;
+  text-align: start;
+  white-space: normal;
+  height: auto;
+  padding-block: var(--lab-sp-10);
+}

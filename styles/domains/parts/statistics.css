@@ -1,0 +1,250 @@
+.statistics-z-input {
+  width: var(--statistics-input-width);
+  padding: var(--lab-sp-2) var(--lab-sp-6);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-xs);
+  background: var(--stage-bg);
+  color: var(--stage-fg);
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.statistics-z-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lab-sp-16);
+  margin: var(--lab-sp-6) 0;
+}
+.statistics-z-formula {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  font-size: var(--lab-t-sm);
+}
+.statistics-z-accent {
+  color: var(--stage-accent);
+}
+.statistics-z-curve-summary {
+  display: flex;
+  flex: 1;
+  min-width: 14.375rem;
+  align-items: center;
+  gap: var(--lab-sp-12);
+}
+.statistics-z-curve {
+  width: 14.375rem;
+  height: auto;
+}
+.statistics-z-probability {
+  color: var(--stage-good);
+  font-size: var(--lab-t-title);
+  font-weight: var(--lab-w-bold);
+}
+.statistics-z-expression,
+.statistics-z-note {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.statistics-z-note {
+  margin-top: var(--lab-sp-6);
+}
+.statistics-z-table-scroll {
+  max-height: 18.75rem;
+  overflow: auto;
+  margin-top: var(--lab-sp-8);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-sm);
+}
+.statistics-z-table {
+  border-collapse: collapse;
+  font-size: var(--lab-t-micro);
+  font-variant-numeric: tabular-nums;
+}
+.statistics-z-corner,
+.statistics-z-column {
+  position: sticky;
+  top: 0;
+  padding: var(--lab-sp-4) var(--lab-sp-6);
+  border-bottom: 2px solid var(--stage-grid);
+  background: var(--stage-bg);
+}
+.statistics-z-corner {
+  left: 0;
+  z-index: var(--lab-z-raised);
+  color: var(--stage-accent);
+}
+.statistics-z-column {
+  color: var(--stage-muted);
+}
+.statistics-z-column[data-selected="true"],
+.statistics-z-row-label[data-selected="true"] {
+  background: color-mix(in oklab, var(--stage-accent) 18%, var(--stage-bg));
+}
+.statistics-z-row-label {
+  position: sticky;
+  left: 0;
+  padding: var(--lab-sp-2) var(--lab-sp-6);
+  border-inline-end: 1px solid var(--stage-grid);
+  background: var(--stage-bg);
+  color: var(--stage-accent);
+  font-weight: var(--lab-w-semibold);
+}
+.statistics-z-cell {
+  padding: var(--lab-sp-2) var(--lab-sp-6);
+  border-bottom: 1px solid color-mix(in oklab, var(--stage-grid) 50%, transparent);
+  color: var(--stage-fg);
+  text-align: right;
+  cursor: pointer;
+}
+.statistics-z-cell[data-row-selected="true"] {
+  background: color-mix(in oklab, var(--stage-accent) 7%, transparent);
+}
+.statistics-z-cell[data-selected="true"] {
+  background: var(--stage-good);
+  color: white;
+  font-weight: var(--lab-w-bold);
+}
+.statistics-bound-handle {
+  cursor: ew-resize;
+}
+.statistics-data-point:focus-visible {
+  stroke: var(--ring, var(--stage-accent));
+  stroke-width: 4;
+}
+.statistics-interactive-scene {
+  padding: var(--lab-sp-8);
+  touch-action: none;
+}
+.statistics-chart {
+  display: block;
+  width: 100%;
+  max-width: 33.75rem;
+  height: auto;
+}
+.statistics-chart-centered {
+  margin: 0 auto;
+}
+.statistics-area-summary,
+.statistics-rule-summary {
+  display: flex;
+  flex-wrap: wrap;
+  margin: var(--lab-sp-10) 0;
+  font-variant-numeric: tabular-nums;
+}
+.statistics-area-summary {
+  align-items: baseline;
+  gap: var(--lab-sp-16);
+}
+.statistics-rule-summary {
+  gap: var(--lab-sp-16);
+  color: var(--stage-accent);
+  font-weight: var(--lab-w-semibold);
+}
+.statistics-area-result {
+  color: var(--stage-good);
+  font-size: var(--lab-t-title);
+  font-weight: var(--lab-w-bold);
+}
+.statistics-z-range {
+  color: var(--stage-accent);
+  font-weight: var(--lab-w-semibold);
+}
+.statistics-interaction-hint {
+  align-self: center;
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.statistics-stat {
+  display: inline-flex;
+  min-width: 4rem;
+  flex-direction: column;
+  align-items: center;
+}
+.statistics-stat-label {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-medium);
+}
+.statistics-stat-value {
+  color: var(--statistics-color, var(--stage-fg));
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-bold);
+  font-variant-numeric: tabular-nums;
+}
+.statistics-challenge {
+  color: var(--stage-fg);
+  font-weight: var(--lab-w-medium);
+}
+.statistics-challenge[data-solved="true"] {
+  color: var(--stage-good);
+}
+.statistics-data-point {
+  cursor: grab;
+  transition:
+    cx var(--lab-dur-fast),
+    cy var(--lab-dur-fast);
+}
+.statistics-data-point[data-dragging="true"] {
+  transition: none;
+}
+.statistics-mean-marker {
+  transform: translateX(var(--statistics-translate));
+  transition: transform var(--lab-dur-fast);
+}
+.statistics-mean-marker[data-dragging="true"] {
+  transition: none;
+}
+.statistics-stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--lab-sp-8);
+  margin: var(--lab-sp-12) 0;
+  padding: var(--lab-sp-8) 0;
+  border-block: 1px solid var(--stage-grid);
+}
+.statistics-stat-compact {
+  min-width: 3.25rem;
+}
+.statistics-stat-compact .statistics-stat-value {
+  font-size: var(--lab-t-sm);
+}
+.statistics-chart-crosshair {
+  cursor: crosshair;
+}
+.statistics-sampling-scene {
+  margin-top: var(--lab-sp-6);
+}
+.statistics-sampling-summary,
+.statistics-formula-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-16);
+  margin-top: var(--lab-sp-6);
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.statistics-formula-summary {
+  align-items: center;
+  margin-block: var(--lab-sp-10);
+}
+.statistics-sampling-good {
+  color: var(--stage-good);
+}
+.statistics-sampling-accent {
+  color: var(--stage-accent);
+}
+.statistics-sampling-detail {
+  color: var(--stage-muted);
+  font-weight: var(--lab-w-regular);
+}
+.statistics-diverges {
+  color: var(--stage-danger);
+  font-weight: var(--lab-w-medium);
+}
+.statistics-explanation {
+  margin-top: var(--lab-sp-4);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}

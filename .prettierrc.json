@@ -1,0 +1,14 @@
+{
+  "printWidth": 110,
+  "singleQuote": true,
+  "jsxSingleQuote": false,
+  "trailingComma": "all",
+  "semi": true,
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "endOfLine": "lf",
+  "overrides": [
+    { "files": ["*.css"], "options": { "printWidth": 100, "singleQuote": false } },
+    { "files": ["*.md", "*.mdx"], "options": { "proseWrap": "preserve" } }
+  ]
+}

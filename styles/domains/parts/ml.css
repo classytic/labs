@@ -1,0 +1,243 @@
+.ml-confusion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-4);
+}
+.ml-instrument-stack {
+  display: grid;
+  gap: var(--lab-sp-12);
+}
+.ml-lesson-support {
+  display: grid;
+  gap: var(--lab-sp-12);
+  padding-top: var(--lab-sp-8);
+}
+.ml-lesson-support section > strong {
+  color: var(--stage-fg);
+  font-size: var(--lab-t-eyebrow);
+}
+.ml-lesson-support ul {
+  margin: var(--lab-sp-6) 0 0;
+  padding-inline-start: var(--lab-sp-16);
+}
+.ml-square-scene {
+  width: min(100%, 32rem);
+  margin: auto;
+}
+.ml-confusion-cell {
+  min-width: 4.875rem;
+  padding: var(--lab-sp-8) var(--lab-sp-10);
+  border: 1px solid color-mix(in oklab, var(--ml-tone) 40%, var(--stage-grid));
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--ml-tone) 14%, var(--stage-bg));
+  text-align: center;
+}
+.ml-confusion-cell div,
+.ml-metric > div:first-child {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+}
+.ml-confusion-cell strong {
+  color: var(--ml-tone);
+  font-size: var(--lab-t-title);
+  font-weight: var(--lab-w-bold);
+}
+.ml-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--lab-sp-12);
+}
+.ml-metric {
+  min-width: 5.625rem;
+  flex: 1;
+}
+.ml-meter,
+.ml-loss-meter {
+  overflow: hidden;
+  border-radius: var(--lab-r-pill);
+  background: color-mix(in oklab, var(--stage-fg) 10%, transparent);
+}
+.ml-meter {
+  height: 0.5rem;
+}
+.ml-meter > div,
+.ml-loss-meter > div {
+  width: var(--ml-value);
+  height: 100%;
+  transition:
+    width var(--lab-dur-fast),
+    background var(--lab-dur-base);
+}
+.ml-meter > div {
+  background: var(--stage-accent);
+}
+.ml-readout {
+  display: grid;
+  gap: var(--lab-sp-6);
+  color: var(--stage-muted);
+}
+.ml-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-12);
+}
+.ml-legend [data-class="a"],
+.ml-vote [data-class="a"] {
+  color: var(--ml-class-a);
+}
+.ml-legend [data-class="b"],
+.ml-vote [data-class="b"] {
+  color: var(--ml-class-b);
+}
+.ml-score {
+  color: var(--stage-accent);
+  font-size: var(--lab-t-lg);
+  font-variant-numeric: tabular-nums;
+}
+.ml-score[data-perfect] {
+  color: var(--stage-good);
+}
+.ml-warning {
+  color: var(--stage-danger, #e03131);
+  font-weight: var(--lab-w-semibold);
+}
+.ml-vote {
+  color: var(--stage-accent);
+}
+.ml-control-hint {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.ml-interactive-scene {
+  position: relative;
+  border-radius: var(--lab-r-xs);
+  outline: none;
+}
+.ml-interactive-scene:focus-visible {
+  outline: 2px solid var(--stage-accent, #1c7ed6);
+  outline-offset: 2px;
+}
+.ml-loss-value,
+.ml-learning-rate {
+  font-variant-numeric: tabular-nums;
+}
+.ml-loss-value {
+  font-weight: var(--lab-w-semibold);
+}
+.ml-loss-value b {
+  font-size: var(--lab-t-body);
+}
+.ml-loss-value[data-optimal] b {
+  color: var(--stage-good);
+}
+.ml-loss-meter {
+  min-width: 7.5rem;
+  height: 0.625rem;
+  margin-block: var(--lab-sp-6);
+}
+.ml-loss-meter > div {
+  background: var(--stage-warn);
+}
+.ml-loss-meter > div[data-optimal] {
+  background: var(--stage-good);
+}
+.ml-loss-history {
+  display: block;
+  max-width: 22.5rem;
+  margin-top: var(--lab-sp-4);
+}
+.ml-learning-rate {
+  color: var(--stage-muted);
+}
+.ml-learning-rate[data-danger] {
+  color: var(--stage-danger);
+}
+.geography-cycle-scene {
+  padding: var(--lab-sp-8);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+}
+.geography-cycle-trace {
+  flex-wrap: wrap;
+  gap: var(--lab-sp-10);
+  min-height: 1.875rem;
+}
+.geography-cycle-trace > span {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.geography-cycle-trace > span b:first-child {
+  color: var(--stage-accent);
+}
+.geography-cycle-trace > span b:last-child {
+  color: var(--stage-fg);
+}
+.geography-cycle-slot {
+  cursor: pointer;
+  outline: none;
+}
+.geography-cycle-slot:focus-visible rect {
+  stroke: var(--stage-accent);
+  stroke-width: 2.5px;
+}
+.geography-process-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-8);
+}
+.geography-process-complete {
+  color: var(--stage-good);
+  font-weight: var(--lab-w-semibold);
+}
+@keyframes scene-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scene-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes vessel-drop {
+  from {
+    transform: translateY(-34px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes slotfill-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  60% {
+    transform: translateX(5px);
+  }
+}
+@keyframes stage-current-flow {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+.stage-current {
+  animation: stage-current-flow var(--stage-current-duration, 1.2s) linear infinite;
+}

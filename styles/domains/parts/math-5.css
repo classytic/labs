@@ -1,0 +1,327 @@
+/* Shared measurement scenes: SVG geometry stays authorable while these semantic
+   roles keep every mode aligned with host shadcn-compatible tokens. */
+.measurement-scene {
+  display: block;
+  width: 100%;
+  aspect-ratio: 32 / 17;
+}
+.measurement-shape {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 12%, transparent);
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 3;
+}
+.measurement-fill {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 12%, transparent);
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 2;
+}
+.measurement-axis {
+  stroke: var(--foreground, var(--stage-fg));
+  stroke-width: 2;
+}
+.measurement-guide {
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 2;
+}
+.measurement-unroll {
+  fill: none;
+  stroke: var(--chart-2, var(--stage-accent-2));
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.measurement-trace {
+  fill: none;
+  stroke: color-mix(in oklab, var(--chart-2, var(--stage-accent-2)) 62%, transparent);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+.measurement-dimension {
+  stroke: var(--chart-2, var(--stage-accent-2));
+  stroke-width: 2;
+  marker-start: none;
+}
+.measurement-tick {
+  stroke: var(--muted-foreground, var(--stage-muted));
+  stroke-width: 1.5;
+}
+.measurement-marker,
+.measurement-handle {
+  fill: var(--primary, var(--stage-accent));
+  stroke: var(--primary-foreground, white);
+  stroke-width: 3;
+}
+.measurement-handle {
+  cursor: grab;
+}
+.measurement-handle:active {
+  cursor: grabbing;
+}
+.measurement-interactive {
+  touch-action: none;
+  user-select: none;
+}
+/* These name parts of the shape they sit on (a diameter across a circle, r on the rim), so they
+   carry a halo like the physics scenes do and stay readable where an edge crosses them. */
+.measurement-label,
+.measurement-small {
+  paint-order: stroke;
+  stroke: var(--card, var(--stage-bg));
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.measurement-label {
+  fill: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-semibold);
+}
+.measurement-small {
+  fill: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.measurement-kicker {
+  fill: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+}
+.measurement-layer {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 7%, transparent);
+  stroke: color-mix(in oklab, var(--primary, var(--stage-accent)) 52%, transparent);
+}
+.measurement-net {
+  fill: color-mix(in oklab, var(--chart-2, var(--stage-accent-2)) 12%, transparent);
+  stroke: var(--chart-2, var(--stage-accent-2));
+  stroke-width: 2;
+}
+.measurement-path {
+  fill: color-mix(in oklab, var(--chart-3, var(--stage-warn)) 38%, transparent);
+  stroke: var(--chart-3, var(--stage-warn));
+  stroke-width: 2;
+}
+.measurement-water {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 28%, transparent);
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 2;
+}
+.measurement-region {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 16%, transparent);
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 3;
+}
+.measurement-cell {
+  fill: transparent;
+  stroke: color-mix(in oklab, var(--border, var(--stage-grid)) 72%, transparent);
+}
+.measurement-cell[data-cell="full"] {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 40%, transparent);
+}
+.measurement-cell[data-cell="partial"] {
+  fill: color-mix(in oklab, var(--chart-3, var(--stage-warn)) 34%, transparent);
+  stroke-dasharray: 3 2;
+}
+.measurement-hint {
+  margin: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+@container lab-activity (max-width: 42.5rem) {
+  .measurement-scene {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* River crossing: the aims, and the one that ran out of physics. */
+.physics-river-aims {
+  flex-wrap: wrap;
+}
+.physics-river-why {
+  margin: var(--lab-sp-6) 0 0;
+  color: var(--lab-muted);
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+.physics-river-why strong {
+  color: var(--lab-fg);
+}
+.physics-river-compare {
+  width: 100%;
+  margin-block-start: var(--lab-sp-10);
+  border-collapse: collapse;
+  font-size: var(--lab-t-sm);
+  font-variant-numeric: tabular-nums;
+}
+.physics-river-compare caption {
+  margin-bottom: var(--lab-sp-4);
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+  letter-spacing: var(--lab-ls-caps);
+  text-align: start;
+  text-transform: uppercase;
+}
+.physics-river-compare th,
+.physics-river-compare td {
+  padding: var(--lab-sp-4) var(--lab-sp-6);
+  border-bottom: 1px solid var(--lab-border);
+  text-align: end;
+}
+.physics-river-compare thead th,
+.physics-river-compare tbody th {
+  color: var(--lab-muted);
+  font-weight: var(--lab-w-medium);
+  text-align: start;
+}
+.physics-river-compare tbody th {
+  color: var(--lab-fg);
+}
+/* The unavailable aim stays in the table so the comparison keeps its shape. */
+.physics-river-compare tr[data-dead] {
+  opacity: 0.55;
+}
+
+/* Discrete reasoning: one quiet visual grammar for arguments, reachability and guarantees. */
+/* The premise, the working and the goal are REGIONS OF ONE CARD, not three cards. Boxing each in a
+   bordered, tinted panel with its own accent bar put four borders inside the activity border, and a
+   3px bar hard against the text is what made them look crowded. They are rows now, separated by
+   hairlines, and the only colour is on the eyebrow: the goal reads as the goal because it is
+   labelled TARGET in the good tone, not because it sits in a green box. */
+.proof-law,
+.proof-claim,
+.proof-target {
+  display: grid;
+  gap: var(--lab-sp-4);
+  padding: var(--lab-sp-12) 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.proof-target {
+  border-block-start: 1px solid var(--lab-hairline);
+}
+.proof-target .lab-field-label {
+  color: var(--lab-good-ink);
+}
+.proof-chain {
+  display: grid;
+  gap: var(--lab-sp-10);
+  min-block-size: 76px;
+  margin: var(--lab-sp-10) 0;
+  padding: 0;
+  list-style: none;
+  align-content: center;
+}
+.proof-chain li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: var(--lab-sp-14);
+  align-items: start;
+  padding: var(--lab-sp-14);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-surface);
+}
+.proof-chain li + li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(1rem + 1px);
+  inset-block-end: 100%;
+  block-size: var(--lab-sp-10);
+  border-inline-start: 2px solid var(--lab-border-strong);
+}
+.proof-chain li > span {
+  display: grid;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 50%;
+  background: var(--lab-accent);
+  color: var(--lab-accent-fg);
+  place-items: center;
+}
+.proof-chain li > div {
+  display: grid;
+  gap: var(--lab-sp-4);
+}
+.proof-chain small,
+.proof-placeholder,
+.proof-law span:last-child {
+  color: var(--lab-muted);
+}
+/* The empty first step is an invitation, not a filled block: a dashed outline on the page ground
+   says "a step goes here" without adding a third tinted surface. */
+.proof-placeholder {
+  border-style: dashed !important;
+  background: transparent !important;
+}
+.proof-placeholder > span {
+  background: transparent !important;
+  color: var(--lab-muted) !important;
+  box-shadow: inset 0 0 0 1px var(--lab-border-strong);
+}
+.discrete-proof-activity .lab-activity-canvas {
+  gap: 0;
+}
+.discrete-proof-activity .lab-activity-inspector {
+  align-self: start;
+}
+.proof-step-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--lab-sp-10);
+}
+.proof-step-actions .lab-btn {
+  block-size: auto;
+  min-block-size: 48px;
+  justify-content: flex-start;
+  white-space: normal;
+  text-align: start;
+}
+.proof-inference-picker {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+.proof-inference-picker {
+  padding-block-start: var(--lab-sp-16);
+  border-block-start: 1px solid var(--lab-border);
+}
+.proof-inference-picker > div:first-child {
+  display: grid;
+  gap: var(--lab-sp-2);
+}
+.proof-inference-picker p {
+  margin: 0;
+  color: var(--lab-muted);
+  font-size: var(--lab-t-sm);
+}
+.proof-inference-option {
+  display: grid !important;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: var(--lab-sp-10);
+  width: 100%;
+  padding: var(--lab-sp-14) !important;
+  border-radius: var(--lab-r-md) !important;
+  line-height: var(--lab-lh-ui);
+}
+.proof-inference-option > span:first-child {
+  display: grid;
+  inline-size: 1.6rem;
+  block-size: 1.6rem;
+  border-radius: 50%;
+  background: var(--lab-sunken);
+  color: var(--lab-muted);
+  place-items: center;
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+}
+
+/* The slide rule is dragged sideways, so the surface claims horizontal pointer
+   travel while leaving vertical scrolling to the page. */
+.math-slide-rule-surface {
+  cursor: grab;
+  touch-action: pan-y;
+}
+.math-slide-rule-surface:active {
+  cursor: grabbing;
+}
+.math-slide-rule-body {
+  cursor: grab;
+}

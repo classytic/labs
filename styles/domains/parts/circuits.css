@@ -1,0 +1,193 @@
+/* ── Circuit studio: Activity composition with a canvas-first authoring layout ── */
+.circuit-editor-activity .lab-activity-workspace {
+  align-items: stretch;
+}
+.circuit-editor-activity .lab-activity-canvas {
+  min-height: 0;
+}
+.circuit-editor-activity .lab-activity-canvas > div:last-child {
+  height: clamp(26rem, 62cqw, 42rem);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  touch-action: none;
+}
+.circuit-editor-activity[data-focus] .lab-activity-canvas > div:last-child {
+  height: clamp(32rem, 70dvh, 64rem);
+}
+.circuit-editor-panel-head {
+  padding: var(--lab-sp-12) var(--lab-sp-12);
+  border-bottom: 1px solid var(--border, var(--stage-grid));
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.circuit-editor-activity .lab-activity-inspector-body > div:not(.circuit-editor-panel-head),
+.circuit-editor-properties {
+  padding: var(--lab-sp-8);
+}
+.circuit-editor-guidance {
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--muted, color-mix(in oklab, currentColor 4%, transparent));
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.circuit-editor-status-hint {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.circuit-editor-history {
+  display: inline-flex;
+  gap: var(--lab-sp-6);
+  margin-inline-start: auto;
+  padding-inline-start: 0 !important;
+  border-inline-start: 0 !important;
+}
+.circuit-editor-activity .lab-activity-inspector button {
+  min-height: 2.5rem;
+}
+.circuit-scene-frame {
+  overflow: hidden;
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+}
+.circuit-scene-move-handle {
+  cursor: move;
+}
+.circuit-scene-wire-handle {
+  cursor: grab;
+}
+.circuit-scene-wire-target,
+.circuit-scene-wire-hit,
+.circuit-scene-activate-target {
+  cursor: pointer;
+}
+.circuit-scene-wire-hit[data-selected],
+.circuit-scene-part-target {
+  cursor: move;
+}
+.circuit-scene-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.circuit-editor-palette,
+.circuit-editor-property-stack,
+.circuit-editor-field-list,
+.circuit-editor-property-section {
+  display: flex;
+  flex-direction: column;
+}
+.circuit-editor-palette {
+  gap: var(--lab-sp-4);
+}
+.circuit-editor-palette-item {
+  display: flex;
+  width: 100%;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: var(--lab-sp-10);
+  padding: var(--lab-sp-8) var(--lab-sp-8);
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius, 0.625rem) - 2px);
+  background: transparent;
+  color: var(--foreground, var(--stage-fg));
+  font: inherit;
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  text-align: start;
+  cursor: pointer;
+}
+.circuit-editor-palette-item:hover {
+  border-color: var(--border, var(--stage-grid));
+  background: var(--accent, color-mix(in oklab, currentColor 6%, transparent));
+}
+.circuit-editor-palette-item:focus-visible {
+  outline: 2px solid var(--ring, var(--stage-accent));
+  outline-offset: 2px;
+}
+.circuit-editor-palette-item > svg:last-child {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.circuit-editor-part-thumb {
+  flex: none;
+}
+.circuit-editor-palette-label {
+  min-width: 0;
+  flex: 1;
+}
+.circuit-editor-alert {
+  padding: var(--lab-sp-10) var(--lab-sp-12);
+  border: 1px solid color-mix(in oklab, var(--destructive, var(--stage-danger)) 35%, transparent);
+  border-radius: calc(var(--radius, 0.625rem) - 2px);
+  background: color-mix(
+    in oklab,
+    var(--destructive, var(--stage-danger)) 12%,
+    var(--background, var(--stage-bg))
+  );
+  color: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.circuit-editor-viewport {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--stage-bg);
+}
+.circuit-editor-property-stack {
+  gap: var(--lab-sp-12);
+}
+.circuit-editor-property-stack[data-spacious="true"] {
+  gap: var(--lab-sp-14);
+}
+.circuit-editor-property-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-10);
+}
+.circuit-editor-property-title {
+  color: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-bold);
+}
+.circuit-editor-property-copy {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.circuit-editor-field-list {
+  gap: var(--lab-sp-8);
+}
+.circuit-editor-separator {
+  height: 1px;
+  background: var(--border, var(--stage-grid));
+}
+.circuit-editor-property-section {
+  gap: var(--lab-sp-8);
+}
+.circuit-editor-section-label {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.circuit-editor-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6);
+}

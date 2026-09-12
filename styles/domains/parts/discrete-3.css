@@ -1,0 +1,116 @@
+.venn-scene {
+  display: flex;
+  justify-content: center;
+  padding: var(--lab-sp-12);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+}
+.venn-svg {
+  display: block;
+  width: 100%;
+  max-width: 22.5rem;
+  height: auto;
+}
+.venn-svg-label,
+.venn-svg-count {
+  paint-order: stroke;
+  stroke: var(--stage-bg);
+  stroke-linejoin: round;
+}
+.venn-svg-label {
+  stroke-width: 4px;
+}
+.venn-svg-count {
+  stroke-width: 4.5px;
+}
+.venn-inclusion-panel {
+  display: grid;
+  gap: var(--lab-sp-6);
+  padding: var(--lab-sp-10) var(--lab-sp-14);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-sm);
+}
+.venn-set-key {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.venn-set-key-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-4) var(--lab-sp-12);
+}
+.venn-equation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--lab-sp-4) var(--lab-sp-6);
+  font-weight: var(--lab-w-medium);
+}
+.venn-equation [data-negative="true"] {
+  color: var(--stage-danger);
+}
+.venn-equation-result {
+  margin-inline-start: var(--lab-sp-4);
+  font-weight: var(--lab-w-bold);
+}
+.venn-equation-numeric {
+  color: var(--stage-muted);
+  font-variant-numeric: tabular-nums;
+}
+.venn-equation-total {
+  margin-inline-start: var(--lab-sp-4);
+  color: var(--stage-good);
+  font-weight: var(--lab-w-bold);
+}
+.venn-shade-target {
+  margin-inline-end: var(--lab-sp-4);
+  font-weight: var(--lab-w-semibold);
+}
+.pascal-scene {
+  overflow-x: auto;
+  padding: var(--lab-sp-8);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+  overscroll-behavior-inline: contain;
+}
+.pascal-svg {
+  display: block;
+  width: max(100%, var(--pascal-width));
+  height: auto;
+  margin-inline: auto;
+}
+.pascal-cell {
+  cursor: pointer;
+  outline: none;
+}
+.pascal-cell:focus-visible circle {
+  filter: drop-shadow(0 0 4px var(--stage-accent));
+  stroke: var(--stage-accent);
+  stroke-width: 3px;
+}
+.pascal-identities {
+  display: grid;
+  gap: var(--lab-sp-6);
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+.pascal-identities p {
+  margin: 0;
+}
+.pascal-expansion {
+  overflow-x: auto;
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--stage-accent) 8%, transparent);
+}
+.pascal-expansion-note {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.pascal-view-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6);
+}

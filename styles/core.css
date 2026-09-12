@@ -1,0 +1,3927 @@
+@source "./dist/**/*.mjs";
+
+:root {
+  /* ── colour (semantic; host shadcn → calm fallback) ─────────────────────── */
+  --lab-surface: var(--card, var(--background, oklch(1 0 0)));
+  --lab-sunken: var(--muted, color-mix(in oklab, currentColor 5%, transparent));
+  --lab-fg: var(--foreground, currentColor);
+  --lab-muted: var(--muted-foreground, color-mix(in oklab, currentColor 55%, transparent));
+  --lab-border: var(--border, color-mix(in oklab, currentColor 13%, transparent));
+  --lab-border-strong: var(--border, color-mix(in oklab, currentColor 22%, transparent));
+  --lab-accent: var(--primary, oklch(0.55 0.16 262));
+  --lab-accent-fg: var(--primary-foreground, oklch(1 0 0));
+  --lab-good: var(--success, oklch(0.58 0.15 152));
+  --lab-warn: var(--warning, oklch(0.72 0.14 75));
+  --lab-warn-fg: var(--warning-foreground, oklch(0.42 0.1 75));
+  --lab-danger: var(--destructive, oklch(0.58 0.19 25));
+  --lab-ring: var(--ring, var(--lab-accent));
+
+  /* ── radius scale ───────────────────────────────────────────────────────── */
+  --lab-r-xs: 4px;
+  --lab-r-sm: 8px;
+  --lab-r-md: 12px;
+  --lab-r-lg: 16px;
+  --lab-r-pill: 999px;
+
+  /* ── spacing scale ──────────────────────────────────────────────────────────
+     A 2px grid, and the number in the name IS the pixel value, so a reader can
+     size a gap by eye and an author cannot invent 0.35rem by accident. The old
+     scale ran 6/10/14/18 while the values actually used were 4/8/12/16, which is
+     why almost nothing referenced it. */
+  --lab-sp-2: 2px;
+  --lab-sp-4: 4px;
+  --lab-sp-6: 6px;
+  --lab-sp-8: 8px;
+  --lab-sp-10: 10px;
+  --lab-sp-12: 12px;
+  --lab-sp-14: 14px;
+  --lab-sp-16: 16px;
+  --lab-sp-20: 20px;
+  --lab-sp-24: 24px;
+  --lab-sp-32: 32px;
+
+  /* ── type scale ─────────────────────────────────────────────────────────── */
+  --lab-t-micro: 10px;
+  --lab-t-eyebrow: 12px;
+  --lab-t-sm: 14px;
+  --lab-t-body: 16px;
+  --lab-t-lg: 18px;
+  --lab-t-title: 20px;
+  --lab-t-hero: 24px;
+
+  /* ── type roles: weight, leading, tracking ───────────────────────────────────
+     Four weights, four leadings, two trackings. A size on its own does not make
+     a hierarchy; the pairing does. The sheets carried ten weights (400 to 850)
+     and seventeen line-heights, which read as no hierarchy at all. */
+  --lab-w-regular: 450; /* prose, answer text */
+  --lab-w-medium: 550; /* the step lead, labels, picked answers */
+  --lab-w-semibold: 650; /* control text, chips, stat labels */
+  --lab-w-bold: 750; /* titles, eyebrows, headline values */
+  --lab-lh-tight: 1; /* a numeral on its own */
+  --lab-lh-title: 1.25; /* headings, readout values */
+  --lab-lh-ui: 1.45; /* everything a learner acts on */
+  --lab-lh-prose: 1.55; /* explanations, observe text */
+  --lab-ls-caps: 0.06em; /* small uppercase labels only */
+  --lab-ls-tight: -0.015em; /* large numerals only */
+
+  /* ── targets ─────────────────────────────────────────────────────────────────
+     44px for anything the learner commits with (answers, primary actions,
+     transport, sliders' hit area). 36px for dense secondary controls inside a
+     dock (chips, segments, icon buttons), still above the WCAG 2.2 AA minimum
+     of 24px and spaced at least 8px apart. */
+  --lab-target: 44px;
+  --lab-target-compact: 36px;
+
+  /* ── state tints ─────────────────────────────────────────────────────────────
+     Every surface that reacts uses the SAME four steps, so "picked" looks like
+     picked everywhere and "right" is one green, not twenty. The mix is toward
+     the surface, not transparent, so the result is identical on a card and on
+     the sunken dock. Ink variants keep 4.5:1 for text on those tints. */
+  --lab-accent-faint: color-mix(in oklab, var(--lab-accent) 5%, var(--lab-surface)); /* hover */
+  --lab-accent-soft: color-mix(in oklab, var(--lab-accent) 12%, var(--lab-surface)); /* picked */
+  --lab-accent-edge: color-mix(
+    in oklab,
+    var(--lab-accent) 45%,
+    var(--lab-border)
+  ); /* hover border */
+  --lab-good-soft: color-mix(in oklab, var(--lab-good) 14%, var(--lab-surface));
+  --lab-good-ink: color-mix(in oklab, var(--lab-good) 80%, var(--lab-fg));
+  --lab-warn-soft: color-mix(in oklab, var(--lab-warn) 16%, var(--lab-surface));
+  --lab-warn-ink: color-mix(in oklab, var(--lab-warn-fg) 85%, var(--lab-fg));
+  --lab-danger-soft: color-mix(in oklab, var(--lab-danger) 12%, var(--lab-surface));
+  --lab-danger-ink: color-mix(in oklab, var(--lab-danger) 80%, var(--lab-fg));
+  --lab-hairline: color-mix(in oklab, var(--lab-border) 60%, transparent); /* row dividers */
+
+  /* ── motion ──────────────────────────────────────────────────────────────────
+     Three durations and three curves, and every animation in the package uses
+     them, so the whole product moves at one rhythm. fast is a state change
+     the pointer caused (hover, press); base is a state change the model caused
+     (a value lands, a chip lights); slow is something that moves through space
+     (a node slides, a panel opens). Exits run at fast. Anything longer than
+     slow is scene physics and is authored in the scene, not here. */
+  --lab-dur-fast: 120ms;
+  --lab-dur-base: 180ms;
+  --lab-dur-slow: 260ms;
+  --lab-ease: cubic-bezier(0.2, 0.8, 0.2, 1); /* decelerating: things arrive */
+  --lab-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* things move between two places */
+  --lab-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* one landing pop, sparingly */
+
+  /* ── focus ───────────────────────────────────────────────────────────────────
+     One ring for every keyboard focus in the package: 2px of the host's ring
+     colour, offset so it never covers the control's own border. Set once in
+     the shared :focus-visible rule; a component only overrides it when the
+     focused thing is SVG geometry with no box to outline. */
+  --lab-focus-ring: 2px solid var(--lab-ring);
+  --lab-focus-offset: 2px;
+
+  /* ── layering ────────────────────────────────────────────────────────────── */
+  --lab-z-raised: 1; /* a dragged handle, a lit edge */
+  --lab-z-overlay: 8; /* a lock, a tooltip, a floating readout inside the scene */
+  --lab-z-top: 50; /* focus-mode chrome */
+
+  /* elevation */
+  --lab-ink: oklch(0.29 0.045 262);
+  --lab-shadow-sm:
+    0 1px 2px -1px color-mix(in oklab, var(--lab-ink) 14%, transparent),
+    0 1px 2px color-mix(in oklab, var(--lab-ink) 8%, transparent);
+  --lab-shadow-md:
+    0 2px 5px -2px color-mix(in oklab, var(--lab-ink) 12%, transparent),
+    0 10px 24px -8px color-mix(in oklab, var(--lab-ink) 16%, transparent);
+  --lab-shadow-lg:
+    0 4px 12px -4px color-mix(in oklab, var(--lab-ink) 14%, transparent),
+    0 22px 46px -12px color-mix(in oklab, var(--lab-ink) 18%, transparent);
+
+  /* Legacy canvas tokens (widgets not yet migrated to stage). DEPRECATED. */
+  --sciviz-stage: oklch(0.16 0.02 255);
+  --sciviz-grid: oklch(0.55 0.02 255 / 0.5);
+  --sciviz-axis: oklch(0.7 0.02 255);
+  --sciviz-accent: oklch(0.72 0.15 250);
+  --sciviz-accent-2: oklch(0.78 0.16 50);
+  --sciviz-good: oklch(0.72 0.17 150);
+  --sciviz-text: oklch(0.92 0.01 255);
+  --sciviz-text-dim: oklch(0.7 0.02 255);
+  --sciviz-warn: oklch(0.82 0.16 85);
+}
+
+/* ── Shared interaction rules ─────────────────────────────────────────────────
+   Set once for the whole package. A component below adds to these only when it
+   has to (SVG geometry with no box to outline); it never restates them. */
+
+/* Focus: one ring for every keyboard focus under a lab root. */
+:is(.lab-activity, .lab-scene-studio)
+  :is(
+    button,
+    a[href],
+    input,
+    select,
+    textarea,
+    summary,
+    [role="button"],
+    [role="slider"],
+    [role="switch"],
+    [role="tab"],
+    [role="option"],
+    [role="radio"],
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible {
+  outline: var(--lab-focus-ring);
+  outline-offset: var(--lab-focus-offset);
+}
+
+/* Reduced motion: honoured at the root, not per animation. Everything collapses
+   to a single frame; confetti is removed outright because a still burst is
+   noise. A scene that must move to teach keeps a static state that still shows
+   the fact (see the lab-design rulebook). */
+@media (prefers-reduced-motion: reduce) {
+  :is(.lab-activity, .lab-scene-studio) :is(*, *::before, *::after) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .lab-activity .lab-confetti {
+    display: none;
+  }
+}
+
+/* Tree Quest: causal motion, recursion memory, and prediction—not decoration. */
+.tree-scene {
+  overflow: hidden;
+  min-height: 17rem;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, currentColor 9%, transparent) 1px,
+        transparent 0
+      )
+      0 0 / 20px 20px,
+    var(--card, var(--stage-bg));
+}
+
+/* One geometry contract for renderer-swappable learning scenes. The selected
+   model changes inside this frame; it must not make the activity jump. */
+.lab-scene-viewport {
+  container-type: inline-size;
+  display: grid;
+  width: 100%;
+  height: clamp(16rem, 62cqi, 25rem);
+  min-width: 0;
+  place-items: stretch;
+  overflow: hidden;
+}
+
+.lab-scene-viewport[data-size="compact"] {
+  height: clamp(14rem, 52cqi, 21rem);
+}
+
+.lab-scene-viewport[data-size="wide"] {
+  height: clamp(15rem, 48cqi, 23rem);
+}
+
+.lab-scene-viewport > :is(svg, .lab-figure, .lab-three-scene),
+.lab-scene-viewport > .lab-three-scene > .lab-three-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.lab-scene-viewport > :is(svg, .lab-figure) {
+  display: block;
+  overflow: hidden;
+}
+
+.lab-field-help {
+  display: block;
+  min-height: 2.5em;
+  color: var(--lab-muted);
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-title);
+}
+.tree-scene svg {
+  display: block;
+  width: 100%;
+  height: clamp(17rem, 36cqw, 27rem);
+}
+.tree-edge {
+  fill: none;
+  stroke: var(--border, var(--stage-grid));
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  transition:
+    stroke var(--lab-dur-base) var(--lab-ease),
+    stroke-width var(--lab-dur-base) var(--lab-ease);
+}
+.tree-edge[data-active] {
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 4;
+  stroke-dasharray: 8 6;
+  animation: tree-edge-flow 0.75s linear infinite;
+}
+.tree-node {
+  outline: none;
+  cursor: default;
+  transition: transform var(--lab-dur-slow) var(--lab-ease);
+}
+.tree-node[tabindex] {
+  cursor: pointer;
+}
+.tree-node-face {
+  fill: var(--card, var(--stage-bg));
+  stroke: var(--border, var(--stage-grid));
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill var(--lab-dur-base) var(--lab-ease),
+    stroke var(--lab-dur-base) var(--lab-ease);
+}
+.tree-node-halo {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.tree-node text {
+  fill: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-bold);
+  pointer-events: none;
+}
+.tree-node[data-visited] .tree-node-face {
+  fill: color-mix(in oklab, var(--stage-success, #16a34a) 16%, var(--card, var(--stage-bg)));
+  stroke: var(--stage-success, #16a34a);
+}
+.tree-node[data-current] .tree-node-face {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 14%, var(--card, var(--stage-bg)));
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 3;
+}
+.tree-node[data-current] .tree-node-halo {
+  stroke: color-mix(in oklab, var(--primary, var(--stage-accent)) 38%, transparent);
+  animation: tree-node-pulse 1.25s var(--lab-ease) infinite;
+}
+.tree-node:focus-visible .tree-node-halo {
+  stroke: var(--ring, var(--stage-accent));
+  stroke-width: 2.5;
+}
+.tree-prediction {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-10);
+  padding: var(--lab-sp-10);
+  border: 1px solid
+    color-mix(in oklab, var(--primary, var(--stage-accent)) 25%, var(--border, var(--stage-grid)));
+  border-radius: var(--lab-r-md);
+  background: color-mix(
+    in oklab,
+    var(--primary, var(--stage-accent)) 6%,
+    var(--card, var(--stage-bg))
+  );
+}
+.tree-prediction > span {
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+}
+.tree-prediction > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--lab-sp-6);
+}
+.tree-prediction small {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-4);
+  flex-basis: 100%;
+  justify-content: center;
+  color: var(--muted-foreground, var(--stage-muted));
+  text-align: center;
+}
+.tree-prediction small svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.list-structure-label {
+  margin: 2px 0 var(--lab-sp-4);
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+
+.list-structure-label[data-spaced] {
+  margin-top: var(--lab-sp-14);
+}
+
+.list-prediction-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-4);
+  margin-top: var(--lab-sp-10);
+  color: var(--muted-foreground, var(--stage-muted));
+}
+
+.tree-complexity ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--lab-sp-4);
+}
+.tree-complexity li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lab-sp-8);
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-sm);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+.tree-complexity li[data-here] {
+  border-color: var(--primary, var(--stage-accent));
+  background: color-mix(
+    in oklab,
+    var(--primary, var(--stage-accent)) 9%,
+    var(--card, var(--stage-bg))
+  );
+  font-weight: var(--lab-w-semibold);
+}
+.tree-complexity code {
+  padding: 0 var(--lab-sp-4);
+  border-radius: var(--lab-r-xs);
+  background: var(--muted, color-mix(in oklab, currentColor 6%, transparent));
+  font-size: 0.95em;
+}
+.tree-inspector {
+  display: grid;
+  gap: 1px;
+  background: var(--border, var(--stage-grid));
+}
+.tree-inspector section {
+  display: grid;
+  gap: var(--lab-sp-8);
+  padding: var(--lab-sp-12);
+  background: var(--card, var(--stage-bg));
+}
+.tree-inspector h4,
+.tree-inspector p {
+  margin: 0;
+  font-size: var(--lab-t-eyebrow);
+}
+.tree-stack {
+  display: grid;
+  gap: var(--lab-sp-4);
+}
+.tree-stack span {
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-sm);
+  background: var(--muted, color-mix(in oklab, currentColor 5%, transparent));
+  font:
+    650 0.68rem ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.tree-stack span[data-top] {
+  border-color: var(--primary, var(--stage-accent));
+  color: var(--primary, var(--stage-accent));
+}
+.tree-stack em,
+.tree-output em {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+}
+.tree-output {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6);
+  min-height: 2rem;
+}
+.tree-output span {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--stage-success, #16a34a) 14%, transparent);
+  color: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+  animation: tree-output-land var(--lab-dur-slow) var(--lab-ease);
+}
+.tree-invariant p {
+  color: var(--muted-foreground, var(--stage-muted));
+  line-height: var(--lab-lh-ui);
+}
+.tree-balance strong {
+  color: var(--primary, var(--stage-accent));
+  font:
+    800 1.1rem ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.tree-balance small {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+}
+.tree-rotation-prediction .lab-chip {
+  min-width: 6.8rem;
+  justify-content: center;
+  gap: var(--lab-sp-6);
+  font-weight: var(--lab-w-medium);
+}
+.tree-rotation-prediction .lab-chip strong {
+  font-weight: var(--lab-w-bold);
+}
+
+/* Algorithm traces need the scene, its evidence and step transport visible as
+   one causal unit. Most embedded lesson columns never reach the generic 60rem
+   desktop breakpoint, so algorithms adopt a narrower two-pane threshold. */
+@container lab-activity (min-width: 48rem) {
+  /* Only reserve a second pane when the inspector is actually open. Between
+     the compact and full desktop breakpoints Inspector intentionally remains
+     collapsible; an unconditional column here left a large, empty canvas. */
+  .algorithm-activity .lab-activity-workspace:has(> .lab-activity-inspector[open]) {
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
+    align-items: start;
+  }
+}
+
+.algorithm-activity .lab-activity-transport {
+  position: sticky;
+  z-index: var(--lab-z-raised);
+  inset-block-end: 0;
+  box-shadow: 0 -0.45rem 1rem
+    color-mix(in oklab, var(--foreground, var(--stage-fg)) 7%, transparent);
+}
+
+@container lab-activity (min-width: 64rem) {
+  .algorithm-activity[data-focus][data-focus-layout="immersive"] .algorithm-graph svg,
+  .algorithm-activity[data-focus][data-focus-layout="immersive"] .tree-scene svg {
+    height: clamp(24rem, 56dvh, 42rem);
+  }
+
+  /* Data-rich subject scenes should use the extra focus width without turning
+     compact controls, tables, or prose into oversized panels. These selectors
+     intentionally target named render surfaces rather than workspace children. */
+  .lab-activity[data-focus][data-focus-layout="immersive"] .statistics-chart {
+    max-width: 64rem;
+    margin-inline: auto;
+  }
+  .lab-activity[data-focus][data-focus-layout="immersive"] .statistics-z-curve {
+    width: min(100%, 34rem);
+  }
+  .lab-activity[data-focus][data-focus-layout="immersive"] .statistics-z-table-scroll {
+    max-height: min(48dvh, 32rem);
+  }
+  .lab-activity[data-focus][data-focus-layout="immersive"] .geography-cycle-scene svg {
+    display: block;
+    width: min(100%, 68rem);
+    height: auto;
+    max-height: 58dvh;
+    margin-inline: auto;
+  }
+  .lab-activity[data-focus][data-focus-layout="immersive"]
+    :is(.biology-plot-region, .biology-chart-scene)
+    > svg {
+    width: 100%;
+    max-height: 56dvh;
+  }
+}
+
+/* Authorable concept rules -------------------------------------------------
+   One semantic composition serves both compact lesson cards and full RuleLab
+   activities. Domain rule data owns the mathematics; this layer owns layout. */
+.rule-card {
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-panel, 0.85rem);
+  background: var(--card, var(--stage-bg));
+  color: var(--card-foreground, var(--stage-fg));
+  container: rule-card / inline-size;
+}
+.rule-card[data-display="activity"] {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.rule-card-header {
+  display: grid;
+  gap: var(--lab-sp-4);
+  padding: var(--lab-sp-14) var(--lab-sp-16);
+  border-bottom: 1px solid var(--border, var(--stage-grid));
+}
+.rule-card-title {
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-bold);
+  line-height: var(--lab-lh-title);
+}
+.rule-card-intuition {
+  margin: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.rule-card-intuition > span {
+  margin-inline-end: var(--lab-sp-8);
+  color: var(--primary, var(--stage-accent));
+  font-size: var(--lab-t-eyebrow, 0.65rem);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.rule-card-workspace {
+  display: grid;
+  min-width: 0;
+}
+.rule-card-scene {
+  display: grid;
+  min-width: 0;
+  align-content: center;
+  justify-items: center;
+  gap: var(--lab-sp-12);
+  padding: clamp(0.9rem, 3cqw, 1.5rem);
+}
+.rule-card-formula {
+  max-width: 100%;
+  overflow-x: auto;
+  font-size: clamp(1rem, 3cqw, 1.25rem);
+  scrollbar-width: thin;
+}
+.rule-card-figure {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  place-items: center;
+}
+.rule-figure {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: var(--lab-sp-8);
+  margin: 0;
+}
+.rule-figure-scene {
+  width: 100%;
+  min-width: 0;
+}
+.rule-figure figcaption {
+  max-width: 65ch;
+  margin-inline: auto;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+  text-align: center;
+}
+.rule-card-evidence {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-14) var(--lab-sp-16);
+  border-top: 1px solid var(--border, var(--stage-grid));
+  background: color-mix(in oklab, var(--muted, var(--stage-grid)) 45%, transparent);
+}
+.rule-step-list {
+  display: grid;
+  gap: var(--lab-sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rule-step-list > li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--lab-sp-4) var(--lab-sp-12);
+  min-width: 0;
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  border-radius: calc(var(--radius, 0.625rem) - 2px);
+}
+.rule-step-list > li[data-result="true"] {
+  border-inline-start: 2px solid var(--primary, var(--stage-accent));
+  background: color-mix(in oklab, var(--primary, var(--stage-accent)) 7%, transparent);
+}
+.rule-step-expression {
+  max-width: 100%;
+  overflow-x: auto;
+  font-size: var(--lab-t-sm);
+}
+.rule-step-note {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.rule-card-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-12) var(--lab-sp-16);
+  border-top: 1px solid var(--border, var(--stage-grid));
+  background: color-mix(in oklab, var(--muted, var(--stage-grid)) 42%, transparent);
+}
+.rule-card-support {
+  border-top: 1px solid var(--border, var(--stage-grid));
+}
+.rule-card-support > summary {
+  cursor: pointer;
+  padding: var(--lab-sp-12) var(--lab-sp-16);
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+}
+.rule-card-support[open] > summary {
+  border-bottom: 1px solid var(--border, var(--stage-grid));
+}
+.rule-card-support-body {
+  display: grid;
+  gap: var(--lab-sp-16);
+  padding: var(--lab-sp-14) var(--lab-sp-16) var(--lab-sp-16);
+}
+.rule-card-support-body section {
+  display: grid;
+  gap: var(--lab-sp-8);
+}
+.rule-card-support-body h4,
+.rule-card-support-body ul {
+  margin: 0;
+}
+.rule-card-support-body h4 {
+  font-size: var(--lab-t-eyebrow, 0.68rem);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.rule-card-support-body ul {
+  display: grid;
+  gap: var(--lab-sp-6);
+  padding-inline-start: var(--lab-sp-16);
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+/* Keep the explanation below the visual until both columns can remain useful.
+   The earlier 42rem split produced a cramped equation rail in ordinary lesson widths. */
+@container rule-card (min-width: 54rem) {
+  .rule-card-workspace:has(> .rule-card-evidence) {
+    grid-template-columns: minmax(28rem, 1.35fr) minmax(19rem, 0.65fr);
+    align-items: stretch;
+  }
+  .rule-card-evidence {
+    border-top: 0;
+    border-inline-start: 1px solid var(--border, var(--stage-grid));
+  }
+}
+
+/* Heap Quest: synchronized tree and array with stable item identity. */
+.heap-dual-view {
+  display: grid;
+  gap: var(--lab-sp-10);
+  min-width: 0;
+}
+.heap-tree {
+  overflow: hidden;
+  min-height: 18rem;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, currentColor 9%, transparent) 1px,
+        transparent 0
+      )
+      0 0 / 20px 20px,
+    var(--card, var(--stage-bg));
+}
+.heap-tree svg {
+  display: block;
+  width: 100%;
+  height: clamp(18rem, 38cqw, 29rem);
+}
+.heap-tree line {
+  stroke: var(--border, var(--stage-grid));
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  transition: stroke var(--lab-dur-base) var(--lab-ease);
+}
+.heap-tree line[data-active] {
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 4;
+}
+.heap-node {
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.5s var(--lab-ease);
+}
+.heap-node circle {
+  fill: var(--card, var(--stage-bg));
+  stroke: var(--border, var(--stage-grid));
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill var(--lab-dur-base) var(--lab-ease),
+    stroke var(--lab-dur-base) var(--lab-ease);
+}
+.heap-node > text:not(.heap-node-index) {
+  fill: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+}
+.heap-node-index {
+  fill: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+}
+.heap-node[data-active] circle {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 13%, var(--card, var(--stage-bg)));
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 3;
+}
+.heap-node[data-selected] circle,
+.heap-node:focus-visible circle {
+  stroke: var(--ring, var(--stage-accent));
+  stroke-width: 3;
+  stroke-dasharray: 4 2;
+}
+.heap-array {
+  display: flex;
+  gap: var(--lab-sp-6);
+  overflow-x: auto;
+  padding: var(--lab-sp-4) 2px var(--lab-sp-8);
+  scroll-snap-type: x proximity;
+}
+.heap-array button {
+  display: grid;
+  flex: 0 0 3rem;
+  min-height: 3.25rem;
+  place-items: center;
+  scroll-snap-align: center;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-sm);
+  background: var(--card, var(--stage-bg));
+  color: var(--foreground, var(--stage-fg));
+  cursor: pointer;
+}
+.heap-array button small {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+}
+.heap-array button strong {
+  font-size: var(--lab-t-eyebrow);
+}
+.heap-array button[data-active] {
+  border-color: var(--primary, var(--stage-accent));
+  background: color-mix(
+    in oklab,
+    var(--primary, var(--stage-accent)) 10%,
+    var(--card, var(--stage-bg))
+  );
+}
+.heap-array button[data-selected],
+.heap-relation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lab-sp-12);
+  min-height: 2.3rem;
+  padding: var(--lab-sp-8) var(--lab-sp-10);
+  border-radius: var(--lab-r-sm);
+  background: var(--muted, color-mix(in oklab, currentColor 5%, transparent));
+  color: var(--muted-foreground, var(--stage-muted));
+  font:
+    0.67rem ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.heap-relation b {
+  flex: none;
+  color: var(--primary, var(--stage-accent));
+}
+.heap-prediction .lab-chip {
+  min-width: 3.5rem;
+  justify-content: center;
+  text-transform: capitalize;
+}
+.heap-inspector {
+  display: grid;
+  gap: 1px;
+  background: var(--border, var(--stage-grid));
+}
+.heap-inspector section {
+  display: grid;
+  gap: var(--lab-sp-8);
+  padding: var(--lab-sp-12);
+  background: var(--card, var(--stage-bg));
+}
+.heap-inspector h4,
+.heap-inspector p,
+.heap-inspector dl {
+  margin: 0;
+  font-size: var(--lab-t-eyebrow);
+}
+.heap-inspector p {
+  color: var(--muted-foreground, var(--stage-muted));
+  line-height: var(--lab-lh-ui);
+}
+.heap-inspector code {
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  border-radius: var(--lab-r-sm);
+  background: var(--muted, color-mix(in oklab, currentColor 5%, transparent));
+  font-size: var(--lab-t-micro);
+}
+.heap-inspector dl {
+  display: grid;
+  gap: var(--lab-sp-6);
+}
+.heap-inspector dl div {
+  display: flex;
+  justify-content: space-between;
+}
+.heap-inspector dd {
+  margin: 0;
+  font-weight: var(--lab-w-bold);
+}
+.heap-authoring-preview {
+  min-width: 0;
+}
+@media (min-width: 56rem) {
+  .heap-authoring {
+    grid-template-columns: minmax(25rem, 1.2fr) minmax(20rem, 0.8fr);
+  }
+  .heap-authoring-preview {
+    position: sticky;
+    top: 1rem;
+  }
+}
+@container lab-activity (max-width: 42.5rem) {
+  .heap-tree {
+    min-height: 15rem;
+  }
+  .heap-tree svg {
+    height: 15rem;
+  }
+  .heap-relation {
+    align-items: flex-start;
+    font-size: var(--lab-t-micro);
+  }
+}
+/* No-code scene authoring. Named classes keep the editor styled in every host;
+   consumers should not need to scan package source with their Tailwind build. */
+.lab-scene-studio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(11rem, 0.42fr);
+  gap: var(--lab-sp-16);
+  align-items: stretch;
+  padding: var(--lab-sp-14);
+  color: var(--lab-fg);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-lg);
+  background: var(--lab-surface);
+}
+.lab-scene-studio-form {
+  display: grid;
+  gap: var(--lab-sp-14);
+  min-width: 0;
+}
+.lab-scene-studio-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-10);
+  align-items: end;
+}
+.lab-scene-studio-field,
+.lab-scene-studio-group {
+  display: grid;
+  gap: var(--lab-sp-6);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.lab-scene-studio-field small {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.lab-scene-studio-label {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+  line-height: var(--lab-lh-title);
+  text-transform: uppercase;
+}
+.lab-scene-studio-input {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--lab-target);
+  box-sizing: border-box;
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  color: var(--lab-fg);
+  font: inherit;
+  font-size: var(--lab-t-sm);
+  border: 1px solid var(--lab-border-strong);
+  border-radius: var(--lab-r-sm);
+  outline: none;
+  background: var(--lab-surface);
+}
+.lab-scene-studio-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--lab-sp-6);
+}
+.lab-scene-studio-choice {
+  display: grid;
+  gap: 2px;
+  min-height: var(--lab-target);
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  text-align: start;
+  color: var(--lab-fg);
+  cursor: pointer;
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-sm);
+  background: var(--lab-surface);
+}
+.lab-scene-studio-choice strong {
+  font-size: var(--lab-t-sm);
+}
+.lab-scene-studio-choice span {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-regular);
+}
+.lab-scene-studio-choice[aria-pressed="true"] {
+  border-color: var(--lab-accent);
+  background: var(--lab-accent-soft);
+}
+.lab-scene-studio-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6);
+}
+.lab-scene-studio-icons button {
+  display: grid;
+  place-items: center;
+  width: var(--lab-target);
+  height: var(--lab-target);
+  padding: 0;
+  cursor: pointer;
+  font-size: var(--lab-t-title);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-sm);
+  background: var(--lab-surface);
+}
+.lab-scene-studio-icons button[aria-pressed="true"] {
+  border-color: var(--lab-accent);
+  background: var(--lab-accent-soft);
+}
+.lab-scene-studio-custom-icon {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  min-height: var(--lab-target);
+  padding-inline: var(--lab-sp-10);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-sm);
+}
+.lab-scene-studio-custom-icon span {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.lab-scene-studio-custom-icon input {
+  width: 2rem;
+  border: 0;
+  outline: 0;
+  color: var(--lab-fg);
+  font: inherit;
+  font-size: var(--lab-t-title);
+  background: transparent;
+}
+.lab-scene-studio-color {
+  display: grid;
+  grid-template-columns: var(--lab-target) 1fr;
+  gap: var(--lab-sp-6);
+}
+.lab-scene-studio-color input[type="color"] {
+  width: var(--lab-target);
+  height: var(--lab-target);
+  padding: var(--lab-sp-2);
+  cursor: pointer;
+  border: 1px solid var(--lab-border-strong);
+  border-radius: var(--lab-r-sm);
+  background: var(--lab-surface);
+}
+.lab-scene-studio-preview {
+  display: grid;
+  grid-template-rows: auto minmax(9.5rem, 1fr) auto;
+  gap: var(--lab-sp-6);
+  justify-items: center;
+  min-width: 0;
+  padding: var(--lab-sp-10);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-sunken);
+}
+.lab-scene-studio-preview-stage {
+  display: grid;
+  place-items: center;
+  min-height: 9.5rem;
+  width: 100%;
+  overflow: hidden;
+}
+.lab-scene-studio-preview-note {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+@media (max-width: 42rem) {
+  .lab-scene-studio {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lab-scene-studio-preview {
+    grid-template-rows: auto 8.5rem auto;
+  }
+  .lab-scene-studio-preview-stage {
+    min-height: 8.5rem;
+  }
+}
+@media (max-width: 30rem) {
+  .lab-scene-studio-fields,
+  .lab-scene-studio-choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lab-scene-studio-choice {
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: var(--lab-sp-6);
+  }
+}
+@keyframes tree-edge-flow {
+  to {
+    stroke-dashoffset: -14;
+  }
+}
+@keyframes tree-node-pulse {
+  from {
+    opacity: 1;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+@keyframes tree-output-land {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.8);
+  }
+}
+@container lab-activity (max-width: 42.5rem) {
+  .tree-scene {
+    min-height: 17rem;
+  }
+  .tree-scene svg {
+    height: 17rem;
+  }
+}
+/* Utility: visually-hidden (screen-reader only). */
+/**
+ * Visually hidden, and it must STAY hidden.
+ *
+ * This is the one place `!important` is right. A live region announces what changed and must never
+ * take part in layout, but a scene's blanket child rule (`.physics-scene-surface > div { width:
+ * 100% }`) matched it and stretched it to the full width: at 360px the page then scrolled sideways
+ * by 53px, which is a WCAG reflow failure caused by text nobody can even see. Every design system
+ * marks this utility important for the same reason.
+ */
+.lab-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRIMITIVES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Eyebrow: the small-caps section label (PREDICT FIRST, SOLUTION, …) ────── */
+.lab-eyebrow,
+.lab-challenge-h,
+.lab-objectives-h,
+.lab-solution-h,
+.lab-field-label {
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+  color: var(--lab-muted);
+  line-height: var(--lab-lh-title);
+}
+
+.lab-option,
+.lab-choice,
+.lang-choice,
+.lang-match-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-6);
+  padding: var(--lab-sp-10) var(--lab-sp-16);
+  border-radius: var(--lab-r-md);
+  border: 1.5px solid var(--lab-border-strong);
+  background: var(--lab-surface);
+  color: var(--lab-fg);
+  font-size: var(--lab-t-lg);
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    border-color var(--lab-dur-fast),
+    background var(--lab-dur-fast),
+    color var(--lab-dur-fast),
+    box-shadow var(--lab-dur-fast),
+    transform var(--lab-dur-fast);
+}
+.lab-option:hover:not(:disabled),
+.lab-choice:hover:not(:disabled),
+.lang-choice:hover:not(:disabled),
+.lang-match-cell:hover:not(:disabled) {
+  border-color: var(--lab-accent-edge);
+  background: var(--lab-accent-faint);
+  box-shadow: var(--lab-shadow-md);
+}
+.lab-option:active:not(:disabled),
+.lab-choice:active:not(:disabled),
+.lang-choice:active:not(:disabled),
+.lang-match-cell:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+/* selected (accent) — unify the different data-attrs the components emit */
+.lab-option[data-picked],
+.lab-option[data-sel="true"],
+.lab-choice[data-picked],
+.lang-choice[data-state="sel"],
+.lang-match-cell[data-state="sel"] {
+  border-color: var(--lab-accent);
+  background: var(--lab-accent-soft);
+}
+/* correct (good) */
+.lab-option[data-tone="correct"],
+.lab-option[data-state="ok"],
+.lab-choice[data-tone="correct"],
+.lang-choice[data-state="ok"],
+.lang-match-cell[data-state="ok"] {
+  border-color: var(--lab-good);
+  background: var(--lab-good-soft);
+  color: var(--lab-good-ink);
+  cursor: default;
+}
+/* wrong (danger) */
+.lab-option[data-tone="wrong"],
+.lab-option[data-state="no"],
+.lab-choice[data-tone="wrong"],
+.lang-choice[data-state="no"],
+.lang-match-cell[data-state="no"] {
+  border-color: var(--lab-danger);
+  background: var(--lab-danger-soft);
+  color: var(--lab-danger-ink);
+}
+.lang-choice[data-state="no"],
+.lang-match-cell[data-state="no"] {
+  animation: lang-shake 0.42s;
+}
+.lang-choice:disabled:not([data-state="ok"]) {
+  opacity: 0.5;
+  cursor: default;
+}
+.lang-match-cell:disabled {
+  cursor: default;
+}
+/* size variants */
+.lab-choice {
+  min-width: 46px;
+  min-height: var(--lab-target);
+}
+.lang-choice {
+  padding: var(--lab-sp-10) var(--lab-sp-20);
+  font-size: var(--lab-t-body);
+}
+.lang-match-cell {
+  padding: var(--lab-sp-14) var(--lab-sp-14);
+}
+
+/* ── Panel: a bordered surface (card / callout / note) ─────────────────────── */
+.lab-panel,
+.lab-challenge,
+.lab-evidence-surface,
+.lab-solution,
+.lab-objectives {
+  border-radius: var(--lab-r-lg);
+  border: 1px solid var(--lab-border);
+  background: var(--lab-surface);
+  color: var(--lab-fg);
+}
+
+.lab-evidence-surface,
+.lab-solution {
+  box-shadow: var(--lab-shadow-sm);
+}
+
+.lab-input {
+  min-width: 140px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--lab-border-strong);
+  border-radius: var(--lab-r-md);
+  overflow: hidden;
+  background: var(--lab-sunken);
+}
+.lab-stepper b {
+  min-width: 30px;
+  text-align: center;
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-bold);
+  padding: 0 var(--lab-sp-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-14);
+  flex-wrap: wrap;
+  padding: var(--lab-sp-12) 2px 2px;
+  font-size: var(--lab-t-body);
+  color: var(--lab-fg);
+}
+.lab-bar .sep {
+  opacity: 0.6;
+}
+
+/* ── Meter bar (progress / energy) ─────────────────────────────────────────── */
+.lab-meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-2);
+}
+.lab-meter-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  color: var(--lab-muted);
+}
+.lab-meter-head b {
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.lab-meter-track {
+  height: 12px;
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--lab-muted) 18%, transparent);
+  overflow: hidden;
+}
+.lab-meter-fill {
+  height: 100%;
+  border-radius: var(--lab-r-sm);
+  background: var(--lab-meter-color, var(--lab-accent));
+  transition: width var(--lab-dur-fast);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPONENTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── pedagogy: objectives / hints / misconception ──────────────────────────── */
+.lab-objectives {
+  margin: 0 0 var(--lab-sp-12);
+  padding: var(--lab-sp-10) var(--lab-sp-14);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-accent-faint);
+}
+.lab-objectives ul {
+  margin: var(--lab-sp-4) 0 0;
+  padding-inline-start: var(--lab-sp-16);
+}
+.lab-objectives li {
+  font-size: var(--lab-t-sm);
+  color: var(--lab-fg);
+  margin: 1px 0;
+}
+.lab-hints {
+  margin-top: var(--lab-sp-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-6);
+  align-items: flex-start;
+}
+.lab-hint {
+  margin: 0;
+  font-size: var(--lab-t-sm);
+  color: var(--lab-fg);
+  padding: var(--lab-sp-6) var(--lab-sp-10);
+  border-radius: var(--lab-r-sm);
+  background: var(--lab-warn-soft);
+  max-width: 60ch;
+}
+.lab-hint-btn {
+  align-self: flex-start;
+  padding: var(--lab-sp-6) var(--lab-sp-14);
+  border-radius: var(--lab-r-pill);
+  border: 1.5px dashed var(--lab-border-strong);
+  background: transparent;
+  color: var(--lab-muted);
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-medium);
+  cursor: pointer;
+  transition:
+    border-color var(--lab-dur-fast),
+    color var(--lab-dur-fast);
+}
+.lab-hint-btn:hover {
+  border-color: var(--lab-accent);
+  color: var(--lab-fg);
+}
+.lab-misconception {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-medium);
+  padding: var(--lab-sp-4) var(--lab-sp-12);
+  border-radius: var(--lab-r-pill);
+  color: var(--lab-warn-fg);
+  background: color-mix(in oklab, var(--lab-warn) 22%, var(--lab-surface));
+}
+
+/* shared "Show answer" escape hatch (kit/pedagogy RevealSolution) */
+.lab-reveal-btn {
+  align-self: flex-start;
+  padding: var(--lab-sp-4) var(--lab-sp-12);
+  border-radius: var(--lab-r-pill);
+  border: 1.5px dashed var(--lab-border-strong);
+  background: transparent;
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-medium);
+  cursor: pointer;
+  transition:
+    border-color var(--lab-dur-fast),
+    color var(--lab-dur-fast);
+}
+.lab-reveal-btn:hover {
+  border-color: var(--lab-warn);
+  color: var(--lab-fg);
+}
+.lab-solution {
+  margin-top: var(--lab-sp-8);
+  max-width: 64ch;
+  padding: var(--lab-sp-10) var(--lab-sp-14);
+  border-radius: var(--lab-r-md);
+  border-color: color-mix(in oklab, var(--lab-warn) 42%, transparent);
+  background: var(--lab-warn-soft);
+}
+.lab-solution-h {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  font-weight: var(--lab-w-bold);
+  color: var(--lab-warn-fg);
+}
+.lab-solution-body {
+  margin-top: var(--lab-sp-4);
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-medium);
+  color: var(--lab-fg);
+}
+.lab-solution-note {
+  margin: var(--lab-sp-4) 0 0;
+  font-size: var(--lab-t-eyebrow);
+  opacity: 0.7;
+}
+
+/* ── Challenge: predict / classify / explain (kit/pedagogy) ─────────────────
+   A clean card: a quiet eyebrow, a readable prompt, comfortable options. The
+   card surface stays neutral so the accent reads only on the pick/right states,
+   which is what carries meaning. */
+/* full width: the card aligns with the figure + controls above it instead of
+   floating as a narrower island in the footer */
+.lab-challenge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-14);
+  width: 100%;
+  padding: var(--lab-sp-14) var(--lab-sp-16);
+  box-shadow: var(--lab-shadow-sm);
+}
+.lab-challenge-h {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+}
+.lab-challenge-h::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: var(--lab-r-pill);
+  background: var(--lab-accent);
+}
+.lab-challenge-count {
+  margin-inline-start: auto;
+  padding: 1px var(--lab-sp-8);
+  border-radius: var(--lab-r-pill);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  font-weight: var(--lab-w-semibold);
+  color: var(--lab-muted);
+  background: color-mix(in oklab, currentColor 8%, transparent);
+}
+.lab-challenge-q {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-10);
+  align-items: flex-start;
+}
+.lab-challenge-q + .lab-challenge-q {
+  padding-top: var(--lab-sp-14);
+  border-top: 1px solid var(--lab-border);
+}
+.lab-challenge-prompt {
+  display: flex;
+  align-items: baseline;
+  gap: var(--lab-sp-8);
+  max-width: 68ch;
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+  font-weight: var(--lab-w-medium);
+  color: var(--lab-fg);
+}
+.lab-challenge-num {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--lab-sp-4);
+  border-radius: var(--lab-r-pill);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+  font-variant-numeric: tabular-nums;
+  color: var(--lab-accent);
+  background: var(--lab-accent-soft);
+  transform: translateY(1px);
+}
+.lab-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-10);
+}
+/* Answer controls stay content-sized on roomy layouts. Equal-width full-row
+   pills make short choices look like dominant page actions and waste space. */
+.lab-challenge .lab-choices {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.lab-challenge .lab-choice {
+  flex: 0 1 auto;
+  width: auto;
+  max-width: min(100%, 34rem);
+  min-height: var(--lab-target);
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  border-width: 1px;
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-regular);
+  line-height: var(--lab-lh-ui);
+  text-align: center;
+  white-space: normal;
+}
+.lab-challenge .lab-choice:hover:not(:disabled) {
+  box-shadow: none;
+}
+@container lab-activity (max-width: 34rem) {
+  .lab-challenge .lab-choice {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
+/* Authored answers are SENTENCES, not tokens. The base .lab-choice is tuned for
+   a short tile ("42", "True"): bold, large, centred, heavy border. A full clause
+   in that dress reads as competing buttons rather than options to weigh. So in a
+   question fieldset they become an option list: one per row so the left edges
+   align, a lettered handle, body-size regular text, and a quiet border that only
+   takes colour on hover or once picked. The prompt stays the heaviest thing. */
+.lab-challenge-q .lab-choices {
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 34rem;
+  gap: var(--lab-sp-4);
+  margin-block-start: 2px;
+  counter-reset: lab-answer;
+}
+/* Short answers are comparisons, so let learners scan them side by side. Long
+   authored clauses retain the prose list above. The renderer sets this policy;
+   lesson authors do not hand-tune columns or button widths. */
+.lab-challenge-q[data-response-layout="compact"] .lab-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  max-width: 48rem;
+  gap: var(--lab-sp-10);
+}
+.lab-challenge-q[data-response-layout="compact"] .lab-choice {
+  height: 100%;
+}
+.lab-challenge-q .lab-choice {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  justify-content: flex-start;
+  gap: var(--lab-sp-10);
+  padding: var(--lab-sp-8) var(--lab-sp-10);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-surface);
+  /* One step BELOW the 15px prompt. At body size the answers came out larger
+     than the question, which inverts the reading order of the whole block. */
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-regular);
+  line-height: var(--lab-lh-ui);
+  text-align: start;
+  white-space: normal;
+}
+/* The letter is a handle, not decoration: it gives the explanation something to
+   point at and keeps every answer's text starting on one vertical line. */
+.lab-challenge-q .lab-choice::before {
+  counter-increment: lab-answer;
+  content: counter(lab-answer, upper-alpha);
+  flex: none;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--lab-r-pill);
+  background: var(--lab-sunken);
+  border: 1px solid var(--lab-border);
+  color: var(--lab-muted);
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-medium);
+  line-height: var(--lab-lh-tight);
+}
+.lab-challenge-q .lab-choice:hover:not(:disabled) {
+  border-color: var(--lab-accent-edge);
+  background: var(--lab-accent-faint);
+  box-shadow: none;
+}
+.lab-challenge-q .lab-choice[data-picked] {
+  font-weight: var(--lab-w-medium);
+}
+.lab-challenge-q .lab-choice[data-picked]::before {
+  background: var(--lab-accent-soft);
+  border-color: var(--lab-accent);
+  color: color-mix(in oklab, var(--lab-accent) 80%, var(--lab-fg));
+}
+.lab-challenge-q .lab-choice[data-tone="correct"]::before {
+  content: "✓";
+  background: var(--lab-good-soft);
+  border-color: var(--lab-good);
+  color: var(--lab-good-ink);
+}
+.lab-challenge-q .lab-choice[data-tone="wrong"]::before {
+  content: "×";
+  background: var(--lab-danger-soft);
+  border-color: var(--lab-danger);
+  color: var(--lab-danger-ink);
+}
+.lab-response-entry {
+  display: grid;
+  grid-template-columns: minmax(12rem, 28rem) auto;
+  align-items: center;
+  gap: var(--lab-sp-10);
+  width: min(100%, 38rem);
+}
+.lab-response-entry .lab-input {
+  width: 100%;
+  min-width: 0;
+}
+.lab-response-entry > :is(.lab-explain, .lab-celebrate) {
+  grid-column: 1 / -1;
+}
+.lab-response-entry[data-multiline] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.lab-response-entry[data-multiline] > button {
+  justify-self: start;
+}
+.lab-ordering-list {
+  display: grid;
+  gap: var(--lab-sp-6);
+  width: min(100%, 38rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+.lab-ordering-list > li {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--lab-sp-10);
+  min-height: var(--lab-target);
+  padding: var(--lab-sp-4) var(--lab-sp-6) var(--lab-sp-4) var(--lab-sp-8);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-surface);
+}
+.lab-ordering-rank {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--lab-r-pill);
+  background: var(--lab-sunken);
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.lab-ordering-label {
+  min-width: 0;
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+.lab-ordering-actions {
+  display: inline-flex;
+  gap: 2px;
+}
+.lab-reflection-rubric {
+  display: grid;
+  gap: var(--lab-sp-6);
+  width: min(100%, 38rem);
+  padding: var(--lab-sp-12) var(--lab-sp-12);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-sunken);
+}
+.lab-reflection-rubric > p {
+  margin: 0;
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.lab-reflection-rubric ul {
+  display: grid;
+  gap: var(--lab-sp-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-reflection-rubric li {
+  position: relative;
+  padding-inline-start: var(--lab-sp-16);
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+.lab-reflection-rubric li::before {
+  position: absolute;
+  inset-inline-start: 2px;
+  color: var(--lab-muted);
+  content: "•";
+}
+@container lab-activity (max-width: 30rem) {
+  .lab-challenge-q[data-response-layout="compact"] .lab-choices,
+  .lab-response-entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lab-response-entry > button {
+    width: 100%;
+  }
+}
+/* explanation note: a SENTENCE, so it reads as prose (regular weight, roomy
+   line-height), not a shouting bold status pill. Neutral surface + a slim good
+   edge: the picked choice already carries the green, a second green wash on
+   the note turned the whole card monochrome. */
+.lab-explain {
+  display: block;
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  border-radius: var(--lab-r-sm);
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-regular);
+  line-height: var(--lab-lh-prose);
+  color: var(--lab-fg);
+  background: var(--lab-sunken);
+  border-inline-start: 3px solid var(--lab-good);
+}
+.lab-explain > b:first-child {
+  color: var(--lab-good-ink);
+}
+.lab-explain[data-state="no"] {
+  border-inline-start-color: var(--lab-border-strong);
+  color: var(--lab-muted);
+}
+/* ── Evidence: a compact instrument/readout surface ───────────────────────── */
+.lab-evidence-surface {
+  padding: var(--lab-sp-14) var(--lab-sp-14);
+  font-size: var(--lab-t-body);
+  line-height: var(--lab-lh-prose);
+  background: var(--lab-accent-faint);
+}
+.lab-evidence-surface[data-tone="result"] {
+  border-color: var(--lab-border);
+  background: var(--lab-surface);
+}
+.lab-evidence-value {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--lab-t-title);
+  font-weight: var(--lab-w-bold);
+  font-variant-numeric: tabular-nums;
+  color: var(--lab-good);
+}
+.lab-readout {
+  display: grid;
+  gap: var(--lab-sp-4);
+  font-variant-numeric: tabular-nums;
+}
+.lab-readout-label {
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+  color: var(--lab-muted);
+}
+.lab-readout-val {
+  font-weight: var(--lab-w-bold);
+  font-size: var(--lab-t-title);
+  line-height: var(--lab-lh-title);
+  letter-spacing: var(--lab-ls-tight);
+  color: var(--lab-fg);
+}
+.lab-readout-sub {
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+  color: var(--lab-muted);
+}
+/* Stat readout: a stack of aligned "label … value" rows (StatList + Stat) — reads
+   like a clean instrument panel, hairline dividers between rows for spec-sheet order. */
+.lab-statlist {
+  display: grid;
+  gap: var(--lab-sp-6);
+  font-size: var(--lab-t-sm);
+  font-variant-numeric: tabular-nums;
+}
+.lab-stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--lab-sp-14);
+}
+.lab-stat + .lab-stat {
+  padding-top: var(--lab-sp-6);
+  border-top: 1px solid var(--lab-hairline);
+}
+.lab-stat-label {
+  color: var(--lab-muted);
+}
+.lab-stat-val {
+  font-weight: var(--lab-w-bold);
+  color: var(--lab-fg);
+  letter-spacing: var(--lab-ls-tight);
+}
+.lab-stat-val[data-tone="good"] {
+  color: var(--lab-good);
+}
+.lab-stat-val[data-tone="warn"] {
+  color: var(--lab-warn);
+}
+.lab-stat-val[data-tone="danger"] {
+  color: var(--lab-danger);
+}
+
+/* Compatibility surface for domain evidence authored before StatList existed.
+   Keep the visual contract here so those labs remain aligned and readable while
+   their JSX can migrate incrementally without subject-specific CSS. */
+.lab-metric-list {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-surface);
+  font-size: var(--lab-t-sm);
+  font-variant-numeric: tabular-nums;
+}
+.lab-metric-list > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--lab-sp-10);
+  padding: var(--lab-sp-10) var(--lab-sp-14);
+}
+.lab-metric-list > div + div {
+  border-top: 1px solid var(--lab-hairline);
+}
+.lab-metric-list > div > span {
+  min-width: 0;
+  color: var(--lab-muted);
+  line-height: var(--lab-lh-ui);
+}
+.lab-metric-list > div > strong {
+  color: var(--lab-fg);
+  font-weight: var(--lab-w-bold);
+  text-align: end;
+}
+
+/* Step progress (deck labs) — a slim segmented indicator above the title, the
+   premium "lesson progress" affordance that replaces a "2 / 4" text pill. */
+.lab-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-10);
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-semibold);
+  color: var(--lab-muted);
+  font-variant-numeric: tabular-nums;
+}
+.lab-progress-segs {
+  display: inline-flex;
+  gap: var(--lab-sp-4);
+}
+.lab-progress-seg {
+  width: 24px;
+  height: 6px;
+  border-radius: var(--lab-r-pill);
+  background: var(--lab-border-strong);
+  transition: background var(--lab-dur-base) var(--lab-ease);
+}
+.lab-progress-seg[data-on="true"] {
+  background: var(--lab-accent);
+}
+.lab-progress-bar {
+  display: inline-block;
+  width: 132px;
+  height: 6px;
+  border-radius: var(--lab-r-pill);
+  background: var(--lab-border-strong);
+  overflow: hidden;
+}
+.lab-progress-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--lab-accent);
+  border-radius: var(--lab-r-pill);
+  transition: width var(--lab-dur-slow) var(--lab-ease);
+}
+.lab-progress[data-complete="true"] {
+  gap: var(--lab-sp-4);
+  padding: var(--lab-sp-4) var(--lab-sp-12);
+  border-radius: var(--lab-r-pill);
+  color: var(--lab-good-ink);
+  background: var(--lab-good-soft);
+}
+.lab-progress-check {
+  font-weight: var(--lab-w-bold);
+}
+.lab-prompt {
+  margin: 0;
+  font-size: var(--lab-t-body);
+  line-height: var(--lab-lh-ui);
+  color: var(--lab-muted);
+  max-width: 68ch;
+}
+.lab-reps {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 0.3fr);
+  gap: var(--lab-sp-16);
+  align-items: center;
+}
+.lab-reps-plot {
+  min-width: 0;
+}
+.lab-reps-views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-10) var(--lab-sp-14);
+  justify-content: center;
+  align-items: flex-end;
+}
+.lab-rep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--lab-sp-2);
+}
+.lab-rep-cap {
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+  color: var(--lab-muted);
+}
+.lab-linked-stack {
+  display: grid;
+  gap: var(--lab-sp-14);
+}
+@container lab-activity (max-width: 38rem) {
+  .lab-reps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── Circuit editor: wiring pin affordance ─────────────────────────────────────
+   Every pin is a click-to-wire point; make that obvious. The dot grows + glows on
+   hover with a crosshair cursor and a tooltip; the armed pin pulses; while a wire
+   is pending the other pins read as connect targets. */
+.lab-pin {
+  cursor: crosshair;
+}
+.lab-pin-dot {
+  r: 5.5;
+  transition:
+    r var(--lab-dur-fast) var(--lab-ease),
+    stroke-width var(--lab-dur-fast) var(--lab-ease),
+    filter var(--lab-dur-fast) var(--lab-ease);
+}
+.lab-pin:hover .lab-pin-dot {
+  r: 8.5;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--stage-accent, #3b82f6) 75%, transparent));
+}
+.lab-pin:focus-visible {
+  outline: none;
+}
+.lab-pin:focus-visible .lab-pin-dot {
+  r: 8.5;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--stage-accent, #3b82f6) 75%, transparent));
+}
+.lab-pin[data-target] .lab-pin-dot {
+  r: 6.5;
+  stroke-width: 2.5;
+}
+.lab-pin[data-armed] .lab-pin-dot {
+  r: 7.5;
+  animation: lab-pin-pulse 1.1s var(--lab-ease-in-out) infinite;
+}
+@keyframes lab-pin-pulse {
+  0%,
+  100% {
+    stroke-width: 2.5;
+  }
+  50% {
+    stroke-width: 5;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* the armed pin cannot pulse, so it is simply heavier */
+  .lab-pin[data-armed] .lab-pin-dot {
+    stroke-width: 4;
+  }
+}
+.lab-control-expr {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-8);
+  font-weight: var(--lab-w-medium);
+}
+
+/* a labelled control: small caps label, then control + value on one row */
+.lab-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-4);
+  min-width: 0;
+}
+.lab-field-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  flex-wrap: wrap;
+}
+.lab-field > .lab-field-row {
+  display: flex;
+  width: 100%;
+}
+.lab-field-val {
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-bold);
+  font-variant-numeric: tabular-nums;
+  min-width: 3.4em;
+  text-align: end;
+}
+.lab-field > .lab-field-row > .lab-field-val {
+  margin-inline-start: auto;
+}
+.lab-field .lab-slider {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 60px;
+}
+/* A slider must read as a TRACK even at its minimum. shadcn paints the track `bg-muted`, which is
+   the same tone as the controls dock it sits on, so a slider at value 0 (a scrubber before Play,
+   most obviously) showed only its thumb: a stray dot with no control around it. */
+.lab-slider [data-slot="slider-track"] {
+  background: color-mix(in oklab, var(--stage-fg) 15%, transparent);
+}
+.lab-locked-wrap {
+  display: contents;
+}
+.lab-field[data-locked="true"] .lab-field-row {
+  opacity: 0.62;
+}
+.lab-field-lock {
+  display: inline-block;
+  width: 0.82em;
+  height: 0.82em;
+  margin-inline-start: 0.3em;
+  vertical-align: -0.05em;
+  opacity: 0.7;
+}
+
+/* ── Play-gate for hand-driven sim labs ────────────────────────────────────── */
+.lab-playwrap {
+  position: relative;
+}
+.lab-play-toggle {
+  position: absolute;
+  inset-block-start: var(--lab-sp-10);
+  inset-inline-end: var(--lab-sp-10);
+  z-index: var(--lab-z-raised);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  min-width: 34px;
+  height: 32px;
+  padding: 0 var(--lab-sp-12);
+  border-radius: var(--lab-r-pill);
+  border: 1px solid var(--lab-border-strong);
+  background: color-mix(in oklab, var(--lab-surface) 88%, transparent);
+  color: var(--lab-fg);
+  cursor: pointer;
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-semibold);
+  box-shadow: var(--lab-shadow-sm);
+  transition:
+    filter var(--lab-dur-fast),
+    transform var(--lab-dur-fast);
+}
+.lab-play-toggle:hover {
+  filter: brightness(1.05);
+}
+.lab-play-toggle:active {
+  transform: translateY(1px);
+}
+.lab-play-toggle[data-playing="false"] {
+  background: var(--lab-accent);
+  color: var(--lab-accent-fg);
+  border-color: transparent;
+}
+
+/* ── In-lab stepper (teach one idea at a time) ─────────────────────────────── */
+.lab-step-caption {
+  margin: 0 0 var(--lab-sp-14);
+  font-size: var(--lab-t-body);
+  line-height: var(--lab-lh-ui);
+  font-weight: var(--lab-w-medium);
+  color: var(--lab-fg);
+  max-width: 62ch;
+}
+.lab-stepnav {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-14);
+}
+.lab-dots {
+  display: inline-flex;
+  gap: var(--lab-sp-6);
+}
+.lab-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--lab-r-pill);
+  background: var(--lab-border-strong);
+  transition: background var(--lab-dur-base);
+}
+.lab-dot[data-on="true"] {
+  background: var(--lab-accent);
+}
+
+:root {
+  --lang-pos-noun: oklch(0.5 0.13 264);
+  --lang-pos-verb: oklch(0.53 0.18 25);
+  --lang-pos-article: oklch(0.52 0.12 150);
+  --lang-pos-adjective: oklch(0.55 0.12 60);
+  --lang-pos-preposition: oklch(0.52 0.12 235);
+  --lang-pos-pronoun: oklch(0.52 0.16 300);
+  --lang-pos-conjunction: oklch(0.55 0.16 350);
+  --lang-pos-adverb: oklch(0.52 0.11 195);
+  --lang-pos-other: oklch(0.5 0.02 260);
+}
+
+.lang-lab {
+  position: relative;
+}
+
+/* 600px held every language figure to well under its column on desktop. */
+.lang-lab {
+  max-width: min(100%, 46rem);
+  margin-inline: auto;
+}
+.lang-sentence,
+.lang-choices,
+.lang-listen-play,
+.lang-dictation-foot,
+.lang-bank,
+.lang-line {
+  justify-content: center;
+}
+.lang-cloze,
+.lang-errsentence,
+.lang-why {
+  text-align: center;
+}
+.lang-match {
+  margin-inline: auto;
+}
+.lang-lab .lab-misconception {
+  display: flex;
+  width: fit-content;
+  margin-inline: auto;
+}
+.lang-hint {
+  font-size: var(--lab-t-sm);
+  color: var(--lab-muted);
+  margin: 0 0 var(--lab-sp-10);
+}
+.lang-prompt {
+  font-size: var(--lab-t-lg);
+  font-weight: var(--lab-w-medium);
+  margin: 0 0 var(--lab-sp-12);
+  color: var(--lab-fg);
+}
+
+.lang-tile {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: var(--lab-sp-8) var(--lab-sp-14);
+  border: 0;
+  border-radius: var(--lab-r-md);
+  background: var(--pos, var(--lang-pos-other));
+  color: var(--lab-accent-fg);
+  font-weight: var(--lab-w-semibold);
+  font-size: var(--lab-t-body);
+  line-height: var(--lab-lh-title);
+  cursor: pointer;
+  box-shadow: var(--lab-shadow-sm);
+  transition:
+    transform var(--lab-dur-fast),
+    filter var(--lab-dur-fast),
+    box-shadow var(--lab-dur-fast);
+}
+.lang-tile:hover {
+  filter: brightness(1.08);
+}
+.lang-tile:active {
+  transform: translateY(1px);
+}
+.lang-tile[data-sel="true"] {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--pos) 55%, transparent);
+}
+.lang-tile[data-dim="true"] {
+  opacity: 0.4;
+}
+.lang-tile-text {
+  font-size: var(--lab-t-body);
+}
+.lang-tile-gloss {
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-medium);
+  opacity: 0.82;
+}
+
+.lang-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-8);
+  align-items: center;
+  min-height: 56px;
+  padding: var(--lab-sp-12);
+  border-radius: var(--lab-r-lg);
+  border: 2px dashed var(--lab-border-strong);
+  background: var(--lab-sunken);
+  transition:
+    border-color var(--lab-dur-fast),
+    background var(--lab-dur-fast);
+}
+.lang-line[data-state="ok"] {
+  border-style: solid;
+  border-color: var(--lab-good);
+  background: var(--lab-good-soft);
+}
+.lang-line[data-state="no"] {
+  border-color: var(--lab-danger);
+}
+.lang-line-empty {
+  font-size: var(--lab-t-sm);
+  color: var(--lab-muted);
+}
+.lang-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-8);
+  margin-top: var(--lab-sp-12);
+}
+
+.lang-speak {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin-inline-start: 2px;
+  border: 0;
+  border-radius: var(--lab-r-pill);
+  background: color-mix(in oklab, currentColor 12%, transparent);
+  color: inherit;
+  font-size: var(--lab-t-sm);
+  cursor: pointer;
+  transition: background var(--lab-dur-fast);
+}
+.lang-speak:hover {
+  background: color-mix(in oklab, var(--lab-accent) 22%, transparent);
+}
+
+.lang-match {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--lab-sp-10) var(--lab-sp-24);
+  max-width: 520px;
+}
+.lang-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-8);
+}
+.lang-match-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.lang-match-row .lang-match-cell {
+  flex: 1;
+  padding-inline-end: 40px;
+}
+.lang-match-row .lang-speak {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--lab-sp-8);
+  transform: translateY(-50%);
+  margin: 0;
+}
+.lang-cell-sub {
+  font-size: var(--lab-t-eyebrow);
+  color: var(--lab-muted);
+  font-weight: var(--lab-w-regular);
+}
+.lang-cell-icon {
+  font-size: 36px;
+  line-height: var(--lab-lh-tight);
+}
+.lang-icon-image {
+  object-fit: contain;
+}
+.lang-icon-svg {
+  display: inline-flex;
+}
+@keyframes lang-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+/* Language activities share the same responsive anatomy while keeping their
+   domain-specific tiles, passages, audio, and grammar scenes. */
+.language-activity .lab-activity-status {
+  justify-content: flex-start;
+}
+.language-activity .lab-activity-workspace {
+  padding: clamp(0.75rem, 2.2vw, 1.25rem);
+}
+.language-activity .lab-activity-canvas {
+  align-content: start;
+}
+.language-activity-support {
+  padding: 0 var(--lab-sp-16) var(--lab-sp-14);
+}
+.language-activity-support > .lab-challenge {
+  margin: 0;
+}
+.language-activity .lab-activity-transport {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 4rem;
+}
+.language-activity .lab-activity-transport .lab-btn,
+.language-activity .lang-audio-action {
+  border-radius: var(--lab-r-md);
+}
+.lang-audio-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-8);
+  min-height: var(--lab-target);
+  padding-inline: var(--lab-sp-16);
+}
+.lang-listen-play {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 var(--lab-sp-16);
+}
+.lang-listen-play .lang-audio-action {
+  min-width: 8.5rem;
+}
+
+.lang-listening-choices .lab-choices {
+  justify-content: center;
+}
+
+.lang-listening-choices[data-layout="picture"] .lab-choice {
+  min-width: 5rem;
+  min-height: 4.5rem;
+}
+
+@container lab-activity (max-width: 42.5rem) {
+  .language-activity .lab-activity-workspace {
+    padding: var(--lab-sp-12);
+  }
+  .language-activity-support {
+    padding-inline: var(--lab-sp-12);
+  }
+  .language-activity .lang-choices,
+  .language-activity .lang-match {
+    gap: var(--lab-sp-8);
+  }
+  .language-activity .lang-choice {
+    padding-inline: var(--lab-sp-14);
+  }
+}
+
+.lang-sentence {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lab-sp-8);
+  font-size: var(--lab-t-title);
+  font-weight: var(--lab-w-medium);
+  color: var(--lab-fg);
+  margin: var(--lab-sp-6) 0 var(--lab-sp-16);
+}
+.lang-cloze {
+  font-size: var(--lab-t-lg);
+  line-height: 2.4;
+  font-weight: var(--lab-w-medium);
+  color: var(--lab-fg);
+  margin: var(--lab-sp-6) 0 var(--lab-sp-16);
+}
+.lang-cloze .lang-speak {
+  vertical-align: middle;
+}
+.lang-dictation-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--lab-sp-12);
+  margin-top: var(--lab-sp-12);
+}
+.lang-dictation-card {
+  width: min(100%, 32rem);
+  margin-inline: auto;
+  overflow: hidden;
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-lg);
+  background: var(--lab-surface);
+  box-shadow: var(--lab-shadow-sm);
+}
+.lang-dictation-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-12);
+  border-bottom: 1px solid var(--lab-border);
+  background: var(--lab-sunken);
+}
+.lang-dictation-toolbar > span {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-sm);
+}
+.lang-dictation-toolbar .lang-audio-action {
+  flex: none;
+  min-height: var(--lab-target);
+  border: 1px solid var(--lab-accent-edge);
+  background: var(--lab-surface);
+  color: var(--lab-accent);
+  box-shadow: none;
+}
+.lang-dictation-answer {
+  display: grid;
+  gap: var(--lab-sp-6);
+  padding: var(--lab-sp-16) var(--lab-sp-16) 0;
+}
+.lang-dictation-answer > label {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.lang-dictation-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--lab-sp-8);
+}
+.lang-dictation-input-row .lab-input {
+  width: 100%;
+  min-height: var(--lab-target);
+}
+.lang-dictation-input-row .lab-btn {
+  min-width: 5.5rem;
+  border-radius: var(--lab-r-md);
+}
+.lang-dictation-card .lang-dictation-foot {
+  padding: 0 var(--lab-sp-16) var(--lab-sp-16);
+}
+@container lab-activity (max-width: 32rem) {
+  .lang-dictation-toolbar > span {
+    display: none;
+  }
+  .lang-dictation-toolbar .lang-audio-action {
+    width: 100%;
+  }
+  .lang-dictation-input-row {
+    grid-template-columns: 1fr;
+  }
+  .lang-dictation-input-row .lab-btn {
+    width: 100%;
+  }
+}
+.lang-reveal {
+  font-size: var(--lab-t-lg);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+  color: var(--lab-fg);
+  font-variant-numeric: tabular-nums;
+}
+.lang-errsentence {
+  font-size: var(--lab-t-title);
+  line-height: 2;
+  font-weight: var(--lab-w-medium);
+  color: var(--lab-fg);
+  margin: var(--lab-sp-6) 0 var(--lab-sp-12);
+}
+.lang-word {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 2px var(--lab-sp-2);
+  border-radius: var(--lab-r-sm);
+  cursor: pointer;
+  transition:
+    background var(--lab-dur-fast),
+    color var(--lab-dur-fast),
+    transform var(--lab-dur-fast);
+}
+.lang-word:hover:not(:disabled) {
+  background: var(--lab-accent-soft);
+}
+.lang-word[data-state="no"] {
+  color: var(--lab-danger);
+  background: var(--lab-danger-soft);
+  animation: lang-shake 0.42s;
+}
+.lang-word:disabled {
+  cursor: default;
+}
+.lang-fix {
+  padding: 2px var(--lab-sp-8);
+  border-radius: var(--lab-r-sm);
+  font-weight: var(--lab-w-bold);
+  color: var(--lab-good);
+  background: var(--lab-good-soft);
+}
+.lang-reading {
+  display: grid;
+  gap: var(--lab-sp-12);
+}
+.lang-passage {
+  padding: var(--lab-sp-16) var(--lab-sp-16);
+  border-radius: var(--lab-r-lg);
+  background: var(--lab-sunken);
+  font-size: var(--lab-t-body);
+  line-height: var(--lab-lh-prose);
+  color: var(--lab-fg);
+  max-width: 68ch;
+}
+.lang-passage p {
+  margin: 0 0 var(--lab-sp-10);
+}
+.lang-passage p:last-child {
+  margin-bottom: 0;
+}
+.lang-gloss {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6) var(--lab-sp-16);
+  font-size: var(--lab-t-sm);
+  color: var(--lab-muted);
+}
+.lang-gloss-row b {
+  color: var(--lab-fg);
+  font-weight: var(--lab-w-semibold);
+}
+.lang-blank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 2px var(--lab-sp-12);
+  border-radius: var(--lab-r-sm);
+  border: 2px dashed var(--lab-border-strong);
+  background: var(--lab-sunken);
+  font-weight: var(--lab-w-bold);
+}
+.lang-blank[data-state="ok"] {
+  border-style: solid;
+  border-color: var(--lab-good);
+  color: var(--lab-good);
+  background: var(--lab-good-soft);
+}
+.lang-blank[data-state="no"] {
+  border-style: solid;
+  border-color: var(--lab-danger);
+  color: var(--lab-danger);
+}
+.lang-noun,
+.lang-subject {
+  font-weight: var(--lab-w-semibold);
+}
+.lang-subject[data-ok="true"] {
+  color: var(--lang-pos-pronoun);
+}
+.lang-link {
+  color: var(--lab-good);
+  font-weight: var(--lab-w-bold);
+}
+.lang-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-10);
+}
+.lang-why {
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-medium);
+  margin: var(--lab-sp-12) 0 0;
+}
+.lang-why[data-state="ok"] {
+  color: var(--lab-good);
+}
+.lang-why[data-state="no"] {
+  color: var(--lab-muted);
+}
+
+.lang-from {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-8);
+  align-items: center;
+  opacity: 0.85;
+}
+.lang-from .lang-tile {
+  filter: saturate(0.7);
+  cursor: default;
+}
+.lang-arrow {
+  font-size: var(--lab-t-title);
+  font-weight: var(--lab-w-bold);
+  color: var(--lab-muted);
+  margin: var(--lab-sp-4) 0;
+  text-align: center;
+  width: 100%;
+}
+
+.lang-scene {
+  display: flex;
+  justify-content: center;
+  padding: var(--lab-sp-4) 0 var(--lab-sp-10);
+}
+.lang-prepscene {
+  position: relative;
+  width: 240px;
+  height: 172px;
+  overflow: hidden;
+  border-radius: var(--lab-r-md);
+  border: 1px solid var(--lab-border);
+  background: color-mix(in oklab, currentColor 3%, transparent);
+}
+.lang-preplandmark {
+  position: absolute;
+  left: var(--landmark-x, 50%);
+  top: 56%;
+  transform: translate(-50%, -50%);
+  font-size: 62px;
+  line-height: var(--lab-lh-tight);
+}
+.lang-prepfig {
+  position: absolute;
+  font-size: 38px;
+  line-height: var(--lab-lh-tight);
+  filter: drop-shadow(0 1px 1.5px color-mix(in oklab, currentColor 30%, transparent));
+}
+.lang-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.lang-backdrop[data-kind="sky"] {
+  background:
+    radial-gradient(
+      circle at 78% 18%,
+      color-mix(in oklab, var(--stage-warn) 38%, transparent) 0 8%,
+      transparent 9%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--stage-accent) 24%, var(--stage-bg)),
+      var(--stage-bg)
+    );
+}
+.lang-backdrop[data-kind="water"] {
+  top: 48%;
+  border-radius: var(--lab-r-lg) var(--lab-r-lg) 0 0 / var(--lab-r-md) var(--lab-r-md) 0 0;
+  background:
+    repeating-linear-gradient(
+      170deg,
+      transparent 0 0.8rem,
+      color-mix(in oklab, white 22%, transparent) 0.85rem 0.95rem
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--stage-accent) 65%, #7fc8ff),
+      color-mix(in oklab, var(--stage-accent) 80%, #174f92)
+    );
+}
+.lang-backdrop[data-kind="ground"] {
+  top: 68%;
+  background:
+    radial-gradient(
+      ellipse at 20% 0,
+      color-mix(in oklab, var(--stage-good) 40%, transparent) 0 28%,
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--stage-good) 58%, #9bd178),
+      color-mix(in oklab, var(--stage-good) 75%, #4d7b36)
+    );
+}
+.lang-backdrop[data-kind="room"] {
+  background:
+    linear-gradient(
+      90deg,
+      transparent 49.5%,
+      color-mix(in oklab, var(--stage-grid) 65%, transparent) 50%,
+      transparent 50.5%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--stage-warn) 8%, var(--stage-bg)) 0 62%,
+      color-mix(in oklab, var(--stage-warn) 22%, var(--stage-bg)) 62%
+    );
+}
+.lang-backdrop-sun {
+  position: absolute;
+  inset-block-start: var(--lab-sp-10);
+  inset-inline-end: var(--lab-sp-14);
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--stage-warn);
+}
+.lang-feedback {
+  margin-top: var(--lab-sp-12);
+}
+.lang-ask-centered {
+  justify-content: center;
+}
+.lang-match[data-layout="picture"] {
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+}
+
+.lang-typegrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--lab-sp-12);
+}
+.lang-typecard {
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-md);
+  padding: var(--lab-sp-6) var(--lab-sp-8) var(--lab-sp-10);
+  background: var(--lab-surface);
+  min-width: 0;
+}
+.lang-typecard svg {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+.lang-typename {
+  font-weight: var(--lab-w-semibold);
+  font-size: var(--lab-t-body);
+  margin: var(--lab-sp-4) 0 0;
+  color: var(--lab-fg);
+}
+.lang-typecap {
+  font-size: var(--lab-t-eyebrow);
+  color: var(--lab-muted);
+  margin: 1px 0 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* river current — wave streaks drift downstream */
+.lab-river-wave {
+  animation-name: stage-river-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+@keyframes stage-river-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(28px);
+  }
+}
+/* annotation kit — a Spotlight ring pulses outward to draw the eye */
+.lab-pulse {
+  animation: lab-pulse 1.5s var(--lab-ease) infinite;
+}
+@keyframes lab-pulse {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+/* ═════════════════════════════════════════════════════════════════════════
+   CELEBRATION + PREDICT-GATE + LESSON PROGRESS (engagement kit)
+   ═════════════════════════════════════════════════════════════════════════ */
+/* celebrate — one-shot confetti burst anchored to the success pill */
+.lab-celebrate {
+  position: relative;
+  display: inline-flex;
+}
+.lab-confetti {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: var(--lab-z-overlay);
+}
+.lab-confetti span {
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--c, var(--lab-accent));
+  opacity: 0;
+  animation: lab-confetti-fly 0.8s var(--lab-ease) forwards;
+  will-change: transform, opacity;
+}
+@keyframes lab-confetti-fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.6);
+  }
+}
+.lab-pop {
+  animation: lab-pop var(--lab-dur-slow) var(--lab-ease-spring);
+}
+@keyframes lab-pop {
+  0% {
+    transform: scale(0.82);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* value flash — a readout/stat value pops accent when it changes, so the
+   learner SEES which number their drag is driving (cause → effect) */
+.lab-val-flash {
+  animation: lab-val-flash 0.5s var(--lab-ease);
+}
+@keyframes lab-val-flash {
+  0% {
+    color: var(--lab-accent);
+  }
+  100% {
+    color: inherit;
+  }
+}
+/* predict-gate — show an intentional preview state without mounting or leaking
+   the model that the prediction is meant to precede. */
+.lab-predict-gate {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-12);
+}
+.lab-predict-body {
+  min-width: 0;
+}
+.lab-predict-lock {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  justify-content: center;
+  gap: 2px var(--lab-sp-14);
+  min-height: clamp(8rem, 24cqw, 13rem);
+  padding: calc(var(--lab-sp-16) + var(--lab-sp-6));
+  border: 1px dashed var(--lab-border-strong);
+  border-radius: var(--lab-r-lg);
+  color: var(--lab-fg);
+  background: color-mix(in oklab, var(--lab-muted) 4%, var(--lab-surface));
+}
+.lab-predict-lock-mark {
+  grid-row: 1 / span 2;
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--lab-r-pill);
+  color: var(--lab-accent);
+  background: var(--lab-accent-soft);
+  font-weight: var(--lab-w-bold);
+}
+.lab-predict-lock strong {
+  align-self: end;
+  font-size: var(--lab-t-body);
+}
+.lab-predict-lock > span:last-child {
+  align-self: start;
+  color: var(--lab-muted);
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+/* ── Networking: vendor-neutral topology, packet layers, and accessible transcript ── */
+.lab-activity {
+  display: flex;
+  flex-direction: column;
+  container: lab-activity / inline-size;
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-lg);
+  background: var(--background, var(--stage-bg));
+  color: var(--foreground, var(--stage-fg));
+  box-shadow:
+    0 1px 2px color-mix(in oklab, currentColor 5%, transparent),
+    0 8px 24px color-mix(in oklab, currentColor 3%, transparent);
+}
+.lab-activity[data-focus] {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100dvw;
+  overflow: auto;
+  overflow-x: hidden;
+  min-height: 100dvh;
+  border: 0;
+  border-radius: 0;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  background: var(--background, var(--stage-bg));
+}
+.lab-activity[data-focus]:not(:fullscreen) {
+  position: fixed;
+  inset: 0;
+  z-index: var(--lab-z-top);
+}
+.lab-activity[data-focus] > *,
+.lab-activity[data-focus] .lab-activity-workspace,
+.lab-activity[data-focus] .lab-activity-canvas {
+  min-width: 0;
+  max-width: 100%;
+}
+.lab-activity[data-focus] > * {
+  width: min(100%, 100rem);
+  margin-inline: auto;
+}
+.lab-activity[data-focus][data-focus-layout="compact"] > * {
+  width: min(100%, 68rem);
+}
+.lab-activity[data-focus][data-focus-layout="immersive"] .lab-scene-viewport {
+  height: clamp(22rem, 58dvh, 42rem);
+}
+@media (min-width: 64rem) {
+  .lab-activity[data-focus][data-focus-layout="compact"]
+    .lab-activity-workspace:has(> .lab-activity-inspector) {
+    grid-template-columns: minmax(0, 1fr) minmax(19rem, 24rem);
+    align-items: stretch;
+  }
+  .lab-activity[data-focus][data-focus-layout="compact"]
+    .lab-activity-workspace
+    > .lab-activity-inspector {
+    min-width: 0;
+    border-inline-start: 1px solid var(--border, var(--stage-grid));
+  }
+}
+@media (max-width: 48rem) {
+  .lab-activity[data-focus] {
+    padding: 0;
+  }
+  .lab-activity[data-focus][data-focus-layout="immersive"] .lab-scene-viewport,
+  .lab-activity[data-focus][data-focus-layout="immersive"] .lab-scene-viewport[data-size] {
+    height: clamp(15rem, 72vw, 22rem);
+  }
+}
+.lab-activity-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--lab-sp-16);
+  padding: var(--lab-sp-16) var(--lab-sp-16) var(--lab-sp-14);
+}
+.lab-activity-heading {
+  min-width: 0;
+}
+.lab-activity-eyebrow {
+  display: block;
+  margin-bottom: var(--lab-sp-4);
+  color: var(--primary, var(--stage-accent));
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.lab-activity-heading h3 {
+  margin: 0;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  line-height: var(--lab-lh-title);
+  text-wrap: balance;
+}
+.lab-activity-description {
+  margin: var(--lab-sp-4) 0 0;
+  max-width: 42rem;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+  text-wrap: pretty;
+}
+.lab-activity-focus {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  min-width: var(--lab-target);
+  min-height: var(--lab-target);
+  padding: var(--lab-sp-6) var(--lab-sp-10);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-sm);
+  background: var(--background, var(--stage-bg));
+  color: var(--foreground, var(--stage-fg));
+  font: inherit;
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-semibold);
+  cursor: pointer;
+}
+.lab-activity-focus:hover {
+  background: var(--accent, color-mix(in oklab, currentColor 6%, transparent));
+}
+.lab-activity-focus svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lab-activity-status {
+  display: flex;
+  align-items: center;
+  gap: var(--lab-sp-10);
+  min-width: 0;
+  padding: var(--lab-sp-10) var(--lab-sp-16);
+  border-block: 1px solid var(--border, var(--stage-grid));
+  background: color-mix(
+    in oklab,
+    var(--muted, currentColor) 52%,
+    var(--background, var(--stage-bg))
+  );
+  font-size: var(--lab-t-eyebrow);
+}
+.lab-activity-status > * + * {
+  padding-inline-start: var(--lab-sp-10);
+  border-inline-start: 1px solid var(--border, var(--stage-grid));
+}
+.network-route-path {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  color: var(--muted-foreground, var(--stage-muted));
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.network-delivery {
+  flex: none;
+  color: var(--destructive, var(--stage-danger));
+  font-weight: var(--lab-w-semibold);
+}
+.network-delivery[data-delivered] {
+  color: var(--lab-good);
+}
+.lab-activity-workspace {
+  display: grid;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-12);
+}
+.lab-activity[data-inspector-layout="stacked"] .lab-activity-workspace {
+  grid-template-columns: minmax(0, 1fr);
+}
+.lab-activity[data-inspector-layout="stacked"] .lab-activity-workspace > .lab-activity-inspector {
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+.lab-activity-canvas {
+  display: grid;
+  gap: var(--lab-sp-10);
+  min-width: 0;
+  align-content: start;
+  isolation: isolate;
+  /* Keep touch-sized wide figures reachable on narrow screens. */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.lab-activity-dock {
+  min-width: 0;
+}
+.network-scene {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, currentColor 11%, transparent) 1px,
+        transparent 0
+      )
+      0 0 / 20px 20px,
+    var(--card, var(--stage-bg));
+}
+.network-scene svg {
+  display: block;
+  width: 100%;
+  height: clamp(190px, 30vw, 300px);
+}
+.network-link {
+  stroke: var(--border, var(--stage-grid));
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition:
+    stroke var(--lab-dur-base) var(--lab-ease),
+    stroke-width var(--lab-dur-base) var(--lab-ease);
+}
+.network-link[data-active] {
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 7;
+}
+.network-link[data-down] {
+  stroke: var(--destructive, var(--stage-danger));
+  stroke-dasharray: 8 7;
+}
+.network-link-label {
+  fill: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+  paint-order: stroke;
+  stroke: var(--card, var(--stage-bg));
+  stroke-width: 4px;
+}
+.network-device {
+  color: var(--foreground, var(--stage-fg));
+  outline: none;
+}
+.network-device-surface {
+  fill: var(--card, var(--stage-bg));
+  stroke: var(--border, var(--stage-grid));
+  stroke-width: 1.5;
+}
+.network-device-symbol {
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.network-device-label {
+  fill: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+}
+.network-device[data-active] .network-device-surface {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 12%, var(--card, var(--stage-bg)));
+  stroke: var(--primary, var(--stage-accent));
+  stroke-width: 3;
+}
+.network-device[data-active] .network-device-symbol {
+  color: var(--primary, var(--stage-accent));
+}
+.network-device:focus-visible .network-device-surface,
+.network-device[data-selected] .network-device-surface {
+  stroke: var(--ring, var(--stage-accent));
+  stroke-width: 3;
+  stroke-dasharray: 5 3;
+}
+.lab-activity-feedback {
+  display: grid;
+  /* minmax(0, 1fr), not 1fr: a grid track is at least min-content wide by default, so the longest
+     word in the sentence set a floor the callout could not go below and it overhung the card on a
+     phone. Below 22rem the label stops sharing the row with the sentence. */
+  grid-template-columns: minmax(5.5rem, auto) minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--lab-sp-10);
+  margin: 0 var(--lab-sp-12) var(--lab-sp-12);
+  /* The callout is inset from a full-bleed column, so it stretches to the column and its own
+     margins then hang over the edge. Cap it at the room its margins leave. */
+  max-width: calc(100% - 2 * var(--lab-sp-12));
+  padding: var(--lab-sp-10) var(--lab-sp-12);
+  border: 0;
+  border-inline-start: 3px solid var(--primary, var(--stage-accent));
+  border-start-start-radius: 0.2rem;
+  border-end-start-radius: 0.2rem;
+  border-start-end-radius: 0.65rem;
+  border-end-end-radius: 0.65rem;
+  background: color-mix(
+    in oklab,
+    var(--primary, var(--stage-accent)) 2.5%,
+    var(--card, var(--stage-bg))
+  );
+}
+/* The step's task sits in the flow above the figure — no second tinted bar under the
+   status strip. The lead IS the question the learner is answering, so it reads as body
+   text in the foreground colour, not as muted fine print. */
+.lab-authored-task {
+  display: grid;
+  gap: var(--lab-sp-10);
+  padding: var(--lab-sp-12) var(--lab-sp-16) 0;
+}
+.lab-authored-task-lead {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-medium);
+  line-height: var(--lab-lh-ui);
+  text-wrap: pretty;
+}
+@container lab-activity (max-width: 22rem) {
+  .lab-activity-feedback {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.lab-activity-feedback > span:first-child {
+  color: var(--primary, var(--stage-accent));
+  font-size: var(--lab-t-eyebrow);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.lab-activity-feedback p {
+  margin: 0;
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+.lab-activity-inspector {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+.lab-activity-inspector > summary {
+  display: none;
+  cursor: pointer;
+  padding: var(--lab-sp-12) var(--lab-sp-12);
+  min-height: var(--lab-target);
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-semibold);
+}
+.lab-activity-inspector-body {
+  min-width: 0;
+}
+.lab-activity-inspector-section {
+  display: grid;
+  gap: var(--lab-sp-16);
+  padding: var(--lab-sp-16);
+}
+.lab-activity-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--lab-sp-10);
+}
+/* Every control gets a real basis. Without one a Field falls back to its content width, and a
+   Field holding a Slider has almost no content width (the Slider is a div, not an input), so a
+   chip group beside it took the whole row and squeezed the slider to its 60px floor. `:has` also
+   covers labs that wrap their Fields in a plain <div>, which a `>` selector would miss. */
+.lab-activity-fields:not(.lab-authored-controls) > :is(.lab-field, :has(> .lab-field)) {
+  flex: 1 1 15rem;
+  /* `fit-content`, not 0: a field never shrinks below what it actually has to draw. A segmented
+     track used to overflow its share and run under the next control's label, and the slider
+     beside it collapsed to a ~40px stub. Now the row wraps instead, which it already allows.
+     (This cannot be scoped to chip rows with `:has`: CSS forbids `:has()` inside `:has()`, so
+     such a rule is invalid and silently dropped.) */
+  min-width: fit-content;
+}
+@media (max-width: 30rem) {
+  /* One control per line at phone widths: let them shrink again rather than scroll the page. */
+  .lab-activity-fields > :is(.lab-field, :has(> .lab-field)) {
+    min-width: 0;
+  }
+}
+/* ── Authored lesson shell ──────────────────────────────────────────────────────
+   One scene-first container. The model is the hero, its controls form a compact dock,
+   and explanatory evidence stays contextual until the learner asks for it. */
+.lab-authored-activity[data-inspector-layout="stacked"] .lab-activity-workspace {
+  gap: 0;
+  padding: var(--lab-sp-12) 0 0;
+}
+.lab-authored-activity[data-inspector-layout="stacked"] .lab-activity-canvas {
+  padding: 0 var(--lab-sp-12) var(--lab-sp-12);
+}
+.lab-authored-activity .lab-activity-dock {
+  border-top: 1px solid color-mix(in oklab, var(--border, var(--stage-grid)) 70%, transparent);
+  background: color-mix(
+    in oklab,
+    var(--muted, currentColor) 28%,
+    var(--background, var(--stage-bg))
+  );
+}
+.lab-authored-activity[data-inspector-layout="stacked"]
+  .lab-activity-workspace
+  > .lab-activity-inspector {
+  border: 0;
+  border-top: 1px solid var(--border, var(--stage-grid));
+  border-radius: 0;
+  background: transparent;
+}
+.lab-authored-activity .lab-activity-inspector > summary {
+  display: list-item;
+  padding-inline: var(--lab-sp-16);
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.lab-authored-activity .lab-activity-inspector[open] > summary {
+  border-bottom: 1px solid color-mix(in oklab, var(--border, var(--stage-grid)) 70%, transparent);
+  color: var(--foreground, var(--stage-fg));
+}
+.lab-authored-evidence {
+  display: grid;
+  gap: var(--lab-sp-10) var(--lab-sp-24);
+  padding: var(--lab-sp-14) var(--lab-sp-16);
+}
+.lab-authored-evidence > .lab-evidence-surface,
+.lab-authored-evidence > .lab-metric-list {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.lab-authored-evidence > .lab-metric-list > div {
+  padding-inline: 0;
+}
+.lab-authored-evidence .lab-readout-val {
+  font-size: clamp(1.4rem, 2.6cqi, 1.75rem);
+}
+.lab-authored-evidence > p {
+  grid-column: 1 / -1;
+  margin: 0;
+  max-width: 62ch;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-prose);
+}
+.lab-authored-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  align-items: end;
+  gap: var(--lab-sp-14) var(--lab-sp-20);
+  padding: var(--lab-sp-12) var(--lab-sp-16);
+}
+.lab-authored-controls > .lab-field {
+  width: 100%;
+}
+/* The dock is a GRID, so an item wider than its column does not wrap, it runs over the next
+   column: a four-option segmented track printed its last option under the control beside it.
+   Grid items default to min-width: auto, so they must be told they may shrink; a segmented track
+   scrolls in the space it gets (see .lab-segmented) rather than overflowing. The fit-content rule
+   above stays for the FLEX row, where an oversized control wraps to the next line instead. */
+.lab-authored-controls > * {
+  min-width: 0;
+}
+@container lab-activity (min-width: 46rem) {
+  .lab-authored-evidence:has(> .lab-evidence-surface + .lab-evidence-surface),
+  .lab-authored-evidence:has(> .lab-evidence-surface + .lab-metric-list) {
+    grid-template-columns: minmax(13rem, 2fr) minmax(0, 3fr);
+    align-items: start;
+  }
+  .lab-authored-evidence > .lab-evidence-surface + .lab-evidence-surface,
+  .lab-authored-evidence > .lab-evidence-surface + .lab-metric-list {
+    padding-inline-start: var(--lab-sp-24);
+    border-inline-start: 1px solid
+      color-mix(in oklab, var(--border, var(--stage-grid)) 70%, transparent);
+  }
+}
+.lab-authored-transcript + .lab-authored-support {
+  margin-top: var(--lab-sp-12);
+  padding-top: var(--lab-sp-12);
+  border-top: 1px solid color-mix(in oklab, var(--border, var(--stage-grid)) 70%, transparent);
+}
+/* Segmented control: a labelled row of mutually-exclusive options as ONE compact control (an
+   iOS-style track), not a column of full-width buttons. Reusable for any 2–4 option mode toggle. */
+.lab-segmented-field {
+  display: grid;
+  gap: var(--lab-sp-4);
+}
+.lab-segmented-field > .lab-field-label {
+  font-size: var(--lab-t-eyebrow, 0.68rem);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+  color: var(--muted-foreground, var(--stage-muted));
+}
+.lab-segmented {
+  display: inline-flex;
+  /* WRAP, do not hide. A four-option track in a narrow dock used to scroll, which
+     left the last mode off-screen with no affordance saying it existed: the
+     learner cannot choose what they cannot see. Wrapping keeps every mode
+     visible; the scroll below is the last resort for one option too wide to fit. */
+  flex-wrap: wrap;
+  gap: var(--lab-sp-4);
+  padding: var(--lab-sp-4);
+  border-radius: var(--lab-r-pill, 999px);
+  background: color-mix(in oklab, var(--stage-fg) 7%, transparent);
+  width: fit-content;
+  max-width: 100%;
+  /* The phone rule above lets a field shrink to avoid scrolling the page, but a segmented track
+     cannot shrink: its options are `nowrap` and `flex: 0 0 auto`. Measured on a 360px screen the
+     track held 813px of options inside a 6px box, so every mode but the first was unreachable and
+     the lab could not be operated at all. Scrolling the track is the standard behaviour for this
+     control and keeps the page itself still. */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+}
+.lab-segmented > * {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.lab-activity-select-field {
+  display: grid;
+  min-width: min(100%, 15rem);
+  gap: var(--lab-sp-4);
+}
+.lab-activity-select-field > .lab-field-label {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow, 0.68rem);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.lab-activity-select {
+  width: 100%;
+  min-width: 0;
+}
+/* One option inside the track, rendered by `Segmented` on the host's ToggleGroup. A track stays
+   on one line; the field's `min-width: fit-content` keeps room for it, so a cramped row wraps the
+   whole field onto the next line rather than clipping a label. */
+.lab-segment {
+  flex: 0 0 auto;
+  min-height: var(--lab-target-compact);
+  padding: var(--lab-sp-4) var(--lab-sp-12);
+  border: 1px solid transparent;
+  border-radius: var(--lab-r-pill, 999px);
+  background: transparent;
+  box-shadow: none;
+  color: var(--lab-muted);
+  font-size: var(--lab-t-sm, 0.8125rem);
+  font-weight: var(--lab-w-medium);
+  white-space: nowrap;
+}
+.lab-segment:hover:not([data-sel="true"]) {
+  background: color-mix(in oklab, var(--stage-fg) 6%, transparent);
+  color: var(--lab-fg);
+}
+.lab-segment[data-sel="true"] {
+  background: var(--lab-surface);
+  color: var(--lab-fg);
+  box-shadow: var(--lab-shadow-sm);
+  font-weight: var(--lab-w-semibold);
+}
+.lab-segment:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.network-inspector-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-12) var(--lab-sp-12);
+  border-bottom: 1px solid var(--border, var(--stage-grid));
+}
+.network-inspector-heading div {
+  display: flex;
+  align-items: baseline;
+  gap: var(--lab-sp-6);
+}
+.network-inspector-heading span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.network-inspector-heading strong {
+  font-size: var(--lab-t-eyebrow);
+}
+.network-packet {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+.network-inspector .network-packet {
+  border: 0;
+  border-radius: 0;
+}
+.network-packet-head {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  border-bottom: 1px solid var(--border, var(--stage-grid));
+  font-size: var(--lab-t-eyebrow);
+}
+.network-packet-head span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-variant-numeric: tabular-nums;
+}
+.network-layer-list {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--border, var(--stage-grid));
+}
+.network-layer {
+  display: grid;
+  grid-template-columns: 4.8rem 3.5rem 1fr;
+  gap: var(--lab-sp-6);
+  padding: var(--lab-sp-8) var(--lab-sp-10);
+  background: var(--card, var(--stage-bg));
+  font-size: var(--lab-t-micro);
+  line-height: var(--lab-lh-ui);
+}
+.network-layer-name {
+  color: var(--muted-foreground, var(--stage-muted));
+  text-transform: uppercase;
+  letter-spacing: var(--lab-ls-caps);
+}
+.network-layer strong {
+  color: var(--primary, var(--stage-accent));
+}
+.lab-activity-transport {
+  display: grid;
+  /* The middle column must be able to SHRINK: with an 8rem floor the three columns could not fit
+     a 360px phone, so the transport pushed its own row wider than the card. Its content is a short
+     status line, which wraps. */
+  grid-template-columns: auto minmax(0, 18rem) auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-12) var(--lab-sp-16);
+  border-top: 1px solid var(--border, var(--stage-grid));
+  background: var(--card, var(--stage-bg));
+}
+/* The transport's middle slot. This is shell, not a subject: it lived in the maths sheet, so every
+   other subject rendered it unstyled, and a long status word ("Photosynthesising") could not shrink
+   inside its flex row and pushed the transport past the card. */
+.lab-transport-state {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--lab-sp-8);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.lab-transport-state > * {
+  min-width: 0;
+}
+.lab-transport-state span {
+  color: var(--lab-muted);
+}
+.lab-activity-transport > button {
+  min-height: var(--lab-target);
+}
+/* The transport has three slots (back · progress · primary). A lab with a fourth
+   action used to drop it into an implicit column and leave it hanging under the
+   left edge; give any extra action a centred row of its own instead. */
+.lab-activity-transport > :nth-child(n + 4) {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+.lab-activity-transport:has(> .lab-guide-nav) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.lab-activity-transport:has(> .lab-sequence) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.lab-guide-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--lab-sp-12);
+  width: 100%;
+}
+.lab-guide-nav > p {
+  margin: 0;
+  font-weight: var(--lab-w-medium);
+  text-align: center;
+}
+.lab-guide-nav > .lab-stepnav,
+.lab-guide-nav > .lab-pill {
+  grid-column: 2;
+}
+.lab-activity-progress {
+  display: grid;
+  gap: var(--lab-sp-4);
+  min-width: 0;
+}
+.lab-activity-progress div {
+  display: flex;
+  justify-content: center;
+  gap: var(--lab-sp-4);
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-sm);
+  font-variant-numeric: tabular-nums;
+}
+.lab-activity-progress strong {
+  color: var(--foreground, var(--stage-fg));
+}
+.lab-activity-progress progress {
+  width: 100%;
+  height: 0.28rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--lab-r-pill);
+  background: var(--muted, var(--stage-grid));
+}
+.lab-activity-progress progress::-webkit-progress-bar {
+  background: var(--muted, var(--stage-grid));
+}
+.lab-activity-progress progress::-webkit-progress-value {
+  border-radius: var(--lab-r-pill);
+  background: var(--primary, var(--stage-accent));
+}
+.lab-activity-progress progress::-moz-progress-bar {
+  border-radius: var(--lab-r-pill);
+  background: var(--primary, var(--stage-accent));
+}
+.lab-activity-progress input[type="range"] {
+  width: 100%;
+  height: 1rem;
+  margin: 0;
+  accent-color: var(--primary, var(--stage-accent));
+  cursor: pointer;
+}
+.lab-activity-transcript {
+  margin: 0;
+  padding: var(--lab-sp-10) var(--lab-sp-16);
+  border-top: 1px solid var(--border, var(--stage-grid));
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-sm);
+}
+.lab-activity-transcript summary {
+  cursor: pointer;
+  font-weight: var(--lab-w-semibold);
+}
+.lab-activity-transcript ol {
+  margin: var(--lab-sp-8) 0 0;
+  padding-inline-start: var(--lab-sp-24);
+}
+.lab-activity-transcript li {
+  padding: var(--lab-sp-2) var(--lab-sp-4);
+}
+.lab-activity-transcript li[data-current] {
+  border-radius: var(--lab-r-xs);
+  background: color-mix(in oklab, var(--primary, var(--stage-accent)) 12%, transparent);
+  color: var(--foreground, var(--stage-fg));
+}
+@container lab-activity (min-width: 60rem) {
+  .lab-authored-activity[data-inspector-layout="side"]
+    .lab-activity-workspace:has(> .lab-activity-inspector) {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+    grid-template-rows: auto auto;
+    gap: 0;
+    padding: var(--lab-sp-12) 0 var(--lab-sp-12) var(--lab-sp-12);
+  }
+  .lab-authored-activity[data-inspector-layout="side"] .lab-activity-canvas {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 0 var(--lab-sp-12) var(--lab-sp-12) 0;
+  }
+  .lab-authored-activity[data-inspector-layout="side"] .lab-activity-dock {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .lab-authored-activity[data-inspector-layout="side"]
+    .lab-activity-workspace
+    > .lab-activity-inspector {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .lab-activity[data-inspector-layout="side"]
+    .lab-activity-workspace:has(> .lab-activity-inspector) {
+    grid-template-columns: minmax(0, 1fr) 19rem;
+    align-items: start;
+  }
+  .lab-activity[data-focus][data-inspector-layout="side"]
+    .lab-activity-workspace:has(> .lab-activity-inspector) {
+    grid-template-columns: minmax(0, 1fr) minmax(19rem, 24rem);
+  }
+  .lab-activity[data-inspector-layout="side"] .lab-activity-workspace > .lab-activity-inspector {
+    border: 0;
+    border-inline-start: 1px solid var(--border, var(--stage-grid));
+    border-radius: 0;
+    background: transparent;
+  }
+  .lab-activity[data-inspector-layout="side"]
+    .lab-activity-workspace
+    > :where(.lab-activity-inspector)
+    :where(.lab-activity-inspector-section) {
+    padding: var(--lab-sp-16);
+  }
+  .lab-activity[data-focus] .network-scene svg {
+    height: clamp(350px, 58vh, 680px);
+  }
+  .physics-activity .lab-activity-inspector {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .physics-activity .lab-activity-inspector-section {
+    padding: var(--lab-sp-16);
+  }
+}
+@container lab-activity (max-width: 59.99rem) {
+  .lab-activity-inspector > summary {
+    display: list-item;
+  }
+  .lab-activity-inspector[open] > summary {
+    border-bottom: 1px solid var(--border, var(--stage-grid));
+  }
+}
+@container lab-activity (max-width: 42.5rem) {
+  .lab-activity-header {
+    padding: var(--lab-sp-12);
+  }
+  .lab-activity-description {
+    font-size: var(--lab-t-sm);
+  }
+  .lab-activity-focus {
+    font-size: var(--lab-t-sm);
+    padding-inline: var(--lab-sp-8);
+  }
+  .lab-activity-focus span {
+    display: none;
+  }
+  .lab-activity-status {
+    padding-inline: var(--lab-sp-12);
+    flex-wrap: wrap;
+    row-gap: var(--lab-sp-6);
+  }
+  .network-route-path {
+    display: none;
+  }
+  .network-delivery {
+    margin-inline-start: auto;
+  }
+  .network-scene svg {
+    height: 180px;
+  }
+  .lab-activity-feedback {
+    grid-template-columns: 1fr;
+    gap: var(--lab-sp-4);
+  }
+  .lab-activity-transport {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: var(--lab-z-overlay);
+    grid-template-columns: auto 1fr auto;
+    gap: var(--lab-sp-8);
+    padding-inline: var(--lab-sp-10);
+    padding-block-end: max(0.75rem, env(safe-area-inset-bottom));
+    box-shadow: 0 -8px 20px color-mix(in oklab, var(--foreground, var(--stage-fg)) 8%, transparent);
+  }
+  .lab-activity-transport .lab-chip {
+    padding-inline: var(--lab-sp-12);
+  }
+  .lab-guide-nav {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lab-guide-nav > .lab-stepnav,
+  .lab-guide-nav > .lab-pill {
+    grid-column: 1;
+    justify-self: center;
+  }
+  .network-layer {
+    grid-template-columns: 4.4rem 3.2rem 1fr;
+    font-size: var(--lab-t-micro);
+  }
+}
+/* Authorable predict → act → observe → explain → transfer sequence. */
+.lab-sequence {
+  display: grid;
+  justify-items: center;
+  gap: var(--lab-sp-6);
+  width: 100%;
+  color: var(--foreground, var(--stage-fg));
+}
+.lab-sequence-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-12);
+}
+.lab-sequence-gate,
+.lab-sequence-count {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.lab-sequence-gate {
+  margin: 0;
+  text-align: center;
+}
+@media (max-width: 40rem) {
+  .lab-sequence-actions {
+    width: 100%;
+  }
+}
+
+/* Scannable rule reference list. */
+.rule-card-patterns {
+  display: grid;
+  gap: var(--lab-sp-8);
+  padding: var(--lab-sp-14) var(--lab-sp-16);
+  border-top: 1px solid var(--border, var(--stage-grid));
+}
+.rule-card-patterns h4 {
+  margin: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow, 0.68rem);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.rule-card-patterns ul {
+  display: grid;
+  gap: var(--lab-sp-8);
+  margin: 0;
+  padding: 0;
+  max-width: 46rem;
+  list-style: none;
+}
+.rule-card-patterns li {
+  position: relative;
+  padding-inline-start: var(--lab-sp-16);
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+.rule-card-patterns li::before {
+  position: absolute;
+  inset-inline-start: 0;
+  color: var(--primary, var(--stage-accent));
+  content: "\203A";
+  font-weight: var(--lab-w-semibold);
+}
+
+/* Bound responsive SVGs to their activity container. */
+.lab-activity svg {
+  max-width: 100%;
+}
+.network-scene-target[data-interactive="true"] {
+  cursor: pointer;
+}
+
+.lab-config-options {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-6);
+}

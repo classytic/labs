@@ -1,0 +1,230 @@
+.math-mode-picker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--lab-sp-6);
+}
+.math-mode-picker .lab-chip {
+  min-width: 0;
+  text-transform: capitalize;
+}
+.math-derivative-explorer .math-scene,
+.math-integral-explorer .math-scene {
+  box-shadow: inset 0 1px 0 color-mix(in oklab, white 65%, transparent);
+}
+.math-ftc-stack {
+  display: grid;
+  gap: var(--lab-sp-10);
+  padding: var(--lab-sp-10);
+}
+.math-ftc-plot {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: color-mix(in oklab, var(--card, var(--stage-bg)) 96%, transparent);
+}
+.math-ftc-label {
+  position: absolute;
+  z-index: var(--lab-z-raised);
+  top: 0.55rem;
+  left: 0.65rem;
+  padding: var(--lab-sp-4) var(--lab-sp-8);
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--card, var(--stage-bg)) 92%, transparent);
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-bold);
+  letter-spacing: var(--lab-ls-caps);
+  pointer-events: none;
+  text-transform: uppercase;
+}
+.math-fundamental-theorem .math-scene {
+  border: 0;
+  background: transparent;
+}
+.math-gradient-descent .math-scene {
+  min-height: 22rem;
+  background: color-mix(in oklab, var(--card, var(--stage-bg)) 22%, #210b3b);
+}
+.math-gradient-descent .lab-playwrap {
+  border: 0;
+  border-radius: inherit;
+}
+.lab-primary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-6);
+  white-space: nowrap;
+}
+.lab-primary-action svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+/* Dragging the 3D view turns it, so the page must not scroll under the pointer. */
+.math-space-surface {
+  touch-action: none;
+  cursor: grab;
+}
+.math-space-surface:active {
+  cursor: grabbing;
+}
+.math-iteration-ledger {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr 1fr;
+  gap: 1px;
+  overflow: hidden;
+  max-height: 15rem;
+  overflow-y: auto;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--border, var(--stage-grid));
+  font-family: ui-monospace, monospace;
+  font-size: var(--lab-t-eyebrow);
+}
+.math-iteration-ledger > span {
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  background: var(--card, var(--stage-bg));
+  font-variant-numeric: tabular-nums;
+}
+.math-iteration-ledger > span:nth-child(-n + 3) {
+  position: sticky;
+  z-index: var(--lab-z-raised);
+  top: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-weight: var(--lab-w-semibold);
+}
+.math-taylor-ledger {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--border, var(--stage-grid));
+  font-family: ui-monospace, monospace;
+  font-size: var(--lab-t-eyebrow);
+}
+.math-taylor-ledger > span {
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  background: var(--card, var(--stage-bg));
+  font-variant-numeric: tabular-nums;
+}
+.math-taylor-ledger > span:nth-child(-n + 2) {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-weight: var(--lab-w-semibold);
+}
+@container lab-activity (min-width: 75rem) {
+  .math-ftc-stack {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@container lab-activity (min-width: 60rem) {
+  .math-activity .lab-activity-workspace {
+    grid-template-columns: minmax(0, 1fr) minmax(17rem, 20rem);
+  }
+}
+@container lab-activity (max-width: 59.99rem) {
+  .math-activity[data-focus] {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+  .math-activity .lab-activity-inspector button,
+  .math-activity .lab-activity-inspector input,
+  .math-activity .lab-activity-inspector select {
+    min-height: 2.75rem;
+  }
+  .math-activity .lab-activity-transcript {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+}
+@container lab-activity (max-width: 42.5rem) {
+  .math-activity .lab-activity-workspace {
+    padding: var(--lab-sp-8);
+  }
+  .math-scene > div {
+    min-height: 18rem;
+  }
+  .lab-transport-state span {
+    display: none;
+  }
+  .math-limit-table,
+  .math-iteration-ledger {
+    min-width: 22rem;
+  }
+  :is(.math-activity, .ml-activity) .lab-activity-transport {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  :is(.math-activity, .ml-activity)
+    .lab-activity-transport:has(> .lab-icon-button + .lab-icon-button) {
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+  }
+  :is(.math-activity, .ml-activity) .lab-activity-transport > button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
+
+/* Geometry foundations: one steady viewport and a visual hierarchy shared by each proof. */
+.geometry-foundation-scene {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+.geometry-scene-title {
+  fill: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-semibold);
+}
+.geometry-scene-note {
+  fill: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.geometry-area-a,
+.geometry-area-b,
+.geometry-area-c {
+  stroke-width: 2.5;
+  rx: 8px;
+}
+.geometry-area-a {
+  fill: color-mix(in oklab, var(--primary, var(--stage-accent)) 22%, transparent);
+  stroke: var(--primary, var(--stage-accent));
+}
+.geometry-area-b {
+  fill: color-mix(in oklab, var(--chart-2, var(--stage-accent-2)) 22%, transparent);
+  stroke: var(--chart-2, var(--stage-accent-2));
+}
+.geometry-area-c {
+  fill: color-mix(in oklab, var(--chart-3, var(--stage-warn)) 18%, transparent);
+  stroke: var(--chart-3, var(--stage-warn));
+}
+.geometry-area-diagonal {
+  fill: none;
+  stroke: color-mix(in oklab, var(--chart-3, var(--stage-warn)) 58%, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+}
+.geometry-area-value {
+  fill: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-sm);
+  font-weight: var(--lab-w-bold);
+}
+.geometry-operator {
+  fill: var(--muted-foreground, var(--stage-muted));
+  font-size: 28px;
+  font-weight: var(--lab-w-medium);
+}
+@container lab-activity (max-width: 42.5rem) {
+  .geometry-foundation-scene {
+    aspect-ratio: 4 / 3;
+  }
+}
+@media (forced-colors: active) {
+  .math-scene,
+  .math-result-probe,
+  .math-ftc-plot {
+    forced-color-adjust: auto;
+  }
+}

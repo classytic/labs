@@ -1,0 +1,299 @@
+@layer components {
+  .lab-three-scene {
+    position: relative;
+    width: 100%;
+    min-height: clamp(18rem, 48vw, 26rem);
+    overflow: hidden;
+    border-radius: var(--lab-radius, 0.75rem);
+    border: 1px solid color-mix(in oklab, var(--stage-grid) 78%, transparent);
+    /* A studio backdrop is NEUTRAL: the model carries the colour. Tinting the stage with the
+       accent and the secondary hue put a pink-and-blue wash behind every scene, which muddied
+       the model's own palette. One achromatic top-down falloff (mixing the foreground, never a
+       hue) reads as a lit surface and works unchanged in both themes. */
+    background: radial-gradient(
+      ellipse 120% 100% at 50% 0%,
+      color-mix(in oklab, var(--stage-fg) 5%, var(--stage-bg)) 0%,
+      var(--stage-bg) 72%
+    );
+  }
+
+  /* Degraded state (WebGL not ready, context lost, or the scene threw): the fallback is a normal
+     figure, so drop the 3D frame rather than strand a short summary in a tall empty gradient. */
+  .lab-three-scene[data-mode="fallback"] {
+    min-height: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .lab-three-canvas {
+    position: relative;
+    height: clamp(18rem, 48vw, 26rem);
+    min-height: inherit;
+  }
+
+  .lab-three-canvas canvas {
+    height: 100% !important;
+    width: 100% !important;
+    max-width: 100%;
+    display: block;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+
+  .lab-three-canvas canvas:active {
+    cursor: grabbing;
+  }
+
+  .lab-meiosis-scene {
+    display: grid;
+    min-height: inherit;
+    margin: 0;
+    align-content: center;
+    justify-items: center;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+  }
+
+  .lab-meiosis-scene svg {
+    display: block;
+    width: min(100%, 42rem);
+    height: auto;
+    max-height: 25rem;
+  }
+  .lab-meiosis-scene figcaption {
+    display: grid;
+    gap: var(--lab-sp-4);
+    max-width: 42rem;
+    text-align: center;
+  }
+  .lab-meiosis-scene figcaption span {
+    color: var(--stage-muted-fg);
+    font-size: var(--lab-t-sm);
+  }
+  .lab-meiosis-product {
+    fill: var(--stage-fg);
+    font:
+      700 16px system-ui,
+      sans-serif;
+  }
+
+  .lab-three-depth {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at 50% 78%,
+      color-mix(in oklab, var(--stage-foreground) 11%, transparent),
+      transparent 34%
+    );
+    mask-image: linear-gradient(to bottom, transparent 35%, black 100%);
+  }
+
+  .lab-three-legend {
+    position: absolute;
+    inset-block-start: var(--lab-sp-12);
+    inset-inline-start: var(--lab-sp-12);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--lab-sp-6);
+    color: var(--stage-muted);
+    font-size: var(--lab-t-eyebrow);
+    pointer-events: none;
+  }
+
+  .lab-three-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--lab-sp-4);
+    padding: var(--lab-sp-4) var(--lab-sp-8);
+    border: 1px solid var(--stage-grid);
+    border-radius: var(--lab-r-pill);
+    color: var(--stage-foreground);
+    background: color-mix(in oklab, var(--stage-bg) 88%, transparent);
+    box-shadow: 0 0.25rem 0.8rem color-mix(in oklab, var(--stage-foreground) 8%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  .lab-three-legend i {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--stage-accent);
+  }
+
+  .lab-three-legend i[data-tone="outer"] {
+    background: var(--stage-accent-2);
+  }
+  .lab-three-legend i[data-tone="pair"] {
+    border: 1px solid var(--stage-accent-2);
+    background: transparent;
+  }
+  .lab-three-legend i[data-tone="nucleus"] {
+    background: var(--stage-warn);
+  }
+
+  /* Neutral: for the parts of a scene that are the MEDIUM (a field, a container) rather than
+     the subject. Without it a scene had to spend a hue on something meant to recede. */
+  .lab-three-legend i[data-tone="neutral"] {
+    background: var(--stage-muted);
+  }
+
+  .lab-three-hint {
+    position: absolute;
+    inset-inline-end: var(--lab-sp-12);
+    inset-block-end: var(--lab-sp-12);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--lab-sp-6);
+    padding: var(--lab-sp-6) var(--lab-sp-10);
+    border: 1px solid color-mix(in oklab, var(--stage-grid) 75%, transparent);
+    border-radius: var(--lab-r-pill);
+    color: var(--stage-muted);
+    background: color-mix(in oklab, var(--stage-bg) 88%, transparent);
+    box-shadow: 0 0.4rem 1.2rem color-mix(in oklab, var(--stage-foreground) 9%, transparent);
+    backdrop-filter: blur(10px);
+    font-size: var(--lab-t-eyebrow);
+    font-weight: var(--lab-w-semibold);
+    pointer-events: none;
+  }
+
+  .lab-three-hint-icon {
+    color: var(--stage-accent);
+    font-size: var(--lab-t-body);
+  }
+
+  .lab-three-tools,
+  .lab-three-inspector {
+    position: absolute;
+    z-index: var(--lab-z-raised);
+    border: 1px solid color-mix(in oklab, var(--stage-grid) 78%, transparent);
+    border-radius: calc(var(--lab-radius, 0.75rem) - 0.15rem);
+    color: var(--stage-foreground);
+    background: color-mix(in oklab, var(--stage-bg) 91%, transparent);
+    box-shadow: 0 1rem 2.4rem -1.4rem color-mix(in oklab, var(--stage-foreground) 30%, transparent);
+    backdrop-filter: blur(14px) saturate(1.15);
+  }
+
+  .lab-three-tools {
+    inset-inline-start: var(--lab-sp-12);
+    inset-block-start: 48px;
+    display: flex;
+    max-width: min(13rem, 34%);
+    flex-direction: column;
+    gap: var(--lab-sp-4);
+    padding: var(--lab-sp-6);
+  }
+
+  .lab-three-tools button {
+    min-height: 2.35rem;
+    padding: var(--lab-sp-8) var(--lab-sp-10);
+    border: 0;
+    border-radius: var(--lab-r-sm);
+    color: var(--stage-muted);
+    background: transparent;
+    font: inherit;
+    font-size: var(--lab-t-eyebrow);
+    font-weight: var(--lab-w-semibold);
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .lab-three-tools button:hover {
+    color: var(--stage-foreground);
+    background: color-mix(in oklab, var(--stage-accent) 9%, transparent);
+  }
+  .lab-three-tools button[aria-pressed="true"] {
+    color: var(--stage-accent);
+    background: color-mix(in oklab, var(--stage-accent) 13%, transparent);
+  }
+  .lab-three-tools button:focus-visible {
+    outline: 2px solid var(--stage-accent);
+    outline-offset: 1px;
+  }
+
+  .lab-three-inspector {
+    inset-inline-end: var(--lab-sp-12);
+    inset-block-start: var(--lab-sp-12);
+    width: min(17rem, 32%);
+    padding: var(--lab-sp-14);
+  }
+
+  .lab-three-inspector h3 {
+    margin: 0;
+    font-size: var(--lab-t-body);
+    line-height: var(--lab-lh-title);
+  }
+  .lab-three-inspector p {
+    margin: var(--lab-sp-6) 0 0;
+    color: var(--stage-muted);
+    font-size: var(--lab-t-eyebrow);
+    line-height: var(--lab-lh-ui);
+  }
+
+  .lab-three-inspector dl {
+    display: grid;
+    gap: var(--lab-sp-6);
+    margin: var(--lab-sp-12) 0 0;
+    font-size: var(--lab-t-eyebrow);
+  }
+  .lab-three-inspector dl > div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--lab-sp-12);
+    padding-block-start: var(--lab-sp-6);
+    border-block-start: 1px solid color-mix(in oklab, var(--stage-grid) 70%, transparent);
+  }
+  .lab-three-inspector dt {
+    color: var(--stage-muted);
+  }
+  .lab-three-inspector dd {
+    margin: 0;
+    font-weight: var(--lab-w-semibold);
+    text-align: end;
+  }
+
+  @media (max-width: 640px) {
+    .lab-three-scene {
+      min-height: clamp(15rem, 72vw, 20rem);
+    }
+    .lab-three-canvas {
+      height: clamp(15rem, 72vw, 20rem);
+    }
+    .lab-three-legend {
+      inset-block-start: var(--lab-sp-8);
+      inset-inline: 0.5rem;
+      gap: var(--lab-sp-4);
+    }
+    .lab-three-legend span {
+      padding: var(--lab-sp-4) var(--lab-sp-6);
+      font-size: var(--lab-t-micro);
+    }
+    .lab-three-hint {
+      inset-inline-end: var(--lab-sp-8);
+      inset-block-end: var(--lab-sp-8);
+      max-width: 12rem;
+    }
+    .lab-three-tools {
+      inset-inline-start: var(--lab-sp-8);
+      inset-block-start: 44px;
+      max-width: 42%;
+    }
+    .lab-three-inspector {
+      inset-inline: 0.5rem;
+      inset-block-start: auto;
+      inset-block-end: 48px;
+      width: auto;
+      padding: var(--lab-sp-10);
+    }
+    .lab-three-inspector dl {
+      display: none;
+    }
+  }
+
+  .lab-activity[data-focus] .lab-three-scene,
+  .lab-activity[data-focus] .lab-three-canvas {
+    height: clamp(28rem, 62dvh, 48rem);
+    min-height: clamp(28rem, 62dvh, 48rem);
+  }
+  /* Reduced motion is honoured once, at the lab root (core.css); it covers this scene. */
+}

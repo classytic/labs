@@ -1,0 +1,20 @@
+export { StressStrainLab, type StressStrainProps, type StressStrainGraph } from './preset.js';
+export {
+  MATERIALS,
+  PLASTIC_SLOPE,
+  areaOf,
+  energyDensity,
+  limitStrain,
+  material,
+  plotStrainMax,
+  plotStressMax,
+  strainAt,
+  stressAt,
+  stressStrainCurve,
+  wireState,
+  type CurvePoint,
+  type Material,
+  type MaterialId,
+  type WireInput,
+  type WireState,
+} from './core.js';

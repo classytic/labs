@@ -1,0 +1,299 @@
+/* Math activities: graph-first experiments with compact symbolic evidence. */
+.math-activity .lab-activity-status span {
+  white-space: nowrap;
+}
+.math-scene {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, currentColor 8%, transparent) 1px,
+        transparent 0
+      )
+      0 0 / 20px 20px,
+    var(--card, var(--stage-bg));
+}
+.math-scene > div {
+  width: 100%;
+}
+/* ONE instrument panel, not a stack of cards. Every readout group carried its own border, radius
+   and shadow, so a lab with a probe, a stat list and a slider row rendered as three floating
+   boxes inside a fourth. Inside the math inspector they are flat and separated by hairlines —
+   the same treatment the authored shell already uses. */
+.math-measurements {
+  display: grid;
+  gap: 0;
+}
+.math-measurements > .lab-evidence-surface,
+.math-measurements > .math-result-probe {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  padding-inline: 0;
+}
+.math-measurements > * + * {
+  padding-top: var(--lab-sp-12);
+  border-top: 1px solid color-mix(in oklab, var(--border, var(--stage-grid)) 65%, transparent);
+}
+.math-measurements > * {
+  padding-bottom: var(--lab-sp-12);
+}
+.math-measurements > :last-child {
+  padding-bottom: 0;
+}
+.math-activity .math-controls {
+  padding-top: var(--lab-sp-14);
+  border-top: 1px solid color-mix(in oklab, var(--border, var(--stage-grid)) 65%, transparent);
+}
+.math-result-probe {
+  display: grid;
+  gap: var(--lab-sp-4);
+  padding: var(--lab-sp-12);
+  border: 1px solid
+    color-mix(in oklab, var(--primary, var(--stage-accent)) 24%, var(--border, var(--stage-grid)));
+  border-radius: var(--lab-r-md);
+  background: color-mix(
+    in oklab,
+    var(--primary, var(--stage-accent)) 7%,
+    var(--card, var(--stage-bg))
+  );
+}
+.math-result-probe > span {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-micro);
+  font-weight: var(--lab-w-semibold);
+  letter-spacing: var(--lab-ls-caps);
+  text-transform: uppercase;
+}
+.math-result-probe > strong {
+  font-size: var(--lab-t-body);
+}
+.math-result-probe > small {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-variant-numeric: tabular-nums;
+}
+.math-explain {
+  margin: 0;
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+/* .lab-transport-state moved to core.css: it is shell, and every subject needs it. */
+:is(.math-activity, .ml-activity)
+  .lab-activity-transport:has(> .lab-icon-button + .lab-icon-button) {
+  grid-template-columns: auto auto minmax(8rem, 18rem) auto;
+}
+.math-equation-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-8) var(--lab-sp-16);
+  max-width: 100%;
+  overflow-x: auto;
+  padding: var(--lab-sp-6) 0 var(--lab-sp-8);
+  font-size: var(--lab-t-sm);
+  overscroll-behavior-inline: contain;
+}
+.math-equation-detail > * {
+  flex: 0 0 auto;
+  max-width: none;
+}
+.math-limit-table {
+  display: grid;
+  grid-template-columns: minmax(2.5rem, auto) 1fr 1fr;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--border, var(--stage-grid));
+  font-family: ui-monospace, monospace;
+  font-size: var(--lab-t-eyebrow);
+}
+.math-limit-table > span {
+  padding: var(--lab-sp-6) var(--lab-sp-8);
+  background: var(--card, var(--stage-bg));
+  font-variant-numeric: tabular-nums;
+}
+.math-limit-table > span:nth-child(-n + 3) {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-weight: var(--lab-w-semibold);
+}
+.math-limit-table [data-side="left"] {
+  color: var(--stage-accent-2);
+}
+.math-limit-table [data-side="right"] {
+  color: var(--stage-good);
+}
+.math-slope-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-8) var(--lab-sp-16);
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.math-slope-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-8);
+}
+.math-slope-legend span::before {
+  width: 1.35rem;
+  height: 2px;
+  border-radius: var(--lab-r-pill);
+  background: var(--stage-accent-2);
+  content: "";
+}
+.math-slope-legend [data-line="function"]::before {
+  background: var(--stage-accent);
+}
+.math-slope-legend [data-line="tangent"]::before {
+  background: repeating-linear-gradient(90deg, var(--stage-good) 0 5px, transparent 5px 8px);
+}
+.math-slope-legend [data-line="field"]::before {
+  height: 1px;
+  background: var(--stage-muted);
+}
+.math-slope-legend [data-line="euler"]::before {
+  background: var(--stage-accent-2);
+}
+.math-slope-legend [data-line="rk4"]::before {
+  height: 3px;
+  background: var(--stage-good);
+}
+.math-slope-legend [data-line="reference"]::before {
+  background: repeating-linear-gradient(90deg, var(--stage-fg) 0 4px, transparent 4px 7px);
+  opacity: 0.55;
+}
+.lab-load-error {
+  display: grid;
+  min-height: 5rem;
+  place-items: center;
+  padding: var(--lab-sp-12);
+  color: var(--destructive, var(--stage-danger));
+  font-size: var(--lab-t-eyebrow);
+  text-align: center;
+}
+.lab-input-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.math-derivation-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-10);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.math-derivation-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--lab-sp-4) var(--lab-sp-16);
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  border-radius: var(--lab-r-sm);
+  transition: background var(--lab-dur-fast);
+}
+.math-derivation-step[data-current="true"] {
+  background: color-mix(in oklab, var(--primary, var(--stage-accent)) 12%, transparent);
+}
+.math-derivation-index {
+  opacity: 0.55;
+  font:
+    0.75rem ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.math-derivation-equation {
+  font-size: var(--lab-t-sm);
+}
+.math-derivation-note {
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-eyebrow);
+}
+.math-derivation-note::before {
+  content: "— ";
+}
+/* The withheld last line: a dashed box says "not finished yet" without shouting. */
+.math-derivation-finish {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lab-sp-6);
+  margin-block-start: var(--lab-sp-10);
+  padding: var(--lab-sp-14);
+  border: 1px dashed var(--lab-border-strong);
+  border-radius: var(--lab-r-md);
+}
+.math-derivation-ask {
+  margin: 0;
+  font-size: var(--lab-t-body);
+  font-weight: var(--lab-w-semibold);
+}
+.math-derivation-unit {
+  color: var(--lab-muted);
+  font-size: var(--lab-t-sm);
+}
+.math-derivation-verdict {
+  margin: 0;
+  color: var(--lab-danger);
+  font-size: var(--lab-t-sm);
+}
+.math-derivation-progress {
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+.math-polynomial-result {
+  display: grid;
+  gap: var(--lab-sp-14);
+}
+.math-polynomial-equation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-6) var(--lab-sp-4);
+  font-size: var(--lab-t-lg);
+}
+.math-polynomial-arrow {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-title);
+}
+.math-polynomial-steps {
+  margin-top: var(--lab-sp-10);
+  padding: var(--lab-sp-12) var(--lab-sp-14);
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+}
+.math-polynomial-input {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--lab-sp-8);
+}
+.math-polynomial-input > span {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}
+.math-polynomial-input .lab-input {
+  min-width: 11.25rem;
+  flex: 1;
+}
+.math-expression-error {
+  display: grid;
+  gap: var(--lab-sp-6);
+  padding: var(--lab-sp-12);
+  border: 1px solid color-mix(in oklab, var(--stage-danger) 32%, transparent);
+  border-radius: var(--lab-r-sm);
+  background: color-mix(in oklab, var(--stage-danger) 6%, var(--stage-bg));
+}
+.math-expression-error > strong {
+  font-size: var(--lab-t-sm);
+}
+.math-expression-error > p {
+  margin: 0;
+  color: var(--stage-danger);
+  font-size: var(--lab-t-eyebrow);
+}
