@@ -15,6 +15,16 @@ export default defineLab({
     speed: z.number().default(2),
     highlightBase: z.number().optional(),
     target: z.number().optional(),
+    /**
+     * Which bases to show, and how many digits each wheel gets.
+     *
+     * The component has always accepted both, and the runtime re-exports it directly, so the props
+     * reach it. The SCHEMA did not declare them, and an undeclared prop is dropped before it gets
+     * that far. So a lesson authoring `bases={[2, 10]}` to contrast two bases was silently handed
+     * all four, and a junior lesson that wants base 10 alone could not have it.
+     */
+    bases: z.array(z.number().int().min(2).max(36)).min(1).max(6).default([2, 8, 10, 16]),
+    width: z.union([z.number().int().min(1).max(16), z.literal('auto')]).default('auto'),
     title: z.string().optional(),
     prompt: z.string().optional(),
   }),
