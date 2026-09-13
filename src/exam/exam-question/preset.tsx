@@ -21,7 +21,7 @@ import { Activity } from '../../kit/activity.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCheckpoint } from '../../kit/pedagogy.js';
-import { earnedMarks, gradePart, totalMarks, type ExamPart, type PartVerdict } from './core.js';
+import { earnedMarks, gradePart, isSettled, totalMarks, type ExamPart, type PartVerdict } from './core.js';
 import { DEFAULT_EXAM_PARTS, DEFAULT_EXAM_STEM } from './default-question.js';
 
 export interface ExamQuestionProps {
@@ -57,9 +57,10 @@ function Part({
 }): ReactNode {
   const [raw, setRaw] = useState('');
   const [attempts, setAttempts] = useState(0);
-  const settled = verdict.state === 'correct';
-  // The scheme appears once the learner has committed: on a correct answer, or after two real
-  // attempts. Showing it earlier turns the question back into something to read.
+  const settled = isSettled(verdict);
+  // The scheme appears once the learner has committed: on a correct answer, after two real
+  // attempts, or when they ask for it. Showing it unasked turns the question back into
+  // something to read.
   const showScheme = settled || attempts >= 2;
 
   return (
@@ -97,6 +98,21 @@ function Part({
           >
             Check
           </Button>
+          {/* Visible from the first look, not unlocked by failing twice.
+              A learner who cannot start the part has nothing to type, so an escape that
+              only appears after two submitted guesses is an escape they cannot reach.
+              It is worded as what it gives up, and it awards no marks. */}
+          {!settled ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              className="lab-exam-reveal"
+              onClick={() => onGrade({ state: 'revealed' })}
+            >
+              Show mark scheme
+            </Button>
+          ) : null}
         </div>
       ) : (
         <p className="lab-exam-note">
@@ -116,7 +132,12 @@ function Part({
       ) : null}
       {verdict.state === 'wrong' ? (
         <p className="lab-exam-verdict" data-tone="bad">
-          Not yet. Check your working, then try again.
+          Not yet. Check your working, then try again, or show the mark scheme.
+        </p>
+      ) : null}
+      {verdict.state === 'revealed' ? (
+        <p className="lab-exam-verdict" data-tone="warn">
+          Mark scheme shown. No marks for this part: read it, then try the next one unaided.
         </p>
       ) : null}
 
@@ -148,7 +169,9 @@ export function ExamQuestion({
   const [verdicts, setVerdicts] = useState<Record<string, PartVerdict>>({});
   const total = totalMarks(parts);
   const earned = earnedMarks(parts, verdicts);
-  const allGraded = parts.filter((p) => p.answer).every((p) => verdicts[p.label]?.state === 'correct');
+  // Finished, not perfect. A revealed part closes too, and the score below carries what it cost:
+  // requiring every part to be CORRECT left a stuck learner with a question that never completed.
+  const allGraded = parts.filter((p) => p.answer).every((p) => isSettled(verdicts[p.label]));
 
   // With no title the heading names what the learner is facing, which varies per question and is
   // the thing they most want to know. A fixed sentence would read as boilerplate by the fourth

@@ -93,13 +93,25 @@ export function SceneViewport({
   children,
   size = 'standard',
   label,
+  overflow = 'fit',
+  className,
 }: {
   children: ReactNode;
-  size?: 'compact' | 'standard' | 'wide';
+  size?: 'strip' | 'compact' | 'standard' | 'wide';
   label?: string;
+  /** Keep dense apparatus readable on narrow screens instead of shrinking its labels. */
+  overflow?: 'fit' | 'scroll';
+  className?: string;
 }): ReactNode {
   return (
-    <div className="lab-scene-viewport" data-size={size} aria-label={label}>
+    <div
+      className={['lab-scene-viewport', className].filter(Boolean).join(' ')}
+      data-size={size}
+      data-overflow={overflow}
+      aria-label={label}
+      role={label ? 'region' : undefined}
+      tabIndex={overflow === 'scroll' ? 0 : undefined}
+    >
       {children}
     </div>
   );

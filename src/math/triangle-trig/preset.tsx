@@ -30,6 +30,15 @@ export interface TriangleTrigProps {
   leg?: number;
   /** Which leg `leg` is: the vertical 'opposite' or the horizontal 'adjacent'. */
   legKind?: 'opposite' | 'adjacent';
+  /**
+   * Show sin, cos and tan as LIVE numbers beside the sides.
+   *
+   * Off by default, because a word problem about a ladder does not need three extra
+   * figures on screen. On for the lesson that has to prove the ratio depends on the
+   * angle alone: scaling the triangle moves every side and leaves these three still,
+   * which is the whole argument, and it cannot be seen if the ratios are not shown.
+   */
+  ratios?: boolean;
   /** Framing: elevation (look up from the base) / depression (look down from the top) / plain. */
   mode?: 'elevation' | 'depression' | 'plain';
   labels?: { opposite?: string; adjacent?: string; hypotenuse?: string; angle?: string };
@@ -49,6 +58,13 @@ const C_GIVEN = 'var(--stage-accent)';
 const C_HYP = 'var(--stage-accent-2)';
 const C_CALC = 'var(--stage-fg)';
 
+/** Default heading per framing, so `plain` does not inherit the depression wording. */
+const MODE_TITLE: Record<'elevation' | 'depression' | 'plain', string> = {
+  elevation: 'Angle of elevation: solve the right triangle',
+  depression: 'Angle of depression: solve the right triangle',
+  plain: 'A right triangle, and the ratios its angle fixes',
+};
+
 const fmt = (n: number): string =>
   Number.isFinite(n) ? (Math.abs(n) >= 100 ? n.toFixed(0) : n.toFixed(2)) : '-';
 
@@ -56,13 +72,14 @@ export function TriangleTrig({
   angleDeg = 31,
   leg = 15,
   legKind = 'opposite',
+  ratios = false,
   mode = 'depression',
   labels,
   drive = ['angle'],
   legMin = 1,
   legMax,
   ask,
-  title = 'Angle of depression: solve the right triangle',
+  title,
   prompt = 'The angle, the height and the ground distance are one right triangle: tan θ = opposite / adjacent.',
   height = 320,
   activity = 'triangle-trig',
@@ -202,7 +219,14 @@ export function TriangleTrig({
   return (
     <Activity.Root className="math-triangle-trig-activity">
       <Activity.Header>
-        <Activity.Heading eyebrow="Right-triangle trigonometry" title={title} description={prompt} />
+        {/* The title follows the MODE. It used to default to the depression wording
+            whatever mode was authored, so a `plain` lesson was headed "Angle of
+            depression" over a triangle that had nothing to do with one. */}
+        <Activity.Heading
+          eyebrow="Right-triangle trigonometry"
+          title={title ?? MODE_TITLE[mode]}
+          description={prompt}
+        />
         <Activity.FocusButton />
       </Activity.Header>
       <Activity.Status>
@@ -215,6 +239,13 @@ export function TriangleTrig({
         </strong>
         <span>θ {deg}°</span>
         <span>hypotenuse {fmt(H)}</span>
+        {/* In the status bar, NOT the inspector. The inspector is a collapsed
+            disclosure, and a ratio you have to click to see cannot be watched
+            holding still while the triangle is scaled, which is the only reason
+            these are on. */}
+        {ratios && <span>sin θ {fmt(O / H)}</span>}
+        {ratios && <span>cos θ {fmt(A / H)}</span>}
+        {ratios && <span>tan θ {fmt(O / A)}</span>}
       </Activity.Status>
       <Activity.Workspace>
         <Activity.Canvas label="Right-triangle model">{figure}</Activity.Canvas>

@@ -16,6 +16,7 @@ export default defineLab({
     // value, so only the lower end is a fixed runtime bound.
     leg: z.number().min(1).optional(),
     legKind: z.enum(['opposite', 'adjacent']).optional(),
+    ratios: z.boolean().optional().describe('show sin, cos and tan live, so scaling shows them hold'),
     mode: z.enum(['elevation', 'depression', 'plain']).optional(),
     labels: z
       .object({

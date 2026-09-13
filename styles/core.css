@@ -186,6 +186,7 @@
 
 /* Tree Quest: causal motion, recursion memory, and prediction—not decoration. */
 .tree-scene {
+  position: relative;
   overflow: hidden;
   min-height: 17rem;
   border: 1px solid var(--border, var(--stage-grid));
@@ -198,6 +199,11 @@
       )
       0 0 / 20px 20px,
     var(--card, var(--stage-bg));
+}
+.tree-fit-button {
+  position: absolute;
+  top: var(--lab-sp-8);
+  right: var(--lab-sp-8);
 }
 
 /* One geometry contract for renderer-swappable learning scenes. The selected
@@ -216,6 +222,10 @@
   height: clamp(14rem, 52cqi, 21rem);
 }
 
+.lab-scene-viewport[data-size="strip"] {
+  height: clamp(10rem, 30cqi, 14rem);
+}
+
 .lab-scene-viewport[data-size="wide"] {
   height: clamp(15rem, 48cqi, 23rem);
 }
@@ -230,6 +240,23 @@
 .lab-scene-viewport > :is(svg, .lab-figure) {
   display: block;
   overflow: hidden;
+}
+
+/* Dense apparatus may preserve a readable drawing width and pan only when the
+   host viewport cannot fit it. This keeps scrolling behavior in one primitive. */
+.lab-scene-viewport[data-overflow="scroll"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+.lab-scene-viewport[data-overflow="scroll"] > :is(svg, .lab-figure) {
+  width: max(100%, 42rem);
+  max-width: none;
+}
+.lab-scene-viewport[data-overflow="scroll"]:focus-visible {
+  outline: 2px solid var(--ring, var(--stage-primary));
+  outline-offset: -2px;
 }
 
 .lab-field-help {

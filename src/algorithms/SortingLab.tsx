@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { Check } from 'lucide-react';
 import { Activity } from '../kit/activity.js';
 import { AssessedChoiceGroup } from '../kit/controls.js';
@@ -42,8 +42,9 @@ function Bars({
   const highlight = tone === 'act' ? 'var(--stage-warn, #f59e0b)' : 'var(--stage-accent, #6366f1)';
   return (
     <svg
+      className="sorting-scene algorithm-scene-svg"
       viewBox={`0 0 ${Math.max(width, 1)} ${CHART_H + 26}`}
-      style={{ width: '100%', maxWidth: width, margin: '0 auto', display: 'block' }}
+      style={{ '--sorting-scene-width': `${width}px` } as CSSProperties}
       role="img"
       aria-label={`Array: ${items.map((item) => item.value).join(', ')}`}
     >
@@ -66,7 +67,7 @@ function Bars({
               x={x + BAR_W / 2}
               y={CHART_H + 16}
               textAnchor="middle"
-              fontSize={13}
+              className="sorting-value"
               fill="currentColor"
               fontWeight={on ? 700 : 400}
             >

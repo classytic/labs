@@ -186,7 +186,9 @@ export function GasBoxLab({
     for (let i = 0; i < MAXN; i++) {
       const a = (i * 2.39996) % (Math.PI * 2); // golden-angle spread of directions
       pool.push({
-        x: R + ((i * 0.211) % 1) * (MINV - 2 * R) + 0.5,
+        // Seed across the authored starting chamber. Seeding against MINV made
+        // every initial state look pre-compressed, with a dense pile at left.
+        x: R + ((i * 0.211) % 1) * (vol - 2 * R),
         y: R + ((i * 0.137) % 1) * (H - 2 * R),
         vx: Math.cos(a) * SPEED0,
         vy: Math.sin(a) * SPEED0,
@@ -280,7 +282,7 @@ export function GasBoxLab({
     const tFrac = clamp((temp - TMIN) / (TMAX - TMIN), 0, 1);
     const hue = 232 - tFrac * 210;
     ctx.fillStyle = `hsl(${hue.toFixed(0)} 78% 55%)`;
-    const rpx = Math.max(2.4, c.sx(R) * 1.4);
+    const rpx = Math.max(1.8, c.sx(R) * (n > 220 ? 0.8 : n > 120 ? 1 : 1.2));
     for (let i = 0; i < n; i++) {
       const p = particles.current[i]!;
       const [px, py] = c.toPx(Math.min(p.x, right - R), p.y);

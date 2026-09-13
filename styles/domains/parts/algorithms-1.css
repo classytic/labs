@@ -18,6 +18,16 @@
   height: clamp(21rem, 42cqw, 34rem);
   overflow: visible;
 }
+/* Normalized algorithm diagrams use a 0–100 viewBox. Their labels therefore
+   need SVG-user-unit sizes, not the rem typography used by surrounding UI. */
+.algorithm-scene-svg .algorithm-scene-label {
+  font-size: 4.2px;
+  font-weight: var(--lab-w-bold);
+}
+.algorithm-scene-svg .algorithm-scene-meta {
+  font-size: 3.2px;
+  font-weight: var(--lab-w-semibold);
+}
 .algorithm-edge line {
   stroke: var(--border, var(--stage-grid));
   stroke-width: 1.4;
@@ -272,6 +282,20 @@
   color: var(--muted-foreground, var(--stage-muted));
   font-size: var(--lab-t-eyebrow);
 }
+.dp-calculation {
+  min-height: 2.25rem;
+  padding: var(--lab-sp-8) var(--lab-sp-12);
+  border-radius: var(--lab-r-sm);
+  background: var(--muted, color-mix(in oklab, currentColor 5%, transparent));
+  color: var(--foreground, var(--stage-fg));
+  font:
+    var(--lab-w-medium) var(--lab-t-eyebrow) / var(--lab-lh-ui) ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
 .dp-mission strong {
   color: var(--foreground, var(--stage-fg));
 }
@@ -315,6 +339,15 @@
 .dp-grid > div[data-current] {
   border-color: var(--primary, var(--stage-accent));
   box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary, var(--stage-accent)) 25%, transparent);
+}
+.sorting-scene {
+  display: block;
+  width: 100%;
+  max-width: var(--sorting-scene-width);
+  margin-inline: auto;
+}
+.sorting-scene .sorting-value {
+  font-size: 13px;
 }
 .graph-authoring {
   display: grid;
@@ -406,8 +439,18 @@
   .dp-grid > div {
     border-radius: var(--lab-r-sm);
   }
+  .dp-mission {
+    padding-inline: var(--lab-sp-8);
+  }
+  .dp-mission > span:nth-child(2) {
+    font-size: 0;
+  }
+  .dp-mission > span:nth-child(2)::after {
+    content: "→ ↓";
+    font-size: var(--lab-t-eyebrow);
+  }
   .algorithm-speed {
-    min-width: 2.5rem;
+    min-width: var(--lab-target);
   }
   .algorithm-speed span {
     display: none;
@@ -416,9 +459,14 @@
     display: none;
   }
   .algorithm-next {
-    width: 2.5rem;
-    min-width: 2.5rem;
+    width: var(--lab-target);
+    min-width: var(--lab-target);
+    min-height: var(--lab-target);
     padding: 0;
+  }
+  .algorithm-playback > .lab-icon-button {
+    min-width: var(--lab-target);
+    min-height: var(--lab-target);
   }
   .algorithm-activity .lab-activity-transport {
     grid-template-columns: auto minmax(5rem, 1fr) auto;

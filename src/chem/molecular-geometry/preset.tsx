@@ -59,22 +59,16 @@ export function MolecularGeometryProjectedScene({
   }));
   const domains = projected.slice(0, spec.bonds + spec.lonePairs).sort((a, b) => a.depth - b.depth),
     cx = 220,
-    cy = 170,
-    radius = 112;
+    cy = 148,
+    radius = 124;
   return (
-    <svg
-      viewBox="0 0 440 340"
-      width="100%"
-      role="img"
-      aria-label={`${spec.formula}, ${spec.shape}, bond angle ${spec.angle}, ${spec.lonePairs} lone pairs, ${spec.polar ? 'polar' : 'non-polar'}. Perspective projection; VSEPR predicts approximate geometry, not a rigid sculpture.`}
-    >
-      <defs>
-        <radialGradient id="atom-core">
-          <stop offset="0" stopColor="white" />
-          <stop offset=".32" stopColor="var(--stage-accent)" />
-          <stop offset="1" stopColor="color-mix(in oklab,var(--stage-accent) 55%,var(--stage-fg))" />
-        </radialGradient>
-      </defs>
+    <figure className="chem-molecular-figure">
+      <svg
+        viewBox="0 0 440 296"
+        width="100%"
+        role="img"
+        aria-label={`${spec.formula}, ${spec.shape}, bond angle ${spec.angle}, ${spec.lonePairs} lone pairs, ${spec.polar ? 'polar' : 'non-polar'}.`}
+      >
       {domains.map((item) => {
         const x = cx + item.x * radius,
           y = cy - item.y * radius,
@@ -164,32 +158,32 @@ export function MolecularGeometryProjectedScene({
           </g>
         );
       })}
-      <circle cx={cx} cy={cy} r="28" fill="url(#atom-core)" stroke="var(--stage-fg)" strokeWidth="2" />
-      <text x={cx} y={cy + 7} textAnchor="middle" fontSize="19" fontWeight="900" fill="white">
+      <circle
+        cx={cx}
+        cy={cy}
+        r="30"
+        fill="var(--stage-accent)"
+        stroke="color-mix(in oklab, var(--stage-accent) 60%, var(--stage-fg))"
+        strokeWidth="3"
+      />
+      <text
+        x={cx}
+        y={cy + 7}
+        textAnchor="middle"
+        fontSize="19"
+        fontWeight="900"
+        fill="var(--stage-accent-fg, white)"
+        stroke="color-mix(in oklab, var(--stage-fg) 28%, transparent)"
+        strokeWidth="0.75"
+        paintOrder="stroke"
+      >
         {spec.central}
       </text>
-      <DiagramLabel
-        x={16}
-        y={24}
-        text="perspective projection · rotate to resolve depth"
-        tone="muted"
-        fontSize={11}
-        fontWeight={500}
-        anchor="start"
-        bounds={{ left: 8, right: 432, top: 8, bottom: 332 }}
-      />
-      <DiagramLabel
-        x={424}
-        y={326}
-        text="VSEPR predicts approximate geometry, not a rigid sculpture"
-        tone="muted"
-        fontSize={10}
-        fontWeight={500}
-        anchor="end"
-        maxChars={52}
-        bounds={{ left: 8, right: 432, top: 8, bottom: 332 }}
-      />
-    </svg>
+      </svg>
+      <figcaption>
+        Rotate to resolve depth. VSEPR predicts an approximate geometry, not a rigid sculpture.
+      </figcaption>
+    </figure>
   );
 }
 
@@ -273,31 +267,28 @@ export function MolecularGeometryLab({
           options={KEYS.map((item) => ({ value: item, label: MOLECULES[item].formula }))}
         />
       </Field>
-      <Field label="model layers">
-        <span className="lab-field-row">
-          <Chip selected={showLonePairs} onClick={() => setShowLonePairs(!showLonePairs)}>
-            lone pairs
-          </Chip>
-          <Chip selected={showDomains} onClick={() => setShowDomains(!showDomains)}>
-            electron domains
-          </Chip>
-          <Chip selected={showDipoles} onClick={() => setShowDipoles(!showDipoles)}>
-            bond dipoles
-          </Chip>
-          <Chip
-            selected={showHybridOrbitals}
-            disabled={!hasDirectionalHybridModel(spec)}
-            onClick={() => setShowHybridOrbitals(!showHybridOrbitals)}
-          >
-            hybrid directions
-          </Chip>
-        </span>
-        <small className="lab-field-help">
-          {hasDirectionalHybridModel(spec)
-            ? 'Layer controls reveal the same molecular geometry; they do not change its shape.'
-            : 'Expanded-octet hybrid labels are bookkeeping; this model does not draw literal d-orbital mixtures.'}
-        </small>
-      </Field>
+      <div className="chem-molecular-layers">
+        <Field label="visible layers">
+          <span className="lab-field-row">
+            <Chip selected={showLonePairs} onClick={() => setShowLonePairs(!showLonePairs)}>
+              lone pairs
+            </Chip>
+            <Chip selected={showDomains} onClick={() => setShowDomains(!showDomains)}>
+              domains
+            </Chip>
+            <Chip selected={showDipoles} onClick={() => setShowDipoles(!showDipoles)}>
+              dipoles
+            </Chip>
+            <Chip
+              selected={showHybridOrbitals}
+              disabled={!hasDirectionalHybridModel(spec)}
+              onClick={() => setShowHybridOrbitals(!showHybridOrbitals)}
+            >
+              hybrid model
+            </Chip>
+          </span>
+        </Field>
+      </div>
       <Field label="horizontal rotation" value={`${yaw}°`}>
         <Slider
           value={yaw}

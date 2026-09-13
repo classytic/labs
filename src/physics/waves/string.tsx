@@ -17,7 +17,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { CanvasLayer, type CoordinateSystem } from '@classytic/stage';
 import { useFrameTick } from '../../kit/anim.js';
-import { Chip, Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Chip, Segmented, Slider } from '../../kit/controls.js';
 import { Field } from '../../kit/frame.js';
 import { useHints, HintLadder } from '../../kit/pedagogy.js';
 import { usePlayGate } from '../../kit/play.js';
@@ -226,7 +226,7 @@ export function StringReflectionLab({
   const controls = (
     <>
       <Field label="mode">
-        <Segmented
+        <ActivitySelect
           ariaLabel="mode"
           value={mode}
           onChange={setMode}

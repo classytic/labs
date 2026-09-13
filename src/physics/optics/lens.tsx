@@ -18,7 +18,7 @@
 import { useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 import { thinOptic } from './core.js';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field } from '../../kit/frame.js';
 import { ImagingActivity } from './imaging-activity.js';
 import { useChallenge, ChallengeCard, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
@@ -346,7 +346,7 @@ export function LensImagingLab({
   const controls = (
     <>
       <Field label="lens">
-        <Segmented
+        <ActivitySelect
           ariaLabel="lens"
           value={lens}
           onChange={setLens}

@@ -16,7 +16,7 @@
 import { useRef, useState, type ReactNode } from 'react';
 import { galvanicCell, type HalfCell } from '@classytic/stage/chem';
 import { ActivitySelect, Slider } from '../../kit/controls.js';
-import { Field, Readout } from '../../kit/frame.js';
+import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { useFrameTick } from '../../kit/anim.js';
 import { usePlayGate, PlayWrap } from '../../kit/play.js';
 import { Tex } from '../../core/tex.js';
@@ -207,7 +207,6 @@ export function ElectrochemLab({
   ): ReactNode => {
     const bx = x - beakW / 2;
     const inward = role === 'anode' ? 1 : -1; // the labels sit on the wire-free side of the electrode
-    const equation = role === 'anode' ? `${metal} → ${m.ion} + ${m.z}e⁻` : `${m.ion} + ${m.z}e⁻ → ${metal}`;
     const ionColor = shade(m.liquid, 80);
     return (
       <g>
@@ -253,7 +252,7 @@ export function ElectrochemLab({
           {m.ion} · {conc.toFixed(conc < 0.1 ? 3 : 2)} M
         </FigText>
         <FigText x={x} y={beakBot + 34} anchor="middle" size="note" tone="soft">
-          {role === 'anode' ? 'oxidation' : 'reduction'} · {equation}
+          {role === 'anode' ? 'oxidation' : 'reduction'}
         </FigText>
       </g>
     );
@@ -261,11 +260,11 @@ export function ElectrochemLab({
 
   const figure = (
     <PlayWrap gate={gate}>
-      <div
-        className="chem-scene chem-electrochem-scene chem-wide-scene"
-        role="region"
-        aria-label="Galvanic cell diagram; scroll horizontally on a narrow screen"
-        tabIndex={0}
+      <SceneViewport
+        className="chem-scene chem-electrochem-scene"
+        size="wide"
+        overflow="scroll"
+        label="Galvanic cell diagram. Pan horizontally on a narrow screen."
       >
         <Figure
           viewBox={[W, H]}
@@ -366,17 +365,8 @@ export function ElectrochemLab({
             {E.toFixed(2)} V
           </FigText>
 
-          {/* legend */}
-          <Particle x={Lx - beakW / 2 + 6} y={H - 10} r={4} color={HUE[2]} />
-          <FigText x={Lx - beakW / 2 + 16} y={H - 10} baseline="middle" size="note" tone="soft">
-            electrons in the wire
-          </FigText>
-          <Particle x={Lx - beakW / 2 + 156} y={H - 10} r={4} color={HUE[3]} />
-          <FigText x={Lx - beakW / 2 + 166} y={H - 10} baseline="middle" size="note" tone="soft">
-            ions in the salt bridge
-          </FigText>
         </Figure>
-      </div>
+      </SceneViewport>
     </PlayWrap>
   );
 

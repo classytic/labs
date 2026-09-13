@@ -45,19 +45,18 @@ export function GridPathLab({
       </Activity.Header>
       <Activity.Status>
         <span className="lab-chip">
-          State{' '}
           <strong>
             dp[{current.row + 1}][{current.col + 1}]
           </strong>
         </span>
         <span className="lab-chip">
-          Rule <strong>top + left</strong>
+          <strong>top + left</strong>
         </span>
       </Activity.Status>
       <Activity.Workspace>
         <Activity.Canvas label="Dynamic programming table">
           <div className="dp-board">
-            <div className="dp-mission">
+            <div className="dp-mission" aria-label="Route from start to goal">
               <span>
                 <strong>Start</strong> top-left
               </span>
@@ -66,7 +65,7 @@ export function GridPathLab({
                 <strong>Goal</strong> bottom-right
               </span>
             </div>
-            <output className="dp-mission" aria-live="polite">
+            <output className="dp-calculation" aria-live="polite">
               {current.dependencies.length === 2
                 ? `dp[${current.row + 1}][${current.col + 1}] = ${revealed.get(`${current.row - 1}:${current.col}`)} + ${revealed.get(`${current.row}:${current.col - 1}`)} = ${current.value}`
                 : `dp[${current.row + 1}][${current.col + 1}] = ${current.value} · boundary base case`}

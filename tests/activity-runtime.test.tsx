@@ -1,12 +1,12 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Activity } from '../src/kit/activity.js';
 import { ControlPolicy, Field } from '../src/kit/frame.js';
 import { GuideNav, type Guide } from '../src/kit/guide.js';
 import { LearningSequenceNav, type LearningSequence } from '../src/kit/learning-sequence.js';
 import { BreakEvenLab } from '../src/commerce/finance/break-even.js';
 import { JournalPosterLab } from '../src/commerce/accounting/journal-poster.js';
-import { Segmented, Slider, Stepper } from '../src/kit/controls.js';
+import { AssessedChoiceGroup, Segmented, Slider, Stepper } from '../src/kit/controls.js';
 import { DecisionDeck } from '../src/commerce/activity.js';
 
 afterEach(() => {
@@ -226,6 +226,33 @@ describe('shared activity runtime', () => {
       />,
     );
     expect(screen.getByRole('button', { name: 'Pendulum' }).getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('keeps host radio groups controlled from the unanswered state in React 19', () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    let value: 'left' | 'right' | undefined;
+    const options = [
+      { value: 'left', label: 'Left' },
+      { value: 'right', label: 'Right' },
+    ] as const;
+    const renderChoices = () => (
+      <AssessedChoiceGroup
+        value={value}
+        options={options}
+        ariaLabel="direction"
+        onChange={(next) => {
+          value = next;
+        }}
+      />
+    );
+    const { rerender } = render(renderChoices());
+
+    fireEvent.click(screen.getByRole('radio', { name: 'Right' }));
+    rerender(renderChoices());
+
+    expect(value).toBe('right');
+    expect(error.mock.calls.some((call) => String(call[0]).includes('uncontrolled value state'))).toBe(false);
+    error.mockRestore();
   });
 
   it('separates continuous slider changes from committed learner choices', () => {

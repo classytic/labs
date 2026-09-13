@@ -90,13 +90,122 @@
 .chem-pressure-gauge {
   position: absolute;
   top: 0.625rem;
-  right: 0.75rem;
+  left: 0.75rem;
   padding: var(--lab-sp-6) var(--lab-sp-10);
   border: 1px solid var(--stage-grid);
   border-radius: var(--lab-r-sm);
   background: color-mix(in oklab, var(--stage-bg) 80%, transparent);
   text-align: center;
   backdrop-filter: blur(6px);
+}
+.chem-molecular-figure {
+  display: grid;
+  min-height: 0;
+  margin: 0;
+  place-items: center;
+}
+.chem-molecular-figure > svg {
+  display: block;
+  width: min(100%, 38rem);
+  max-height: min(52cqh, 25rem);
+}
+.chem-molecular-figure > figcaption {
+  max-width: 54ch;
+  margin: 0 auto var(--lab-sp-8);
+  padding-inline: var(--lab-sp-12);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+  text-align: center;
+}
+.chem-molecular-layers {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.chem-molecular-layers .lab-field-row {
+  gap: var(--lab-sp-6);
+}
+.chem-orbital-overlap-figure,
+.chem-atomic-orbital-figure {
+  display: grid;
+  min-height: 0;
+  margin: 0;
+  place-items: center;
+}
+.chem-orbital-overlap-figure > svg,
+.chem-atomic-orbital-figure > svg {
+  display: block;
+  width: min(100%, 36rem);
+  max-height: min(48cqh, 22rem);
+}
+.chem-orbital-overlap-figure > figcaption,
+.chem-atomic-orbital-figure > figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lab-sp-4) var(--lab-sp-10);
+  max-width: 52ch;
+  margin: 0 auto var(--lab-sp-8);
+  padding-inline: var(--lab-sp-10);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+  text-align: center;
+}
+.chem-orbital-overlap-figure > figcaption strong {
+  color: var(--stage-fg);
+}
+.chem-orbital-axis {
+  stroke: var(--stage-grid);
+  stroke-width: 1;
+  stroke-dasharray: 4 7;
+}
+.chem-orbital-density {
+  fill: var(--stage-good);
+  opacity: 0.14;
+}
+.chem-orbital-lobe {
+  opacity: 0.58;
+  stroke: color-mix(in oklab, currentColor 20%, var(--stage-fg));
+  stroke-width: 1.5;
+}
+.chem-orbital-nucleus {
+  fill: var(--stage-bg);
+  stroke: var(--stage-fg);
+  stroke-width: 2;
+}
+.chem-orbital-nucleus-label,
+.chem-orbital-node-label {
+  fill: var(--stage-fg);
+  font-size: 10px;
+  font-weight: 700;
+}
+.chem-orbital-node {
+  fill: color-mix(in oklab, var(--stage-danger, #e03131) 18%, transparent);
+  stroke: var(--stage-danger, #e03131);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+.chem-phase-dot {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-inline-end: var(--lab-sp-4);
+  border-radius: 999px;
+  background: var(--stage-accent);
+}
+.chem-phase-dot[data-phase="negative"] {
+  background: var(--stage-accent-2);
+}
+@container lab-activity (max-width: 34rem) {
+  .chem-molecular-figure > svg {
+    max-height: 18rem;
+  }
+  .chem-orbital-overlap-figure > svg,
+  .chem-atomic-orbital-figure > svg {
+    max-height: 16rem;
+  }
 }
 .chem-pressure-gauge > div {
   color: var(--stage-fg);
@@ -136,15 +245,17 @@
   letter-spacing: var(--lab-ls-caps);
   text-align: center;
 }
+
+.chem-stoich-figure {
+  display: grid;
+  min-width: 0;
+  gap: var(--lab-sp-8);
+}
 .chem-equilibrium-scene,
 .chem-stoich-scene,
 .chem-titration-scene,
 .chem-kinetics-scene {
   min-width: 0;
-}
-.chem-wide-scene:focus-visible {
-  outline: 2px solid var(--stage-accent);
-  outline-offset: 2px;
 }
 .chem-stoich-scene svg,
 .chem-reaction-scene svg {
@@ -172,17 +283,6 @@
 }
 
 @media (max-width: 34rem) {
-  /* Dense apparatus + graph scenes remain readable instead of shrinking their
-     labels to ~5px. Compact chemistry scenes continue to scale fluidly. */
-  .chem-wide-scene {
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scrollbar-gutter: stable;
-  }
-  .chem-wide-scene > svg {
-    width: 38rem;
-    max-width: none;
-  }
   .chem-dilution-scene {
     grid-template-columns: 1fr;
   }

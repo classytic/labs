@@ -21,7 +21,7 @@
 import { useState, type ReactNode } from 'react';
 import { Stage, Grid, Axes, Segment, Polygon, Dot, Label, type Vec2 } from '@classytic/stage';
 import { Field } from '../../kit/frame.js';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Tex } from '../../core/tex.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
@@ -381,7 +381,7 @@ export function PowerLab({
   const controls = (
     <>
       <Field label="situation">
-        <Segmented
+        <ActivitySelect
           ariaLabel="situation"
           value={mode}
           onChange={setMode}

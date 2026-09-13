@@ -19,7 +19,7 @@
 
 import { useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field } from '../../kit/frame.js';
 import { thermalColor } from '../../kit/thermal.js';
 import { Tex } from '../../core/tex.js';
@@ -270,7 +270,7 @@ export function EntropyLab({
     <>
       <>
         <Field label="process">
-          <Segmented
+          <ActivitySelect
             ariaLabel="process"
             value={mode}
             onChange={setMode}

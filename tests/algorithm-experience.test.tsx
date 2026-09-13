@@ -4,6 +4,7 @@ import { GraphAlgorithmLab } from '../src/algorithms/GraphAlgorithmLab.js';
 import { GridPathLab } from '../src/algorithms/GridPathLab.js';
 import { TreeQuestLab } from '../src/algorithms/TreeQuestLab.js';
 import { HeapQuestLab } from '../src/algorithms/HeapQuestLab.js';
+import { SortingLab } from '../src/algorithms/SortingLab.js';
 
 describe('algorithm learning experience', () => {
   it('pauses Dijkstra at a meaningful frontier choice', () => {
@@ -95,5 +96,15 @@ describe('algorithm learning experience', () => {
     expect(screen.getByText('Transfer')).toBeTruthy();
     fireEvent.click(screen.getByRole('radio', { name: 'No' }));
     expect(screen.getByText(/parent–child priority, not global sorted order/)).toBeTruthy();
+  });
+
+  it('supports keyboard trace navigation while focus stays inside the activity', () => {
+    render(<SortingLab values={[2, 1]} predict={false} showCosts={false} />);
+    const next = screen.getByRole('button', { name: 'Next step' });
+    next.focus();
+
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+    expect(screen.getByText('2/4')).toBeTruthy();
   });
 });

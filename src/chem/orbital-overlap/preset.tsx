@@ -1,7 +1,7 @@
 'use client';
 import { useState, type ComponentType, type ReactNode } from 'react';
 import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js';
-import { Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { orbitalOverlapActivity } from './activity.js';
 import { OVERLAP_FACTS, overlapStrength, type OverlapMode, type OverlapPhase } from './core.js';
@@ -32,47 +32,63 @@ export function OrbitalOverlapProjectedScene({
     s = mode === 's-s-sigma',
     gap = 52 + separation * 24,
     same = phase === 'bonding';
+  const phaseFor = (side: number, lobe: number): 'primary' | 'secondary' => {
+    const flipped = side === 1 && !same;
+    return (lobe < 0) !== flipped ? 'secondary' : 'primary';
+  };
+  const fillFor = (tone: 'primary' | 'secondary'): string =>
+    tone === 'primary' ? 'var(--stage-accent)' : 'var(--stage-accent-2)';
   return (
-    <svg
-      viewBox="0 0 560 300"
-      width="100%"
-      role="img"
-      aria-label={`${OVERLAP_FACTS[mode].label}, ${phase} overlap`}
-    >
-      <line x1="55" y1="150" x2="505" y2="150" stroke="var(--stage-grid)" strokeDasharray="5 5" />
-      {[-1, 1].map((side) => (
-        <g key={side} transform={`translate(${280 + side * gap} 150)`}>
-          {(s ? [0] : pi ? [-1, 1] : [side]).map((v, i) => (
-            <ellipse
-              key={i}
-              cx={pi ? 0 : v * 36}
-              cy={pi ? v * 48 : 0}
-              rx={pi ? 42 : s ? 48 : 55}
-              ry={pi ? 30 : s ? 42 : 28}
-              fill={(side === 1 && !same) || (pi && v < 0) ? 'var(--stage-accent-2)' : 'var(--stage-accent)'}
-              opacity=".5"
-            />
-          ))}
-          <circle r="7" fill="var(--stage-warn)" />
-        </g>
-      ))}
-      {phase === 'antibonding' && (
-        <line
-          x1="280"
-          y1="55"
-          x2="280"
-          y2="245"
-          stroke="var(--stage-fg)"
-          strokeWidth="2"
-          strokeDasharray="5 5"
-        />
-      )}
-      <text x="280" y="278" textAnchor="middle" fill="var(--stage-muted)" fontSize="12">
-        {phase === 'bonding'
-          ? 'constructive overlap · density builds between nuclei'
-          : 'destructive overlap · node between nuclei'}
-      </text>
-    </svg>
+    <figure className="chem-orbital-overlap-figure">
+      <svg
+        viewBox="0 0 560 250"
+        width="100%"
+        role="img"
+        aria-label={`${OVERLAP_FACTS[mode].label}, ${phase} overlap`}
+      >
+        <line x1="58" y1="125" x2="502" y2="125" className="chem-orbital-axis" />
+        {phase === 'bonding' && (
+          <ellipse
+            cx="280"
+            cy="125"
+            rx={Math.max(18, gap - 34)}
+            ry={pi ? 34 : 22}
+            className="chem-orbital-density"
+          />
+        )}
+        {[-1, 1].map((side) => (
+          <g key={side} transform={`translate(${280 + side * gap} 125)`}>
+            {(s ? [0] : pi ? [-1, 1] : [side]).map((v, i) => (
+              <ellipse
+                key={i}
+                cx={pi ? 0 : v * 34}
+                cy={pi ? v * 43 : 0}
+                rx={pi ? 43 : s ? 45 : 54}
+                ry={pi ? 27 : s ? 39 : 27}
+                fill={fillFor(phaseFor(side, pi ? v : side))}
+                className="chem-orbital-lobe"
+              />
+            ))}
+            <circle r="9" className="chem-orbital-nucleus" />
+            <text y="4" textAnchor="middle" className="chem-orbital-nucleus-label">
+              {side < 0 ? 'A' : 'B'}
+            </text>
+          </g>
+        ))}
+        {phase === 'antibonding' && (
+          <g>
+            <rect x="274" y="30" width="12" height="190" rx="6" className="chem-orbital-node" />
+            <text x="280" y="22" textAnchor="middle" className="chem-orbital-node-label">
+              node
+            </text>
+          </g>
+        )}
+      </svg>
+      <figcaption>
+        <strong>{same ? 'Constructive overlap' : 'Destructive overlap'}</strong>
+        <span>{same ? 'Electron density joins the nuclei.' : 'A nodal plane separates the nuclei.'}</span>
+      </figcaption>
+    </figure>
   );
 }
 export function OrbitalOverlapLab({
@@ -96,7 +112,7 @@ export function OrbitalOverlapLab({
   const controls = (
     <>
       <Field label="overlap">
-        <Segmented
+        <ActivitySelect
           ariaLabel="overlap"
           value={mode}
           onChange={setMode}
@@ -107,7 +123,7 @@ export function OrbitalOverlapLab({
         />
       </Field>
       <Field label="relative phase">
-        <Segmented
+        <ActivitySelect
           ariaLabel="relative phase"
           value={phase}
           onChange={setPhase}

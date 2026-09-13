@@ -17,7 +17,7 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { solveStoichiometry, type StoichSpecies } from '@classytic/stage/chem';
 import { ActivitySelect, Slider } from '../../kit/controls.js';
-import { Field, Readout } from '../../kit/frame.js';
+import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity, AuthoredChoiceQuestion } from '../../kit/activity-authoring.js';
 import {
@@ -257,18 +257,19 @@ export function StoichiometryLab({
   const trayW = TOK_GAP * 2 + TOK_R * 2 + 20;
 
   const figure = (
-    <div
-      className="chem-scene chem-stoich-scene chem-wide-scene"
-      role="region"
-      aria-label="Stoichiometric reaction trays; scroll horizontally on a narrow screen"
-      tabIndex={0}
-    >
+    <div className="chem-stoich-figure">
       <div className="chem-reaction-equation">{eqn(rx)}</div>
-      <Figure
-        viewBox={[W, H]}
-        domain="chem"
-        label={`limiting reagent ${res.limiting.join(' and ')}, ${fmt(res.products[0]!.moles)} mol product`}
+      <SceneViewport
+        className="chem-scene chem-stoich-scene"
+        size="strip"
+        overflow="scroll"
+        label="Stoichiometric reaction trays. Pan horizontally on a narrow screen."
       >
+        <Figure
+          viewBox={[W, H]}
+          domain="chem"
+          label={`limiting reagent ${res.limiting.join(' and ')}, ${fmt(res.products[0]!.moles)} mol product`}
+        >
         {rx.reactants.map((s, i) => {
           const isLim = res.limiting.includes(s.name);
           const cx = rXs[i]!;
@@ -323,7 +324,8 @@ export function StoichiometryLab({
             +
           </FigText>
         )}
-      </Figure>
+        </Figure>
+      </SceneViewport>
     </div>
   );
 

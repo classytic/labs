@@ -233,4 +233,25 @@ describe('exam question learner path', () => {
     expect(view.queryByLabelText('Answer to part b')).toBeNull();
     expect(view.getByText(/Write your answer on paper/)).toBeTruthy();
   });
+
+  it('lets a stuck learner open the mark scheme without guessing first', () => {
+    // The scheme used to appear only on a correct answer or after two submitted attempts, and
+    // nothing on screen said so. A learner who could not start the part had nothing to submit,
+    // so the question was a dead end for exactly the learner who needed the scheme.
+    const view = render(<ExamQuestion stem="A circle." parts={[radiusPart]} />);
+    expect(view.queryByText(/radius = diameter \/ 2/)).toBeNull();
+
+    fireEvent.click(view.getByRole('button', { name: 'Show mark scheme' }));
+    expect(view.getByText(/radius = diameter \/ 2/)).toBeTruthy();
+  });
+
+  it('awards nothing for a revealed part, and says so', () => {
+    const view = render(<ExamQuestion stem="A circle." parts={[radiusPart]} />);
+    fireEvent.click(view.getByRole('button', { name: 'Show mark scheme' }));
+    // The running total must not move: seeing the answer is not earning it.
+    expect(view.container.querySelector('.lab-activity-status strong')?.textContent).toBe('0 / 2');
+    expect(view.getByText(/No marks for this part/)).toBeTruthy();
+    // And the part is closed, so the learner is not invited to type an answer they have just read.
+    expect((view.getByLabelText('Answer to part a') as HTMLInputElement).disabled).toBe(true);
+  });
 });

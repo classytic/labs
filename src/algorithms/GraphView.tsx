@@ -25,7 +25,7 @@ export function GraphView({
   const pathEdges = new Set(path.slice(1).map((id, index) => `${path[index]}:${id}`));
   return (
     <div className="algorithm-graph">
-      <svg viewBox="0 0 100 100" role="img" aria-label="Algorithm graph">
+      <svg className="algorithm-scene-svg" viewBox="0 0 100 100" role="img" aria-label="Algorithm graph">
         <defs>
           <marker
             id={markerId}
@@ -65,11 +65,11 @@ export function GraphView({
                 markerEnd={edge.directed ? `url(#${markerId})` : undefined}
               />
               <text
+                className="algorithm-scene-meta"
                 x={labelX}
                 y={labelY}
                 textAnchor="middle"
                 dominantBaseline="central"
-                style={{ fontSize: '3.4px' }}
               >
                 {edge.weight ?? 1}
               </text>
@@ -86,11 +86,11 @@ export function GraphView({
             data-discovered={discovered.has(node.id) || undefined}
           >
             <circle r="7" />
-            <text textAnchor="middle" dominantBaseline="central" style={{ fontSize: '4.2px' }}>
+            <text className="algorithm-scene-label" textAnchor="middle" dominantBaseline="central">
               {node.label ?? node.id}
             </text>
             {distances && (
-              <text className="algorithm-distance" textAnchor="middle" y="12" style={{ fontSize: '3.2px' }}>
+              <text className="algorithm-distance algorithm-scene-meta" textAnchor="middle" y="12">
                 {Number.isFinite(distances[node.id]!) ? distances[node.id] : '∞'}
               </text>
             )}

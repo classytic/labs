@@ -142,13 +142,13 @@ export function TreeScene({ tree, event, visited = new Set(), onNodeSelect }: Tr
 
   const vb = large ? view : box;
   return (
-    <div className="tree-scene" data-pannable={large || undefined} style={{ position: 'relative' }}>
+    <div className="tree-scene" data-pannable={large || undefined}>
       <svg
         ref={svgRef}
         viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`}
         preserveAspectRatio="xMidYMid meet"
-        role="tree"
-        aria-orientation="vertical"
+        role={onNodeSelect ? 'tree' : 'img'}
+        aria-orientation={onNodeSelect ? 'vertical' : undefined}
         aria-label="Binary tree visualization"
         onWheel={onWheel}
         onPointerDown={onPointerDown}
@@ -187,16 +187,20 @@ export function TreeScene({ tree, event, visited = new Set(), onNodeSelect }: Tr
               transform={`translate(${position.x} ${position.y})`}
               data-current={node.id === current || undefined}
               data-visited={visited.has(node.id) || undefined}
-              role="treeitem"
-              aria-level={position.depth + 1}
+              role={onNodeSelect ? 'treeitem' : undefined}
+              aria-level={onNodeSelect ? position.depth + 1 : undefined}
               aria-label={`Node ${node.value}, depth ${position.depth}`}
               tabIndex={onNodeSelect ? (node.id === focusId ? 0 : -1) : undefined}
-              onFocus={() => setFocusId(node.id)}
-              onClick={() => {
-                setFocusId(node.id);
-                onNodeSelect?.(node.id);
-              }}
-              onKeyDown={(key) => onNodeKeyDown(key, node.id)}
+              onFocus={onNodeSelect ? () => setFocusId(node.id) : undefined}
+              onClick={
+                onNodeSelect
+                  ? () => {
+                      setFocusId(node.id);
+                      onNodeSelect(node.id);
+                    }
+                  : undefined
+              }
+              onKeyDown={onNodeSelect ? (key) => onNodeKeyDown(key, node.id) : undefined}
             >
               <circle className="tree-node-halo" r={R_HALO} />
               <circle className="tree-node-face" r={R_FACE} />
@@ -212,11 +216,10 @@ export function TreeScene({ tree, event, visited = new Set(), onNodeSelect }: Tr
           type="button"
           variant="outline"
           size="icon-sm"
-          className="lab-icon-button"
           onClick={() => setView(box)}
           title="Fit tree to view"
           aria-label="Fit tree to view"
-          style={{ position: 'absolute', top: 8, right: 8 }}
+          className="lab-icon-button tree-fit-button"
         >
           <Maximize2 aria-hidden="true" />
         </Button>

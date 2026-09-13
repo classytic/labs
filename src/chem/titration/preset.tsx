@@ -16,8 +16,8 @@
 
 import { useMemo, useState, type ReactNode } from 'react';
 import { titrationCurve, pHAt, type TitrationSpec } from '@classytic/stage/chem';
-import { ActivitySelect, Segmented, Slider } from '../../kit/controls.js';
-import { Field, Readout } from '../../kit/frame.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
+import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity, AuthoredChoiceQuestion } from '../../kit/activity-authoring.js';
 import { Tex } from '../../core/tex.js';
@@ -256,11 +256,11 @@ export function TitrationLab({
   ];
 
   const figure = (
-    <div
-      className="chem-scene chem-titration-scene chem-wide-scene"
-      role="region"
-      aria-label="Titration apparatus and pH curve; scroll horizontally on a narrow screen"
-      tabIndex={0}
+    <SceneViewport
+      className="chem-scene chem-titration-scene"
+      size="wide"
+      overflow="scroll"
+      label="Titration apparatus and pH curve. Pan horizontally on a narrow screen."
     >
       <Figure
         viewBox={[W, H]}
@@ -312,8 +312,10 @@ export function TitrationLab({
           fill={flaskFill}
           liquid={indicatorVisual.color}
           liquidOpacity={0.85}
-          label={`${indicatorSpec.label} · ${indicatorVisual.description}`}
         />
+        <FigText x={burX} y={flaskTop + flaskH - 10} anchor="middle" size="note">
+          pH {pH.toFixed(2)}
+        </FigText>
 
         {/* ── pH curve ── */}
         <PlotFrame
@@ -363,7 +365,7 @@ export function TitrationLab({
           <Ball cx={PXv(vAddedMl)} cy={PYp(pH)} r={7} color={indicatorVisual.color} active />
         </PlotFrame>
       </Figure>
-    </div>
+    </SceneViewport>
   );
 
   const evidence = (
@@ -418,7 +420,7 @@ export function TitrationLab({
   const controls = (
     <>
       <Field label="acid in the flask">
-        <Segmented
+        <ActivitySelect
           ariaLabel="acid in the flask"
           value={analyte}
           onChange={setAnalyte}

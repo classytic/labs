@@ -19,7 +19,7 @@
 
 import { useRef, useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { ActivitySelect, Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, type ControlConfig } from '../../kit/frame.js';
 import { useFrameTick } from '../../kit/anim.js';
 import { usePlayGate } from '../../kit/play.js';
@@ -494,7 +494,7 @@ export function HeatTransferLab({
           />
         </Field>
         <Field label="surface">
-          <Segmented
+          <ActivitySelect
             ariaLabel="surface"
             value={emiss > 0.5 ? 'matte' : 'shiny'}
             onChange={(v) => setEmiss(v === 'matte' ? 1 : 0.1)}

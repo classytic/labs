@@ -3,7 +3,7 @@
 import { useMemo, useState, type ComponentType, type ReactNode } from 'react';
 import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { ActivitySelect, Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { atomicOrbitalActivity } from './activity.js';
 import { orbitalCloud, orbitalFacts, projectOrbital, type OrbitalKind } from './core.js';
@@ -46,38 +46,34 @@ export function AtomicOrbitalProjectedScene({
   );
   const visible = view === 'cloud' ? points : points.filter((point) => Math.abs(point.depth) < 0.18);
   return (
-    <svg
-      viewBox="0 0 420 340"
-      width="100%"
-      role="img"
-      aria-label={`${kind} orbital probability ${view}; ${facts.radialNodes} radial and ${facts.angularNodes} angular nodes`}
-    >
-      <defs>
-        <radialGradient id="orbital-nucleus">
-          <stop offset="0" stopColor="white" />
-          <stop offset="1" stopColor="var(--stage-warn)" />
-        </radialGradient>
-      </defs>
-      <line x1="28" y1="170" x2="392" y2="170" stroke="var(--stage-grid)" strokeDasharray="3 5" />
-      <line x1="210" y1="18" x2="210" y2="322" stroke="var(--stage-grid)" strokeDasharray="3 5" />
-      {visible.map((point, index) => (
-        <circle
-          key={index}
-          cx={point.px}
-          cy={point.py}
-          r={view === 'cloud' ? 1.9 : 2.7}
-          fill={point.phase > 0 ? 'var(--stage-accent)' : 'var(--stage-accent-2)'}
-          opacity={Math.min(0.78, 0.15 + point.density * 0.7)}
-        />
-      ))}
-      <circle cx="210" cy="170" r="7" fill="url(#orbital-nucleus)" stroke="var(--stage-fg)" strokeWidth="1" />
-      <text x="16" y="24" fill="var(--stage-muted)" fontSize="11">
-        sampled |ψ|² · colour = sign of ψ
-      </text>
-      <text x="404" y="326" textAnchor="end" fill="var(--stage-muted)" fontSize="10">
-        rotate the coordinate model, not an electron path
-      </text>
-    </svg>
+    <figure className="chem-atomic-orbital-figure">
+      <svg
+        viewBox="0 0 420 300"
+        width="100%"
+        role="img"
+        aria-label={`${kind} orbital probability ${view}; ${facts.radialNodes} radial and ${facts.angularNodes} angular nodes`}
+      >
+        <line x1="28" y1="150" x2="392" y2="150" className="chem-orbital-axis" />
+        <line x1="210" y1="18" x2="210" y2="282" className="chem-orbital-axis" />
+        {visible.map((point, index) => (
+          <circle
+            key={index}
+            cx={point.px}
+            cy={point.py - 20}
+            r={view === 'cloud' ? 2.1 : 2.8}
+            fill={point.phase > 0 ? 'var(--stage-accent)' : 'var(--stage-accent-2)'}
+            opacity={Math.min(0.82, 0.2 + point.density * 0.68)}
+          />
+        ))}
+        <circle cx="210" cy="150" r="9" className="chem-orbital-nucleus" />
+        <circle cx="210" cy="150" r="3" fill="var(--stage-bg)" />
+      </svg>
+      <figcaption>
+        <span><i className="chem-phase-dot" data-phase="positive" />positive phase</span>
+        <span><i className="chem-phase-dot" data-phase="negative" />negative phase</span>
+        <span>Dots sample |ψ|²—not an electron path.</span>
+      </figcaption>
+    </figure>
   );
 }
 
@@ -148,7 +144,7 @@ export function AtomicOrbitalLab({
         />
       </Field>
       <Field label="representation">
-        <Segmented
+        <ActivitySelect
           ariaLabel="representation"
           value={view}
           onChange={setView}

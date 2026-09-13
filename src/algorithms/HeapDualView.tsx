@@ -34,7 +34,12 @@ export function HeapDualView({
   return (
     <div className="heap-dual-view">
       <div className="heap-tree">
-        <svg viewBox="0 0 100 100" role="img" aria-label={`Heap tree with ${items.length} items`}>
+        <svg
+          className="algorithm-scene-svg"
+          viewBox="0 0 100 100"
+          role="img"
+          aria-label={`Heap tree with ${items.length} items`}
+        >
           {items.slice(1).map((_item, index) => {
             const child = index + 1;
             const parent = Math.floor((child - 1) / 2);
@@ -72,10 +77,10 @@ export function HeapDualView({
                 }}
               >
                 <circle r="6" />
-                <text textAnchor="middle" dominantBaseline="central" style={{ fontSize: '4.2px' }}>
+                <text className="algorithm-scene-label" textAnchor="middle" dominantBaseline="central">
                   {item.value}
                 </text>
-                <text className="heap-node-index" textAnchor="middle" y="10.5" style={{ fontSize: '3.2px' }}>
+                <text className="heap-node-index algorithm-scene-meta" textAnchor="middle" y="10.5">
                   [{index}]
                 </text>
               </g>
@@ -83,13 +88,12 @@ export function HeapDualView({
           })}
         </svg>
       </div>
-      <div className="heap-array" role="list" aria-label="Heap array, zero based">
+      <div className="heap-array" role="group" aria-label="Heap array, zero based">
         {items.map((item, index) => (
           <Button
             type="button"
             variant="outline"
             size="sm"
-            role="listitem"
             key={item.id}
             data-active={active.has(index) || undefined}
             data-selected={selectedId === item.id || undefined}

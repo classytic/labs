@@ -67,9 +67,11 @@ export function Derivation({
   const [solved, setSolved] = useState(false);
   const [raw, setRaw] = useState('');
   const [missed, setMissed] = useState(0);
+  const [revealed, setRevealed] = useState(false);
   useEffect(() => {
     setStep(showAll ? all.length - 1 : 0);
     setSolved(false);
+    setRevealed(false);
   }, [showAll, all.length]);
 
   // A one-line derivation has nothing to withhold, and `showAll` is for print and review.
@@ -119,7 +121,9 @@ export function Derivation({
       <Activity.Status>
         <strong>{showAll ? 'Complete derivation' : `Step ${shown.length}`}</strong>
         <span>{all.length} lines</span>
-        {graded ? <span>{solved ? 'you finished it' : 'last line is yours'}</span> : null}
+        {graded ? (
+          <span>{!solved ? 'last line is yours' : revealed ? 'last line shown' : 'you finished it'}</span>
+        ) : null}
       </Activity.Status>
       <Activity.Workspace>
         <Activity.Canvas label="Derivation steps">{figure}</Activity.Canvas>
@@ -128,7 +132,7 @@ export function Derivation({
             <p className="math-derivation-ask">
               {missed >= 2
                 ? 'Still not it. Type the last line, or show it and study what you missed.'
-                : 'The last line is yours. What does it come to?'}
+                : 'The last line is yours. What does it come to? Show it if you are stuck.'}
             </p>
             <div className="lab-field-row">
               <Input
@@ -151,19 +155,21 @@ export function Derivation({
               >
                 Check
               </Button>
-              {missed >= 2 ? (
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => {
-                    setSolved(true);
-                    setStep(last);
-                  }}
-                >
-                  Show me
-                </Button>
-              ) : null}
+              {/* Not gated behind two wrong guesses. A learner who cannot see how to finish the
+                  derivation has nothing to type, so a reveal that unlocks only after two
+                  submitted answers is one they can never unlock. */}
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={() => {
+                  setRevealed(true);
+                  setSolved(true);
+                  setStep(last);
+                }}
+              >
+                Show the last line
+              </Button>
             </div>
             {missed > 0 ? (
               <p className="math-derivation-verdict">

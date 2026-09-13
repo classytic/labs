@@ -21,7 +21,7 @@ import { useRef, useState, type ReactNode } from 'react';
 import { EquilibriumCore, type EquilibriumState, type RxnSpecies } from '@classytic/stage/sim';
 import { useFrameTick } from '../../kit/anim.js';
 import { Chip, IconButton, Segmented } from '../../kit/controls.js';
-import { Field, Readout } from '../../kit/frame.js';
+import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { usePlayGate, PlayWrap } from '../../kit/play.js';
 import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
@@ -240,11 +240,11 @@ export function LeChatelierLab({
 
   const figure = (
     <PlayWrap gate={gate}>
-      <div
-        className="chem-scene chem-equilibrium-scene chem-wide-scene"
-        role="region"
-        aria-label="Equilibrium vessel and concentration graph; scroll horizontally on a narrow screen"
-        tabIndex={0}
+      <SceneViewport
+        className="chem-scene chem-equilibrium-scene"
+        size="wide"
+        overflow="scroll"
+        label="Equilibrium vessel and concentration graph. Pan horizontally on a narrow screen."
       >
         <Figure
           viewBox={[W, H]}
@@ -330,17 +330,8 @@ export function LeChatelierLab({
             <Marker x={nowX} y={py(a)} color={reactantColor} r={4.5} />
             <Marker x={nowX} y={py(b)} color={productColor} r={4.5} />
           </PlotFrame>
-          {/* legend */}
-          <Particle x={GX0 + 6} y={GY1 + 46} r={5} color={reactantColor} />
-          <FigText x={GX0 + 16} y={GY1 + 46} baseline="middle" size="note" tone="soft">
-            {reactantName}
-          </FigText>
-          <Particle x={GX0 + 96} y={GY1 + 46} r={5} color={productColor} />
-          <FigText x={GX0 + 106} y={GY1 + 46} baseline="middle" size="note" tone="soft">
-            {productName}
-          </FigText>
         </Figure>
-      </div>
+      </SceneViewport>
     </PlayWrap>
   );
 

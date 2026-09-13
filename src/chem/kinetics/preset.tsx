@@ -20,7 +20,7 @@ import { useRef, useState, type ReactNode } from 'react';
 import { R, fractionAboveEa, halfLife, type RateOrder } from '@classytic/stage/chem';
 import { RotateCcw } from 'lucide-react';
 import { Slider, Segmented, IconButton } from '../../kit/controls.js';
-import { Field, Readout } from '../../kit/frame.js';
+import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { useFrameTick } from '../../kit/anim.js';
 import { usePlayGate, PlayWrap } from '../../kit/play.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
@@ -31,7 +31,6 @@ import {
   FigText,
   Glass,
   Ball,
-  Particle,
   PlotFrame,
   Curve,
   Area,
@@ -293,11 +292,11 @@ export function KineticsLab({
 
   const figure = (
     <PlayWrap gate={gate}>
-      <div
-        className="chem-scene chem-kinetics-scene chem-wide-scene"
-        role="region"
-        aria-label="Reaction vessel and molecular-energy diagram; scroll horizontally on a narrow screen"
-        tabIndex={0}
+      <SceneViewport
+        className="chem-scene chem-kinetics-scene"
+        size="wide"
+        overflow="scroll"
+        label="Reaction vessel and molecular-energy diagram. Pan horizontally on a narrow screen."
       >
         <Figure
           viewBox={[W, H]}
@@ -313,16 +312,6 @@ export function KineticsLab({
               <Ball key={i} cx={m.x} cy={m.y} r={5.5} color={m.b ? HUE[2] : HUE[1]} flash={m.flash} />
             ))}
           </Glass>
-          {/* legend */}
-          <Particle x={BX0 + 12} y={BY1 + 18} r={5} color={HUE[1]} />
-          <FigText x={BX0 + 22} y={BY1 + 18} baseline="middle" size="note" tone="soft">
-            A (reactant)
-          </FigText>
-          <Particle x={BX0 + 124} y={BY1 + 18} r={5} color={HUE[2]} />
-          <FigText x={BX0 + 134} y={BY1 + 18} baseline="middle" size="note" tone="soft">
-            B (product)
-          </FigText>
-
           {/* ── Maxwell–Boltzmann energy spread ── */}
           <PlotFrame
             x={MX0}
@@ -367,7 +356,7 @@ export function KineticsLab({
             {convPct}% converted
           </FigText>
         </Figure>
-      </div>
+      </SceneViewport>
     </PlayWrap>
   );
 

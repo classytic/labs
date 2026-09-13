@@ -44,6 +44,7 @@ export interface BearingsProps {
 }
 
 const C_LEG = 'var(--stage-accent)';
+const C_LEG_2 = 'var(--stage-success)';
 const C_HOME = 'var(--stage-warn)';
 const C_NORTH = 'var(--stage-muted)';
 
@@ -76,6 +77,22 @@ function NorthLine({ at, length }: { at: Point; length: number }): ReactNode {
       <Label x={at.east} y={at.north + length} text="N" color={C_NORTH} size={12} dy={-6} />
     </>
   );
+}
+
+function midpointLabel(
+  from: Point,
+  to: Point,
+  distance: number,
+  side: 1 | -1,
+): { x: number; y: number } {
+  const dx = to.east - from.east;
+  const dy = to.north - from.north;
+  const length = Math.hypot(dx, dy) || 1;
+  const offset = Math.max(distance * 0.08, 0.45);
+  return {
+    x: (from.east + to.east) / 2 + side * (-dy / length) * offset,
+    y: (from.north + to.north) / 2 + side * (dx / length) * offset,
+  };
 }
 
 export function BearingsLab({
@@ -122,6 +139,8 @@ export function BearingsLab({
   );
   const northLen = legSpan * 0.4;
   const arcR = legSpan * 0.18;
+  const firstDistanceLabel = midpointLabel(origin, turn, firstDistance, 1);
+  const secondDistanceLabel = midpointLabel(turn, end, secondDistance, -1);
   // Crop to everything actually drawn: the route, the north lines above each turning point, and
   // the bearing arcs, which reach a full radius in every direction once a bearing passes 180.
   const marks: Vec2[] = [
@@ -145,7 +164,7 @@ export function BearingsLab({
   const figure = (
     <Stage
       view={view}
-      height={340}
+      height={300}
       ariaLabel={`Journey from ${places[0]} on bearing ${formatBearing(b1)} then ${formatBearing(b2)}`}
     >
       {/* A north line at BOTH the start and the turn. Drawing only one is the classic diagram
@@ -158,40 +177,60 @@ export function BearingsLab({
 
       {/* The two legs, then the direct line home, which is the side the cosine rule finds. */}
       <Segment from={P(origin)} to={P(turn)} color={C_LEG} weight={3} />
-      <Segment from={P(turn)} to={P(end)} color={C_LEG} weight={3} />
-      <Segment from={P(end)} to={P(origin)} color={C_HOME} weight={2} dashed />
+      <Segment from={P(turn)} to={P(end)} color={C_LEG_2} weight={3} />
+      <Segment from={P(end)} to={P(origin)} color={C_HOME} weight={1.6} dashed />
 
       {points.map((p, i) => (
-        <Dot key={i} x={p.east} y={p.north} r={4.5} color={i === 2 ? C_HOME : C_LEG} />
+        <Dot
+          key={i}
+          x={p.east}
+          y={p.north}
+          r={4.5}
+          color={i === 2 ? C_HOME : i === 1 ? C_LEG_2 : C_LEG}
+        />
       ))}
-      <Label x={origin.east} y={origin.north} text={places[0]} color={C_LEG} size={12} dx={-20} dy={12} />
-      <Label x={turn.east} y={turn.north} text={places[1]} color={C_LEG} size={12} dx={22} dy={4} />
-      <Label x={end.east} y={end.north} text={places[2]} color={C_HOME} size={12} dx={20} dy={10} />
+      <Label x={origin.east} y={origin.north} text={places[0]} color={C_LEG} size={11} dx={-30} dy={13} />
+      <Label x={turn.east} y={turn.north} text={places[1]} color={C_LEG_2} size={11} dx={28} dy={-15} />
+      <Label x={end.east} y={end.north} text={places[2]} color={C_HOME} size={11} dx={22} dy={12} />
 
       {/* Each bearing labelled ON its own arc, so the number is attached to the sweep it names. */}
       <Label
-        x={origin.east + arcR * Math.sin((b1 * Math.PI) / 360)}
-        y={origin.north + arcR * Math.cos((b1 * Math.PI) / 360)}
+        x={origin.east + arcR * 1.28 * Math.sin((b1 * Math.PI) / 360)}
+        y={origin.north + arcR * 1.28 * Math.cos((b1 * Math.PI) / 360)}
         text={formatBearing(b1)}
         color={C_LEG}
-        size={12}
-        dx={14}
+        size={11}
+        dx={8}
       />
       <Label
-        x={turn.east + arcR * Math.sin((b2 * Math.PI) / 360)}
-        y={turn.north + arcR * Math.cos((b2 * Math.PI) / 360)}
+        x={turn.east + arcR * 1.32 * Math.sin((b2 * Math.PI) / 360)}
+        y={turn.north + arcR * 1.32 * Math.cos((b2 * Math.PI) / 360)}
         text={formatBearing(b2)}
+        color={C_LEG_2}
+        size={11}
+        dx={8}
+      />
+      <Label
+        x={firstDistanceLabel.x}
+        y={firstDistanceLabel.y}
+        text={`${fmt(firstDistance)} ${unit}`}
         color={C_LEG}
-        size={12}
-        dx={14}
+        size={10}
+      />
+      <Label
+        x={secondDistanceLabel.x}
+        y={secondDistanceLabel.y}
+        text={`${fmt(secondDistance)} ${unit}`}
+        color={C_LEG_2}
+        size={10}
       />
       <Label
         x={(origin.east + end.east) / 2}
         y={(origin.north + end.north) / 2}
         text={`${fmt(r.distance)} ${unit}`}
         color={C_HOME}
-        size={12}
-        dy={18}
+        size={10}
+        dy={14}
       />
     </Stage>
   );

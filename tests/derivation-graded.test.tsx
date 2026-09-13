@@ -32,7 +32,7 @@ describe('derivation with a withheld last line', () => {
     expect(view.getByText('step 2 / 3')).toBeTruthy();
     // Next is spent: the third line is the learner's to produce.
     expect((view.getByRole('button', { name: 'Next →' }) as HTMLButtonElement).disabled).toBe(true);
-    expect(view.getByText('The last line is yours. What does it come to?')).toBeTruthy();
+    expect(view.getByText(/The last line is yours\. What does it come to\?/)).toBeTruthy();
 
     fireEvent.change(view.getByLabelText('Final line'), { target: { value: '4.62' } });
     fireEvent.click(view.getByRole('button', { name: 'Check' }));
@@ -40,19 +40,27 @@ describe('derivation with a withheld last line', () => {
     expect(view.queryByLabelText('Final line')).toBeNull();
   });
 
-  it('says so when the answer is wrong, and opens a way out after two tries', () => {
+  it('says so when the answer is wrong', () => {
     const view = render(<Derivation steps={STEPS} answer={{ kind: 'number', value: 4.62 }} />);
     fireEvent.click(view.getByRole('button', { name: 'Next →' }));
     const input = view.getByLabelText('Final line');
     fireEvent.change(input, { target: { value: '9' } });
     fireEvent.click(view.getByRole('button', { name: 'Check' }));
     expect(view.getByText(/Read the line above again/)).toBeTruthy();
-    expect(view.queryByRole('button', { name: 'Show me' })).toBeNull();
+  });
 
-    fireEvent.change(input, { target: { value: '8' } });
-    fireEvent.click(view.getByRole('button', { name: 'Check' }));
-    fireEvent.click(view.getByRole('button', { name: 'Show me' }));
+  it('offers the way out BEFORE a wrong answer, not as a reward for two of them', () => {
+    // The reveal used to unlock only after two submitted guesses. A learner who cannot see how
+    // to finish has nothing to submit, so the escape was unreachable by exactly the learner it
+    // existed for. It is now on screen as soon as the last line is asked for.
+    const view = render(<Derivation steps={STEPS} answer={{ kind: 'number', value: 4.62 }} />);
+    fireEvent.click(view.getByRole('button', { name: 'Next →' }));
+    const reveal = view.getByRole('button', { name: 'Show the last line' });
+    fireEvent.click(reveal);
     expect(view.getByText('step 3 / 3')).toBeTruthy();
+    // And it is recorded as shown, not as solved, so the status line cannot claim credit.
+    expect(view.getByText('last line shown')).toBeTruthy();
+    expect(view.queryByText('you finished it')).toBeNull();
   });
 
   it('ignores grading for a print/review render, which is meant to show everything', () => {

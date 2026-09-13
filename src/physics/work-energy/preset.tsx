@@ -11,7 +11,7 @@
 import { useState, type ReactNode } from 'react';
 import { Stage, Grid, Axes, Polygon, Segment, Dot, Label, type Vec2 } from '@classytic/stage';
 import { Field } from '../../kit/frame.js';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Tex } from '../../core/tex.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
@@ -274,7 +274,13 @@ export function WorkEnergyLab({
         />
         <Segment from={{ x, y: 0 }} to={{ x, y: Fx }} color="var(--stage-grid)" weight={1} dashed />
         <Dot x={x} y={Fx} r={5} color={ACCENT} />
-        <Label x={X_MAX * 0.94} y={-yTop * 0.07} text="distance (m)" color="var(--stage-muted)" anchor="end" />
+        <Label
+          x={X_MAX * 0.94}
+          y={-yTop * 0.07}
+          text="distance (m)"
+          color="var(--stage-muted)"
+          anchor="end"
+        />
         <Label x={0.08} y={yTop * 0.94} text="force (N)" color="var(--stage-muted)" anchor="start" />
       </Stage>
     </SceneSurface>
@@ -311,7 +317,7 @@ export function WorkEnergyLab({
   const controls = (
     <>
       <Field label="situation">
-        <Segmented
+        <ActivitySelect
           ariaLabel="situation"
           value={mode}
           onChange={setMode}

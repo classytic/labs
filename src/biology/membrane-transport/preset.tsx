@@ -2,7 +2,7 @@
 import { useState, type ComponentType, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js';
-import { Chip, Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Chip, Slider } from '../../kit/controls.js';
 import { Field, SceneViewport } from '../../kit/frame.js';
 import { membraneTransportActivity } from './activity.js';
 import {
@@ -91,7 +91,7 @@ export function MembraneTransportLab({
       controls={
         <>
           <Field label="transport pathway">
-            <Segmented
+            <ActivitySelect
               ariaLabel="transport pathway"
               value={mode}
               onChange={setMode}

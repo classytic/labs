@@ -122,8 +122,21 @@ export function examQuestionProblems(question: ExamQuestion): string[] {
 export type PartVerdict =
   | { state: 'unanswered' }
   | { state: 'correct'; marks: number }
+  /**
+   * The learner asked to see the mark scheme instead of answering.
+   *
+   * It closes the part like a correct answer does, because a student who is stuck has to be able
+   * to read the scheme and move on, but it earns nothing. Both halves matter: without the first
+   * the question is a dead end, and without the second the marks stop meaning anything.
+   */
+  | { state: 'revealed' }
   | { state: 'known-error'; why: string }
   | { state: 'wrong' };
+
+/** A part the learner has finished with, whether they answered it or gave up on it. */
+export function isSettled(verdict: PartVerdict | undefined): boolean {
+  return verdict?.state === 'correct' || verdict?.state === 'revealed';
+}
 
 /** A normalised string that is a bare number, so `parseFloat` reads ALL of it and not a prefix. */
 const NUMERIC = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i;
