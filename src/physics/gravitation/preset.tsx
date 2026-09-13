@@ -278,13 +278,28 @@ export function GravitationLab({
     </>
   );
 
+  const setRadius = (next: number): void => {
+    const rr = clamp(next, R_MIN, R_MAX);
+    setSat({ x: rr, y: 0 });
+  };
+
   const controls = (
     <>
+      <Field label="distance r" value={`${r.toFixed(1)} r₀`}>
+        <Slider
+          value={r}
+          min={R_MIN}
+          max={R_MAX}
+          step={0.1}
+          onChange={setRadius}
+          ariaLabel="distance from planet"
+        />
+      </Field>
       <div className="lab-field-row">
-        <ActionButton onClick={() => setRadius(r / 2)} disabled={r <= R_MIN + 0.01}>
+        <ActionButton className="lab-btn-ghost" onClick={() => setRadius(r / 2)} disabled={r <= R_MIN + 0.01}>
           ½ distance
         </ActionButton>
-        <ActionButton onClick={() => setRadius(r * 2)} disabled={r >= R_MAX - 0.01}>
+        <ActionButton className="lab-btn-ghost" onClick={() => setRadius(r * 2)} disabled={r >= R_MAX - 0.01}>
           2× distance
         </ActionButton>
       </div>
@@ -297,10 +312,6 @@ export function GravitationLab({
     </>
   );
 
-  const setRadius = (next: number): void => {
-    const rr = clamp(next, R_MIN, R_MAX);
-    setSat({ x: rr, y: 0 });
-  };
   const initialRadius = 4.6;
   return (
     <AuthoredActivityRuntime

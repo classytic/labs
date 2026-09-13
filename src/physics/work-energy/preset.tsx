@@ -274,8 +274,8 @@ export function WorkEnergyLab({
         />
         <Segment from={{ x, y: 0 }} to={{ x, y: Fx }} color="var(--stage-grid)" weight={1} dashed />
         <Dot x={x} y={Fx} r={5} color={ACCENT} />
-        <Label x={X_MAX / 2} y={-yTop * 0.07} text="distance x (m)" color="var(--stage-muted)" />
-        <Label x={0.05} y={yTop * 0.95} text="force F (N)" color="var(--stage-muted)" anchor="start" />
+        <Label x={X_MAX * 0.94} y={-yTop * 0.07} text="distance (m)" color="var(--stage-muted)" anchor="end" />
+        <Label x={0.08} y={yTop * 0.94} text="force (N)" color="var(--stage-muted)" anchor="start" />
       </Stage>
     </SceneSurface>
   );

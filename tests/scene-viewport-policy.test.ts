@@ -169,7 +169,7 @@ describe('renderer-swappable scene viewport policy', () => {
       ['src/physics/atwood/preset.tsx', ['label="W₁"', 'label="W₂"', 'label="T"', 'label="a"']],
       ['src/physics/ramp-forces/preset.tsx', ['label="mg"', "label={held ? 'fₛ' : 'fₖ'}"]],
       ['src/physics/couple-torque/preset.tsx', ['label="F₁"', 'label="F₂"', 'text="d"']],
-      ['src/physics/electric-flux/preset.tsx', ['text="A"', 'label="n"', 'label="θ"']],
+      ['src/physics/electric-flux/preset.tsx', ['text="A"', 'text="surface normal"', 'label="θ"']],
     ];
 
     for (const [path, labels] of expectations) {

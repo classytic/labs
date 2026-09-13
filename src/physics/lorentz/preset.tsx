@@ -86,9 +86,11 @@ export function LorentzForceLab({
   const vTip: Vec2 = { x: pos.x + vDir.x * 1.5, y: pos.y + vDir.y * 1.5 };
   const fTip: Vec2 = { x: pos.x + fDir.x * 1.2, y: pos.y + fDir.y * 1.2 };
 
-  // field symbols grid (⊗ in / ⊙ out)
+  // A sparse field texture is enough to establish direction. A dense 5×5 label
+  // grid competed with the path and vectors, especially on narrow screens.
   const grid: Vec2[] = [];
-  for (let gx = -4; gx <= 4; gx += 2) for (let gy = -4; gy <= 4; gy += 2) grid.push({ x: gx, y: gy });
+  for (let gx = -3.4; gx <= 3.4; gx += 3.4)
+    for (let gy = -3.4; gy <= 3.4; gy += 3.4) grid.push({ x: gx, y: gy });
 
   useControlSurface(controlId, {
     charge: {
@@ -118,15 +120,22 @@ export function LorentzForceLab({
           ariaLabel={`charge ${q > 0 ? 'positive' : 'negative'} curving in a field ${out ? 'out of' : 'into'} the page`}
         >
           {grid.map((g, i) => (
-            <Label key={i} x={g.x} y={g.y} text={out ? '⊙' : '⊗'} color="var(--stage-muted)" size={15} />
+            <Label
+              key={i}
+              x={g.x}
+              y={g.y}
+              text={out ? '⊙' : '⊗'}
+              color="color-mix(in oklab, var(--stage-muted) 58%, transparent)"
+              size={11}
+            />
           ))}
           {/* the circular path */}
           <Circle center={{ x: 0, y: 0 }} r={r} fill="none" color="var(--stage-grid)" weight={1.5} dashed />
           {/* force then velocity then the charge on top */}
           <Vector tail={pos} tip={fTip} color={ORANGE} weight={3} />
           <Vector tail={pos} tip={vTip} color={GREEN} weight={3} />
-          <Label x={(pos.x + vTip.x) / 2} y={(pos.y + vTip.y) / 2} text="v" color={GREEN} size={13} dy={-8} />
-          <Label x={(pos.x + fTip.x) / 2} y={(pos.y + fTip.y) / 2} text="F" color={ORANGE} size={13} dx={8} />
+          <Label x={vTip.x} y={vTip.y} text="velocity" color={GREEN} size={11} dy={-9} />
+          <Label x={fTip.x} y={fTip.y} text="force" color={ORANGE} size={11} dx={10} />
           <Dot x={pos.x} y={pos.y} r={8} color={q > 0 ? POS : NEG} />
           <Label x={pos.x} y={pos.y} text={q > 0 ? '+' : '−'} color="white" size={12} />
         </Stage>

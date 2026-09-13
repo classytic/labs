@@ -6,8 +6,7 @@ import { GuideNav, type Guide } from '../src/kit/guide.js';
 import { LearningSequenceNav, type LearningSequence } from '../src/kit/learning-sequence.js';
 import { BreakEvenLab } from '../src/commerce/finance/break-even.js';
 import { JournalPosterLab } from '../src/commerce/accounting/journal-poster.js';
-import { Stepper } from '../src/kit/controls.js';
-import { Slider } from '../src/kit/controls.js';
+import { Segmented, Slider, Stepper } from '../src/kit/controls.js';
 import { DecisionDeck } from '../src/commerce/activity.js';
 
 afterEach(() => {
@@ -190,6 +189,43 @@ describe('shared activity runtime', () => {
     expect(value).toBe(2);
     fireEvent.click(screen.getByRole('button', { name: 'decrease neighbours' }));
     expect(value).toBe(1);
+  });
+
+  it('lets the host toggle group own a segmented selection without duplicate updates', () => {
+    let value = 'spring';
+    let changes = 0;
+    const options = [
+      { value: 'spring', label: 'Spring' },
+      { value: 'pendulum', label: 'Pendulum' },
+    ] as const;
+    const { rerender } = render(
+      <Segmented
+        value={value}
+        options={options}
+        ariaLabel="oscillator mode"
+        onChange={(next) => {
+          changes += 1;
+          value = next;
+        }}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Pendulum' }));
+    expect(value).toBe('pendulum');
+    expect(changes).toBe(1);
+
+    rerender(
+      <Segmented
+        value={value}
+        options={options}
+        ariaLabel="oscillator mode"
+        onChange={(next) => {
+          changes += 1;
+          value = next;
+        }}
+      />,
+    );
+    expect(screen.getByRole('button', { name: 'Pendulum' }).getAttribute('aria-pressed')).toBe('true');
   });
 
   it('separates continuous slider changes from committed learner choices', () => {

@@ -131,29 +131,27 @@ export function WorkPotentialLab({
             weight={1.2}
           />
         ))}
-        {/* equipotential rings; the label reads V from the SAME engine as A/B (one source
-          of truth), so it can never drift from the point potentials */}
+        {/* Values belong in the readout. Keeping the rings unlabelled preserves the
+            contour-map idea without placing four pieces of copy over the model. */}
         {rings.map((r, i) => (
-          <g key={`ring${i}`}>
-            <Circle center={source} r={r} color={RING} fill="none" weight={1.6} dashed />
-            <Label
-              x={source.x + r * 0.82}
-              y={source.y + r * 0.57}
-              text={`V = ${fmt(V({ x: source.x + r, y: source.y }))}`}
-              color={RING}
-              size={12}
-              weight={650}
-              dx={2}
-            />
-          </g>
+          <Circle key={`ring${i}`} center={source} r={r} color={RING} fill="none" weight={1.6} dashed />
         ))}
+        <Label
+          x={VIEW.xMin + 0.45}
+          y={VIEW.yMax - 0.55}
+          text="each ring = one potential"
+          color="var(--stage-muted)"
+          size={11}
+          weight={650}
+          anchor="start"
+        />
         {/* the displacement A → B */}
         <Segment from={A} to={B} color="var(--stage-muted)" weight={1.6} dashed />
         {/* A and B labels */}
         <Label
           x={A.x}
           y={A.y}
-          text={`A · V=${fmt(Va)}`}
+          text="A"
           color={A_COL}
           size={12}
           weight={700}
@@ -164,7 +162,7 @@ export function WorkPotentialLab({
         <Label
           x={B.x}
           y={B.y}
-          text={`B · V=${fmt(Vb)}`}
+          text="B"
           color={B_COL}
           size={12}
           weight={700}

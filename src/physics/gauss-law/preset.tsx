@@ -153,7 +153,7 @@ export function GaussLab({
   title = 'Gauss’s law: flux depends only on the charge inside',
   prompt = 'Drag the loop and resize it. Green markers are field leaving, red are field entering. The net depends only on the charge enclosed, not the loop’s size.',
   ask,
-  height = 420,
+  height = 380,
   activity = 'gauss-law',
   objectives,
 }: GaussProps = {}): ReactNode {

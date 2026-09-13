@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 
 export type LabRuntimeLoader = () => Promise<{ default: (attrs: any) => ReactNode }>;
 
-/** 278 labs, keyed by lab id. */
+/** 279 labs, keyed by lab id. */
 export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'apportion': () => import('./accounting/apportion/runtime.js'),
   'break-even': () => import('./accounting/break-even/runtime.js'),
@@ -115,6 +115,7 @@ export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'binary-search': () => import('./ict/binary-search/runtime.js'),
   'bit-grouper': () => import('./ict/bit-grouper/runtime.js'),
   'complexity-growth': () => import('./ict/complexity-growth/runtime.js'),
+  'cost-derivation': () => import('./ict/cost-derivation/runtime.js'),
   'graph-algorithm': () => import('./ict/graph-algorithm/runtime.js'),
   'grid-path-dp': () => import('./ict/grid-path-dp/runtime.js'),
   'hash-table': () => import('./ict/hash-table/runtime.js'),
@@ -397,6 +398,7 @@ export const labTags: Record<string, string> = {
   'binary-search': 'BinarySearch',
   'bit-grouper': 'BitGrouper',
   'complexity-growth': 'ComplexityGrowth',
+  'cost-derivation': 'CostDerivation',
   'graph-algorithm': 'GraphAlgorithm',
   'grid-path-dp': 'GridPathDp',
   'hash-table': 'HashTable',

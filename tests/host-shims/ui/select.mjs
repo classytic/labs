@@ -19,13 +19,29 @@ function collectItems(node, out = []) {
   return out;
 }
 
+function findTriggerProps(node) {
+  let found;
+  Children.forEach(node, (child) => {
+    if (found || !isValidElement(child)) return;
+    if (child.type?.__selectTrigger) {
+      found = child.props;
+      return;
+    }
+    if (child.props?.children) found = findTriggerProps(child.props.children);
+  });
+  return found;
+}
+
 export function Select({ items, value, defaultValue, onValueChange, disabled, children }) {
   const collected = collectItems(children);
   const options = collected.length ? collected : (items ?? []);
+  const triggerProps = findTriggerProps(children) ?? {};
   return createElement(
     'select',
     {
       'data-slot': 'select',
+      'aria-label': triggerProps['aria-label'],
+      className: triggerProps.className,
       value: value ?? defaultValue ?? '',
       disabled,
       onChange: (event) => onValueChange?.(event.target.value),
@@ -41,6 +57,7 @@ export function Select({ items, value, defaultValue, onValueChange, disabled, ch
 export function SelectTrigger() {
   return null;
 }
+SelectTrigger.__selectTrigger = true;
 export function SelectValue() {
   return null;
 }

@@ -15,7 +15,9 @@ describe('chemistry foundations use the authored activity runtime', () => {
     fireEvent.click(view.getByRole('button', { name: 'Continue' }));
 
     expect(view.getByLabelText(/Periodic table coloured by Atomic radius/)).toBeTruthy();
-    fireEvent.click(view.getByRole('button', { name: 'Ionisation energy' }));
+    fireEvent.change(view.getByRole('combobox', { name: 'colour by' }), {
+      target: { value: 'ie' },
+    });
     await waitFor(() =>
       expect((view.getByRole('button', { name: 'Continue' }) as HTMLButtonElement).disabled).toBe(false),
     );
@@ -62,9 +64,13 @@ describe('chemistry foundations use the authored activity runtime', () => {
     fireEvent.click(view.getByRole('radio', { name: 'pKa' }));
     fireEvent.click(view.getByRole('button', { name: 'Continue' }));
 
-    fireEvent.click(view.getByRole('button', { name: '½ equivalence' }));
+    fireEvent.change(view.getByRole('combobox', { name: 'titration landmarks' }), {
+      target: { value: 'half' },
+    });
     expect(view.getByLabelText(/12\.5 millilitres added, pH 4\.76/i)).toBeTruthy();
-    fireEvent.click(view.getByRole('button', { name: 'bromothymol blue' }));
+    fireEvent.change(view.getByRole('combobox', { name: 'indicator' }), {
+      target: { value: 'bromothymol-blue' },
+    });
     expect(view.getByText('pH 6–7.6')).toBeTruthy();
   });
 

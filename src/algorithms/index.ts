@@ -28,3 +28,14 @@ export * from './lists.js';
 export * from './ListLab.js';
 export * from './HeapDualView.js';
 export * from './HeapQuestLab.js';
+export {
+  CostDerivationLab,
+  costReadout,
+  halvingChain,
+  halvingSteps,
+  recursionLevels,
+  triangleRows,
+  triangleTotal,
+  type CostDerivationProps,
+  type CostMode,
+} from './cost-derivation/index.js';

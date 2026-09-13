@@ -16,12 +16,16 @@ export function RadioGroup({ value, onValueChange, className, children, ...rest 
 export function RadioGroupItem({ value, className, disabled, onKeyDown, ...rest }) {
   const group = useContext(RadioContext);
   const checked = group?.value === value;
+  const groupHasValue = group?.value != null && group.value !== '';
   return createElement('button', {
     type: 'button',
     role: 'radio',
     className,
     disabled,
     'aria-checked': checked,
+    // Base UI exposes one keyboard entry point: the selected item, or the first
+    // enabled item while the controlled group has no value yet.
+    tabIndex: checked ? 0 : groupHasValue ? -1 : undefined,
     'data-slot': 'radio-group-item',
     'data-checked': checked ? '' : undefined,
     onClick: () => group?.onValueChange?.(value),

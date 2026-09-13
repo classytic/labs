@@ -10,6 +10,7 @@
  */
 
 import { createElement as h } from 'react';
+import { CostDerivationLab } from '../../dist/algorithms/index.mjs';
 import {
   RiverBoat,
   GravityDrop,
@@ -268,6 +269,11 @@ export const GALLERY = [
   // Judged at a FULL TURN: seven bands, six tick marks, the straightened ruler and the
   // "rim is closed" line are all on screen at once, which is the busiest this ever gets.
   { name: 'radian-wrap-full-turn', element: h(RadianWrapLab, { startRadians: 6.283185 }) },
+  // Each derivation judged at the size where its picture is busiest: 20 rows of dots,
+  // a six-step halving chain, and a tree deep enough to show the work staying flat.
+  { name: 'cost-derivation-nested', element: h(CostDerivationLab, { mode: 'nested', n: 20 }) },
+  { name: 'cost-derivation-halving', element: h(CostDerivationLab, { mode: 'halving', n: 40 }) },
+  { name: 'cost-derivation-recursion', element: h(CostDerivationLab, { mode: 'recursion', n: 32 }) },
   { name: 'radian-wrap-one', element: h(RadianWrapLab, { startRadians: 1 }) },
   { name: 'solid-net-net', element: h(SolidNetLab, { mode: 'net' }) },
   { name: 'solid-net-compound', element: h(SolidNetLab, { mode: 'compound' }) },

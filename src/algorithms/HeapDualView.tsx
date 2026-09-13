@@ -72,10 +72,10 @@ export function HeapDualView({
                 }}
               >
                 <circle r="6" />
-                <text textAnchor="middle" dominantBaseline="central">
+                <text textAnchor="middle" dominantBaseline="central" style={{ fontSize: '4.2px' }}>
                   {item.value}
                 </text>
-                <text className="heap-node-index" textAnchor="middle" y="10">
+                <text className="heap-node-index" textAnchor="middle" y="10.5" style={{ fontSize: '3.2px' }}>
                   [{index}]
                 </text>
               </g>

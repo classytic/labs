@@ -22,7 +22,7 @@ import { useState, type ReactNode } from 'react';
 import { Stage, Segment, Polygon, Dot, Label, MovableDot, type Vec2 } from '@classytic/stage';
 import { AngleArc } from '../../kit/diagram/annotations.js';
 import { Field } from '../../kit/frame.js';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { LabAsk, type LabAskSpec } from '../../kit/ask.js';
 import { MechanicsVector, SceneSurface } from '../mechanics/presentation.js';
 import { FieldActivity } from '../fields/activity.js';
@@ -145,9 +145,18 @@ export function ElectricFluxLab({
           tail={C}
           tip={{ x: C.x + n.x * 1.5, y: C.y + n.y * 1.5 }}
           color={C_NORMAL}
-          label="n"
         />
-        <AngleArc at={C} from={{ x: 1, y: 0 }} to={n} rPx={38} label="θ" />
+        {Math.abs(deg) > 4 ? <AngleArc at={C} from={{ x: 1, y: 0 }} to={n} rPx={46} label="θ" /> : null}
+        <Label
+          x={C.x + n.x * 1.72}
+          y={C.y + n.y * 1.72}
+          text="surface normal"
+          color={C_NORMAL}
+          size={11}
+          weight={650}
+          dx={n.x >= 0 ? 7 : -7}
+          anchor={n.x >= 0 ? 'start' : 'end'}
+        />
 
         {/* rotate handle, sits out at the normal's tip so it stays clear of the centre */}
         <MovableDot
@@ -181,11 +190,14 @@ export function ElectricFluxLab({
       </Field>
       <Field label="medium">
         {/* The state is the permittivity (a number); the medium's NAME is its string key. */}
-        <Segmented
+        <ActivitySelect
           ariaLabel="medium"
           value={MEDIA.find((m) => m.er === er)?.name ?? ''}
           onChange={(name) => setEr(MEDIA.find((m) => m.name === name)?.er ?? 1)}
-          options={MEDIA.map((m) => ({ value: m.name, label: m.name }))}
+          options={MEDIA.map((m) => ({
+            value: m.name,
+            label: m.er === 1 ? 'Vacuum · εr 1' : `${m.name[0]!.toUpperCase()}${m.name.slice(1)} · εr ${m.er}`,
+          }))}
         />
       </Field>
     </>

@@ -43,6 +43,13 @@ export function GraphView({
           const from = nodes.get(edge.from)!;
           const to = nodes.get(edge.to)!;
           const onPath = pathEdges.has(`${edge.from}:${edge.to}`) || pathEdges.has(`${edge.to}:${edge.from}`);
+          const dx = to.x - from.x;
+          const dy = to.y - from.y;
+          const length = Math.hypot(dx, dy) || 1;
+          // Keep the weight beside its edge rather than sitting on the stroke or a node.
+          const labelOffset = 3.2;
+          const labelX = (from.x + to.x) / 2 + (-dy / length) * labelOffset;
+          const labelY = (from.y + to.y) / 2 + (dx / length) * labelOffset;
           return (
             <g
               key={edge.id}
@@ -57,7 +64,13 @@ export function GraphView({
                 y2={to.y}
                 markerEnd={edge.directed ? `url(#${markerId})` : undefined}
               />
-              <text x={(from.x + to.x) / 2} y={(from.y + to.y) / 2 - 2}>
+              <text
+                x={labelX}
+                y={labelY}
+                textAnchor="middle"
+                dominantBaseline="central"
+                style={{ fontSize: '3.4px' }}
+              >
                 {edge.weight ?? 1}
               </text>
             </g>
@@ -73,11 +86,11 @@ export function GraphView({
             data-discovered={discovered.has(node.id) || undefined}
           >
             <circle r="7" />
-            <text textAnchor="middle" dominantBaseline="central">
+            <text textAnchor="middle" dominantBaseline="central" style={{ fontSize: '4.2px' }}>
               {node.label ?? node.id}
             </text>
             {distances && (
-              <text className="algorithm-distance" textAnchor="middle" y="12">
+              <text className="algorithm-distance" textAnchor="middle" y="12" style={{ fontSize: '3.2px' }}>
                 {Number.isFinite(distances[node.id]!) ? distances[node.id] : '∞'}
               </text>
             )}

@@ -255,7 +255,7 @@ export function MagnetismLab({
 
   const figure = (
     <div className="physics-magnetism-scene">
-      <Stage view={VIEW} height={420} ariaLabel={`Magnetic field with compass pointing ${direction}`}>
+      <Stage view={VIEW} height={380} ariaLabel={`Magnetic field with compass pointing ${direction}`}>
         <FieldFigure
           sources={sources}
           lines={lines}
@@ -312,8 +312,8 @@ export function MagnetismLab({
             value={current >= 0 ? 'out' : 'in'}
             onChange={(v) => setCurrent(v === 'out' ? 1 : -1)}
             options={[
-              { value: 'out', label: '⊙ out of screen' },
-              { value: 'in', label: '⊗ into screen' },
+              { value: 'out', label: '⊙ out' },
+              { value: 'in', label: '⊗ in' },
             ]}
           />
         </Field>

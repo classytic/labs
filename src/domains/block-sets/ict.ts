@@ -7,6 +7,7 @@ import binaryDisplay from '../ict/binary-display/manifest.js';
 import binarySearch from '../ict/binary-search/manifest.js';
 import bitGrouper from '../ict/bit-grouper/manifest.js';
 import complexityGrowth from '../ict/complexity-growth/manifest.js';
+import costDerivation from '../ict/cost-derivation/manifest.js';
 import graphAlgorithm from '../ict/graph-algorithm/manifest.js';
 import gridPathDp from '../ict/grid-path-dp/manifest.js';
 import hashTable from '../ict/hash-table/manifest.js';
@@ -25,4 +26,4 @@ import treeQuest from '../ict/tree-quest/manifest.js';
 import twosComplement from '../ict/twos-complement/manifest.js';
 import wireAChip from '../ict/wire-a-chip/manifest.js';
 
-export const blocks = [arrayVsList, baseOdometer, binaryCounter, binaryDisplay, binarySearch, bitGrouper, complexityGrowth, graphAlgorithm, gridPathDp, hashTable, heapQuest, jkFlipFlop, latchVsFlipFlop, logicBuilder, logicCircuit, logicGate, placeValueDial, sequenceDetector, shiftRegister, sortingQuest, srLatch, treeQuest, twosComplement, wireAChip].map(manifestToBlock);
+export const blocks = [arrayVsList, baseOdometer, binaryCounter, binaryDisplay, binarySearch, bitGrouper, complexityGrowth, costDerivation, graphAlgorithm, gridPathDp, hashTable, heapQuest, jkFlipFlop, latchVsFlipFlop, logicBuilder, logicCircuit, logicGate, placeValueDial, sequenceDetector, shiftRegister, sortingQuest, srLatch, treeQuest, twosComplement, wireAChip].map(manifestToBlock);

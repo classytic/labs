@@ -94,10 +94,10 @@ describe('portable authored responses', () => {
         onRespond={onRespond}
       />,
     );
-    const left = view.getByText('Left');
+    const left = view.getByRole('radio', { name: 'Left' });
     left.focus();
     fireEvent.keyDown(left, { key: 'ArrowRight' });
     expect(onRespond).toHaveBeenCalledWith({ questionId: 'c', response: 'right', correct: true });
-    expect(document.activeElement).toBe(view.getByText('Right'));
+    expect(document.activeElement).toBe(view.getByRole('radio', { name: 'Right' }));
   });
 });

@@ -278,7 +278,10 @@ export function AssessedChoiceGroup<T extends string>({
     <RadioGroup
       className={['lab-choices', className].filter(Boolean).join(' ')}
       aria-label={ariaLabel}
-      value={value}
+      // Keep the host Base UI RadioGroup controlled for its entire lifetime.
+      // `undefined` on the prediction screen followed by a picked string is an
+      // uncontrolled → controlled transition and React correctly warns.
+      value={value ?? ''}
       onValueChange={(next: unknown) => {
         const picked = next as T | undefined;
         if (picked != null) onChange(picked);
@@ -360,8 +363,12 @@ export function Segmented<T extends string>({
       aria-label={ariaLabel}
       value={[value]}
       onValueChange={(next: unknown) => {
-        // base-ui reports the group's whole value; a single-select group sends one item back.
-        const picked = Array.isArray(next) ? (next[0] as T | undefined) : (next as T | undefined);
+        // Base UI reports the group's whole selected-value array. ToggleGroup itself is
+        // multi-select, so activating another item briefly yields [current, next]. Pick
+        // the newly activated value and feed back a one-item controlled array.
+        const picked = Array.isArray(next)
+          ? (next.find((candidate) => candidate !== value) as T | undefined)
+          : (next as T | undefined);
         // Ignore a deselect: a mode switcher always has exactly one option active.
         if (picked != null && picked !== value) onChange(picked);
       }}
@@ -373,8 +380,6 @@ export function Segmented<T extends string>({
           key={option.value}
           value={option.value}
           disabled={option.disabled}
-          pressed={option.value === value}
-          onPressedChange={() => onChange(option.value)}
           className="lab-segment"
           data-sel={option.value === value}
         >

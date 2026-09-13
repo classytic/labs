@@ -183,7 +183,7 @@ export function ElectricFieldLab({
     <SceneSurface tone="grid">
       <Stage
         view={VIEW}
-        height={420}
+        height={380}
         ariaLabel="Electric field lines from two charges, with a draggable test charge feeling a force"
       >
         <ChargeFigure sources={sources} lines={lines} test={test} testSign={testSign} />

@@ -17,7 +17,7 @@ export interface TreeSceneProps {
 // gap(56/74) > 2·R(16) guarantees nodes never touch, at any tree size or shape.
 const R_HALO = 22,
   R_FACE = 16,
-  FONT = 15,
+  FONT = 10,
   PAD = 34;
 // beyond this natural size the tree can't stay readable when fit-to-canvas, so we let
 // the learner pan/zoom instead of squinting at a shrunk-to-fit diagram.
