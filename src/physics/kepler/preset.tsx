@@ -24,7 +24,7 @@ import { useFrameTick } from '../../kit/anim.js';
 import { clamp } from '../../core/util.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { MechanicsVector, SceneSurface } from '../mechanics/presentation.js';
+import { MechanicsVector, SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { ellipseStateAtMeanAnomaly, keplerPeriod } from '../orbital/core.js';
 
 const KEPLER_ACTIVITY: AuthoredActivity = {
@@ -340,20 +340,6 @@ export function KeplerLab({
 
   const controls = (
     <>
-      <div className="lab-field-row">
-        <Chip selected={gate.playing} onClick={() => gate.setPlaying(!gate.playing)}>
-          {gate.playing ? 'Pause orbit' : 'Play orbit'}
-        </Chip>
-        <Chip
-          selected={false}
-          onClick={() => {
-            gate.setPlaying(false);
-            tRef.current = 0;
-          }}
-        >
-          Reset
-        </Chip>
-      </div>
       <Control name="equal-area wedges">
         <Chip selected={showWedge} onClick={() => setShowWedge((w) => !w)}>
           equal-area wedges
@@ -372,6 +358,19 @@ export function KeplerLab({
           ariaLabel="semi-major axis"
         />
       </Field>
+      <SimulationTransport
+        running={gate.playing}
+        onReset={() => {
+          gate.setPlaying(false);
+          tRef.current = 0;
+        }}
+        onToggle={() => gate.setPlaying(!gate.playing)}
+        state={gate.playing ? 'Orbiting' : 'Paused'}
+        detail={`period ${T.toFixed(1)} · e ${e.toFixed(2)}`}
+        startLabel="Play orbit"
+        pauseLabel="Pause orbit"
+        resetLabel="Reset orbit"
+      />
     </>
   );
 

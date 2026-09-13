@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useLabEmbed } from './embed.js';
 import {
   createContext,
   useContext,
@@ -159,6 +160,23 @@ function Heading({
   title: ReactNode;
   description?: ReactNode;
 }): ReactNode {
+  /**
+   * Inside a lesson the page has already said what this is, so the eyebrow and the
+   * product name are the third telling and cost the figure a chunk of the frame.
+   * The description survives, because it is the only line that says what to DO.
+   *
+   * The title is kept for screen readers rather than dropped: it is this region's
+   * accessible name and the document outline would otherwise gain a nameless block.
+   */
+  const embedded = useLabEmbed();
+  if (embedded) {
+    return (
+      <div className="lab-activity-heading" data-embedded="true">
+        <h3 className="lab-sr-only">{title}</h3>
+        {description && <div className="lab-activity-description">{description}</div>}
+      </div>
+    );
+  }
   return (
     <div className="lab-activity-heading">
       {eyebrow && <span className="lab-activity-eyebrow">{eyebrow}</span>}

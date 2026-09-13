@@ -17,13 +17,18 @@
 
 import { useRef, useState, type ReactNode } from 'react';
 import { Stage, Segment, Polyline, Circle, Label, useInView } from '@classytic/stage';
-import { Slider, StatusPill, Chip } from '../../kit/controls.js';
+import { Slider, StatusPill } from '../../kit/controls.js';
 import { Field, LiveRegion, type ControlConfig } from '../../kit/frame.js';
 import { useReducedMotion, useFrameTick } from '../../kit/anim.js';
 import { clamp } from '../../core/util.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { MechanicsMassBlock, MechanicsVector, SceneSurface } from '../mechanics/presentation.js';
+import {
+  MechanicsMassBlock,
+  MechanicsVector,
+  SceneSurface,
+  SimulationTransport,
+} from '../mechanics/presentation.js';
 import { atwoodState } from '../mechanics/core.js';
 
 const ATWOOD_ACTIVITY: AuthoredActivity = {
@@ -386,26 +391,27 @@ export function AtwoodLab({
 
   const controls = (
     <>
-      <Chip selected={running} onClick={running ? () => setRunning(false) : release} disabled={balanced}>
-        {running ? 'Pause' : finished ? 'Release again' : 'Release'}
-      </Chip>
-      <Chip
-        selected={false}
-        onClick={() => {
-          setRunning(false);
-          setFinished(false);
-          tRef.current = 0;
-          repaint();
-        }}
-      >
-        Reset
-      </Chip>
       <Field label="m₁ (left)" value={`${ma} kg`}>
         <Slider value={ma} min={1} max={8} step={0.5} onChange={onParam(setMa)} ariaLabel="left mass (kg)" />
       </Field>
       <Field label="m₂ (right)" value={`${mb} kg`}>
         <Slider value={mb} min={1} max={8} step={0.5} onChange={onParam(setMb)} ariaLabel="right mass (kg)" />
       </Field>
+      <SimulationTransport
+        running={running}
+        onReset={() => {
+          setRunning(false);
+          setFinished(false);
+          tRef.current = 0;
+          repaint();
+        }}
+        onToggle={running ? () => setRunning(false) : release}
+        state={balanced ? 'Balanced' : running ? 'Moving' : finished ? 'Complete' : 'Ready'}
+        detail={balanced ? 'equal masses' : `${ma > mb ? 'left' : 'right'} side falls`}
+        startLabel={finished ? 'Release again' : 'Release'}
+        disabled={balanced}
+        resetLabel="Reset Atwood machine"
+      />
     </>
   );
 

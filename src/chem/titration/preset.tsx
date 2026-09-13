@@ -16,7 +16,7 @@
 
 import { useMemo, useState, type ReactNode } from 'react';
 import { titrationCurve, pHAt, type TitrationSpec } from '@classytic/stage/chem';
-import { Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Segmented, Slider } from '../../kit/controls.js';
 import { Field, Readout } from '../../kit/frame.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity, AuthoredChoiceQuestion } from '../../kit/activity-authoring.js';
@@ -434,7 +434,7 @@ export function TitrationLab({
         </Field>
       )}
       <Field label="indicator">
-        <Segmented
+        <ActivitySelect
           ariaLabel="indicator"
           value={indicator}
           onChange={setIndicator}
@@ -455,7 +455,7 @@ export function TitrationLab({
         />
         {/* Landmarks jump the continuous slider to a named volume. Between them nothing is
             selected, so `''` is the value for "off a landmark" and is absent from `options`. */}
-        <Segmented
+        <ActivitySelect
           ariaLabel="titration landmarks"
           value={LANDMARKS.find((l) => Math.abs(vAddedMl - l.at(vEqMl)) < 0.1)?.id ?? ''}
           onChange={(id) => {

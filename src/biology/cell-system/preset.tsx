@@ -2,7 +2,7 @@
 import { useState, type ComponentType, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js';
-import { Segmented } from '../../kit/controls.js';
+import { ActivitySelect } from '../../kit/controls.js';
 import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { cellSystemActivity } from './activity.js';
 import {
@@ -70,7 +70,7 @@ export function CellSystemLab({
       controls={
         <>
           <Field label="protein journey">
-            <Segmented
+            <ActivitySelect
               ariaLabel="protein journey"
               value={step}
               onChange={setStep}
@@ -78,7 +78,7 @@ export function CellSystemLab({
             />
           </Field>
           <Field label="organelle failure">
-            <Segmented
+            <ActivitySelect
               ariaLabel="organelle failure"
               value={failure}
               onChange={setFailure}

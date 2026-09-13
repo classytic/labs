@@ -3,7 +3,7 @@
 import { useCallback, useState, type ComponentType, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js';
-import { Chip, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Chip, Segmented } from '../../kit/controls.js';
 import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { meiosisExplorerActivity } from './meiosis-activity.js';
 import {
@@ -60,7 +60,7 @@ export function MeiosisExplorerLab({
   const controls = (
     <>
       <Field label="checkpoint">
-        <Segmented
+        <ActivitySelect
           ariaLabel="checkpoint"
           value={checkpoint}
           onChange={setCheckpoint}

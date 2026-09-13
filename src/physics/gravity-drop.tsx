@@ -8,11 +8,11 @@
 
 import { useRef, useState, type ReactNode } from 'react';
 import { Stage, Segment, Label, useFrameLoop, useInView, useCoords, fmt } from '@classytic/stage';
-import { Slider, Chip } from '../kit/controls.js';
+import { Slider } from '../kit/controls.js';
 import { Field } from '../kit/frame.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../kit/activity-authoring.js';
-import { SceneSurface } from './mechanics/presentation.js';
+import { SceneSurface, SimulationTransport } from './mechanics/presentation.js';
 
 const num = (v: number | string | undefined, fb: number): number => {
   const n = typeof v === 'string' ? parseFloat(v) : v;
@@ -301,14 +301,6 @@ export function GravityDrop({
   );
   const controls = (
     <>
-      <div className="lab-field-row">
-        <Chip selected={running} onClick={() => (running ? setRunning(false) : drop())}>
-          {running ? 'Pause' : t > 0 ? 'Drop again' : 'Drop'}
-        </Chip>
-        <Chip selected={false} onClick={reset}>
-          Reset
-        </Chip>
-      </div>
       <Field label="drop height" value={`${fallH.toFixed(0)} m`}>
         <Slider
           value={fallH}
@@ -322,6 +314,15 @@ export function GravityDrop({
           ariaLabel="drop height in metres"
         />
       </Field>
+      <SimulationTransport
+        running={running}
+        onReset={reset}
+        onToggle={() => (running ? setRunning(false) : drop())}
+        state={running ? 'Falling' : landed === WORLDS.length ? 'Complete' : 'Ready'}
+        detail={`${landed}/${WORLDS.length} worlds landed`}
+        startLabel={t > 0 ? 'Drop again' : 'Drop'}
+        resetLabel="Reset gravity drop"
+      />
     </>
   );
   return (

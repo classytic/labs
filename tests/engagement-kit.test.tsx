@@ -87,26 +87,27 @@ function ChallengeHarness(): ReactNode {
 
 describe('ChallengeCard feedback', () => {
   it('supports APG arrow-key selection inside a radio group', () => {
-    const { getByText } = render(<ChallengeHarness />);
-    const first = getByText('Higher cost');
+    const { getByRole } = render(<ChallengeHarness />);
+    const first = getByRole('radio', { name: 'Higher cost' });
     first.focus();
     fireEvent.keyDown(first, { key: 'ArrowRight' });
-    expect(getByText('Higher income').getAttribute('aria-checked')).toBe('true');
-    expect(document.activeElement).toBe(getByText('Higher income'));
+    const second = getByRole('radio', { name: 'Higher income' });
+    expect(second.getAttribute('aria-checked')).toBe('true');
+    expect(document.activeElement).toBe(second);
   });
 
   it('does not reveal the correct option after a wrong attempt and gives authored coaching', () => {
     const { container, getByText } = render(<ChallengeHarness />);
     fireEvent.click(getByText('Higher cost'));
     expect(getByText('Cost changes supply, not demand. Look at which curve moved.')).toBeTruthy();
-    expect(getByText('Higher cost').getAttribute('data-tone')).toBe('wrong');
-    expect(getByText('Higher income').getAttribute('data-tone')).toBeNull();
+    expect(getByText('Higher cost').closest('.lab-choice')?.getAttribute('data-tone')).toBe('wrong');
+    expect(getByText('Higher income').closest('.lab-choice')?.getAttribute('data-tone')).toBeNull();
   });
 
   it('reveals the explanation only after the correct answer', () => {
     const { getByText } = render(<ChallengeHarness />);
     fireEvent.click(getByText('Higher income'));
     expect(getByText(/Income changes willingness/)).toBeTruthy();
-    expect(getByText('Higher income').getAttribute('data-tone')).toBe('correct');
+    expect(getByText('Higher income').closest('.lab-choice')?.getAttribute('data-tone')).toBe('correct');
   });
 });

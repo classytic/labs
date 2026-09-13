@@ -20,11 +20,11 @@ import { useRef, useState, type ReactNode } from 'react';
 import { Stage, CanvasLayer, Segment, Vector, Label, useCoords } from '@classytic/stage';
 import { mulberry32 } from '../../core/rng.js';
 import { useReducedMotion, useFrameTick } from '../../kit/anim.js';
-import { Slider, Chip } from '../../kit/controls.js';
+import { Slider } from '../../kit/controls.js';
 import { AngleArc } from '../../kit/diagram/annotations.js';
 import { Field, LiveRegion } from '../../kit/frame.js';
 import { usePlayGate } from '../../kit/play.js';
-import { SceneSurface } from '../mechanics/presentation.js';
+import { SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 
@@ -308,26 +308,24 @@ export function RainRelativeLab({
 
   const controls = (
     <>
-      <div className="lab-field-row">
-        <Chip selected={gate.playing} onClick={() => gate.setPlaying(!gate.playing)}>
-          {gate.playing ? 'Pause' : 'Drive'}
-        </Chip>
-        <Chip
-          selected={false}
-          onClick={() => {
-            gate.setPlaying(false);
-            setSpeed(start);
-            drops.current = [];
-            lastT.current = 0;
-            wheelAngle.current = 0;
-          }}
-        >
-          Reset
-        </Chip>
-      </div>
       <Field label="car speed" value={`${thetaDeg}° from vertical`}>
         <Slider value={speed} min={0} max={maxSpeed} step={0.5} onChange={setSpeed} ariaLabel="car speed" />
       </Field>
+      <SimulationTransport
+        running={gate.playing}
+        onReset={() => {
+          gate.setPlaying(false);
+          setSpeed(start);
+          drops.current = [];
+          lastT.current = 0;
+          wheelAngle.current = 0;
+        }}
+        onToggle={() => gate.setPlaying(!gate.playing)}
+        state={gate.playing ? 'Driving' : 'Paused'}
+        detail={`${thetaDeg}° apparent rain`}
+        startLabel="Drive"
+        resetLabel="Reset rain scene"
+      />
     </>
   );
 

@@ -226,15 +226,19 @@ export function ChallengeCard({
         const answered = picked != null;
         const correct = picked === q.answer;
         return (
-          <div className="lab-challenge-q" data-response-layout={choiceResponseLayout(q.choices)} key={q.id}>
-            <span className="lab-challenge-prompt">
+          <fieldset
+            className="lab-challenge-q"
+            data-response-layout={choiceResponseLayout(q.choices)}
+            key={q.id}
+          >
+            <legend className="lab-challenge-prompt">
               {questions.length > 1 && (
                 <span className="lab-challenge-num" aria-hidden>
                   {i + 1}
                 </span>
               )}
               <span>{q.prompt}</span>
-            </span>
+            </legend>
             <AssessedChoiceGroup
               value={picked}
               ariaLabel={typeof q.prompt === 'string' ? q.prompt : 'Answer choices'}
@@ -268,7 +272,7 @@ export function ChallengeCard({
                     'Not yet. Revisit the evidence and try another choice.'}
                 </span>
               ))}
-          </div>
+          </fieldset>
         );
       })}
     </div>

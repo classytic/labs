@@ -481,6 +481,9 @@
 .physics-wave .physics-controls > .lab-field:first-child {
   grid-column: 1 / -1;
 }
+.physics-wave-mode-select {
+  width: min(100%, 13rem);
+}
 .physics-wave .physics-controls > .lab-chip,
 .physics-wave .physics-control-hint {
   grid-column: 1 / -1;

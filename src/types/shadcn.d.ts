@@ -65,6 +65,27 @@ declare module '@/components/ui/checkbox' {
   export const Checkbox: ForwardRefExoticComponent<CheckboxProps & RefAttributes<HTMLButtonElement>>;
 }
 
+declare module '@/components/ui/radio-group' {
+  import type { ForwardRefExoticComponent, HTMLAttributes, ReactNode, RefAttributes } from 'react';
+  export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
+    value?: string;
+    defaultValue?: string;
+    onValueChange?: (value: string, eventDetails?: unknown) => void;
+    disabled?: boolean;
+    orientation?: 'horizontal' | 'vertical';
+    children?: ReactNode;
+  }
+  export const RadioGroup: ForwardRefExoticComponent<RadioGroupProps & RefAttributes<HTMLDivElement>>;
+
+  export interface RadioGroupItemProps extends Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> {
+    value: string;
+    disabled?: boolean;
+  }
+  export const RadioGroupItem: ForwardRefExoticComponent<
+    RadioGroupItemProps & RefAttributes<HTMLButtonElement>
+  >;
+}
+
 declare module '@/components/ui/toggle-group' {
   import type { ForwardRefExoticComponent, HTMLAttributes, ReactNode, RefAttributes } from 'react';
   export interface ToggleGroupProps extends Omit<

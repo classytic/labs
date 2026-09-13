@@ -160,6 +160,12 @@
 .physics-simulation-actions[data-stepper="true"] {
   grid-template-columns: auto minmax(0, 1fr) auto;
 }
+.physics-transport-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--lab-sp-8);
+}
 .physics-transport-state-wide {
   justify-content: flex-start;
 }
@@ -169,6 +175,14 @@
   }
   .physics-simulation-actions > .physics-play-button {
     grid-column: 1 / -1;
+    width: 100%;
+  }
+  .physics-transport-actions {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .physics-transport-actions > * {
     width: 100%;
   }
   .physics-simulation-actions[data-stepper="true"] {

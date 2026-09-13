@@ -2904,6 +2904,22 @@ export const generatedManifestCatalog: LabManifestCatalogEntry[] = [
   },
   },
   {
+    key: 'radian-wrap',
+    label: 'The radian, measured by laying the radius along the rim',
+    description: 'A radian is usually introduced as a conversion factor, which teaches the arithmetic and hides the idea. Here the learner lays the radius round the circumference one length at a time and counts: six whole ones and a short stub. The count IS the angle, so 2π stops being a number to memorise and the definition angle = arc / radius is the thing they watched happen.',
+    category: 'interactive',
+    void: true,
+    group: 'Trigonometry',
+    domain: 'math',
+    taxonomy: {
+    grades: ['10', '11', '12'],
+    outcomes: ['trigonometry', 'radian-measure', 'circular-motion'],
+    durationMinutes: 6,
+    interaction: 'explorer',
+    authorability: 'simple',
+  },
+  },
+  {
     key: 'rate-machine',
     label: 'Proportion machine (drag the count, it scales)',
     description: 'Count-driven concrete → graph: drag the input up and down; objects drop into a vessel, the liquid level rises by the same rate each step, and a point rides up the line leaving a dot at every whole step. Proportionality you scrub. Skinnable (battery, jar, savings) and an optional "set it to N" goal.',

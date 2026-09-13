@@ -20,12 +20,12 @@
 import { useRef, useState, type ReactNode } from 'react';
 import { Stage, Segment, Polyline, Polygon, Circle, Dot, Label, type Vec2 } from '@classytic/stage';
 import { usePlayGate } from '../../kit/play.js';
-import { Chip, Segmented, Slider } from '../../kit/controls.js';
+import { Segmented, Slider } from '../../kit/controls.js';
 import { Field, Control, MeterBar, LiveRegion, type ControlConfig } from '../../kit/frame.js';
 import { useFrameTick } from '../../kit/anim.js';
 import { clamp } from '../../core/util.js';
 import { springOmega, smallAnglePendulumOmega, oscillatorPeriod, sampleOscillator } from './core.js';
-import { SceneSurface, TracePanel } from '../mechanics/presentation.js';
+import { SceneSurface, SimulationTransport, TracePanel } from '../mechanics/presentation.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 
@@ -494,21 +494,6 @@ export function SimpleHarmonicLab({
 
   const controls = (
     <>
-      <div className="lab-field-row">
-        <Chip selected={gate.playing} onClick={() => gate.setPlaying(!gate.playing)}>
-          {gate.playing ? 'Pause' : 'Play'}
-        </Chip>
-        <Chip
-          selected={false}
-          onClick={() => {
-            tRef.current = 0;
-            gate.setPlaying(false);
-            paint((n) => n + 1);
-          }}
-        >
-          Reset
-        </Chip>
-      </div>
       <Control name="mode">
         <div className="lab-segmented-field">
           <span className="lab-field-label">mode</span>
@@ -569,6 +554,18 @@ export function SimpleHarmonicLab({
           </Field>
         </>
       )}
+      <SimulationTransport
+        running={gate.playing}
+        onReset={() => {
+          tRef.current = 0;
+          gate.setPlaying(false);
+          paint((n) => n + 1);
+        }}
+        onToggle={() => gate.setPlaying(!gate.playing)}
+        state={gate.playing ? 'Oscillating' : 'Paused'}
+        detail={`${isSpring ? 'spring' : 'pendulum'} · ${omega.toFixed(2)} rad/s`}
+        resetLabel="Reset oscillator"
+      />
     </>
   );
 

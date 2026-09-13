@@ -18,7 +18,7 @@ import { useRef, useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 import { Stage, Circle, Segment, Polyline, Dot } from '@classytic/stage';
 import { usePlayGate } from '../../kit/play.js';
-import { ActionButton, Slider, Chip } from '../../kit/controls.js';
+import { ActionButton, Slider } from '../../kit/controls.js';
 import { Field, LiveRegion, type ControlConfig } from '../../kit/frame.js';
 import { useFrameTick } from '../../kit/anim.js';
 import { useChallenge, ChallengeCard, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
@@ -259,9 +259,6 @@ export function CircularMotionLab({
 
   const controls = (
     <>
-      <Chip selected={cut} onClick={() => (cut ? retie() : doCut())}>
-        {cut ? 'flying free' : 'on the string'}
-      </Chip>
       <Field label="speed v" value={`${v} m/s`}>
         <Slider value={v} min={2} max={12} step={0.5} onChange={onParam(setV)} ariaLabel="speed (m/s)" />
       </Field>
@@ -294,11 +291,15 @@ export function CircularMotionLab({
       onReset={reset}
       onToggle={() => gate.setPlaying(!gate.playing)}
       state={cut ? 'Free flight' : 'Tethered'}
-      center={
-        <ActionButton className="physics-cut-button" onClick={cut ? retie : doCut}>
-          {cut ? 'Re-tie' : 'Cut string'}
-        </ActionButton>
-      }
+      detail={cut ? 'moving along the tangent' : 'inward force active'}
+      renderAction={(playAction) => (
+        <div className="physics-transport-actions">
+          <ActionButton className="lab-btn-ghost physics-cut-button" onClick={cut ? retie : doCut}>
+            {cut ? 'Re-tie string' : 'Release string'}
+          </ActionButton>
+          {playAction}
+        </div>
+      )}
       resetLabel="Reset circular motion"
     />
   );

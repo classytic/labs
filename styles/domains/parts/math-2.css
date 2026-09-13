@@ -228,3 +228,48 @@
     forced-color-adjust: auto;
   }
 }
+
+/* Linear-model readout: one quiet annotation attached to the linked views,
+   rather than another nested card competing with the graph and assessment. */
+.math-linear-readout {
+  display: grid;
+  grid-template-columns: auto auto minmax(12rem, 1fr);
+  align-items: baseline;
+  gap: var(--lab-sp-6) var(--lab-sp-10);
+  padding: var(--lab-sp-10) var(--lab-sp-12);
+  border-inline-start: 3px solid var(--border, var(--stage-grid));
+  color: var(--muted-foreground, var(--stage-muted));
+  font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+.math-linear-readout[data-state="moved"] {
+  border-inline-start-color: var(--lab-warn);
+}
+.math-linear-readout[data-state="correct"] {
+  border-inline-start-color: var(--lab-good);
+}
+.math-linear-readout-label {
+  color: var(--foreground, var(--stage-fg));
+  font-weight: var(--lab-w-medium);
+}
+.math-linear-readout .math-reading-value {
+  color: var(--foreground, var(--stage-fg));
+  font-variant-numeric: tabular-nums;
+}
+.math-linear-readout[data-state="moved"] .math-reading-value {
+  color: var(--lab-warn-ink);
+}
+.math-linear-readout[data-state="correct"] .math-reading-value {
+  color: var(--lab-good-ink);
+}
+.math-linear-readout-guidance {
+  min-width: 0;
+}
+@container lab-activity (max-width: 34rem) {
+  .math-linear-readout {
+    grid-template-columns: auto 1fr;
+  }
+  .math-linear-readout-guidance {
+    grid-column: 1 / -1;
+  }
+}

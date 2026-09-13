@@ -327,3 +327,13 @@ export {
   type SlideRuleProps,
   type Product as SlideRuleProduct,
 } from './slide-rule/index.js';
+export {
+  RadianWrapLab,
+  bands as radianBands,
+  radianReadout,
+  wholeRadii,
+  TAU,
+  DEG_PER_RAD,
+  type RadianWrapProps,
+  type Band as RadianBand,
+} from './radian-wrap/index.js';

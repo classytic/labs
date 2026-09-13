@@ -8,6 +8,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider as ShadcnSlider } from '@/components/ui/slider';
 import {
   Select,
@@ -18,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import type { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react';
+import { useId, type ButtonHTMLAttributes, type CSSProperties, type ReactNode } from 'react';
 
 export function IconButton({
   label,
@@ -258,7 +259,7 @@ export function choiceResponseLayout(
     : 'prose';
 }
 
-/** A single-choice answer set backed by the host ToggleGroup. */
+/** A single-choice answer set backed by the host RadioGroup. */
 export function AssessedChoiceGroup<T extends string>({
   value,
   onChange,
@@ -272,64 +273,40 @@ export function AssessedChoiceGroup<T extends string>({
   ariaLabel: string;
   className?: string;
 }): ReactNode {
+  const groupId = useId();
   return (
-    <ToggleGroup
+    <RadioGroup
       className={['lab-choices', className].filter(Boolean).join(' ')}
-      role="radiogroup"
       aria-label={ariaLabel}
-      value={value ? [value] : []}
+      value={value}
       onValueChange={(next: unknown) => {
-        const picked = Array.isArray(next) ? (next[0] as T | undefined) : (next as T | undefined);
+        const picked = next as T | undefined;
         if (picked != null) onChange(picked);
       }}
-      spacing={0}
-      size="sm"
     >
-      {options.map((option, index) => {
+      {options.map((option) => {
         const selected = option.value === value;
+        const controlId = `${groupId}-${option.value}`;
         return (
-          <ToggleGroupItem
+          <label
             key={option.value}
-            value={option.value}
-            disabled={option.disabled}
-            pressed={selected}
-            onPressedChange={(pressed) => pressed && onChange(option.value)}
+            htmlFor={controlId}
             className="lab-choice"
-            role="radio"
-            aria-checked={selected}
-            tabIndex={selected || (value == null && index === 0) ? 0 : -1}
             data-picked={selected || undefined}
             data-tone={option.tone}
-            onKeyDown={(event) => {
-              if (!['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End'].includes(event.key))
-                return;
-              event.preventDefault();
-              const enabled = Array.from(
-                event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>(
-                  '[role="radio"]:not(:disabled)',
-                ) ?? [],
-              );
-              const current = enabled.indexOf(event.currentTarget);
-              const next =
-                event.key === 'Home'
-                  ? 0
-                  : event.key === 'End'
-                    ? enabled.length - 1
-                    : (current +
-                        (event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : -1) +
-                        enabled.length) %
-                      enabled.length;
-              const target = enabled[next];
-              const picked = options.filter((item) => !item.disabled)[next];
-              if (picked) onChange(picked.value);
-              target?.focus();
-            }}
+            data-disabled={option.disabled || undefined}
           >
-            {option.label}
-          </ToggleGroupItem>
+            <RadioGroupItem
+              id={controlId}
+              value={option.value}
+              disabled={option.disabled}
+              className="lab-choice-control"
+            />
+            <span className="lab-choice-label">{option.label}</span>
+          </label>
         );
       })}
-    </ToggleGroup>
+    </RadioGroup>
   );
 }
 

@@ -15,12 +15,12 @@
 
 import { useRef, useState, type ReactNode } from 'react';
 import { Stage, Segment, Polygon, Dot, Label } from '@classytic/stage';
-import { Slider, StatusPill, Chip } from '../../kit/controls.js';
+import { Slider, StatusPill } from '../../kit/controls.js';
 import { Field, MeterBar, LiveRegion } from '../../kit/frame.js';
 import { useReducedMotion, useFrameTick } from '../../kit/anim.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { MechanicsVector, SceneSurface } from '../mechanics/presentation.js';
+import { MechanicsVector, SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { collisionResult } from '../mechanics/core.js';
 
 export interface CollisionTrackProps {
@@ -354,18 +354,6 @@ export function CollisionTrackLab({
 
   const controls = (
     <>
-      <Chip selected={running} onClick={running ? () => setRunning(false) : launch}>
-        {running ? 'Pause' : collided ? 'Run again' : 'Launch'}
-      </Chip>
-      <Chip
-        selected={false}
-        onClick={() => {
-          setRunning(false);
-          reset();
-        }}
-      >
-        Reset
-      </Chip>
       <StatusPill ok={e > 0.98}>
         {e > 0.98
           ? 'elastic · KE conserved'
@@ -423,6 +411,18 @@ export function CollisionTrackLab({
           ariaLabel="initial velocity of cart B (m/s)"
         />
       </Field>
+      <SimulationTransport
+        running={running}
+        onReset={() => {
+          setRunning(false);
+          reset();
+        }}
+        onToggle={running ? () => setRunning(false) : launch}
+        state={running ? 'Approaching' : collided ? 'Collision complete' : 'Ready'}
+        detail={`elasticity ${e.toFixed(2)}`}
+        startLabel={collided ? 'Run again' : 'Launch'}
+        resetLabel="Reset collision"
+      />
     </>
   );
 

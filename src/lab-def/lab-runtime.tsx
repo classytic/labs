@@ -8,6 +8,7 @@
  */
 
 import { Button } from '@/components/ui/button';
+import { LabEmbedProvider } from '../kit/embed.js';
 import { Component, createElement, useCallback, useEffect, useState, type ReactNode } from 'react';
 
 interface BoundaryProps {
@@ -135,5 +136,11 @@ export function LabRuntime({ loader, attributes }: LabRuntimeProps): ReactNode {
       </div>
     );
   }
-  return createElement(state.Comp, attributes);
+  /**
+   * Every lab rendered from an MDX tag arrives here, and only here, so this is where a
+   * lab learns that the surrounding lesson has already introduced it. Importing a lab
+   * component directly (gallery, stage-preview, authoring) bypasses this and keeps the
+   * full self-introducing heading, which is correct: there, nothing else names it.
+   */
+  return createElement(LabEmbedProvider, null, createElement(state.Comp, attributes));
 }

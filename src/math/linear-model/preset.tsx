@@ -16,10 +16,10 @@
 
 import { useEffect, useState, type ReactNode } from 'react';
 import type { Vec2 } from '@classytic/stage';
-import { LinkedViews, StatList } from '../../kit/frame.js';
+import { LinkedViews } from '../../kit/frame.js';
 import { Activity } from '../../kit/activity.js';
 import { LabAsk, type LabAskSpec } from '../../kit/ask.js';
-import { Feedback, useCheckpoint } from '../../kit/pedagogy.js';
+import { useCheckpoint } from '../../kit/pedagogy.js';
 import { useReducedMotion } from '../../kit/anim.js';
 import { PredictPlot } from '../../kit/predict.js';
 import { Vessel, type GuessTone } from '../../kit/vessel.js';
@@ -140,28 +140,17 @@ export function LinearModelLab(props: LinearModelProps = {}): ReactNode {
   );
 
   const readout = (
-    <StatList>
-      <span>
-        Your reading:{' '}
-        <strong className="math-reading-value" data-state={solved ? 'correct' : moved ? 'moved' : 'idle'}>
-          {num(guess.y)} {unit}
-        </strong>
+    <div className="math-linear-readout" data-state={solved ? 'correct' : moved ? 'moved' : 'idle'}>
+      <span className="math-linear-readout-label">Your reading</span>
+      <strong className="math-reading-value">
+        {num(guess.y)} {unit}
+      </strong>
+      <span className="math-linear-readout-guidance">
+        {solved
+          ? `Pattern found: +${num(slope)} ${unit} per ${(objectLabel ?? xLabel).toLowerCase().replace(/s$/, '')}.`
+          : 'Use the given points to estimate the next value.'}
       </span>
-      <Feedback
-        ok={solved}
-        okText={`Spot on, ${num(target)} ${unit}.`}
-        tryText="Read the pattern off the given points."
-      />
-      {solved && (
-        <span>
-          Rule:{' '}
-          <strong>
-            +{num(slope)} {unit}
-          </strong>{' '}
-          per {(objectLabel ?? xLabel).toLowerCase().replace(/s$/, '')}.
-        </span>
-      )}
-    </StatList>
+    </div>
   );
 
   // The concrete twin is part of the SAME workspace as the graph. It must not use the
@@ -244,17 +233,22 @@ export function LinearModelLab(props: LinearModelProps = {}): ReactNode {
       </Activity.Status>
       <Activity.Workspace>
         <Activity.Canvas label="Linked graph and concrete model">
-          <LinkedViews primary={figure} representations={twins.length ? twins : undefined} />
+          <LinkedViews
+            primary={figure}
+            representations={twins.length ? twins : undefined}
+            readout={readout}
+          />
         </Activity.Canvas>
-        <Activity.Inspector label="Prediction evidence">{readout}</Activity.Inspector>
       </Activity.Workspace>
-      <Activity.Feedback>
-        <span>Observe</span>
-        <div>
-          Equal changes in {xLabel.toLowerCase()} produce equal changes of {num(slope)} {unit} in{' '}
-          {yLabel.toLowerCase()}.
-        </div>
-      </Activity.Feedback>
+      {solved ? (
+        <Activity.Feedback>
+          <span>Pattern</span>
+          <div>
+            Equal changes in {xLabel.toLowerCase()} produce equal changes of {num(slope)} {unit} in{' '}
+            {yLabel.toLowerCase()}.
+          </div>
+        </Activity.Feedback>
+      ) : null}
       {footer ? (
         <section className="lab-authored-task" aria-label="Follow-up question">
           {footer}

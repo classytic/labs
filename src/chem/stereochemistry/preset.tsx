@@ -3,7 +3,7 @@
 import { useState, type ComponentType, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js';
-import { Chip, Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Chip, Segmented, Slider } from '../../kit/controls.js';
 import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { stereochemistryActivity } from './activity.js';
 import {
@@ -153,7 +153,7 @@ export function StereochemistryLab({
   const controls = (
     <>
       <Field label="molecule">
-        <Segmented
+        <ActivitySelect
           ariaLabel="molecule"
           value={molecule}
           onChange={setMolecule}

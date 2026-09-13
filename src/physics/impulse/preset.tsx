@@ -19,13 +19,13 @@
 
 import { useRef, useState, type ReactNode } from 'react';
 import { Stage, Segment, Polygon, Polyline, Label, useInView, useLearner } from '@classytic/stage';
-import { Slider, StatusPill, Chip } from '../../kit/controls.js';
+import { Slider, StatusPill } from '../../kit/controls.js';
 import { Field, LiveRegion, type ControlConfig } from '../../kit/frame.js';
 import { useReducedMotion, useFrameTick } from '../../kit/anim.js';
 import { clamp } from '../../core/util.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { SceneSurface, TracePanel } from '../mechanics/presentation.js';
+import { SceneSurface, SimulationTransport, TracePanel } from '../mechanics/presentation.js';
 import { halfSinePeakForce, halfSinePulse } from '../mechanics/core.js';
 import { Arrow, FigTag, FigText, Figure, Ground, HUE, STROKE, alpha, shade } from '../../kit/figure/index.js';
 
@@ -456,18 +456,6 @@ export function ImpulseLab({
 
   const controls = (
     <>
-      <Chip selected={running} onClick={running ? () => setRunning(false) : launch}>
-        {running ? 'Pause' : settled ? 'Run again' : 'Launch impact'}
-      </Chip>
-      <Chip
-        selected={false}
-        onClick={() => {
-          setRunning(false);
-          tRef.current = 0;
-        }}
-      >
-        Reset
-      </Chip>
       <Field label="contact Δt" value={`${(dt * 1000).toFixed(0)} ms`}>
         <Slider
           value={dt}
@@ -498,6 +486,18 @@ export function ImpulseLab({
           ariaLabel="impact speed (m/s)"
         />
       </Field>
+      <SimulationTransport
+        running={running}
+        onReset={() => {
+          setRunning(false);
+          tRef.current = 0;
+        }}
+        onToggle={running ? () => setRunning(false) : launch}
+        state={running ? 'Impact in progress' : settled ? (cracks ? 'Egg cracked' : 'Safe stop') : 'Ready'}
+        detail={`${(dt * 1000).toFixed(0)} ms contact`}
+        startLabel={settled ? 'Run again' : 'Launch impact'}
+        resetLabel="Reset impact"
+      />
     </>
   );
 

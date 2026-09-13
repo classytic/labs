@@ -27,7 +27,7 @@ import {
   waveOmega,
   type WaveSpec,
 } from './core.js';
-import { Chip, Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Chip, Slider } from '../../kit/controls.js';
 import { Field } from '../../kit/frame.js';
 import { useHints, HintLadder } from '../../kit/pedagogy.js';
 import { useControlSurface } from '@classytic/stage';
@@ -366,8 +366,9 @@ export function WaveLab({
   const controls = (
     <>
       <Field label="view">
-        <Segmented<WaveMode>
+        <ActivitySelect<WaveMode>
           ariaLabel="view"
+          className="physics-wave-mode-select"
           value={mode}
           onChange={setMode}
           options={(['travelling', 'superpose', 'standing'] as const).map((m) => ({

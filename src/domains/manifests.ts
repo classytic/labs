@@ -199,6 +199,7 @@ import partialFractions from './math/partial-fractions/manifest.js';
 import percentBar from './math/percent-bar/manifest.js';
 import phasePortrait from './math/phase-portrait/manifest.js';
 import polynomialSolver from './math/polynomial-solver/manifest.js';
+import radianWrap from './math/radian-wrap/manifest.js';
 import rateMachine from './math/rate-machine/manifest.js';
 import ratioShare from './math/ratio-share/manifest.js';
 import receiptTotals from './math/receipt-totals/manifest.js';
@@ -355,9 +356,9 @@ export const labManifests: readonly LabManifest[] = [
   customScene, derivation, derivativeExplorer, differentialEquation, domainRange, fractionBar, functionMachine, fundamentalTheorem,
   geometryFoundations, geometryTransform, gradientDescent, graph, growingPattern, harmonicForm, identityProof, integralExplorer,
   interactiveProblem, iteration, limitExplorer, linearModel, linearSystem, linesInSpace, measurement, mysteryBucket,
-  newtonMethod, numberLine, obliqueTriangle, partialFractions, percentBar, phasePortrait, polynomialSolver, rateMachine,
-  ratioShare, receiptTotals, sequencePredict, slideRule, solidNet, straightLine, systemSolve, taylorSeries,
-  triangleTrig, trigExplorer, trigSigns, vertexParabola,
+  newtonMethod, numberLine, obliqueTriangle, partialFractions, percentBar, phasePortrait, polynomialSolver, radianWrap,
+  rateMachine, ratioShare, receiptTotals, sequencePredict, slideRule, solidNet, straightLine, systemSolve,
+  taylorSeries, triangleTrig, trigExplorer, trigSigns, vertexParabola,
   // ml
   classifierThreshold, decisionBoundary, embeddingSpace, kmeans, knn, nextToken, regression,
   // networking

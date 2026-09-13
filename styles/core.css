@@ -592,7 +592,13 @@
 }
 .rule-card-formula {
   max-width: 100%;
+  /* Same trap as `.rule-step-expression`, and worse here because the formula is set
+     larger: one scrolling axis promotes the other, so a fraction grew a vertical
+     scrollbar on the card's headline equation. */
   overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.3em;
+  line-height: 1.9;
   font-size: clamp(1rem, 3cqw, 1.25rem);
   scrollbar-width: thin;
 }
@@ -652,7 +658,16 @@
 }
 .rule-step-expression {
   max-width: 100%;
+  /* `overflow-x: auto` alone is a trap: CSS promotes the OTHER axis from `visible`
+     to `auto` as soon as one axis scrolls. A KaTeX fraction is taller than the line
+     box it sits in, so every \frac grew its own vertical scrollbar, arrows and all.
+     Pin the y axis, then give the line box room so pinning it never clips: the
+     padding and line-height below are what let a two-storey fraction sit inside the
+     element rather than poke out of it. Wide expressions still scroll sideways. */
   overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.3em;
+  line-height: 1.9;
   font-size: var(--lab-t-sm);
 }
 .rule-step-note {
@@ -1501,6 +1516,11 @@
   flex-direction: column;
   gap: var(--lab-sp-10);
   align-items: flex-start;
+  min-inline-size: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 .lab-challenge-q + .lab-challenge-q {
   padding-top: var(--lab-sp-14);
@@ -1515,6 +1535,8 @@
   line-height: var(--lab-lh-ui);
   font-weight: var(--lab-w-medium);
   color: var(--lab-fg);
+  margin: 0;
+  padding: 0;
 }
 .lab-challenge-num {
   flex: none;
@@ -1595,6 +1617,7 @@
   height: 100%;
 }
 .lab-challenge-q .lab-choice {
+  position: relative;
   flex: 0 0 auto;
   width: 100%;
   max-width: 100%;
@@ -1612,6 +1635,25 @@
   line-height: var(--lab-lh-ui);
   text-align: start;
   white-space: normal;
+}
+.lab-choice-control {
+  position: absolute !important;
+  inline-size: 1px !important;
+  block-size: 1px !important;
+  margin: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
+.lab-choice:has(.lab-choice-control:focus-visible) {
+  border-color: var(--lab-accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--lab-accent) 22%, transparent);
+}
+.lab-choice[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.lab-choice-label {
+  min-inline-size: 0;
 }
 /* The letter is a handle, not decoration: it gives the explanation something to
    point at and keeps every answer's text starting on one vertical line. */
@@ -3268,7 +3310,18 @@
 .lab-authored-task {
   display: grid;
   gap: var(--lab-sp-10);
-  padding: var(--lab-sp-12) var(--lab-sp-16) 0;
+  padding: var(--lab-sp-14) var(--lab-sp-16);
+  border-top: 1px solid var(--border, var(--stage-grid));
+}
+/* An authored question is already a semantic section of Activity. Its challenge
+   must not draw a second card inside that section: one boundary, one prompt,
+   one response row. Standalone ChallengeCard instances retain their card. */
+.lab-authored-task > .lab-challenge {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
 }
 .lab-authored-task-lead {
   margin: 0;
@@ -3422,6 +3475,9 @@
    above stays for the FLEX row, where an oversized control wraps to the next line instead. */
 .lab-authored-controls > * {
   min-width: 0;
+}
+.lab-authored-controls > .physics-simulation-actions {
+  grid-column: 1 / -1;
 }
 @container lab-activity (min-width: 46rem) {
   .lab-authored-evidence:has(> .lab-evidence-surface + .lab-evidence-surface),

@@ -70,6 +70,7 @@ import {
 } from '../../dist/physics/modern/index.mjs';
 import {
   AreaRearrangeLab,
+  RadianWrapLab,
   BalanceAlgebraLab,
   MeasurementLab,
   SlideRuleLab,
@@ -264,6 +265,10 @@ export const GALLERY = [
       ],
     }),
   },
+  // Judged at a FULL TURN: seven bands, six tick marks, the straightened ruler and the
+  // "rim is closed" line are all on screen at once, which is the busiest this ever gets.
+  { name: 'radian-wrap-full-turn', element: h(RadianWrapLab, { startRadians: 6.283185 }) },
+  { name: 'radian-wrap-one', element: h(RadianWrapLab, { startRadians: 1 }) },
   { name: 'solid-net-net', element: h(SolidNetLab, { mode: 'net' }) },
   { name: 'solid-net-compound', element: h(SolidNetLab, { mode: 'compound' }) },
   // Applied measurement (the wheel / cylinder / area word-problem family) — every mode is judged.

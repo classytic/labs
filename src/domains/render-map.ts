@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 
 export type LabRuntimeLoader = () => Promise<{ default: (attrs: any) => ReactNode }>;
 
-/** 277 labs, keyed by lab id. */
+/** 278 labs, keyed by lab id. */
 export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'apportion': () => import('./accounting/apportion/runtime.js'),
   'break-even': () => import('./accounting/break-even/runtime.js'),
@@ -182,6 +182,7 @@ export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'percent-bar': () => import('./math/percent-bar/runtime.js'),
   'phase-portrait': () => import('./math/phase-portrait/runtime.js'),
   'polynomial-solver': () => import('./math/polynomial-solver/runtime.js'),
+  'radian-wrap': () => import('./math/radian-wrap/runtime.js'),
   'rate-machine': () => import('./math/rate-machine/runtime.js'),
   'ratio-share': () => import('./math/ratio-share/runtime.js'),
   'receipt-totals': () => import('./math/receipt-totals/runtime.js'),
@@ -463,6 +464,7 @@ export const labTags: Record<string, string> = {
   'percent-bar': 'PercentBar',
   'phase-portrait': 'PhasePortrait',
   'polynomial-solver': 'PolynomialSolver',
+  'radian-wrap': 'RadianWrap',
   'rate-machine': 'RateMachine',
   'ratio-share': 'RatioShare',
   'receipt-totals': 'ReceiptTotals',

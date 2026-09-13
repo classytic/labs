@@ -12,7 +12,7 @@
  */
 
 import { useState, type ReactNode } from 'react';
-import { Segmented } from '../../kit/controls.js';
+import { ActivitySelect } from '../../kit/controls.js';
 import { Field, Readout } from '../../kit/frame.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity, AuthoredChoiceQuestion } from '../../kit/activity-authoring.js';
@@ -407,7 +407,7 @@ export function PeriodicTrendsLab({
 
   const controls = (
     <Field label="colour by">
-      <Segmented
+      <ActivitySelect
         ariaLabel="colour by"
         value={prop}
         onChange={setProp}
