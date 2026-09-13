@@ -2517,6 +2517,17 @@ export const generatedManifestCatalog: LabManifestCatalogEntry[] = [
   },
   },
   {
+    key: 'expression-order',
+    tag: 'ExpressionOrderLab',
+    label: 'Order of operations: make every operation wait its turn',
+    description: 'Predict the first valid operation, then reveal an authored chain of equivalent reductions checked by the shared Stage expression engine.',
+    category: 'interactive',
+    void: true,
+    group: 'Number systems',
+    domain: 'math',
+    taxonomy: { grades:['5','6','7','8'], outcomes:['order-of-operations','bodmas','pemdas','equivalent-expressions'], durationMinutes:10, interaction:'guided', authorability:'advanced', representation:'number', related:['division-workbench','proof-builder'] },
+  },
+  {
     key: 'fraction-bar',
     label: 'Fraction strip',
     description: 'A strip cut into equal parts; drag to shade k/n. Reads as fraction, decimal, percent and (with a whole) a quantity. An optional compare strip shows the equivalent fraction.',

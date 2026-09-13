@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 
 export type LabRuntimeLoader = () => Promise<{ default: (attrs: any) => ReactNode }>;
 
-/** 282 labs, keyed by lab id. */
+/** 283 labs, keyed by lab id. */
 export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'apportion': () => import('./accounting/apportion/runtime.js'),
   'break-even': () => import('./accounting/break-even/runtime.js'),
@@ -159,6 +159,7 @@ export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'differential-equation': () => import('./math/differential-equation/runtime.js'),
   'division-workbench': () => import('./math/division-workbench/runtime.js'),
   'domain-range': () => import('./math/domain-range/runtime.js'),
+  'expression-order': () => import('./math/expression-order/runtime.js'),
   'fraction-bar': () => import('./math/fraction-bar/runtime.js'),
   'function-machine': () => import('./math/function-machine/runtime.js'),
   'fundamental-theorem': () => import('./math/fundamental-theorem/runtime.js'),
@@ -445,6 +446,7 @@ export const labTags: Record<string, string> = {
   'differential-equation': 'DifferentialEquation',
   'division-workbench': 'DivisionWorkbenchLab',
   'domain-range': 'DomainRange',
+  'expression-order': 'ExpressionOrderLab',
   'fraction-bar': 'FractionBar',
   'function-machine': 'FunctionMachine',
   'fundamental-theorem': 'FundamentalTheorem',

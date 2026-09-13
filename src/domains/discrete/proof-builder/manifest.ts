@@ -12,6 +12,36 @@ export default defineLab({
     'Construct a justified finite argument using direct proof, contrapositive, or contradiction and receive feedback at the exact invalid inference.',
   schema: z.object({
     strategy: z.enum(['direct', 'contrapositive', 'contradiction']).optional(),
+    /**
+     * The proof to build. Without this declared, the lab was stuck on its built-in default.
+     *
+     * The component has always accepted a `graph` and falls back to `DEFAULT_GRAPH`, which proves
+     * "n² even implies n even" by contradiction. That argument is on no syllabus we teach, so the
+     * one lab in the library that makes a learner CONSTRUCT a proof could not be pointed at the
+     * circle theorems, the similarity chains or the trigonometric identities that need it. Every
+     * lesson got the same undergraduate proof, or the lab went unused, and it went unused.
+     *
+     * `requires` is what makes it a proof rather than a list: a step only becomes available once
+     * the steps it depends on are chosen, so an argument cannot be assembled out of order.
+     */
+    graph: z
+      .object({
+        premises: z.array(z.string().min(1)).min(1),
+        target: z.string().min(1),
+        conclusion: z.string().min(1),
+        nodes: z
+          .array(
+            z.object({
+              id: z.string().min(1),
+              statement: z.string().min(1),
+              justification: z.string().min(1),
+              requires: z.array(z.string().min(1)).optional(),
+              distractorFeedback: z.string().optional(),
+            }),
+          )
+          .min(2),
+      })
+      .optional(),
     ...commonLabProps,
   }),
   taxonomy: {
