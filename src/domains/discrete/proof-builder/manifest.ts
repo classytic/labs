@@ -37,9 +37,64 @@ export default defineLab({
               justification: z.string().min(1),
               requires: z.array(z.string().min(1)).optional(),
               distractorFeedback: z.string().optional(),
+              /** Figure element ids this step is about; they light and the rest dims. */
+              highlights: z.array(z.string().min(1)).optional(),
             }),
           )
           .min(2),
+        /**
+         * An optional diagram, so a geometry proof can be seen as well as read.
+         *
+         * Everything is placed by POINT ID rather than by coordinates repeated at each use, so a
+         * figure cannot fall out of agreement with itself. Points, segments, circles and angles
+         * are enough for the circle theorems and angle chases this lab exists for; stopping there
+         * keeps authoring to something a teacher can fill in.
+         */
+        figure: z
+          .object({
+            points: z
+              .array(
+                z.object({
+                  id: z.string().min(1),
+                  x: z.number(),
+                  y: z.number(),
+                  label: z.string().optional(),
+                }),
+              )
+              .min(2),
+            segments: z
+              .array(
+                z.object({
+                  id: z.string().optional(),
+                  from: z.string().min(1),
+                  to: z.string().min(1),
+                  label: z.string().optional(),
+                }),
+              )
+              .optional(),
+            circles: z
+              .array(
+                z.object({
+                  id: z.string().optional(),
+                  center: z.string().min(1),
+                  through: z.string().optional(),
+                  r: z.number().positive().optional(),
+                }),
+              )
+              .optional(),
+            angles: z
+              .array(
+                z.object({
+                  id: z.string().optional(),
+                  at: z.string().min(1),
+                  from: z.string().min(1),
+                  to: z.string().min(1),
+                  label: z.string().optional(),
+                }),
+              )
+              .optional(),
+          })
+          .optional(),
       })
       .optional(),
     ...commonLabProps,
