@@ -235,6 +235,10 @@ export const flatVecSchema = z.object({
   dy: z.union([z.number(), z.string()]).optional(),
   color: z.string().optional(),
   drag: z.boolean().optional(),
+  lockMagnitude: z
+    .boolean()
+    .optional()
+    .describe('dragging rotates this vector and holds its length (constant speed)'),
 });
 export const typePanelSchema = z.object({
   name: z.string(),

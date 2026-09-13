@@ -51,13 +51,29 @@
 }
 .physics-vector-readout {
   display: grid;
-  gap: var(--lab-sp-4);
+  gap: var(--lab-sp-6);
   font-weight: var(--lab-w-medium);
   font-variant-numeric: tabular-nums;
 }
 
 .physics-vector-readout > span {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--lab-sp-6);
+  color: var(--foreground, var(--stage-fg));
+}
+.physics-vector-readout i {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--vector-color);
+}
+.physics-vector-readout strong {
   color: var(--vector-color);
+}
+.physics-vector-readout small {
+  color: var(--muted-foreground, var(--stage-muted));
 }
 .physics-lever-slider {
   flex: 1 1 10rem;

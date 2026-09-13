@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { CanvasLayer, useFrameLoop, useInView, type CoordinateSystem } from '@classytic/stage';
-import { Slider, StatusPill, Chip } from '../kit/controls.js';
+import { Slider, StatusPill } from '../kit/controls.js';
 import { Field, LiveRegion, type ControlConfig } from '../kit/frame.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../kit/activity-authoring.js';
-import { SceneSurface } from './mechanics/presentation.js';
+import { SceneSurface, SimulationTransport } from './mechanics/presentation.js';
 import { launchState, specificOrbitalEnergy, stepTwoBody, type TwoBodyState } from './orbital/core.js';
 
 const MU = 1,
@@ -355,23 +355,6 @@ export function OrbitLab({
   );
   const controls = (
     <>
-      <div className="lab-field-row">
-        <Chip
-          selected={phase === 'running'}
-          onClick={
-            phase === 'running'
-              ? () => setPhase('paused')
-              : phase === 'paused'
-                ? () => setPhase('running')
-                : launch
-          }
-        >
-          {phase === 'running' ? 'Pause' : phase === 'paused' ? 'Resume' : 'Launch'}
-        </Chip>
-        <Chip selected={false} onClick={reset}>
-          Reset
-        </Chip>
-      </div>
       <Field label="launch speed" value={`${speed.toFixed(2)}× circular`}>
         <Slider
           value={speed}
@@ -385,6 +368,21 @@ export function OrbitLab({
           ariaLabel="launch speed relative to circular speed"
         />
       </Field>
+      <SimulationTransport
+        running={phase === 'running'}
+        onReset={reset}
+        onToggle={
+          phase === 'running'
+            ? () => setPhase('paused')
+            : phase === 'paused'
+              ? () => setPhase('running')
+              : launch
+        }
+        state={phase === 'idle' ? 'Ready' : phase === 'running' ? 'In flight' : verdict}
+        detail={`r ${radius.toFixed(2)} · v ${velocity.toFixed(2)}`}
+        startLabel={phase === 'paused' ? 'Resume' : 'Launch'}
+        resetLabel="Reset orbit launch"
+      />
     </>
   );
   return (

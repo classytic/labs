@@ -74,8 +74,12 @@
   display: inline-flex;
   align-items: center;
   gap: var(--lab-sp-6);
-  color: var(--stage-muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--stage-fg);
+}
+
+.math-grapher-formula {
+  font-size: var(--lab-t-body);
+  line-height: 1;
 }
 
 .math-grapher-swatch {

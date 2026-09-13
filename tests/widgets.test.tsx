@@ -115,6 +115,13 @@ describe('widget smoke', () => {
     expect(container.textContent).toBeTruthy();
   });
 
+  it('Grapher presents evaluator expressions as typeset mathematics', () => {
+    const { container } = render(<Grapher equations={['m*x^2/r']} />);
+
+    expect(container.querySelector('.math-grapher-formula .katex')).not.toBeNull();
+    expect(container.querySelector('.math-grapher-legend')?.textContent).not.toContain('m*x^2/r');
+  });
+
   it('Derivation mounts and renders its steps (no canvas — it is stepped LaTeX)', () => {
     const { container } = render(
       <Derivation steps={['a^2+b^2=c^2', { tex: 'c = \\sqrt{a^2+b^2}', note: 'take roots' }]} />,

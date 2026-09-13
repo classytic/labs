@@ -160,7 +160,7 @@ export function VectorScene({
             tail={r.tail}
             comp={r.comp}
             color={r.color}
-            label={r.label}
+            label={r.label ? r.id : undefined}
             components={r.components}
           />
         ))}
@@ -189,7 +189,10 @@ export function VectorScene({
           const ang = toDeg(Math.atan2(r.comp.y, r.comp.x));
           return (
             <span key={r.id} style={{ '--vector-color': r.color } as CSSProperties}>
-              {r.label}: {mag.toFixed(2)} ∠ {ang.toFixed(0)}°
+              <i aria-hidden="true" />
+              <span>{r.label}</span>
+              <strong>{mag.toFixed(1)}</strong>
+              <small>{ang.toFixed(0)}°</small>
             </span>
           );
         })}

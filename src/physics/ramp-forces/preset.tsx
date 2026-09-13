@@ -25,7 +25,7 @@ import { Slider, Chip, StatusPill } from '../../kit/controls.js';
 import { Field, Control, LiveRegion, type ControlConfig } from '../../kit/frame.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { MechanicsVector, SceneSurface } from '../mechanics/presentation.js';
+import { MechanicsVector, SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { rampForceState } from '../mechanics/core.js';
 
 const RAMP_ACTIVITY: AuthoredActivity = {
@@ -454,23 +454,6 @@ export function RampForcesLab({
 
   const controls = (
     <>
-      <Control name="release">
-        <Chip selected={sliding} disabled={held} onClick={sliding ? () => setSliding(false) : release}>
-          {sliding ? 'Pause' : landed ? 'Release again' : 'Release'}
-        </Chip>
-      </Control>
-      <Chip
-        selected={false}
-        onClick={() => {
-          setSliding(false);
-          setP(0.55);
-          p0.current = 0.55;
-          setLanded(false);
-          startRef.current = null;
-        }}
-      >
-        Reset
-      </Chip>
       <Control name="components">
         <Chip selected={comps} onClick={() => setComps((c) => !c)}>
           components
@@ -524,6 +507,22 @@ export function RampForcesLab({
           ariaLabel="kinetic friction coefficient"
         />
       </Field>
+      <SimulationTransport
+        running={sliding}
+        onReset={() => {
+          setSliding(false);
+          setP(0.55);
+          p0.current = 0.55;
+          setLanded(false);
+          startRef.current = null;
+        }}
+        onToggle={sliding ? () => setSliding(false) : release}
+        state={held ? 'Held by friction' : sliding ? 'Sliding' : landed ? 'Complete' : 'Ready'}
+        detail={held ? 'increase the slope or push' : `net ${Math.abs(net).toFixed(1)} N`}
+        startLabel={landed ? 'Release again' : 'Release'}
+        disabled={held}
+        resetLabel="Reset ramp"
+      />
     </>
   );
 

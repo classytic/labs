@@ -15,14 +15,14 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Stage, Circle, Vector, Label, Dot, type Vec2 } from '@classytic/stage';
 import { useReducedMotion, useFrameTick } from '../../kit/anim.js';
-import { Chip, Segmented, Slider } from '../../kit/controls.js';
+import { Segmented, Slider } from '../../kit/controls.js';
 import { Field } from '../../kit/frame.js';
 import { useHints, HintLadder } from '../../kit/pedagogy.js';
 import { usePlayGate, PlayWrap } from '../../kit/play.js';
 import { useControlSurface } from '@classytic/stage';
 import { Tex } from '../../core/tex.js';
 import { cyclotronSense, cyclotronRadius } from './core.js';
-import { SceneSurface } from '../mechanics/presentation.js';
+import { SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { FieldActivity } from '../fields/activity.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 
@@ -155,20 +155,6 @@ export function LorentzForceLab({
 
   const controls = (
     <>
-      <div className="lab-field-row">
-        <Chip selected={gate.playing} onClick={() => gate.setPlaying(!gate.playing)}>
-          {gate.playing ? 'Pause' : 'Play'}
-        </Chip>
-        <Chip
-          selected={false}
-          onClick={() => {
-            theta.current = -Math.PI / 2;
-            gate.setPlaying(false);
-          }}
-        >
-          Reset
-        </Chip>
-      </div>
       <Field label="charge">
         <Segmented
           ariaLabel="charge"
@@ -197,6 +183,17 @@ export function LorentzForceLab({
       <Field label="speed v" value={v.toFixed(1)}>
         <Slider value={v} min={0.6} max={4} step={0.1} onChange={setV} ariaLabel="speed" />
       </Field>
+      <SimulationTransport
+        running={gate.playing}
+        onReset={() => {
+          theta.current = -Math.PI / 2;
+          gate.setPlaying(false);
+        }}
+        onToggle={() => gate.setPlaying(!gate.playing)}
+        state={gate.playing ? 'Deflecting' : 'Paused'}
+        detail={`${sense > 0 ? 'counter-clockwise' : 'clockwise'} · r ${r.toFixed(2)}`}
+        resetLabel="Reset particle"
+      />
     </>
   );
 

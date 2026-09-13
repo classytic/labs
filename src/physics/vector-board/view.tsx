@@ -18,6 +18,8 @@ export interface FlatVec {
   dy?: number | string;
   color?: string;
   drag?: boolean;
+  /** Dragging rotates and holds the length: for a body moving at constant speed. */
+  lockMagnitude?: boolean;
 }
 
 export interface VectorBoardViewProps {
@@ -64,6 +66,7 @@ export function VectorBoardView({
     label: v.label,
     color: v.color || undefined,
     drag: !!v.drag,
+    lockMagnitude: !!v.lockMagnitude,
   }));
   const hasGoal = goalX !== undefined && goalX !== '' && goalY !== undefined && goalY !== '';
   const goal = hasGoal ? { match: { x: Number(goalX) || 0, y: Number(goalY) || 0 }, tol } : undefined;

@@ -35,7 +35,7 @@ import { HintLadder, useHints } from '../../kit/pedagogy.js';
 import { Field, LiveRegion } from '../../kit/frame.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { MechanicsVector, SceneSurface } from '../mechanics/presentation.js';
+import { MechanicsVector, SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { stoppingMetrics, stoppingPositionAt, stoppingSpeedAt } from '../mechanics/core.js';
 
 const STOPPING_ACTIVITY: AuthoredActivity = {
@@ -503,21 +503,6 @@ export function StoppingDistanceLab({
 
   const controls = (
     <>
-      <Chip selected={driving} onClick={driving ? () => setDriving(false) : drive}>
-        {driving ? 'Pause' : finished ? 'Run again' : 'Drive'}
-      </Chip>
-      <Chip
-        selected={false}
-        onClick={() => {
-          setDriving(false);
-          setT(0);
-          setFinished(false);
-          setRevealed(!predict);
-          startRef.current = null;
-        }}
-      >
-        Reset
-      </Chip>
       <Chip selected={false} onClick={doubleSpeed}>
         ×2 speed
       </Chip>
@@ -569,6 +554,21 @@ export function StoppingDistanceLab({
           ariaLabel="braking deceleration (m/s²)"
         />
       </Field>
+      <SimulationTransport
+        running={driving}
+        onReset={() => {
+          setDriving(false);
+          setT(0);
+          setFinished(false);
+          setRevealed(!predict);
+          startRef.current = null;
+        }}
+        onToggle={driving ? () => setDriving(false) : drive}
+        state={driving ? (t < tr ? 'Reacting' : 'Braking') : finished ? 'Stopped' : 'Ready'}
+        detail={`${Math.min(t, tTotal).toFixed(1)} of ${tTotal.toFixed(1)} s`}
+        startLabel={finished ? 'Run again' : 'Drive'}
+        resetLabel="Reset stopping run"
+      />
     </>
   );
 

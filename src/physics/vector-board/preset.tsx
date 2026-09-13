@@ -37,6 +37,50 @@ export interface BoardVector {
   label?: string;
   /** Head is draggable by the learner. */
   drag?: boolean;
+  /**
+   * Dragging ROTATES this vector and holds its length.
+   *
+   * For anything moving at constant speed, the magnitude is the premise, not a
+   * free variable. A circular-motion board authored at 3.0 m/s let a learner drag
+   * the head to 3.2 and still reported a confident change-in-velocity, quietly
+   * falsifying "its speed never changes by even a little" — and worse, with
+   * unequal speeds the difference arrow stops pointing at the centre, which is the
+   * exact conclusion the lesson is walking them towards.
+   *
+   * Sweeping the velocity round the circle while Δv keeps pointing inward IS the
+   * lesson, so the answer is to constrain the drag rather than disable it.
+   */
+  lockMagnitude?: boolean;
+}
+
+/**
+ * Where a dragged head lands, as components from its tail.
+ *
+ * Split out of the drag callback so the rule is testable without a pointer: a
+ * constant-speed vector must come back with its authored length whatever the learner
+ * does with it, and that is the sort of claim worth pinning.
+ *
+ * `lock` keeps the authored magnitude and takes only the DIRECTION from the pointer.
+ * Snapping is deliberately skipped in that mode: snapping to the grid would pull the
+ * head off the circle and change the very length being held.
+ */
+export function dragTo(
+  pointer: Vec2,
+  tail: Vec2,
+  authored: Vec2,
+  opts: { lock?: boolean; snap?: (n: number) => number } = {},
+): Vec2 {
+  const want = { x: pointer.x - tail.x, y: pointer.y - tail.y };
+  if (!opts.lock) {
+    const snap = opts.snap ?? ((n: number) => n);
+    return { x: snap(pointer.x) - tail.x, y: snap(pointer.y) - tail.y };
+  }
+  const len = Math.hypot(want.x, want.y);
+  const fixed = Math.hypot(authored.x, authored.y);
+  // A drag onto the tail has no direction to read, and a zero-length authored vector
+  // has no length to keep: in both cases the only safe move is to stay put.
+  if (len < 1e-6 || fixed < 1e-6) return authored;
+  return { x: (want.x / len) * fixed, y: (want.y / len) * fixed };
 }
 
 export interface VectorBoardProps {
@@ -348,7 +392,9 @@ export function VectorBoardLab({
                 setInteracted(true);
                 setComps((cs) =>
                   cs.map((c, j) =>
-                    j === i ? { x: snapV(p.x) - tailOf(i).x, y: snapV(p.y) - tailOf(i).y } : c,
+                    j === i
+                      ? dragTo(p, tailOf(i), c, { lock: v.lockMagnitude, snap: snapV })
+                      : c,
                   ),
                 );
               }}

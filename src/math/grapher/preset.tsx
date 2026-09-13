@@ -13,7 +13,8 @@
  */
 
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
-import { Stage, Segment, Label, Plot, compileExpr, type CompiledExpr } from '@classytic/stage';
+import { Stage, Segment, Label, Plot, compileExpr, toLatex, type CompiledExpr } from '@classytic/stage';
+import { Tex } from '../../core/tex.js';
 import { Slider } from '../../kit/controls.js';
 import { Field } from '../../kit/frame.js';
 import { Activity } from '../../kit/activity.js';
@@ -23,6 +24,8 @@ const PALETTE = ['var(--stage-accent)', 'var(--stage-accent-2)', 'var(--stage-go
 export interface GraphEquation {
   /** Formula in `x` and any params, e.g. `a*sin(b*x + c)`. */
   expr: string;
+  /** Optional authored TeX for the learner-facing label. Defaults to the parsed expression's TeX. */
+  latex?: string;
   color?: string;
 }
 export interface GraphParam {
@@ -47,6 +50,7 @@ export interface GrapherProps {
 
 interface Curve {
   expr: string;
+  latex: string;
   color: string;
   compiled: CompiledExpr | null;
   error?: string;
@@ -137,7 +141,13 @@ export function Grapher({
       normalizeEquations(equations).map((eq, i) => {
         const res = compileExpr(eq.expr);
         const compiled = typeof res.fn === 'function' ? (res as CompiledExpr) : null;
-        return { expr: eq.expr, color: eq.color ?? PALETTE[i % PALETTE.length]!, compiled, error: res.error };
+        return {
+          expr: eq.expr,
+          latex: eq.latex ?? (compiled ? toLatex(compiled.ast) : eq.expr),
+          color: eq.color ?? PALETTE[i % PALETTE.length]!,
+          compiled,
+          error: res.error,
+        };
       }),
     [equations],
   );
@@ -318,8 +328,8 @@ export function Grapher({
       <div className="math-grapher-legend">
         {curves.map((cu, i) => (
           <span key={i} className="math-grapher-legend-item">
-            <span className="math-grapher-swatch" style={{ '--curve-color': cu.color } as CSSProperties} />y ={' '}
-            {cu.expr}
+            <span className="math-grapher-swatch" style={{ '--curve-color': cu.color } as CSSProperties} />
+            <Tex tex={`y=${cu.latex}`} className="math-grapher-formula" />
           </span>
         ))}
       </div>
