@@ -86,8 +86,12 @@ export function dragTo(
 export interface VectorBoardProps {
   view?: { xMin: number; xMax: number; yMin: number; yMax: number };
   vectors: BoardVector[];
-  /** sum → a+b+… resultant; diff → a−b (relative velocity); none → no resultant. */
-  combine?: 'sum' | 'diff' | 'none';
+  /**
+   * sum → a+b+… resultant, every arrow from a common origin; chain → the same resultant, but each
+   * arrow drawn head to tail so equilibrium appears as a CLOSED polygon; diff → a−b (relative
+   * velocity); none → no resultant.
+   */
+  combine?: 'sum' | 'diff' | 'none' | 'chain';
   resultantLabel?: string;
   resultantColor?: string;
   show?: { components?: boolean; angle?: boolean; magnitude?: boolean; parallelogram?: boolean };
@@ -179,13 +183,30 @@ function autoView(
 ): NonNullable<VectorBoardProps['view']> {
   const comps = vectors.map((v) => v.comp);
   const pts: Vec2[] = [ORIGIN];
-  vectors.forEach((v, i) => pts.push(vec.add(v.tail ?? ORIGIN, comps[i] ?? ORIGIN)));
+  // Every arrow TIP, and in chain mode every joint too, since a head-to-tail path can travel well
+  // outside the box that its individual vectors would occupy from a common origin.
+  let walk: Vec2 = ORIGIN;
+  vectors.forEach((v, i) => {
+    const tail = v.tail ?? (combine === 'chain' ? walk : ORIGIN);
+    const tip = vec.add(tail, comps[i] ?? ORIGIN);
+    pts.push(tail, tip);
+    walk = tip;
+  });
   if (combine === 'diff') pts.push(vec.sub(comps[0] ?? ORIGIN, comps[1] ?? ORIGIN));
   else if (combine !== 'none') pts.push(comps.reduce<Vec2>((a, c) => vec.add(a, c), ORIGIN));
   if (goal) pts.push(goal.match);
   const xs = pts.map((p) => p.x);
   const ys = pts.map((p) => p.y);
-  const pad = 1.6;
+  /**
+   * Padding proportional to the figure, with a floor.
+   *
+   * It was a flat 1.6 units. On a board of forces spanning 40 units that is 4%, and the magnitude
+   * labels sit OUTSIDE the geometry in pixels, so "|S| = 30.0" was cut off by the bottom edge.
+   * A vector that reaches the frame always loses its label; it only became obvious with chain
+   * mode, which pushes arrows out to the edge instead of fanning them around the origin.
+   */
+  const span = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys), 1);
+  const pad = Math.max(1.6, span * 0.12);
   return {
     xMin: Math.floor(Math.min(0, ...xs) - pad),
     xMax: Math.ceil(Math.max(0, ...xs) + pad),
@@ -223,7 +244,25 @@ export function VectorBoardLab({
     [viewProp, vectors, combine, goal],
   );
 
-  const tailOf = (i: number): Vec2 => vectors[i]?.tail ?? ORIGIN;
+  /**
+   * Where each arrow starts.
+   *
+   * In `chain` mode every arrow begins where the previous one ended, which is what "head to tail"
+   * means and what a triangle of forces IS. Drawn from a common origin instead, three forces in
+   * equilibrium look like a star and no triangle appears anywhere, so a lesson whose whole point
+   * is "the last arrow lands on the tail of the first" showed the learner something else entirely.
+   *
+   * An explicit authored `tail` still wins, so a chain can be anchored somewhere other than the
+   * origin.
+   */
+  const tailOf = (i: number): Vec2 => {
+    const authored = vectors[i]?.tail;
+    if (authored) return authored;
+    if (combine !== 'chain') return ORIGIN;
+    let acc: Vec2 = ORIGIN;
+    for (let k = 0; k < i; k += 1) acc = vec.add(acc, comps[k] ?? ORIGIN);
+    return acc;
+  };
   const tipOf = (i: number): Vec2 => vec.add(tailOf(i), comps[i] ?? ORIGIN);
   const snapV = (v: number): number => (snap ? Math.round(v / snap) * snap : v);
 

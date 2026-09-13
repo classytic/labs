@@ -12,7 +12,7 @@ export default defineLab({
     'Drag vector heads; live resultant (sum) or relative velocity (diff, the rain case) + angle. Optional drag-to-match goal.',
   schema: z.object({
     vectors: z.array(flatVecSchema).max(12).default([]),
-    combine: z.enum(['sum', 'diff', 'none']).default('sum'),
+    combine: z.enum(['sum', 'diff', 'none', 'chain']).default('sum'),
     goalX: z.union([z.number(), z.string()]).optional(),
     goalY: z.union([z.number(), z.string()]).optional(),
     components: z.boolean().optional(),
