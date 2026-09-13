@@ -23,7 +23,8 @@ import recurrenceBuilder from '../discrete/recurrence-builder/manifest.js';
 import ruleCard from '../discrete/rule-card/manifest.js';
 import sampleSpace from '../discrete/sample-space/manifest.js';
 import selection from '../discrete/selection/manifest.js';
+import statementLogic from '../discrete/statement-logic/manifest.js';
 import truthTable from '../discrete/truth-table/manifest.js';
 import venn from '../discrete/venn/manifest.js';
 
-export const blocks = [arrangements, bayes, binomial, combinationStudio, countingSlots, countingTree, expectedValue, hypergeometric, inductionLadder, invariantDetective, karnaugh, lln, modularClock, monteCarlo, montyHall, outcomeBuilder, pascal, pigeonholeAdversary, proofBuilder, recurrenceBuilder, ruleCard, sampleSpace, selection, truthTable, venn].map(manifestToBlock);
+export const blocks = [arrangements, bayes, binomial, combinationStudio, countingSlots, countingTree, expectedValue, hypergeometric, inductionLadder, invariantDetective, karnaugh, lln, modularClock, monteCarlo, montyHall, outcomeBuilder, pascal, pigeonholeAdversary, proofBuilder, recurrenceBuilder, ruleCard, sampleSpace, selection, statementLogic, truthTable, venn].map(manifestToBlock);

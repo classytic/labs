@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 
 export type LabRuntimeLoader = () => Promise<{ default: (attrs: any) => ReactNode }>;
 
-/** 279 labs, keyed by lab id. */
+/** 282 labs, keyed by lab id. */
 export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'apportion': () => import('./accounting/apportion/runtime.js'),
   'break-even': () => import('./accounting/break-even/runtime.js'),
@@ -99,6 +99,7 @@ export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'rule-card': () => import('./discrete/rule-card/runtime.js'),
   'sample-space': () => import('./discrete/sample-space/runtime.js'),
   'selection': () => import('./discrete/selection/runtime.js'),
+  'statement-logic': () => import('./discrete/statement-logic/runtime.js'),
   'truth-table': () => import('./discrete/truth-table/runtime.js'),
   'venn': () => import('./discrete/venn/runtime.js'),
   'demand-shift-vs-move': () => import('./economics/demand-shift-vs-move/runtime.js'),
@@ -156,6 +157,7 @@ export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'derivation': () => import('./math/derivation/runtime.js'),
   'derivative-explorer': () => import('./math/derivative-explorer/runtime.js'),
   'differential-equation': () => import('./math/differential-equation/runtime.js'),
+  'division-workbench': () => import('./math/division-workbench/runtime.js'),
   'domain-range': () => import('./math/domain-range/runtime.js'),
   'fraction-bar': () => import('./math/fraction-bar/runtime.js'),
   'function-machine': () => import('./math/function-machine/runtime.js'),
@@ -178,6 +180,7 @@ export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'mystery-bucket': () => import('./math/mystery-bucket/runtime.js'),
   'newton-method': () => import('./math/newton-method/runtime.js'),
   'number-line': () => import('./math/number-line/runtime.js'),
+  'number-structure': () => import('./math/number-structure/runtime.js'),
   'oblique-triangle': () => import('./math/oblique-triangle/runtime.js'),
   'partial-fractions': () => import('./math/partial-fractions/runtime.js'),
   'percent-bar': () => import('./math/percent-bar/runtime.js'),
@@ -382,6 +385,7 @@ export const labTags: Record<string, string> = {
   'rule-card': 'RuleCard',
   'sample-space': 'SampleSpaceBoard',
   'selection': 'Selection',
+  'statement-logic': 'StatementLogic',
   'truth-table': 'TruthTable',
   'venn': 'VennSetBoard',
   'demand-shift-vs-move': 'DemandShiftVsMove',
@@ -439,6 +443,7 @@ export const labTags: Record<string, string> = {
   'derivation': 'Derivation',
   'derivative-explorer': 'DerivativeExplorer',
   'differential-equation': 'DifferentialEquation',
+  'division-workbench': 'DivisionWorkbenchLab',
   'domain-range': 'DomainRange',
   'fraction-bar': 'FractionBar',
   'function-machine': 'FunctionMachine',
@@ -461,6 +466,7 @@ export const labTags: Record<string, string> = {
   'mystery-bucket': 'MysteryBucket',
   'newton-method': 'NewtonMethod',
   'number-line': 'NumberLine',
+  'number-structure': 'NumberStructureLab',
   'oblique-triangle': 'ObliqueTriangle',
   'partial-fractions': 'PartialFractions',
   'percent-bar': 'PercentBar',
@@ -526,7 +532,7 @@ export const labTags: Record<string, string> = {
   'length-contraction': 'LengthContractionLab',
   'lens-imaging': 'LensImaging',
   'lever': 'Lever',
-  'linear-pursuit': 'Catch-up motion',
+  'linear-pursuit': 'LinearPursuit',
   'lorentz': 'Lorentz',
   'lorentz-transformation': 'LorentzTransformationLab',
   'magnetism': 'Magnetism',

@@ -69,6 +69,20 @@ describe('production manifest registry', () => {
     for (const m of labManifests) expect(labTags[m.id], `tag for ${m.id}`).toBe(m.tag ?? labTag(m.id));
   });
 
+  it('every tag is a usable JSX identifier, because a lesson writes it as one', () => {
+    /**
+     * `linear-pursuit` shipped with `tag: 'Catch-up motion'`, its human label. Nothing rejected
+     * it: the generator copied it into the render map, the sync copied it into the curriculum's
+     * lab-keys snapshot, and both looked consistent. But a lesson has to write `<Catch-up motion />`,
+     * which is not parseable, so the lab was unusable from the day it was added and no count of
+     * "labs in the catalogue" revealed it.
+     */
+    const bad = labManifests
+      .map((m) => [m.id, m.tag ?? labTag(m.id)] as const)
+      .filter(([, tag]) => !/^[A-Z][A-Za-z0-9]*$/.test(tag));
+    expect(bad, `tags must be PascalCase identifiers: ${JSON.stringify(bad)}`).toEqual([]);
+  });
+
   it('the PUBLIC catalog derives each migrated lab exactly once (no legacy duplicate)', () => {
     for (const key of manifestKeys) {
       const rows = labCatalog.filter((e) => e.key === key);

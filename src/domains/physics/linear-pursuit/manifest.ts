@@ -4,7 +4,14 @@ import { commonLabProps } from '../../../shared/fields.js';
 
 export default defineLab({
   id: 'linear-pursuit',
-  tag: 'Catch-up motion',
+  /**
+   * The JSX tag a lesson writes, so it must be a valid identifier.
+   *
+   * This read `Catch-up motion`, the human label, which the generator copied faithfully into the
+   * render map and the curriculum's lab-keys snapshot. `<Catch-up motion />` is not parseable, so
+   * the lab has never been usable from a lesson and never could be. The label lives in `title`.
+   */
+  tag: 'LinearPursuit',
   domain: 'physics',
   group: 'Physics',
   title: 'Catch-up motion: where do they meet?',
