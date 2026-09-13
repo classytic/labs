@@ -343,7 +343,6 @@ export function StressStrainLab({
   const limitPx = px(limitData);
   // "limit of proportionality" is about 130 units wide at note size; flip it when it would
   // run past the right-hand end of the plot.
-  const limitRoom = limitPx[0] + 9 + 132 < PLOT.x + PLOT.w;
 
   // ── the wire itself ────────────────────────────────────────────────────────
   const wirePx = 2 + ((clamp(diameter, DIA_MIN, DIA_MAX) - DIA_MIN) / (DIA_MAX - DIA_MIN)) * 8;
@@ -381,7 +380,8 @@ export function StressStrainLab({
             y={WIRE_TOP}
             w={wirePx}
             h={breakY - WIRE_TOP}
-            color={HUE.metal}
+            color={mat.colour}
+            style={mat.opacity ? { opacity: mat.opacity } : undefined}
             radius={1}
           />
           <Block
@@ -389,7 +389,8 @@ export function StressStrainLab({
             y={breakY + 16}
             w={wirePx}
             h={fallenY - breakY - 16}
-            color={HUE.metal}
+            color={mat.colour}
+            style={mat.opacity ? { opacity: mat.opacity } : undefined}
             radius={1}
           />
           <FigText x={WIRE_X + 14} y={breakY + 8} size="note" tone="hot">
@@ -403,7 +404,8 @@ export function StressStrainLab({
             y={WIRE_TOP}
             w={wirePx}
             h={restBottom + extPx - WIRE_TOP}
-            color={HUE.metal}
+            color={mat.colour}
+            style={mat.opacity ? { opacity: mat.opacity } : undefined}
             radius={1}
           />
           {/* where the bottom of the wire sat before the load went on */}
@@ -448,7 +450,7 @@ export function StressStrainLab({
       <PlotFrame
         {...PLOT}
         arrows={false}
-        title={isStrain ? 'stress against strain: gradient = E' : 'force against extension: gradient = k'}
+        title={isStrain ? 'stress against strain' : 'force against extension'}
         xLabel={isStrain ? 'strain ε (×10⁻³)' : 'extension x (mm)'}
         yLabel={isStrain ? 'stress σ (MPa)' : 'force F (N)'}
         xTicks={axisTicks(xMax).map((v) => ({ at: sc.x(v), label: fmt(v, 2) }))}
@@ -461,25 +463,9 @@ export function StressStrainLab({
           <>
             <Guide x1={limitPx[0]} y1={baseY} x2={limitPx[0]} y2={limitPx[1]} color={HUE.warn} />
             <Marker x={limitPx[0]} y={limitPx[1]} r={4.5} color={HUE.warn} />
-            {/* Below and to the right of the knee: the one pocket that is empty for a rising
-                curve, whichever way the wire swings the line. Flipped when it would overrun. */}
-            <FigText
-              x={limitPx[0] + (limitRoom ? 9 : -9)}
-              y={limitPx[1] + 17}
-              anchor={limitRoom ? 'start' : 'end'}
-              size="note"
-              tone="hot"
-            >
-              {mat.brittle ? 'it breaks here' : 'limit of proportionality'}
-            </FigText>
           </>
         )}
         {nowOnPlot && <Marker x={sc.x(nowData[0])} y={sc.y(nowData[1])} r={5} color={HUE[1]} />}
-        {!isStrain && filled.length > 1 && (
-          <FigText x={PLOT.x + PLOT.w - 8} y={PLOT.y + 14} anchor="end" size="note" tone="hue-2">
-            shaded area = Eₚ = {num(state.energyJ)} J
-          </FigText>
-        )}
         {!nowOnPlot && (
           <FigText
             x={PLOT.x + PLOT.w - 8}
@@ -613,6 +599,7 @@ export function StressStrainLab({
 
   return (
     <AuthoredActivityRuntime
+      className="physics-stress-strain"
       focusLayout="immersive"
       activity={{ ...authoredActivity, objectives: objectives ?? authoredActivity.objectives }}
       activityId={activityId}

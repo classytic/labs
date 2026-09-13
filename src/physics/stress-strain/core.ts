@@ -30,6 +30,19 @@ export interface Material {
   brittle: boolean;
   /** One-line description shown next to the material picker. */
   note: string;
+  /**
+   * What the wire LOOKS like, pinned rather than themed.
+   *
+   * Every material used to draw in one grey `--fig-metal`, so steel, copper, aluminium and glass
+   * were the same rod and only the caption changed. Choosing a material is the central act of
+   * this lab, and it produced no visible difference at all.
+   *
+   * Pinned literals because a theme token inverts with light and dark: copper that turns pale
+   * blue in dark mode is not copper. A physical object owns its own colour.
+   */
+  colour: string;
+  /** Glass is see-through, so it is drawn lighter than an opaque metal. */
+  opacity?: number;
 }
 
 /**
@@ -69,6 +82,7 @@ export const MATERIALS: readonly Material[] = [
     limitStress: 2.5e8,
     brittle: false,
     note: 'Very stiff. It stretches very little, then yields and stays stretched.',
+    colour: '#8c97a8',
   },
   {
     id: 'copper',
@@ -77,6 +91,7 @@ export const MATERIALS: readonly Material[] = [
     limitStress: 6.0e7,
     brittle: false,
     note: 'Softer than steel and very ductile. It yields early and can be drawn into wire.',
+    colour: '#b87333',
   },
   {
     id: 'aluminium',
@@ -85,6 +100,7 @@ export const MATERIALS: readonly Material[] = [
     limitStress: 9.5e7,
     brittle: false,
     note: 'A third of the stiffness of steel, so the same load stretches it about three times as far.',
+    colour: '#ccd2da',
   },
   {
     id: 'glass',
@@ -93,6 +109,8 @@ export const MATERIALS: readonly Material[] = [
     limitStress: 5.0e7,
     brittle: true,
     note: 'Brittle. The line stays straight right up to the break, then the wire snaps.',
+    colour: '#a9d8e0',
+    opacity: 0.72,
   },
 ];
 
