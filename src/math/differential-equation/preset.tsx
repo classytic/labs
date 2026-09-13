@@ -201,7 +201,9 @@ export function DifferentialEquationExplorer({
       status={
         <>
           <strong>{state}</strong>
-          <span>y′ = {equation}</span>
+          <span>
+            <Tex tex={`y'=${model.latex}`} />
+          </span>
           <span>h {stepSize.toFixed(2)}</span>
         </>
       }

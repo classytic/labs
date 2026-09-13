@@ -12,7 +12,7 @@
 
 import { useState, type ReactNode } from 'react';
 import { Activity } from '../../kit/activity.js';
-import { Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, LiveRegion, Readout } from '../../kit/frame.js';
 import { ChallengeCard, useChallenge, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
 import { FigText, Figure, HUE, STROKE, tint } from '../../kit/figure/index.js';
@@ -200,11 +200,11 @@ export function AreaRearrangeLab({
         <Activity.Dock>
           <Readout label="area" value={value.toFixed(1)} sub={formula} />
           <Field label="shape">
-            <Segmented
+            <ActivitySelect<RearrangeMode>
               value={mode}
               options={MODES}
               onChange={(v) => {
-                setMode(v as RearrangeMode);
+                setMode(v);
                 setT(0);
               }}
               ariaLabel="choose the shape"

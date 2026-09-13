@@ -17,7 +17,7 @@
 
 import { useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field } from '../../kit/frame.js';
 import { thermalColor } from '../../kit/thermal.js';
 import { Tex } from '../../core/tex.js';
@@ -271,16 +271,17 @@ export function TemperatureScalesLab({
       </>
       <>
         <Field label="jump to">
-          {/* Presets sit over a continuous slider: between them nothing is selected, and the
-              preset's LABEL is the string key for a state that is a Celsius number. */}
-          <Segmented
+          <ActivitySelect
             ariaLabel="jump to"
-            value={presets.find((p) => Math.abs(p.c - c) < 0.6)?.label ?? ''}
+            value={presets.find((p) => Math.abs(p.c - c) < 0.6)?.label ?? '__custom'}
             onChange={(label) => {
               const p = presets.find((q) => q.label === label);
               if (p) setC(p.c);
             }}
-            options={presets.map((p) => ({ value: p.label, label: p.label }))}
+            options={[
+              { value: '__custom', label: `${c.toFixed(0)} °C · custom`, disabled: true },
+              ...presets.map((p) => ({ value: p.label, label: p.label })),
+            ]}
           />
         </Field>
       </>

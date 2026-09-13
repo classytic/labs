@@ -138,11 +138,17 @@
 }
 .physics-water-density-scene svg,
 .physics-carnot-scene svg,
-.physics-gas-process-scene svg,
-.physics-expansion-scene svg {
+.physics-gas-process-scene svg {
   display: block;
   width: 100%;
   min-height: 22rem;
+}
+.physics-expansion-scene svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: 28rem;
 }
 .physics-temperature-scales-scene svg {
   display: block;

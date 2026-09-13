@@ -39,7 +39,7 @@
 import { useState, type ReactNode } from 'react';
 import { Stage, Circle, Label, Polygon, Polyline, Segment, type Vec2 } from '@classytic/stage';
 import { Control, Field } from '../../kit/frame.js';
-import { Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Tex } from '../../core/tex.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
@@ -48,8 +48,9 @@ import { MechanicsVector, SceneSurface } from '../mechanics/presentation.js';
 const FORCE = 'var(--stage-accent)';
 const ACCEL = 'var(--stage-warn)';
 const BODY = 'var(--stage-fg)';
+const BODY_A = 'var(--stage-accent)';
+const BODY_B = 'var(--stage-accent-2)';
 const SOFT = 'var(--stage-muted)';
-const METAL = 'var(--stage-metal)';
 
 /** Scene geometry, in the Stage's own units. Kept together so a tweak cannot desynchronise. */
 const VIEW = { xMin: -11, xMax: 11, yMin: -3, yMax: 5.4 };
@@ -162,15 +163,15 @@ const FORCE_PAIRS_ACTIVITY: AuthoredActivity = {
   questions: [
     {
       id: 'pair',
-      prompt: 'A heavy skater and a light skater push apart on ice. While their hands are touching\u2026',
+      prompt: 'Body A is much heavier than body B. While the two bodies interact\u2026',
       choices: [
         {
           value: 'equal',
-          label: 'each pushes the other equally hard, and the lighter one speeds up more',
+          label: 'each pushes the other equally hard; the lighter body accelerates more',
         },
-        { value: 'heavier', label: 'the heavier skater pushes harder' },
-        { value: 'cancel', label: 'the forces are equal and opposite, so they cancel and neither moves' },
-        { value: 'lighter', label: 'the lighter skater pushes harder, which is why she flies off' },
+        { value: 'heavier', label: 'the heavier body pushes harder' },
+        { value: 'cancel', label: 'the forces cancel because they are equal and opposite' },
+        { value: 'lighter', label: 'the lighter body pushes harder' },
       ],
       answer: 'equal',
       explain:
@@ -200,7 +201,7 @@ const FORCE_PAIRS_ACTIVITY: AuthoredActivity = {
       key: 'pair',
       operator: 'eq',
       value: 'equal',
-      pendingLabel: 'Predict which skater pushes harder.',
+      pendingLabel: 'Predict how the interaction forces compare.',
     },
     {
       id: 'mass-changed',
@@ -251,39 +252,60 @@ const fmtA = (a: number): string => (a >= 100 ? a.toFixed(0) : a.toFixed(1));
  * One body, drawn facing its partner. `dir` is +1 when the other body lies to the right, so a
  * single set of coordinates serves both halves of the mirror-image figure.
  */
-function BodyGlyph({ kind, cx, dir }: { kind: GlyphKind; cx: number; dir: 1 | -1 }): ReactNode {
+function BodyGlyph({
+  kind,
+  cx,
+  dir,
+  color,
+}: {
+  kind: GlyphKind;
+  cx: number;
+  dir: 1 | -1;
+  color: string;
+}): ReactNode {
   if (kind === 'person') {
-    const hx = cx - dir * 0.35;
+    const hx = cx - dir * 0.24;
     return (
       <>
-        <Circle center={{ x: hx, y: 3 }} r={0.42} color={BODY} fill={BODY} fillOpacity={0.85} weight={2} />
-        <Polyline
-          points={[
-            { x: hx, y: 2.58 },
-            { x: cx - dir * 0.5, y: 1.5 },
-          ]}
-          color={BODY}
-          weight={3.5}
+        <Circle
+          center={{ x: hx, y: 3.02 }}
+          r={0.42}
+          color={color}
+          fill={color}
+          fillOpacity={0.92}
+          weight={2}
         />
-        {/* the arm reaches toward the partner: the force pair has a visible place to happen */}
+        <Polygon
+          points={[
+            { x: cx - dir * 0.72, y: 2.5 },
+            { x: cx + dir * 0.28, y: 2.55 },
+            { x: cx + dir * 0.4, y: 1.48 },
+            { x: cx - dir * 0.62, y: 1.42 },
+          ]}
+          color={color}
+          fill={color}
+          fillOpacity={0.78}
+          weight={2.25}
+        />
         <Polyline
           points={[
-            { x: cx - dir * 0.42, y: 2.35 },
-            { x: cx + dir * 0.35, y: 2.18 },
+            { x: cx - dir * 0.08, y: 2.35 },
+            { x: cx + dir * 0.48, y: 2.2 },
             { x: cx + dir * 1.15, y: 2.05 },
           ]}
-          color={BODY}
-          weight={3.5}
+          color={color}
+          weight={3}
         />
         <Polyline
           points={[
-            { x: cx - dir * 1.05, y: 0.85 },
-            { x: cx - dir * 0.5, y: 1.5 },
-            { x: cx + dir * 0.15, y: 0.9 },
+            { x: cx - dir * 0.88, y: 0.75 },
+            { x: cx - dir * 0.42, y: 1.46 },
+            { x: cx + dir * 0.32, y: 0.8 },
           ]}
-          color={BODY}
-          weight={3.5}
+          color={color}
+          weight={3}
         />
+        <Segment from={{ x: cx - 1.2, y: 0.68 }} to={{ x: cx + 0.9, y: 0.68 }} color={SOFT} weight={2.5} />
       </>
     );
   }
@@ -292,18 +314,35 @@ function BodyGlyph({ kind, cx, dir }: { kind: GlyphKind; cx: number; dir: 1 | -1
       <>
         <Polygon
           points={[
-            { x: cx - 1.35, y: 0.85 },
-            { x: cx + 1.35, y: 0.85 },
-            { x: cx + 1.35, y: 3.25 },
-            { x: cx - 1.35, y: 3.25 },
+            { x: cx - 1.2, y: 0.85 },
+            { x: cx + 1.2, y: 0.85 },
+            { x: cx + 1.2, y: 2.92 },
+            { x: cx - 1.2, y: 2.92 },
           ]}
-          color={METAL}
-          fill={METAL}
-          fillOpacity={0.22}
+          color={color}
+          fill={color}
+          fillOpacity={0.18}
           weight={2.5}
         />
-        <Segment from={{ x: cx - 1.35, y: 0.85 }} to={{ x: cx + 1.35, y: 3.25 }} color={METAL} weight={1.5} />
-        <Segment from={{ x: cx - 1.35, y: 3.25 }} to={{ x: cx + 1.35, y: 0.85 }} color={METAL} weight={1.5} />
+        <Polygon
+          points={[
+            { x: cx - 1.2, y: 2.92 },
+            { x: cx - 0.62, y: 3.35 },
+            { x: cx + 1.72, y: 3.35 },
+            { x: cx + 1.2, y: 2.92 },
+          ]}
+          color={color}
+          fill={color}
+          fillOpacity={0.32}
+          weight={2}
+        />
+        <Segment
+          from={{ x: cx, y: 0.85 }}
+          to={{ x: cx, y: 2.92 }}
+          color={color}
+          weight={1.25}
+          opacity={0.55}
+        />
       </>
     );
   }
@@ -320,8 +359,8 @@ function BodyGlyph({ kind, cx, dir }: { kind: GlyphKind; cx: number; dir: 1 | -1
             { x: cx - n * 1.25, y: Y_FORCE - 0.72 },
             { x: cx + n * 0.55, y: Y_FORCE - 0.72 },
           ]}
-          color={BODY}
-          fill={BODY}
+          color={color}
+          fill={color}
           fillOpacity={0.14}
           weight={2.5}
         />
@@ -331,8 +370,8 @@ function BodyGlyph({ kind, cx, dir }: { kind: GlyphKind; cx: number; dir: 1 | -1
             { x: cx - n * 1.45, y: Y_FORCE + 1.35 },
             { x: cx - n * 1.45, y: Y_FORCE + 0.72 },
           ]}
-          color={BODY}
-          fill={BODY}
+          color={color}
+          fill={color}
           fillOpacity={0.14}
           weight={2}
         />
@@ -342,8 +381,8 @@ function BodyGlyph({ kind, cx, dir }: { kind: GlyphKind; cx: number; dir: 1 | -1
             { x: cx - n * 1.45, y: Y_FORCE - 1.35 },
             { x: cx - n * 1.45, y: Y_FORCE - 0.72 },
           ]}
-          color={BODY}
-          fill={BODY}
+          color={color}
+          fill={color}
           fillOpacity={0.14}
           weight={2}
         />
@@ -367,8 +406,8 @@ function BodyGlyph({ kind, cx, dir }: { kind: GlyphKind; cx: number; dir: 1 | -1
           key={i}
           center={{ x: cx + dx, y: Y_FORCE + dy }}
           r={r}
-          color={METAL}
-          fill={METAL}
+          color={color}
+          fill={color}
           fillOpacity={0.24}
           weight={1.75}
         />
@@ -449,8 +488,8 @@ export function ForcePairsLab({
         />
         <Label x={0} y={2.62} text={scene.contact} color={SOFT} size={13} weight={600} />
 
-        <BodyGlyph kind={scene.glyphA} cx={-BODY_X} dir={1} />
-        <BodyGlyph kind={scene.glyphB} cx={BODY_X} dir={-1} />
+        <BodyGlyph kind={scene.glyphA} cx={-BODY_X} dir={1} color={BODY_A} />
+        <BodyGlyph kind={scene.glyphB} cx={BODY_X} dir={-1} color={BODY_B} />
 
         {/* the pair: same length, opposite directions, one inside each boundary */}
         <MechanicsVector
@@ -460,7 +499,6 @@ export function ForcePairsLab({
           weight={3.5}
           label={`force B on A · ${force} N`}
           labelAt={{ x: -forceLabelX, y: 4.12 }}
-          active
         />
         <MechanicsVector
           tail={{ x: BODY_X, y: Y_FORCE }}
@@ -469,7 +507,6 @@ export function ForcePairsLab({
           weight={3.5}
           label={`force A on B · ${force} N`}
           labelAt={{ x: forceLabelX, y: 4.12 }}
-          active
         />
 
         <Label
@@ -545,7 +582,7 @@ export function ForcePairsLab({
       <Control name="situation">
         <div className="lab-segmented-field">
           <span className="lab-field-label">situation</span>
-          <Segmented
+          <ActivitySelect
             ariaLabel="interaction"
             value={scenario}
             onChange={setScenario}

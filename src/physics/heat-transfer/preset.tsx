@@ -19,7 +19,7 @@
 
 import { useRef, useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider, Segmented } from '../../kit/controls.js';
 import { Field, type ControlConfig } from '../../kit/frame.js';
 import { useFrameTick } from '../../kit/anim.js';
 import { usePlayGate } from '../../kit/play.js';
@@ -227,7 +227,7 @@ export function HeatTransferLab({
     controls = (
       <>
         <Field label="material">
-          <Segmented
+          <ActivitySelect
             ariaLabel="material"
             value={material}
             onChange={setMaterial}
@@ -529,7 +529,7 @@ export function HeatTransferLab({
   const mechanismControls = (
     <>
       <Field label="mechanism">
-        <Segmented
+        <ActivitySelect
           ariaLabel="mechanism"
           value={mode}
           onChange={setMode}

@@ -22,7 +22,7 @@ import {
   type ProcessKind,
   type GasState,
 } from '@classytic/stage/thermo';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider, Segmented } from '../../kit/controls.js';
 import { Field } from '../../kit/frame.js';
 import { thermalColor } from '../../kit/thermal.js';
 import { Tex } from '../../core/tex.js';
@@ -294,7 +294,7 @@ export function GasProcessLab({
     <>
       <>
         <Field label="process">
-          <Segmented
+          <ActivitySelect
             ariaLabel="process"
             value={kind}
             onChange={setKind}

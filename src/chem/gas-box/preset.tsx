@@ -20,7 +20,7 @@ import { CanvasLayer, fmt } from '@classytic/stage';
 import { useFrameTick, useReducedMotionDeferred } from '../../kit/anim.js';
 import { usePlayGate, PlayWrap } from '../../kit/play.js';
 import { clamp } from '../../core/util.js';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, LiveRegion, Readout } from '../../kit/frame.js';
 import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity, AuthoredChoiceQuestion } from '../../kit/activity-authoring.js';
@@ -389,15 +389,15 @@ export function GasBoxLab({
   const controls = (
     <>
       <Field label="hold constant">
-        <Segmented
+        <ActivitySelect
           ariaLabel="hold constant"
           value={mode}
           onChange={pickMode}
           options={[
-            { value: 'none', label: 'free' },
-            { value: 'temperature', label: 'T (Boyle)' },
-            { value: 'volume', label: 'V (Gay-Lussac)' },
-            { value: 'pressure', label: 'P (Charles)' },
+            { value: 'none', label: 'Free piston' },
+            { value: 'temperature', label: 'Temperature · Boyle' },
+            { value: 'volume', label: 'Volume · Gay-Lussac' },
+            { value: 'pressure', label: 'Pressure · Charles' },
           ]}
         />
       </Field>

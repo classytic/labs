@@ -17,7 +17,7 @@
 
 import { useId, useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, type ControlConfig } from '../../kit/frame.js';
 import { thermalColor } from '../../kit/thermal.js';
 import { DiagramLabel } from '../../kit/annotate.js';
@@ -433,50 +433,39 @@ export function ThermalExpansionLab({
 
   const controls = (
     <>
-      <>
-        <Field label="what expands">
-          <Segmented
-            ariaLabel="what expands"
-            value={mode}
-            onChange={setMode}
-            options={[
-              { value: 'length', label: 'length' },
-              { value: 'area', label: 'area' },
-              { value: 'volume', label: 'volume' },
-              { value: 'bimetallic', label: 'bimetallic strip' },
-            ]}
+      <Field label="what expands">
+        <ActivitySelect<Mode>
+          ariaLabel="what expands"
+          value={mode}
+          onChange={setMode}
+          options={[
+            { value: 'length', label: 'Length' },
+            { value: 'area', label: 'Area' },
+            { value: 'volume', label: 'Volume' },
+            { value: 'bimetallic', label: 'Bimetal strip' },
+          ]}
+        />
+      </Field>
+      {mode !== 'bimetallic' && (
+        <Field label="material" value={`α ${(a * 1e6).toFixed(1)} × 10⁻⁶ /°C`}>
+          <ActivitySelect
+            ariaLabel="material"
+            value={material}
+            onChange={setMaterial}
+            options={Object.entries(METALS).map(([key, m]) => ({ value: key, label: m.label }))}
           />
         </Field>
-      </>
-      <>
-        {mode !== 'bimetallic' && (
-          <Field label="material">
-            <Segmented
-              ariaLabel="material"
-              value={material}
-              onChange={setMaterial}
-              options={Object.entries(METALS).map(([key, m]) => ({
-                value: key,
-                label: (
-                  <>
-                    {m.label} (α={(m.a * 1e6).toFixed(1)}×10⁻⁶)
-                  </>
-                ),
-              }))}
-            />
-          </Field>
-        )}
-        <Field label="temperature rise ΔT" value={`+${dT} °C`}>
-          <Slider
-            value={dT}
-            min={0}
-            max={200}
-            step={5}
-            onChange={setDT}
-            ariaLabel="temperature rise (Celsius)"
-          />
-        </Field>
-      </>
+      )}
+      <Field label="temperature rise ΔT" value={`+${dT} °C`}>
+        <Slider
+          value={dT}
+          min={0}
+          max={200}
+          step={5}
+          onChange={setDT}
+          ariaLabel="temperature rise (Celsius)"
+        />
+      </Field>
     </>
   );
 

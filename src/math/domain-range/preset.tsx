@@ -22,7 +22,7 @@
  */
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Plot, Segment, Dot, MovableDot, Label, compileExpr } from '@classytic/stage';
+import { Plot, Segment, Dot, MovableDot, Label, compileExpr, toLatex } from '@classytic/stage';
 import { StatList, Stat } from '../../kit/frame.js';
 import { Activity } from '../../kit/activity.js';
 import { LabAsk, type LabAskSpec } from '../../kit/ask.js';
@@ -30,6 +30,7 @@ import { useCheckpoint } from '../../kit/pedagogy.js';
 import { CoordPlane, num } from '../../kit/coords.js';
 import { clamp } from '../../core/util.js';
 import { StatusPill } from '../../kit/controls.js';
+import { Tex } from '../../core/tex.js';
 
 export interface DomainRangeProps {
   /** The function f(x): e.g. 'x^2', 'sqrt(x)', '1/(x-2)', 'sqrt(9 - x^2)', 'log(x)'. */
@@ -104,6 +105,7 @@ export function DomainRangeLab({
     const c = compileExpr(equation);
     return c.error !== undefined ? null : c;
   })();
+  const equationLatex = compiled ? toLatex(compiled.ast) : equation;
   const inRestrict = (x: number): boolean =>
     !restrict || (x >= restrict[0] - 1e-9 && x <= restrict[1] + 1e-9);
   const f = (x: number): number => (compiled && inRestrict(x) ? compiled.fn({ x }) : NaN);
@@ -251,7 +253,7 @@ export function DomainRangeLab({
         {accepted ? `✓ f(${num(pX)}) = ${num(pY)}, accepted` : `✗ x = ${num(pX)} is not in the domain`}
       </StatusPill>
       <StatList>
-        <Stat label="f(x)" value={equation} />
+        <Stat label="f(x)" value={<Tex tex={equationLatex} />} />
         <Stat
           label={<span className="math-domain-label">domain</span>}
           value={fmtIntervals(domain, dx * 3)}

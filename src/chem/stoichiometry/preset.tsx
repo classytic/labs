@@ -16,7 +16,7 @@
 
 import { useMemo, useState, type ReactNode } from 'react';
 import { solveStoichiometry, type StoichSpecies } from '@classytic/stage/chem';
-import { Slider, Segmented } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, Readout } from '../../kit/frame.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity, AuthoredChoiceQuestion } from '../../kit/activity-authoring.js';
@@ -84,8 +84,8 @@ type RxKey = 'water' | 'ammonia' | 'methane' | 'rust';
 const ORDER: RxKey[] = ['water', 'ammonia', 'methane', 'rust'];
 const LABEL: Record<RxKey, string> = {
   water: 'Water',
-  ammonia: 'Ammonia (Haber)',
-  methane: 'Methane burning',
+  ammonia: 'Ammonia synthesis',
+  methane: 'Methane combustion',
   rust: 'Rusting',
 };
 
@@ -366,9 +366,9 @@ export function StoichiometryLab({
   const controls = (
     <>
       <Field label="reaction">
-        {/* An authored custom reaction is none of the presets, so nothing should read as
-            pressed: '' is that state and is deliberately absent from `options`. */}
-        <Segmented<RxKey | ''>
+        {/* An authored custom reaction is none of the presets; the empty value keeps the
+            picker honest instead of presenting a preset that is not driving the model. */}
+        <ActivitySelect<RxKey | ''>
           ariaLabel="reaction"
           value={customR ? '' : preset}
           onChange={(p) => {

@@ -73,7 +73,9 @@ export function VertexParabolaLab({ a = 1, height = 380 }: ParabolaProps): React
         <strong>
           Vertex ({h}, {k})
         </strong>
-        <span>{equation}</span>
+        <span>
+          <TexHtml tex={equation} />
+        </span>
       </Activity.Status>
       <Activity.Workspace>
         <Activity.Canvas label="Interactive parabola graph">{figure}</Activity.Canvas>

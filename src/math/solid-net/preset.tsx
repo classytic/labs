@@ -11,7 +11,7 @@
 
 import { useState, type ReactNode } from 'react';
 import { Activity } from '../../kit/activity.js';
-import { Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, LiveRegion, Readout } from '../../kit/frame.js';
 import { ChallengeCard, useChallenge, useCheckpoint, type ChallengeQuestion } from '../../kit/pedagogy.js';
 import { FigText, Figure, HUE, STROKE, tint } from '../../kit/figure/index.js';
@@ -211,7 +211,12 @@ export function SolidNetLab({
         <Activity.Dock>
           <Readout label="volume" value={volume.toFixed(1)} sub={`surface ${surface.toFixed(1)}`} />
           <Field label="view">
-            <Segmented value={mode} options={MODES} onChange={setMode} ariaLabel="choose the view" />
+            <ActivitySelect<SolidMode>
+              value={mode}
+              options={MODES}
+              onChange={setMode}
+              ariaLabel="choose the view"
+            />
           </Field>
           {mode === 'layers' ? (
             <Field label="layers" value={String(Math.round(h))}>

@@ -196,8 +196,8 @@ export interface SegmentedOption<T extends string> {
 /**
  * A compact activity picker for sets that no longer fit as one visible choice row.
  *
- * Keep `Segmented` for two to four short, frequently compared states. Use this picker
- * for five or more modes (or long labels) so the learning canvas never gains a horizontal
+ * Keep `Segmented` for two or three concise, frequently compared states. Use this picker
+ * for four or more modes, contextual presets, or long labels so the learning canvas never gains a horizontal
  * scrollbar. The host's shadcn Select owns keyboard, focus, portal, and collision behavior.
  */
 export function ActivitySelect<T extends string>({
@@ -318,8 +318,25 @@ export function AssessedChoiceGroup<T extends string>({
  * semantics — no roving focus, no arrow-key traversal, no group role — and its layout
  * needed repeated fixing because the kit was maintaining behaviour a component already owns.
  *
- * Use it for "which situation / which mode" (2–5 options). A `Chip` is still the right thing
+ * Use it for two or three concise states that benefit from side-by-side comparison. A `Chip` is still the right thing
  * for an ACTION (Play, Reset, Refill) and for multi-select filters, which are not one choice.
+ */
+/**
+ * A mode switcher: every option visible, one of them on.
+ *
+ * It WRAPS rather than scrolls, deliberately, because a scrolling track left the last
+ * mode off-screen with nothing saying it existed and a learner cannot choose what they
+ * cannot see. In the 19rem Dock (two columns, so ~140px each) three word-length options
+ * wrap every time, so wrapping is the normal case here, not the exception.
+ *
+ * Making this degrade to a dropdown automatically was tried and REJECTED. It hides the
+ * options the wrap exists to keep visible, and it trades this group's arrow-key
+ * navigation for a combobox across all 87 labs that use it, breaking the tests that
+ * assert that keyboard contract.
+ *
+ * Where a wrapped track genuinely reads badly, switch THAT LAB to `ActivitySelect`,
+ * which is a per-lab judgement about whether the options are worth keeping on screen.
+ * heat-transfer did exactly that for its mechanism and material pickers.
  */
 export function Segmented<T extends string>({
   value,
