@@ -1,11 +1,15 @@
 /**
- * Dev-only: mirror the sibling `../stage` build into node_modules.
+ * Dev-only, opt-in: mirror the sibling `../stage` build into node_modules.
  *
- * labs depends on `@classytic/stage` from npm, but the source already imports subpaths
- * (`stage/finance`, `stage/logic`) that only exist in the unpublished sibling checkout.
- * Every `pnpm install` / `pnpm add` re-links the npm copy and silently breaks
- * `./finance` resolution, so this runs as `postinstall` and is a no-op when there is
- * no sibling checkout (CI, consumers) or when the sibling has not been built.
+ * Run it (`npm run sync:stage`) only while developing a stage change alongside labs, to
+ * test against the sibling checkout before that change is published. It is a no-op when
+ * there is no sibling checkout (CI, consumers) or when the sibling has not been built.
+ *
+ * It used to run as `postinstall`, back when the source imported subpaths (`stage/finance`,
+ * `stage/logic`) that existed only in the unpublished sibling. Those ship in stage 0.3.0,
+ * so the automatic copy had become a liability: it silently replaced the npm package on
+ * every install, which meant labs could never actually be tested against what consumers
+ * resolve. `npm install` now leaves the published package in place.
  */
 import { cpSync, existsSync, readFileSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';

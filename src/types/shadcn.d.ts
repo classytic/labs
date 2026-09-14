@@ -159,6 +159,50 @@ declare module '@/components/ui/popover' {
   export const PopoverContent: ForwardRefExoticComponent<PopoverContentProps & RefAttributes<HTMLDivElement>>;
 }
 
+declare module '@/components/ui/tooltip' {
+  import type {
+    ForwardRefExoticComponent,
+    HTMLAttributes,
+    ReactElement,
+    ReactNode,
+    RefAttributes,
+  } from 'react';
+
+  export interface TooltipProviderProps {
+    delay?: number;
+    closeDelay?: number;
+    timeout?: number;
+    children?: ReactNode;
+  }
+  export const TooltipProvider: (props: TooltipProviderProps) => ReactElement | null;
+
+  export interface TooltipProps {
+    open?: boolean;
+    defaultOpen?: boolean;
+    onOpenChange?: (open: boolean, eventDetails?: unknown) => void;
+    delay?: number;
+    children?: ReactNode;
+  }
+  export const Tooltip: (props: TooltipProps) => ReactElement | null;
+
+  export interface TooltipTriggerProps extends HTMLAttributes<HTMLElement> {
+    /** base-ui composition: render the trigger AS this element (e.g. `<button />`). */
+    render?: ReactElement;
+    disabled?: boolean;
+    children?: ReactNode;
+  }
+  export const TooltipTrigger: ForwardRefExoticComponent<TooltipTriggerProps & RefAttributes<HTMLElement>>;
+
+  export interface TooltipContentProps extends HTMLAttributes<HTMLDivElement> {
+    align?: 'start' | 'center' | 'end';
+    alignOffset?: number;
+    side?: 'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end';
+    sideOffset?: number;
+    children?: ReactNode;
+  }
+  export const TooltipContent: ForwardRefExoticComponent<TooltipContentProps & RefAttributes<HTMLDivElement>>;
+}
+
 declare module '@/components/ui/select' {
   import type { ForwardRefExoticComponent, HTMLAttributes, ReactNode, RefAttributes } from 'react';
 

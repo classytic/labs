@@ -297,7 +297,6 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "postinstall": "node scripts/sync-stage.mjs",
     "format": "prettier --write \"src/**/*.{ts,tsx}\" \"tests/**/*.{ts,tsx,mjs}\" \"scripts/**/*.mjs\" \"styles/**/*.css\" \"*.{ts,mjs,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"tests/**/*.{ts,tsx,mjs}\" \"scripts/**/*.mjs\" \"styles/**/*.css\" \"*.{ts,mjs,json,css}\"",
     "typecheck": "tsc --noEmit",
@@ -318,6 +317,7 @@
     "labs:quality": "npm run build && node scripts/labs-quality.mjs",
     "labs:quality:strict": "npm run build && node scripts/labs-quality.mjs --strict",
     "package:check": "node scripts/package-check.mjs",
+    "sync:stage": "node scripts/sync-stage.mjs",
     "styles:split": "node scripts/split-domains.mjs",
     "styles:check": "node scripts/split-domains.mjs --check",
     "tokens:export": "node scripts/export-tokens.mjs",
@@ -365,8 +365,8 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9",
-    "@classytic/cms-ui": "^0.3.1",
-    "@classytic/dev-tools": "^0.2.0",
+    "@classytic/cms-ui": "^0.4.0",
+    "@classytic/dev-tools": "^0.2.1",
     "@classytic/stage": "^0.3.0",
     "@react-three/fiber": "^9.7.0",
     "@testing-library/react": "^16.3.2",
@@ -376,17 +376,17 @@
     "@types/three": "0.186.0",
     "clsx": "^2.1.1",
     "happy-dom": "^20.0.0",
-    "lucide-react": "^0.563.0",
+    "lucide-react": "^1.41.0",
     "playwright": "^1.61.0",
     "prettier": "^3.9.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tailwind-merge": "^3.5.0",
+    "tailwind-merge": "^3.6.0",
     "three": "0.186.0",
     "tsdown": "^0.22.0",
     "typescript": "^5.7.0",
     "vitest": "^4.1.0",
-    "zod": "^4.1.0"
+    "zod": "^4.5.4"
   },
   "keywords": [
     "react",
