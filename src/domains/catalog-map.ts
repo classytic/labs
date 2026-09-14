@@ -2533,6 +2533,22 @@ export const generatedManifestCatalog: LabManifestCatalogEntry[] = [
   },
   },
   {
+    key: 'exact-triangle',
+    label: 'Where the exact values come from',
+    description: 'sin 30 = 1/2 taught as a measurement rather than a fact to memorise. An equilateral triangle of side 2 cuts down the middle into 1, 2 and root 3; a unit square cuts on its diagonal into 1, 1 and root 2. Open the cut and read the ratios straight off the half that is left. Both accepted forms are shown, 1/root 2 and root 2 over 2, because a learner who has only met one assumes the other is a different number.',
+    category: 'interactive',
+    void: true,
+    group: 'Math',
+    domain: 'math',
+    taxonomy: {
+    grades: ['9', '10', '11'],
+    outcomes: ['math', 'trigonometry', 'exact-values'],
+    durationMinutes: 7,
+    interaction: 'explorer',
+    authorability: 'simple',
+  },
+  },
+  {
     key: 'expression-order',
     tag: 'ExpressionOrderLab',
     label: 'Order of operations: make every operation wait its turn',

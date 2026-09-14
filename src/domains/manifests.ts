@@ -177,6 +177,7 @@ import derivativeExplorer from './math/derivative-explorer/manifest.js';
 import differentialEquation from './math/differential-equation/manifest.js';
 import divisionWorkbench from './math/division-workbench/manifest.js';
 import domainRange from './math/domain-range/manifest.js';
+import exactTriangle from './math/exact-triangle/manifest.js';
 import expressionOrder from './math/expression-order/manifest.js';
 import fractionBar from './math/fraction-bar/manifest.js';
 import functionMachine from './math/function-machine/manifest.js';
@@ -361,13 +362,13 @@ export const labManifests: readonly LabManifest[] = [
   sentenceBuilder, transform, wordMatch,
   // math
   areaModel, areaRearrange, balanceAlgebra, bearings, boundsWindow, brokenTree, circleGeometry, complexPlane,
-  conic, customScene, derivation, derivativeExplorer, differentialEquation, divisionWorkbench, domainRange, expressionOrder,
-  fractionBar, functionMachine, fundamentalTheorem, geometryFoundations, geometryTransform, gradientDescent, graph, growingPattern,
-  harmonicForm, identityProof, integralExplorer, interactiveProblem, iteration, limitExplorer, linearModel, linearSystem,
-  linesInSpace, measurement, mysteryBucket, newtonMethod, numberLine, numberStructure, obliqueTriangle, partialFractions,
-  percentBar, phasePortrait, polynomialSolver, radianWrap, rateMachine, ratioShare, receiptTotals, sequencePredict,
-  slideRule, solidNet, solidSlice, straightLine, systemSolve, taylorSeries, triangleTrig, trigExplorer,
-  trigSigns, vertexParabola,
+  conic, customScene, derivation, derivativeExplorer, differentialEquation, divisionWorkbench, domainRange, exactTriangle,
+  expressionOrder, fractionBar, functionMachine, fundamentalTheorem, geometryFoundations, geometryTransform, gradientDescent, graph,
+  growingPattern, harmonicForm, identityProof, integralExplorer, interactiveProblem, iteration, limitExplorer, linearModel,
+  linearSystem, linesInSpace, measurement, mysteryBucket, newtonMethod, numberLine, numberStructure, obliqueTriangle,
+  partialFractions, percentBar, phasePortrait, polynomialSolver, radianWrap, rateMachine, ratioShare, receiptTotals,
+  sequencePredict, slideRule, solidNet, solidSlice, straightLine, systemSolve, taylorSeries, triangleTrig,
+  trigExplorer, trigSigns, vertexParabola,
   // ml
   classifierThreshold, decisionBoundary, embeddingSpace, kmeans, knn, nextToken, regression,
   // networking
