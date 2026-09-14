@@ -3,6 +3,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { AuthoredActivityRuntime } from '../src/kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../src/kit/activity-authoring.js';
 import { Control, Field } from '../src/kit/frame.js';
+import { Activity } from '../src/kit/activity.js';
 
 const activity: AuthoredActivity = {
   pattern: 'investigation',
@@ -130,6 +131,40 @@ describe('AuthoredActivityRuntime', () => {
     ).not.toBeNull();
     const support = view.getByText('Learning support').closest('details');
     expect(support?.textContent).toContain('Progressive hint');
+  });
+
+  // The status strip carries two different things. Setup ("Spring", "solid", "120 W") is what the
+  // learner chose and needs in order to orient. Measurements ("T 2.22 s") are the model's answer,
+  // and printing those beside the question answers it in the act of asking. Marking the measured
+  // items keeps setup exactly where it is; 173 labs pass a status strip, so a prop split would
+  // have meant migrating all of them before any of them got safer.
+  it('withholds measured status until the prediction is made, and keeps setup', () => {
+    const view = render(
+      <AuthoredActivityRuntime
+        activity={activity}
+        activityId="measured-status"
+        status={
+          <>
+            <span>Spring</span>
+            <Activity.Measured label="period">T 2.22 s</Activity.Measured>
+          </>
+        }
+      >
+        <div>domain model</div>
+      </AuthoredActivityRuntime>,
+    );
+    expect(view.getByText('Spring')).toBeTruthy();
+    expect(view.queryByText('T 2.22 s')).toBeNull();
+    expect(view.getByLabelText('period')).toBeTruthy(); // the slot is held, not removed
+    fireEvent.click(view.getByRole('radio', { name: 'Right' }));
+    expect(view.getByText('T 2.22 s')).toBeTruthy();
+  });
+
+  // Outside the authored runtime there is no prediction to protect, so a bare scene, the gallery
+  // and a host embed must all read exactly as they did before.
+  it('shows a measured value when there is no runtime around it', () => {
+    const view = render(<Activity.Measured>T 2.22 s</Activity.Measured>);
+    expect(view.getByText('T 2.22 s')).toBeTruthy();
   });
 
   it('keeps model controls adjacent to the scene and outside contextual evidence', () => {

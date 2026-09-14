@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, type ReactNode } from 'react';
-import { Activity } from './activity.js';
+import { Activity, EarnedProvider } from './activity.js';
 import {
   compileAuthoredActivity,
   type AuthoredActivity,
@@ -178,91 +178,97 @@ export function AuthoredActivityRuntime({
   const renderedSupport = renderSlot(support, context);
 
   return (
-    <ControlPolicy config={controlConfig}>
-      <Activity.Root
-        className={['lab-authored-activity', className].filter(Boolean).join(' ')}
-        data-inspector-layout={inspectorLayout}
-        focusLayout={focusLayout}
-      >
-        <Activity.Header>
-          {/* The description was briefly hidden while a question was on screen, to cut the stack
+    <EarnedProvider value={evidenceEarned}>
+      <ControlPolicy config={controlConfig}>
+        <Activity.Root
+          className={['lab-authored-activity', className].filter(Boolean).join(' ')}
+          data-inspector-layout={inspectorLayout}
+          focusLayout={focusLayout}
+        >
+          <Activity.Header>
+            {/* The description was briefly hidden while a question was on screen, to cut the stack
               of title, description, step lead and question down to something a learner could act
               on. It had to come back: some descriptions carry a definition the question depends
               on, and the Hall-effect lab states its V_H sign convention there and nowhere else,
               so hiding it asked for a polarity the learner had not been told. Shortening this
               stack has to happen per lab, in the writing, not by suppressing a slot wholesale. */}
-          <Activity.Heading
-            eyebrow={eyebrow}
-            title={title ?? authored.title ?? sequence.current.title ?? 'Interactive activity'}
-            description={description}
-          />
-          <Activity.FocusButton />
-        </Activity.Header>
-        <Activity.Status>
-          {/* The phase is our word for the step, not the learner's, and beside a title like
+            <Activity.Heading
+              eyebrow={eyebrow}
+              title={title ?? authored.title ?? sequence.current.title ?? 'Interactive activity'}
+              description={description}
+            />
+            <Activity.FocusButton />
+          </Activity.Header>
+          <Activity.Status>
+            {/* The phase is our word for the step, not the learner's, and beside a title like
               "Predict compression" the chip reading "predict" says the same thing twice in the
               same breath. Show it only when the title does not already carry it. */}
-          {(sequence.current.title ?? '')
-            .toLowerCase()
-            .includes(sequence.current.phase.toLowerCase()) ? null : (
-            <strong>{sequence.current.phase}</strong>
-          )}
-          <span>{sequence.current.title}</span>
-          {renderSlot(status, context)}
-        </Activity.Status>
-        {renderedTask || question || sequence.current.lead ? (
-          <section className="lab-authored-task" aria-label="Your task">
-            {sequence.current.lead ? <p className="lab-authored-task-lead">{sequence.current.lead}</p> : null}
-            {renderedTask}
-            {question ? <AuthoredResponse key={question.id} question={question} onRespond={respond} /> : null}
-          </section>
-        ) : null}
-        <Activity.Workspace>
-          <Activity.Canvas label={`${String(title ?? authored.title ?? 'Interactive activity')} model`}>
-            {renderedModel}
-          </Activity.Canvas>
-          {renderedControls ? (
-            <Activity.Dock>
-              <section className="lab-activity-fields lab-authored-controls" aria-label="Controls">
-                {renderedControls}
-              </section>
-            </Activity.Dock>
+            {(sequence.current.title ?? '')
+              .toLowerCase()
+              .includes(sequence.current.phase.toLowerCase()) ? null : (
+              <strong>{sequence.current.phase}</strong>
+            )}
+            <span>{sequence.current.title}</span>
+            {renderSlot(status, context)}
+          </Activity.Status>
+          {renderedTask || question || sequence.current.lead ? (
+            <section className="lab-authored-task" aria-label="Your task">
+              {sequence.current.lead ? (
+                <p className="lab-authored-task-lead">{sequence.current.lead}</p>
+              ) : null}
+              {renderedTask}
+              {question ? (
+                <AuthoredResponse key={question.id} question={question} onRespond={respond} />
+              ) : null}
+            </section>
           ) : null}
-          {(renderedEvidence && evidenceEarned) || renderedInspector ? (
-            <Activity.Inspector
-              label="Explore evidence"
-              defaultOpen={inspectorLayout === 'side'}
-              responsive={false}
-            >
-              {renderedEvidence && evidenceEarned ? (
-                <section className="lab-authored-evidence" aria-label="Evidence">
-                  {renderedEvidence}
+          <Activity.Workspace>
+            <Activity.Canvas label={`${String(title ?? authored.title ?? 'Interactive activity')} model`}>
+              {renderedModel}
+            </Activity.Canvas>
+            {renderedControls ? (
+              <Activity.Dock>
+                <section className="lab-activity-fields lab-authored-controls" aria-label="Controls">
+                  {renderedControls}
+                </section>
+              </Activity.Dock>
+            ) : null}
+            {(renderedEvidence && evidenceEarned) || renderedInspector ? (
+              <Activity.Inspector
+                label="Explore evidence"
+                defaultOpen={inspectorLayout === 'side'}
+                responsive={false}
+              >
+                {renderedEvidence && evidenceEarned ? (
+                  <section className="lab-authored-evidence" aria-label="Evidence">
+                    {renderedEvidence}
+                  </section>
+                ) : null}
+                {renderedInspector}
+              </Activity.Inspector>
+            ) : null}
+          </Activity.Workspace>
+          {renderedObservation && evidenceEarned ? (
+            <Activity.Feedback>
+              <span>Observe</span>
+              <div>{renderedObservation}</div>
+            </Activity.Feedback>
+          ) : null}
+          {renderedTranscript || renderedSupport ? (
+            <Activity.Transcript label={renderedSupport ? 'Learning support' : 'Event transcript'}>
+              {renderedTranscript ? (
+                <section className="lab-authored-transcript" aria-label="Event transcript">
+                  {renderedTranscript}
                 </section>
               ) : null}
-              {renderedInspector}
-            </Activity.Inspector>
+              {renderedSupport ? <section className="lab-authored-support">{renderedSupport}</section> : null}
+            </Activity.Transcript>
           ) : null}
-        </Activity.Workspace>
-        {renderedObservation && evidenceEarned ? (
-          <Activity.Feedback>
-            <span>Observe</span>
-            <div>{renderedObservation}</div>
-          </Activity.Feedback>
-        ) : null}
-        {renderedTranscript || renderedSupport ? (
-          <Activity.Transcript label={renderedSupport ? 'Learning support' : 'Event transcript'}>
-            {renderedTranscript ? (
-              <section className="lab-authored-transcript" aria-label="Event transcript">
-                {renderedTranscript}
-              </section>
-            ) : null}
-            {renderedSupport ? <section className="lab-authored-support">{renderedSupport}</section> : null}
-          </Activity.Transcript>
-        ) : null}
-        <Activity.Transport>
-          <LearningSequenceNav sequence={sequence} />
-        </Activity.Transport>
-      </Activity.Root>
-    </ControlPolicy>
+          <Activity.Transport>
+            <LearningSequenceNav sequence={sequence} />
+          </Activity.Transport>
+        </Activity.Root>
+      </ControlPolicy>
+    </EarnedProvider>
   );
 }

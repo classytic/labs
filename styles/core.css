@@ -3202,6 +3202,12 @@
   padding-inline-start: var(--lab-sp-10);
   border-inline-start: 1px solid var(--border, var(--stage-grid));
 }
+/* A measurement the learner has not earned yet. It holds its slot so the strip keeps its shape
+   when the number arrives, and reads as clearly absent rather than as a value of zero. */
+.lab-activity-measured-pending {
+  color: var(--lab-muted);
+  opacity: 0.55;
+}
 .network-route-path {
   min-width: 0;
   flex: 1;

@@ -27,6 +27,7 @@ import { clamp } from '../../core/util.js';
 import { springOmega, smallAnglePendulumOmega, oscillatorPeriod, sampleOscillator } from './core.js';
 import { SceneSurface, SimulationTransport, TracePanel } from '../mechanics/presentation.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
+import { Activity } from '../../kit/activity.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 
 export type SHMMode = 'spring' | 'pendulum';
@@ -580,10 +581,16 @@ export function SimpleHarmonicLab({
       description={prompt}
       status={
         <>
+          {/* Mode is setup: the learner chose it and needs it to orient. The rest is the model's
+              answer, and the first step asks where the speed is greatest. */}
           <span>{isSpring ? 'Spring' : 'Pendulum'}</span>
-          <span>x {displacement}</span>
-          <span>T {T.toFixed(2)} s</span>
-          <span>f {f.toFixed(2)} Hz</span>
+          <Activity.Measured label="displacement, measured after you predict">
+            x {displacement}
+          </Activity.Measured>
+          <Activity.Measured label="period, measured after you predict">T {T.toFixed(2)} s</Activity.Measured>
+          <Activity.Measured label="frequency, measured after you predict">
+            f {f.toFixed(2)} Hz
+          </Activity.Measured>
         </>
       }
       evidence={aside}

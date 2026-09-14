@@ -28,6 +28,41 @@ const useActivity = (): ActivityContextValue => {
   return value;
 };
 
+/**
+ * Whether the learner has earned the measurements yet.
+ *
+ * Defaults to true, so a lab rendered outside the authored runtime (a bare scene, the gallery, a
+ * host embed) behaves exactly as before. The runtime lowers it during a predict step.
+ */
+const EarnedContext = createContext(true);
+
+/** Provided by the authored runtime; nothing else should set it. */
+export const EarnedProvider = EarnedContext.Provider;
+
+/**
+ * One measured value in the status strip, withheld until the prediction is made.
+ *
+ * The strip mixes two different things. "Spring", "solid", "120 W" are SETUP: what the learner
+ * chose, which they need in order to orient, and which gives nothing away. "T 2.22 s", "f 0.45 Hz",
+ * "2.40 m" are MEASUREMENTS: the model's answer. Printing those beside "where is the speed
+ * greatest?" answers the question in the act of asking it, and 173 labs pass a status strip.
+ *
+ * Marking the measured items rather than splitting the prop keeps the setup items exactly where
+ * they are, and keeps the decision local to the lab that knows which is which.
+ *
+ * A dash holds the place rather than the item vanishing: the strip keeps its shape, and a gap
+ * where a number will be is itself a promise that the model is about to answer.
+ */
+export function Measured({ children, label }: { children: ReactNode; label?: string }): ReactNode {
+  const earned = useContext(EarnedContext);
+  if (earned) return <span>{children}</span>;
+  return (
+    <span className="lab-activity-measured-pending" aria-label={label ?? 'measured after you predict'}>
+      <span aria-hidden>—</span>
+    </span>
+  );
+}
+
 export interface ActivityRootProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   /** Large-screen composition intent. Defaults to a balanced reading layout. */
@@ -476,6 +511,7 @@ export const Activity = {
   Heading,
   FocusButton,
   Status,
+  Measured,
   Workspace,
   Canvas,
   Dock,

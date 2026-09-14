@@ -27,6 +27,7 @@ import {
   AuthoredActivityRuntime,
   type AuthoredActivityContext,
 } from '../../kit/authored-activity-runtime.js';
+import { Activity } from '../../kit/activity.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 
 export interface HeatingCurveProps {
@@ -543,9 +544,13 @@ export function HeatingCurveLab({
       description={prompt}
       status={
         <>
+          {/* Phase and power are setup. Temperature is the measurement, and the first step asks
+              what temperature does on a plateau. */}
           <span>{phase}</span>
-          <span>{Math.round(tempC)} °C</span>
-          <span>{pct}% heated</span>
+          <Activity.Measured label="temperature, measured after you predict">
+            {Math.round(tempC)} °C
+          </Activity.Measured>
+          <Activity.Measured label="progress, measured after you predict">{pct}% heated</Activity.Measured>
           <span>{power} W</span>
         </>
       }
