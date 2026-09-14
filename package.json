@@ -317,6 +317,7 @@
     "labs:quality": "npm run build && node scripts/labs-quality.mjs",
     "labs:quality:strict": "npm run build && node scripts/labs-quality.mjs --strict",
     "package:check": "node scripts/package-check.mjs",
+    "teaching:check": "node scripts/teaching-variety.mjs",
     "sync:stage": "node scripts/sync-stage.mjs",
     "styles:split": "node scripts/split-domains.mjs",
     "styles:check": "node scripts/split-domains.mjs --check",
