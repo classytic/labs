@@ -25,6 +25,8 @@ export interface Box {
   /** 'face' is a surface you count, 'body' is the solid, 'lost' vanishes at a join. */
   tone: 'face' | 'body' | 'lost';
   label?: string;
+  /** Matching-face family in an opened cuboid net. */
+  pair?: 0 | 1 | 2;
 }
 
 export interface Dims {
@@ -71,12 +73,12 @@ function layers(d: Dims): Box[] {
 function net(d: Dims): Box[] {
   const { length: l, width: w, height: h } = d;
   return [
-    { x: w, y: 0, w: l, h: w, tone: 'face', label: 'top' },
-    { x: 0, y: w, w: w, h: h, tone: 'face', label: 'side' },
-    { x: w, y: w, w: l, h: h, tone: 'face', label: 'front' },
-    { x: w + l, y: w, w: w, h: h, tone: 'face', label: 'side' },
-    { x: w + l + w, y: w, w: l, h: h, tone: 'face', label: 'back' },
-    { x: w, y: w + h, w: l, h: w, tone: 'face', label: 'base' },
+    { x: w, y: 0, w: l, h: w, tone: 'face', label: 'l × w', pair: 0 },
+    { x: 0, y: w, w: w, h: h, tone: 'face', label: 'w × h', pair: 1 },
+    { x: w, y: w, w: l, h: h, tone: 'face', label: 'l × h', pair: 2 },
+    { x: w + l, y: w, w: w, h: h, tone: 'face', label: 'w × h', pair: 1 },
+    { x: w + l + w, y: w, w: l, h: h, tone: 'face', label: 'l × h', pair: 2 },
+    { x: w, y: w + h, w: l, h: w, tone: 'face', label: 'l × w', pair: 0 },
   ];
 }
 

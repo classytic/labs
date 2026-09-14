@@ -100,7 +100,7 @@ export function BaseOdometerLab({
   );
 
   return (
-    <Activity.Root className="ict-number-activity">
+    <Activity.Root className="ict-number-activity" focusLayout="compact">
       <Activity.Header>
         <Activity.Heading eyebrow="Number systems" title={title} description={prompt} />
         <Activity.FocusButton />
@@ -129,8 +129,8 @@ export function BaseOdometerLab({
           </IconButton>
         </div>
         <div className="ict-transport-state" aria-live="polite">
-          <strong>{value}</strong>
-          <span>same quantity in every base</span>
+          <strong>{racing ? 'Counting' : `Decimal ${value}`}</strong>
+          <span>every row represents the same quantity</span>
         </div>
         <ActionButton
           className="ict-race-action"

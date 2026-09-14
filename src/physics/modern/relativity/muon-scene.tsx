@@ -4,7 +4,7 @@ import type { MuonExperimentState, MuonParticleState, MuonSurvivalState } from '
 import { ClockFace } from './scene-primitives.js';
 
 const W = 720;
-const H = 340;
+const H = 286;
 const LANE_X0 = 54;
 const LANE_X1 = 662;
 const DETECTOR_X = 662;
@@ -39,7 +39,9 @@ function ParticleLane({
         weight="hair"
       />
       {particles.map((particle) => {
-        const x = LANE_X0 + particle.progress * (LANE_X1 - LANE_X0 - 4);
+        const waitingOffset = (particle.laneOffset - 0.5) * 34;
+        const x =
+          progress <= 0 ? LANE_X0 + waitingOffset : LANE_X0 + particle.progress * (LANE_X1 - LANE_X0 - 4);
         const py = y + (particle.laneOffset - 0.5) * 24;
         const decayed = progress >= particle.decayProgress && !particle.survived;
         if (!decayed) return <Particle key={particle.id} x={x} y={py} r={5} color={HUE[1]} />;
@@ -67,11 +69,11 @@ function Clock({
 }): ReactNode {
   return (
     <g>
-      <ClockFace cx={x} cy={300} r={13} turns={turns} />
-      <FigText x={x + 22} y={294} size="eyebrow" tone="soft">
+      <ClockFace cx={x} cy={253} r={13} turns={turns} />
+      <FigText x={x + 22} y={247} size="eyebrow" tone="soft">
         {label}
       </FigText>
-      <FigText x={x + 22} y={314} size="measure">
+      <FigText x={x + 22} y={267} size="measure">
         {(elapsedS * 1e6).toFixed(1)} μs
       </FigText>
     </g>
@@ -88,6 +90,16 @@ export function MuonAtmosphereScene({
   experiment: MuonExperimentState;
 }): ReactNode {
   const cohortSize = experiment.relativistic.length;
+  const laneDetail = (arrivals: number, particles: readonly MuonParticleState[]): string => {
+    if (experiment.progress <= 0) return `${cohortSize} ready`;
+    if (experiment.progress < 1) {
+      const active = particles.filter(
+        (particle) => experiment.progress < particle.decayProgress || particle.survived,
+      ).length;
+      return `${active} still travelling`;
+    }
+    return `${arrivals}/${cohortSize} detected`;
+  };
   void population;
   return (
     <Figure
@@ -100,16 +112,16 @@ export function MuonAtmosphereScene({
       </FigText>
       <ParticleLane
         label="without dilation · prediction"
-        detail={`${experiment.withoutDilationArrivals}/${cohortSize} detected`}
+        detail={laneDetail(experiment.withoutDilationArrivals, experiment.withoutDilation)}
         particles={experiment.withoutDilation}
-        y={104}
+        y={88}
         progress={experiment.progress}
       />
       <ParticleLane
         label="relativistic model"
-        detail={`${experiment.relativisticArrivals}/${cohortSize} detected`}
+        detail={laneDetail(experiment.relativisticArrivals, experiment.relativistic)}
         particles={experiment.relativistic}
-        y={224}
+        y={184}
         progress={experiment.progress}
       />
       <Clock

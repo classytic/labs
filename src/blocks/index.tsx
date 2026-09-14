@@ -33,12 +33,13 @@ export { coerceArray } from './authoring.js';
 export { parseAuthoredValue, parseAuthoredAttrs } from '../lab-def/attrs.js';
 
 import { lessonBlocks, lessonComponents } from './lesson.js';
+import type { CmsBlock } from '@classytic/cms-ui/contract';
 // Every lab is now a canonical manifest (real schema + per-lab lazy loader); the lesson blocks
 // are the only remaining hand-authored blocks.
 import { manifestBlocks, manifestComponents } from '../domains/blocks.js';
 
 /** Every lab block, pass to `<CmsBlockEditor blocks={labsBlocks}>` (slash menu). */
-export const labsBlocks = [...manifestBlocks, ...lessonBlocks];
+export const labsBlocks: CmsBlock[] = [...manifestBlocks, ...lessonBlocks];
 
 /** MDX render map, merge into the host's `blockComponents` (tag → component).
  *  Tags match each block's `tag` so editor + player render the same component.

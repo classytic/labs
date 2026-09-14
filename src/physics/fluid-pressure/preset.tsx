@@ -230,7 +230,6 @@ export function FluidPressureLab({
   const probeY = SURFACE_Y - depth;
   const surfaceRight = coneRight(SURFACE_Y);
   const lineRight = coneRight(probeY);
-  const coneMid = (coneLeft(probeY) + lineRight) / 2;
   // Mixed toward the BACKGROUND, not to transparent. A 32% alpha tint reads fine on white and
   // disappears on a near-black ground, which left every vessel looking empty in dark mode.
   const fill = `color-mix(in oklab, ${liquid.color} 30%, var(--stage-bg))`;
@@ -400,7 +399,8 @@ export function FluidPressureLab({
         <Label x={-0.45} y={SURFACE_Y + 0.25} text="low p" color={SOFT} size={11} />
         <Label x={-0.45} y={FLOOR_Y - 0.18} text="high p" color={liquid.color} size={11} weight={700} />
 
-        {/* the argument: ONE depth line crossing all three shapes, each carrying its own gauge */}
+        {/* One shared depth line is the argument. A single reading avoids implying that
+            the vessels contain three independent measurements. */}
         <Segment
           from={{ x: 0.15, y: probeY }}
           to={{ x: lineRight, y: probeY }}
@@ -409,11 +409,15 @@ export function FluidPressureLab({
           dashed
         />
         <Dot x={0.15} y={probeY} r={4} color={ACCENT} />
-        {/* tags hang BELOW the line: above it is where the drag pill appears, and a reading
-            that jumps out of the way while you drag is a reading you cannot compare */}
-        <Label x={1.5} y={probeY} dy={16} text={tag} color={INK} size={13} weight={700} />
-        <Label x={3.2} y={probeY} dy={16} text={tag} color={INK} size={13} weight={700} />
-        <Label x={coneMid} y={probeY} dy={16} text={tag} color={INK} size={13} weight={700} />
+        <Label
+          x={3.2}
+          y={probeY}
+          dy={16}
+          text={`${tag} · equal at this depth`}
+          color={INK}
+          size={13}
+          weight={700}
+        />
 
         {/* names above the rims, clear of every wall and of the fluid */}
         <Label x={1.5} y={RIM_Y + 0.25} text="wide tank" color={SOFT} size={13} />

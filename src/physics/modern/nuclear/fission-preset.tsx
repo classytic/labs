@@ -3,7 +3,7 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../../kit/activity-authoring.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../../kit/authored-activity-runtime.js';
-import { Segmented, Slider } from '../../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../../kit/controls.js';
 import { Field, Readout } from '../../../kit/frame.js';
 import { ExperimentTransport, useExperimentTimeline } from '../shared/experiment-transport.js';
 import { fissionChainActivity } from './fission-activity.js';
@@ -58,7 +58,7 @@ export function FissionChainLab({
         />
       </Field>
       <Field label="reactor condition">
-        <Segmented
+        <ActivitySelect
           ariaLabel="reactor condition"
           // `baseK` is a free number, so an authored value off these three presets selects nothing,
           // exactly as the chip row did.
@@ -69,9 +69,9 @@ export function FissionChainLab({
             setBaseK(next === 'low' ? 1.15 : next === 'disturbance' ? 1.55 : 1.35);
           }}
           options={[
-            { value: 'low', label: 'low' },
-            { value: 'nominal', label: 'nominal' },
-            { value: 'disturbance', label: 'disturbance' },
+            { value: 'low', label: 'Low multiplication' },
+            { value: 'nominal', label: 'Nominal reactor' },
+            { value: 'disturbance', label: 'Neutron disturbance' },
           ]}
         />
       </Field>

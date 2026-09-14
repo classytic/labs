@@ -1,0 +1,81 @@
+.statement-logic-scene {
+  display: grid;
+  gap: 1.25rem;
+  width: min(100%, 52rem);
+  margin-inline: auto;
+  padding: clamp(1.25rem, 4vw, 2rem);
+}
+
+.statement-logic-scene blockquote {
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-weight: 650;
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.statement-logic-context {
+  border-inline-start: 3px solid var(--primary);
+  padding-inline-start: 1rem;
+}
+
+.statement-logic-context span,
+.statement-logic-implication small {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.statement-logic-context p,
+.statement-logic-activity .lab-activity-feedback p { margin: .35rem 0 0; }
+
+.statement-logic-implication {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+}
+
+.statement-logic-implication > span {
+  min-height: 5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: color-mix(in oklab, var(--muted) 55%, transparent);
+  font-weight: 650;
+}
+
+.statement-logic-implication > svg { color: var(--primary); }
+.statement-logic-response .lab-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.statement-logic-verdict { display: inline-flex; align-items: center; gap: .4rem; font-weight: 700; }
+.statement-logic-verdict svg { width: 1rem; height: 1rem; }
+.statement-logic-verdict[data-correct="true"] { color: var(--lab-success, var(--primary)); }
+
+@container (max-width: 34rem) {
+  .statement-logic-scene { padding: 1rem; }
+  .statement-logic-response .lab-choices { grid-template-columns: 1fr; }
+  .statement-logic-implication { grid-template-columns: 1fr; }
+  .statement-logic-implication > svg { margin-inline: auto; transform: rotate(90deg); }
+}
+
+.discrete-proof-activity .lab-activity-canvas {
+  gap: 0;
+}
+.discrete-proof-activity .lab-activity-inspector {
+  align-self: start;
+}
+.discrete-stage-scene {
+  overflow: hidden;
+  border: 1px solid var(--stage-grid);
+  border-radius: var(--lab-r-md);
+  background: var(--stage-bg);
+}
+.discrete-path-status {
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+}

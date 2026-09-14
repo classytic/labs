@@ -14,7 +14,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { Stage, Segment, Polygon, Dot, Label, useFrameLoop, type Vec2 } from '@classytic/stage';
 import { usePlayGate, PlayWrap } from '../kit/play.js';
 import { Slider } from '../kit/controls.js';
-import { Field, StatList, Stat } from '../kit/frame.js';
+import { Field, SceneViewport, StatList, Stat } from '../kit/frame.js';
 import { AuthoredActivityRuntime } from '../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../kit/activity-authoring.js';
 import { ResistorBox } from '../kit/diagram/circuit-box.js';
@@ -64,6 +64,8 @@ const LX = 26,
   BTOP = 30,
   ETOP = 44,
   WIRE = 53;
+
+const BRIDGE_Y = 34;
 
 function rect(cx: number, halfW: number, y0: number, y1: number): Vec2[] {
   return [
@@ -121,12 +123,18 @@ export function Battery({
 
   const figure = (
     <PlayWrap gate={gate}>
-      <Stage
-        view={VIEW}
-        height={height}
-        preserveAspect={false}
-        ariaLabel={`Galvanic cell, ${E.toFixed(2)} V, ${(current * 1000).toFixed(0)} mA`}
+      <SceneViewport
+        className="chem-scene chem-battery-scene"
+        size="wide"
+        overflow="scroll"
+        label="Zinc–copper galvanic cell. Pan horizontally on a narrow screen."
       >
+        <Stage
+          view={VIEW}
+          height={height}
+          preserveAspect={false}
+          ariaLabel={`Zinc copper galvanic cell with a salt bridge, ${E.toFixed(2)} volts, ideal load current ${(current * 1000).toFixed(0)} milliamps`}
+        >
         {/* beakers (electrolyte solutions), glass walls + a liquid surface line */}
         <Polygon
           points={rect(LX, 16, BBOT, BTOP)}
@@ -158,6 +166,50 @@ export function Battery({
         />
         <Label x={LX} y={BBOT} text="Zn²⁺" color="var(--stage-fg)" size={11} dy={-8} />
         <Label x={RX} y={BBOT} text="Cu²⁺" color="var(--stage-fg)" size={11} dy={-8} />
+        {/* Ionic return path. Without this bridge, charge separation stops the cell. */}
+        <Segment
+          from={{ x: LX + 10, y: BTOP - 5 }}
+          to={{ x: LX + 10, y: BRIDGE_Y }}
+          color="var(--stage-muted-fg)"
+          weight={7}
+          opacity={0.45}
+        />
+        <Segment
+          from={{ x: LX + 10, y: BRIDGE_Y }}
+          to={{ x: RX - 10, y: BRIDGE_Y }}
+          color="var(--stage-muted-fg)"
+          weight={7}
+          opacity={0.45}
+        />
+        <Segment
+          from={{ x: RX - 10, y: BRIDGE_Y }}
+          to={{ x: RX - 10, y: BTOP - 5 }}
+          color="var(--stage-muted-fg)"
+          weight={7}
+          opacity={0.45}
+        />
+        <Segment
+          from={{ x: LX + 10, y: BTOP - 5 }}
+          to={{ x: LX + 10, y: BRIDGE_Y }}
+          color="var(--stage-accent-2)"
+          weight={3.5}
+          opacity={0.7}
+        />
+        <Segment
+          from={{ x: LX + 10, y: BRIDGE_Y }}
+          to={{ x: RX - 10, y: BRIDGE_Y }}
+          color="var(--stage-accent-2)"
+          weight={3.5}
+          opacity={0.7}
+        />
+        <Segment
+          from={{ x: RX - 10, y: BRIDGE_Y }}
+          to={{ x: RX - 10, y: BTOP - 5 }}
+          color="var(--stage-accent-2)"
+          weight={3.5}
+          opacity={0.7}
+        />
+        <Label x={50} y={BRIDGE_Y} text="salt bridge · ion flow" color="var(--stage-fg)" size={10} dy={13} />
         {/* electrodes */}
         <Polygon
           points={rect(LX, 1.4, 16, ETOP)}
@@ -204,7 +256,8 @@ export function Battery({
           const p = onWire((t * speed + k / N_E) % 1);
           return <Dot key={`e-${k}`} x={p.x} y={p.y} r={3.2} color="var(--stage-accent)" />;
         })}
-      </Stage>
+        </Stage>
+      </SceneViewport>
     </PlayWrap>
   );
 
@@ -227,11 +280,15 @@ export function Battery({
     <>
       <StatList>
         <Stat label="EMF" value={`${E.toFixed(2)} V`} />
-        <Stat label="current I" value={`${(current * 1000).toFixed(0)} mA`} />
+        <Stat label="ideal load current I = E/R" value={`${(current * 1000).toFixed(0)} mA`} />
       </StatList>
       <div className="chem-equation-stack">
         <Tex tex={'\\text{anode: } Zn \\to Zn^{2+} + 2e^-'} />
         <Tex tex={'\\text{cathode: } Cu^{2+} + 2e^- \\to Cu'} />
+        <p className="chem-model-note">
+          The salt bridge completes the ionic circuit. The displayed current is an ideal Ohm's-law value;
+          real cells also have internal resistance and polarization losses.
+        </p>
       </div>
     </>
   );
@@ -243,7 +300,7 @@ export function Battery({
       activityId="battery"
       eyebrow="Electrochemistry"
       title={title}
-      description="Electrons leave the zinc anode, pass through the load, and arrive at the copper cathode."
+      description="Electrons leave the zinc anode, pass through the load, and arrive at the copper cathode while ions cross the salt bridge to keep both half-cells neutral."
       status={
         <>
           <span>{E.toFixed(2)} V</span>
@@ -253,12 +310,13 @@ export function Battery({
       evidence={aside}
       controls={controls}
       observation={
-        <>Increasing resistance reduces current; the cell’s authored EMF remains the driving potential.</>
+        <>Increasing load resistance reduces the ideal current; the salt bridge closes the ionic circuit.</>
       }
       transcript={
         <p>
-          Electrons flow from zinc anode to copper cathode through a {load} ohm load. Current is{' '}
-          {(current * 1000).toFixed(0)} milliamps.
+          Electrons flow from zinc anode to copper cathode through a {load} ohm load while ions move
+          through the salt bridge. The idealized load current is {(current * 1000).toFixed(0)} milliamps;
+          internal resistance is omitted.
         </p>
       }
     >

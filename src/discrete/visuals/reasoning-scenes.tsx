@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { Figure, FigText, HUE, Particle, STROKE, tint } from '../../kit/figure/index.js';
+import { figUrl, Figure, FigText, HUE, Particle, STROKE, tint, useFigureId } from '../../kit/figure/index.js';
 
 export function DominoInductionScene({
   first,
@@ -16,6 +16,7 @@ export function DominoInductionScene({
   base: boolean;
   bridge: boolean;
 }): ReactNode {
+  const uid = useFigureId();
   const values = Array.from({ length: last - first + 1 }, (_, index) => first + index);
   const gap = 74;
   const startX = 50;
@@ -29,7 +30,7 @@ export function DominoInductionScene({
       preserveAspectRatio="xMidYMid meet"
     >
       <defs>
-        <marker id="induction-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <marker id={`${uid}-induction-arrow`} markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
           <path d="M 0 0 L 8 4 L 0 8 Z" fill={bridge ? HUE.good : HUE.soft} />
         </marker>
       </defs>
@@ -47,7 +48,7 @@ export function DominoInductionScene({
           stroke={bridge ? HUE.good : HUE.soft}
           strokeWidth={STROKE.edge}
           strokeDasharray={bridge ? undefined : '6 6'}
-          markerEnd="url(#induction-arrow)"
+          markerEnd={figUrl(uid, 'induction-arrow')}
         />
       ))}
       {values.map((value, index) => {

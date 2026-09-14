@@ -14,14 +14,15 @@
  */
 
 import { useRef, useState, type ReactNode } from 'react';
-import { Stage, Segment, Polygon, Dot, Label } from '@classytic/stage';
-import { Slider, StatusPill } from '../../kit/controls.js';
+import { Stage, Segment, Dot, Label } from '@classytic/stage';
+import { Segmented, Slider, StatusPill } from '../../kit/controls.js';
 import { Field, MeterBar, LiveRegion } from '../../kit/frame.js';
 import { useReducedMotion, useFrameTick } from '../../kit/anim.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 import { MechanicsVector, SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { collisionResult } from '../mechanics/core.js';
+import { MechanicsCartGlyph } from '../mechanics/glyphs.js';
 
 export interface CollisionTrackProps {
   m1?: number;
@@ -37,7 +38,6 @@ export interface CollisionTrackProps {
 }
 
 const CART_W = 1.8,
-  CART_H = 1.2,
   X0 = -9,
   X1 = 9;
 
@@ -236,45 +236,27 @@ export function CollisionTrackLab({
       reset();
     };
 
+  type CollisionPreset = 'elastic' | 'inelastic' | 'sticky';
+  const collisionPreset: CollisionPreset = e >= 0.98 ? 'elastic' : e <= 0.02 ? 'sticky' : 'inelastic';
+  const chooseCollisionPreset = (preset: CollisionPreset): void => {
+    const nextElasticity = preset === 'elastic' ? 1 : preset === 'sticky' ? 0 : 0.5;
+    setE(nextElasticity);
+    setRunning(false);
+    reset();
+  };
+
   const xcom = (ma * xa.current + mb * xb.current) / M;
-  const view = { xMin: X0, xMax: X1, yMin: -2, yMax: 5 };
+  const view = { xMin: X0, xMax: X1, yMin: -1.2, yMax: 4.3 };
 
   const Cart = (x: number, w: number, vel: number, tint: string, name: string): ReactNode => {
     const hw = CART_W / 2;
     return (
       <>
-        <Polygon
-          points={[
-            { x: x - hw, y: 0.15 },
-            { x: x + hw, y: 0.15 },
-            { x: x + hw, y: 0.15 + CART_H },
-            { x: x - hw, y: 0.15 + CART_H },
-          ]}
-          color={`color-mix(in oklab, ${tint} 60%, black)`}
-          fill={tint}
-          fillOpacity={0.85}
-          weight={1.5}
-        />
-        <Dot x={x - hw * 0.55} y={0.15} r={4} color="var(--stage-metal)" />
-        <Dot x={x + hw * 0.55} y={0.15} r={4} color="var(--stage-metal)" />
-        <Segment
-          from={{ x: x + Math.sign(vel || 1) * hw, y: 0.35 }}
-          to={{ x: x + Math.sign(vel || 1) * (hw + 0.16), y: 0.35 }}
-          color="var(--stage-metal)"
-          weight={3}
-        />
-        <Label
-          x={x}
-          y={0.15 + CART_H + 0.25}
-          text={`${name} · ${w} kg`}
-          color="var(--stage-fg)"
-          size={14}
-          dy={-8}
-        />
+        <MechanicsCartGlyph at={{ x, y: 0.42 }} color={tint} name={name} mass={w} />
         {Math.abs(vel) > 0.05 && (
           <MechanicsVector
-            tail={{ x, y: 0.15 + CART_H + 0.6 }}
-            tip={{ x: x + vel * 0.5, y: 0.15 + CART_H + 0.6 }}
+            tail={{ x: x + Math.sign(vel) * hw * 0.15, y: 2.35 }}
+            tip={{ x: x + vel * 0.42, y: 2.35 }}
             color={tint}
             weight={3}
             label={`${vel > 0 ? '+' : ''}${vel.toFixed(1)} m/s`}
@@ -361,56 +343,74 @@ export function CollisionTrackLab({
             ? 'perfectly inelastic · stick'
             : 'inelastic · KE lost'}
       </StatusPill>
-      <Field label="elasticity e" value={e.toFixed(2)}>
-        <Slider
-          value={e}
-          min={0}
-          max={1}
-          step={0.05}
-          onChange={onParam(setE)}
-          ariaLabel="coefficient of restitution"
+      <div className="physics-collision-presets">
+        <span className="lab-field-label">Collision type</span>
+        <Segmented
+          value={collisionPreset}
+          onChange={chooseCollisionPreset}
+          ariaLabel="collision type"
+          options={[
+            { value: 'elastic', label: 'Elastic' },
+            { value: 'inelastic', label: 'Inelastic' },
+            { value: 'sticky', label: 'Stick together' },
+          ]}
         />
-      </Field>
-      <Field label="m₁" value={`${ma}kg`}>
-        <Slider
-          value={ma}
-          min={1}
-          max={6}
-          step={0.5}
-          onChange={onParam(setMa)}
-          ariaLabel="mass of cart A (kg)"
-        />
-      </Field>
-      <Field label="u₁" value={`${ua}m/s`}>
-        <Slider
-          value={ua}
-          min={0}
-          max={8}
-          step={0.5}
-          onChange={onParam(setUa)}
-          ariaLabel="initial velocity of cart A (m/s)"
-        />
-      </Field>
-      <Field label="m₂" value={`${mb}kg`}>
-        <Slider
-          value={mb}
-          min={1}
-          max={6}
-          step={0.5}
-          onChange={onParam(setMb)}
-          ariaLabel="mass of cart B (kg)"
-        />
-      </Field>
-      <Field label="u₂" value={`${ub}m/s`}>
-        <Slider
-          value={ub}
-          min={-8}
-          max={0}
-          step={0.5}
-          onChange={onParam(setUb)}
-          ariaLabel="initial velocity of cart B (m/s)"
-        />
-      </Field>
+      </div>
+      <details className="physics-collision-fine-tune">
+        <summary>Fine-tune values</summary>
+        <div className="physics-collision-fine-tune-grid">
+          <Field label="elasticity e" value={e.toFixed(2)}>
+            <Slider
+              value={e}
+              min={0}
+              max={1}
+              step={0.05}
+              onChange={onParam(setE)}
+              ariaLabel="coefficient of restitution"
+            />
+          </Field>
+          <Field label="m₁" value={`${ma} kg`}>
+            <Slider
+              value={ma}
+              min={1}
+              max={6}
+              step={0.5}
+              onChange={onParam(setMa)}
+              ariaLabel="mass of cart A (kg)"
+            />
+          </Field>
+          <Field label="u₁" value={`${ua} m/s`}>
+            <Slider
+              value={ua}
+              min={0}
+              max={8}
+              step={0.5}
+              onChange={onParam(setUa)}
+              ariaLabel="initial velocity of cart A (m/s)"
+            />
+          </Field>
+          <Field label="m₂" value={`${mb} kg`}>
+            <Slider
+              value={mb}
+              min={1}
+              max={6}
+              step={0.5}
+              onChange={onParam(setMb)}
+              ariaLabel="mass of cart B (kg)"
+            />
+          </Field>
+          <Field label="u₂" value={`${ub} m/s`}>
+            <Slider
+              value={ub}
+              min={-8}
+              max={0}
+              step={0.5}
+              onChange={onParam(setUb)}
+              ariaLabel="initial velocity of cart B (m/s)"
+            />
+          </Field>
+        </div>
+      </details>
       <SimulationTransport
         running={running}
         onReset={() => {
@@ -428,7 +428,8 @@ export function CollisionTrackLab({
 
   return (
     <AuthoredActivityRuntime
-      focusLayout="immersive"
+      className="physics-collision-activity"
+      focusLayout="compact"
       activity={{ ...authoredActivity, objectives: objectives ?? authoredActivity.objectives }}
       activityId={activityId}
       eyebrow="Mechanics"

@@ -48,30 +48,6 @@
     display: none;
   }
 }
-@container lab-activity (max-width: 42.5rem) {
-  .circuit-editor-activity .lab-activity-canvas > div:last-child,
-  .logic-editor-activity .lab-activity-canvas > div:last-child {
-    height: min(65dvh, 32rem);
-    min-height: 22rem;
-  }
-  .circuit-editor-guidance {
-    font-size: var(--lab-t-micro);
-  }
-  .circuit-editor-status-hint {
-    display: none;
-  }
-  .circuit-editor-history button {
-    padding-inline: var(--lab-sp-8) !important;
-  }
-  .circuit-editor-history button span {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
-}
 .lab-choice-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -159,7 +159,7 @@ export function BitGrouperLab({
       : `${target.base === 16 ? '0x' : target.base === 8 ? '0o' : '0b'}${target.value.toString(target.base).toUpperCase()}`;
 
   return (
-    <Activity.Root className="ict-number-activity">
+    <Activity.Root className="ict-number-activity" focusLayout="compact">
       <Activity.Header>
         <Activity.Heading eyebrow="Number systems" title={title} description={prompt} />
         <Activity.FocusButton />

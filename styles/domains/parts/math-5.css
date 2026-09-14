@@ -130,54 +130,6 @@
   }
 }
 
-/* River crossing: the aims, and the one that ran out of physics. */
-.physics-river-aims {
-  flex-wrap: wrap;
-}
-.physics-river-why {
-  margin: var(--lab-sp-6) 0 0;
-  color: var(--lab-muted);
-  font-size: var(--lab-t-sm);
-  line-height: var(--lab-lh-ui);
-}
-.physics-river-why strong {
-  color: var(--lab-fg);
-}
-.physics-river-compare {
-  width: 100%;
-  margin-block-start: var(--lab-sp-10);
-  border-collapse: collapse;
-  font-size: var(--lab-t-sm);
-  font-variant-numeric: tabular-nums;
-}
-.physics-river-compare caption {
-  margin-bottom: var(--lab-sp-4);
-  color: var(--lab-muted);
-  font-size: var(--lab-t-eyebrow);
-  letter-spacing: var(--lab-ls-caps);
-  text-align: start;
-  text-transform: uppercase;
-}
-.physics-river-compare th,
-.physics-river-compare td {
-  padding: var(--lab-sp-4) var(--lab-sp-6);
-  border-bottom: 1px solid var(--lab-border);
-  text-align: end;
-}
-.physics-river-compare thead th,
-.physics-river-compare tbody th {
-  color: var(--lab-muted);
-  font-weight: var(--lab-w-medium);
-  text-align: start;
-}
-.physics-river-compare tbody th {
-  color: var(--lab-fg);
-}
-/* The unavailable aim stays in the table so the comparison keeps its shape. */
-.physics-river-compare tr[data-dead] {
-  opacity: 0.55;
-}
-
 /* Discrete reasoning: one quiet visual grammar for arguments, reachability and guarantees. */
 /* The premise, the working and the goal are REGIONS OF ONE CARD, not three cards. Boxing each in a
    bordered, tinted panel with its own accent bar put four borders inside the activity border, and a
@@ -257,11 +209,37 @@
   color: var(--lab-muted) !important;
   box-shadow: inset 0 0 0 1px var(--lab-border-strong);
 }
-.discrete-proof-activity .lab-activity-canvas {
-  gap: 0;
+.proof-composition,
+.proof-argument {
+  display: grid;
+  min-width: 0;
 }
-.discrete-proof-activity .lab-activity-inspector {
-  align-self: start;
+.proof-composition {
+  gap: var(--lab-sp-16);
+}
+.proof-argument {
+  align-content: start;
+}
+.proof-figure {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-surface);
+}
+.proof-figure > svg {
+  display: block;
+  width: 100%;
+}
+@container lab-activity (min-width: 56rem) {
+  .proof-composition[data-has-figure] {
+    grid-template-columns: minmax(18rem, 0.88fr) minmax(22rem, 1.12fr);
+    align-items: start;
+  }
+  .proof-composition[data-has-figure] .proof-figure {
+    position: sticky;
+    top: var(--lab-sp-12);
+  }
 }
 .proof-step-actions {
   display: grid;

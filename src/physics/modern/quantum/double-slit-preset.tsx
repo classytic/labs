@@ -2,7 +2,7 @@
 import { useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../../kit/activity-authoring.js';
 import { AuthoredActivityRuntime } from '../../../kit/authored-activity-runtime.js';
-import { Segmented, Slider } from '../../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../../kit/controls.js';
 import { Field, Readout } from '../../../kit/frame.js';
 import {
   Ball,
@@ -81,13 +81,13 @@ export function DoubleSlitLab({
   const controls = (
       <>
         <Field label="path information">
-          <Segmented
+          <ActivitySelect
             ariaLabel="path information"
             value={whichPath ? 'detector' : 'indistinguishable'}
             onChange={(next) => setWhichPath(next === 'detector')}
             options={[
-              { value: 'indistinguishable', label: 'paths indistinguishable' },
-              { value: 'detector', label: 'which-path detector' },
+              { value: 'indistinguishable', label: 'Interference visible' },
+              { value: 'detector', label: 'Which-path detector' },
             ]}
           />
         </Field>

@@ -73,7 +73,7 @@ export function GridPathLab({
             <div
               className="dp-grid"
               style={{
-                gridTemplateColumns: `repeat(${trace.cols}, minmax(2.75rem, 1fr))`,
+                gridTemplateColumns: `repeat(${trace.cols}, minmax(3rem, 4.75rem))`,
               }}
             >
               {trace.table.flatMap((row, r) =>

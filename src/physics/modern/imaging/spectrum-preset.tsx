@@ -2,7 +2,7 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../../kit/activity-authoring.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../../kit/authored-activity-runtime.js';
-import { Segmented, Slider } from '../../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../../kit/controls.js';
 import { Field, Readout } from '../../../kit/frame.js';
 import { xraySpectrumActivity } from './spectrum-activity.js';
 import { ExperimentTransport, useExperimentTimeline } from '../shared/experiment-transport.js';
@@ -71,7 +71,7 @@ export function XrayTubeSpectrumLab({
         />
       </Field>
       <Field label="target">
-        <Segmented
+        <ActivitySelect
           ariaLabel="target"
           value={target}
           onChange={(id) => {

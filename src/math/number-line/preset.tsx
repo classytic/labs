@@ -10,7 +10,6 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Stage, Segment, Dot, Label, MovableDot } from '@classytic/stage';
-import { StatusPill } from '../../kit/controls.js';
 import { Activity } from '../../kit/activity.js';
 import { useCheckpoint } from '../../kit/pedagogy.js';
 import { clamp } from '../../core/util.js';
@@ -90,6 +89,18 @@ export function NumberLineLab({
         .map((t) => (
           <Label key={`l${t}`} x={t} y={0} text={String(t)} color="var(--stage-muted)" dy={22} size={12} />
         ))}
+      {target != null && (
+        <>
+          <Segment
+            from={{ x: target, y: -0.62 }}
+            to={{ x: target, y: 0.62 }}
+            color="var(--stage-good)"
+            opacity={solved ? 0.55 : 0.28}
+            weight={2}
+          />
+          <Label x={target} y={0} text="target" color="var(--stage-good)" dy={-28} size={11} />
+        </>
+      )}
       {solved && target != null && <Dot x={target} y={0} r={11} color="var(--stage-good)" opacity={0.3} />}
       <MovableDot
         value={{ x: val, y: 0 }}
@@ -102,15 +113,6 @@ export function NumberLineLab({
         ariaLabel="number-line marker"
       />
     </Stage>
-  );
-
-  const controls = (
-    <div className="lab-activity-fields">
-      <span className="math-coordinate-readout">value = {val}</span>
-      {target != null && (
-        <StatusPill ok={solved}>{solved ? `✓ Landed on ${target}` : 'Not there yet'}</StatusPill>
-      )}
-    </div>
   );
 
   const update = target != null ? (solved ? `Landed on ${target}` : `Marker at ${val}`) : `Marker at ${val}`;
@@ -128,7 +130,6 @@ export function NumberLineLab({
       </Activity.Status>
       <Activity.Workspace>
         <Activity.Canvas label="Interactive number line">{figure}</Activity.Canvas>
-        <Activity.Inspector label="Position and target">{controls}</Activity.Inspector>
       </Activity.Workspace>
       <Activity.Feedback>
         <span>{solved ? 'Complete' : 'Observe'}</span>
@@ -142,7 +143,7 @@ export function NumberLineLab({
       <Activity.Transport>
         <div className="lab-transport-state">
           <strong>{solved ? 'Position confirmed' : 'Drag the marker'}</strong>
-          <span>{update}</span>
+          <span>{target == null ? `Current value ${val}` : `${Math.abs(target - val)} step${Math.abs(target - val) === 1 ? '' : 's'} from target`}</span>
         </div>
       </Activity.Transport>
     </Activity.Root>

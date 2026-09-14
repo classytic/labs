@@ -3,7 +3,7 @@
 /**
  * BrownoutLab — what a falling supply voltage does to digital logic. A CMOS gate only switches
  * when its transistors can turn on, and that needs the supply rail VDD to stay above the
- * threshold Vth. Drag the battery EMF down (a draining cell, a sagging rail) and the engine solves
+ * threshold Vth. Drag the supply voltage down and the engine solves
  * the gate's output: with a healthy supply it swings rail to rail (valid 1 / 0); as VDD falls
  * toward Vth the swing collapses and the output can no longer follow the input, so it is no longer
  * a valid 1 or 0. That is a brown-out: the chip is not broken, it is simply starved of voltage, and
@@ -42,7 +42,7 @@ export function BrownoutLab({
   vth = 2,
   vmax = 6,
   title = 'Brown-out: when the supply is too low to think',
-  prompt = 'Drag the battery EMF down. The CMOS gate only switches while the supply rail VDD stays above the transistor threshold. As VDD falls toward Vth the output, solved by the engine, loses its swing and can no longer follow the input: a brown-out, where the logic is no longer a valid 1 or 0.',
+  prompt = 'Lower the supply voltage VDD. The CMOS gate only switches while VDD stays above the transistor threshold. As VDD falls toward Vth the output, solved by the engine, loses its swing and can no longer follow the input: a brown-out, where the logic is no longer a valid 1 or 0.',
   ask,
   activity = 'brownout',
 }: BrownoutProps = {}): ReactNode {
@@ -92,23 +92,13 @@ export function BrownoutLab({
         role="img"
         aria-label={`Brown-out demo, supply ${vdd.toFixed(1)} volts, logic ${zone === 'healthy' ? 'valid' : zone === 'marginal' ? 'marginal' : 'invalid'}`}
       >
-        {/* battery and its explicit supply rail */}
-        <rect
-          x={44}
-          y={70}
-          width={64}
-          height={76}
-          rx={12}
-          fill="var(--stage-bg)"
-          stroke={zoneColor}
-          strokeWidth={2}
-        />
-        <rect x={64} y={62} width={24} height={8} rx={3} fill={zoneColor} opacity={0.8} />
-        <rect x={51} y={78} width={50} height={60} rx={7} fill={zoneColor} opacity={0.18} />
-        <Tag x={76} y={97} text="VDD" color="var(--stage-fg)" size={12} weight={800} anchor="middle" />
+        {/* VDD is a supply node, not necessarily a battery. Keep it in schematic language. */}
+        <circle cx={76} cy={gy - 34} r={6} fill={zoneColor} stroke="var(--stage-bg)" strokeWidth={2} />
+        <line x1={76} y1={gy - 28} x2={76} y2={gy + 20} stroke={zoneColor} strokeWidth={2} />
+        <Tag x={76} y={gy - 48} text="VDD" color="var(--stage-fg)" size={12} weight={800} anchor="middle" />
         <Tag
           x={76}
-          y={121}
+          y={gy + 38}
           text={`${vdd.toFixed(1)} V`}
           color={zoneColor}
           size={14}
@@ -116,7 +106,7 @@ export function BrownoutLab({
           anchor="middle"
         />
         <SupplyRail
-          from={[108, gy - 34]}
+          from={[76, gy - 34]}
           to={[gx, gy - 34]}
           label="supply rail"
           live={vdd > 0.05}
@@ -219,14 +209,14 @@ export function BrownoutLab({
 
   const controls = (
     <>
-      <Field label={`battery EMF = ${vdd.toFixed(1)} V`}>
+      <Field label={`supply voltage VDD = ${vdd.toFixed(1)} V`}>
         <Slider
           min={0}
           max={vmax}
           step={0.1}
           value={vdd}
           onChange={setVdd}
-          ariaLabel="battery EMF in volts"
+          ariaLabel="supply voltage VDD in volts"
         />
       </Field>
       <Field label="input A">

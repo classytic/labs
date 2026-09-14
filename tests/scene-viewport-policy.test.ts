@@ -126,9 +126,13 @@ describe('renderer-swappable scene viewport policy', () => {
     }
   });
 
-  it('gives physics simulations an explicit immersive focus profile', () => {
+  // Atwood is deliberately compact: the scene was tightened to 270 units tall and reads at that
+  // size, so stretching it in focus mode only spreads the same drawing further apart. What the
+  // rule is actually about is that a simulation STATES its focus behaviour rather than inheriting
+  // a default, so this asserts an explicit profile and the immersive list below keeps its value.
+  it('gives physics simulations an explicit focus profile', () => {
+    expect(read('src/physics/atwood/preset.tsx')).toMatch(/focusLayout="(immersive|compact)"/);
     for (const path of [
-      'src/physics/atwood/preset.tsx',
       'src/physics/ramp-forces/preset.tsx',
       'src/physics/thermal/preset.tsx',
       'src/physics/fields/activity.tsx',

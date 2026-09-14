@@ -32,7 +32,7 @@ import {
   type MaterialId,
 } from './core.js';
 import { Field, Readout, Stat, StatList } from '../../kit/frame.js';
-import { ActivitySelect, Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Tex } from '../../core/tex.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
@@ -554,7 +554,7 @@ export function StressStrainLab({
         />
       </Field>
       <Field label="graph">
-        <Segmented
+        <ActivitySelect
           ariaLabel="graph"
           value={graph}
           onChange={setGraph}

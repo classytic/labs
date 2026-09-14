@@ -21,6 +21,14 @@ const METAL = 'var(--stage-metal, #8a8a8a)';
 const BG = 'var(--stage-bg, #fff)';
 const FG = 'var(--stage-fg, #222)';
 const GLASS = 'color-mix(in oklab, var(--stage-fg) 28%, transparent)';
+/** Apparatus labels sit ON the drawing (under a beaker, over a thermometer), so they carry the
+    same paper halo every other scene label does and stay readable across a stroke they cross. */
+const HALO = {
+  paintOrder: 'stroke',
+  stroke: BG,
+  strokeWidth: 3.5,
+  strokeLinejoin: 'round',
+} as const;
 
 /** Blue (cold) → red (hot) along a 0..1 fraction, in perceptual space. */
 export function thermalColor(frac: number): string {
@@ -102,7 +110,15 @@ export function ThermometerGlyph({
         fill="color-mix(in oklab, var(--stage-sheen, #fff) 55%, transparent)"
       />
       {label && (
-        <text x={cx} y={top - 4} textAnchor="middle" fontSize={12} fontWeight={700} fill={FG}>
+        <text
+          x={cx}
+          y={top - 4}
+          textAnchor="middle"
+          fontSize={12}
+          fontWeight={700}
+          fill={FG}
+          {...HALO}
+        >
           {label}
         </text>
       )}
@@ -254,7 +270,15 @@ export function BeakerGlyph({
       {/* rim lip */}
       <line x1={x - 3} y1={y} x2={x + w + 3} y2={y} stroke={METAL} strokeWidth={3} strokeLinecap="round" />
       {label && (
-        <text x={x + w / 2} y={y + h + 22} textAnchor="middle" fontSize={12} fontWeight={700} fill={FG}>
+        <text
+          x={x + w / 2}
+          y={y + h + 22}
+          textAnchor="middle"
+          fontSize={12}
+          fontWeight={700}
+          fill={FG}
+          {...HALO}
+        >
           {label}
         </text>
       )}

@@ -22,6 +22,34 @@ export {
 } from './calculus/index.js';
 export { LinearSystemLab, type LinearSystemProps, type SystemLine } from './linear-system/index.js';
 export { NumberLineLab, type NumberLineProps } from './number-line/index.js';
+export {
+  NumberStructureLab,
+  arrayState,
+  divisibilityEvidence,
+  divisors,
+  factorPairs,
+  factorTree,
+  gcd as numberGcd,
+  isPrime,
+  lcm as numberLcm,
+  primeFactors,
+  primePowers,
+  type FactorSplitStrategy,
+  type FactorTreeNode,
+  type NumberStructureMode,
+  type NumberStructureProps,
+} from './number-structure/index.js';
+export {
+  DivisionWorkbenchLab,
+  divisionModel,
+  formatQuotient,
+  normalizeDivision,
+  writtenDivisionSteps,
+  type DivisionMode,
+  type DivisionModel,
+  type DivisionStep,
+  type DivisionWorkbenchProps,
+} from './division-workbench/index.js';
 export { areaModelDoc, AreaModelLab, AREA_MODEL_ASSET, type AreaModelProps } from './area-model/index.js';
 export {
   growingPatternDoc,
@@ -337,3 +365,15 @@ export {
   type RadianWrapProps,
   type Band as RadianBand,
 } from './radian-wrap/index.js';
+export {
+  ExpressionOrderLab,
+  DEFAULT_EXPRESSION_ORDER_ROUNDS,
+  expressionLatex,
+  expressionValue,
+  validateExpressionOrderRounds,
+  type ExpressionOrderProps,
+  type ExpressionOrderMessages,
+  type ExpressionOrderChoice,
+  type ExpressionOrderRound,
+  type ExpressionOrderStep,
+} from './expression-order/index.js';

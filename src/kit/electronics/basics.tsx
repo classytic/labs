@@ -308,12 +308,9 @@ export interface BulbGlyphProps extends LeadGlyphProps {
   leads?: boolean;
 }
 
-/**
- * FILAMENT LAMP, a glass envelope with a real coiled filament inside (the schematic
- * "circle + filament" lamp, clearer than the bare × cross). When `live` the filament
- * glows warm and a soft LAYERED halo (two faded rings, not one hard disc) blooms behind
- * it, scaling with `brightness`; when dark the filament is a thin metal coil.
- */
+/** IEC-style indicator lamp. The crossed filament is intentionally schematic: it stays
+ * legible at small sizes and cannot be confused with a resistor or inductor. State is
+ * communicated by the restrained halo and active colour, never by changing the symbol. */
 export function BulbGlyph({
   cx,
   cy,
@@ -327,11 +324,7 @@ export function BulbGlyph({
   const b = Math.max(0, Math.min(1, brightness));
   const lit = live && b > 0.02;
   const ring = lit ? C_LAMP : METAL;
-  const fil = lit ? '#f5b301' : METAL; // warm filament vs cold metal
-  const fy = cy + 1; // filament baseline
-  // a coiled filament: two support posts rising from the base contacts, bridged by a
-  // small horizontal coil (three loops) — reads as a real incandescent filament.
-  const coil = `M ${cx - 8} ${fy} q 1.3 -6 2.7 0 q 1.3 6 2.7 0 q 1.3 -6 2.7 0 q 1.3 6 2.7 0 q 1.3 -6 2.6 0`;
+  const filament = lit ? C_LAMP : METAL;
   return (
     <g>
       {lit && (
@@ -339,52 +332,21 @@ export function BulbGlyph({
           <circle
             cx={cx}
             cy={cy}
-            r={r + 5 + b * 13}
+            r={r + 3 + b * 5}
             fill="var(--stage-warn)"
-            opacity={0.05 + 0.11 * b}
-            pointerEvents="none"
-          />
-          <circle
-            cx={cx}
-            cy={cy}
-            r={r + 1 + b * 6}
-            fill="var(--stage-warn)"
-            opacity={0.09 + 0.19 * b}
+            opacity={0.08 + 0.14 * b}
             pointerEvents="none"
           />
         </>
       )}
       {leads && <Leads cx={cx} cy={cy} half={half} bodyHalf={r} live={live} />}
-      {/* glass envelope */}
-      <circle cx={cx} cy={cy} r={r} fill={lit ? tint(C_LAMP, 14) : BG} stroke={ring} strokeWidth={2} />
-      {/* support posts from the bottom contacts up to the coil ends */}
+      <circle cx={cx} cy={cy} r={r} fill={lit ? tint(C_LAMP, 9) : BG} stroke={ring} strokeWidth={2} />
       <path
-        d={`M ${cx - 8} ${fy} L ${cx - 6} ${cy + r - 2.5} M ${cx + 8} ${fy} L ${cx + 6} ${cy + r - 2.5}`}
+        d={`M ${cx - 7} ${cy - 7} L ${cx + 7} ${cy + 7} M ${cx + 7} ${cy - 7} L ${cx - 7} ${cy + 7}`}
         fill="none"
-        stroke={lit ? fil : METAL}
-        strokeWidth={1.5}
+        stroke={filament}
+        strokeWidth={2.2}
         strokeLinecap="round"
-        opacity={0.75}
-      />
-      {/* the coiled filament */}
-      <path
-        d={coil}
-        fill="none"
-        stroke={fil}
-        strokeWidth={lit ? 2.3 : 1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* hot-spot at the coil centre when fully lit */}
-      {lit && <circle cx={cx} cy={fy - 2.4} r={2.1} fill="#fff6da" opacity={0.55 + 0.4 * b} />}
-      {/* glass sheen highlight */}
-      <path
-        d={`M ${cx - r * 0.62} ${cy - r * 0.5} A ${r} ${r} 0 0 1 ${cx + r * 0.12} ${cy - r * 0.9}`}
-        fill="none"
-        stroke={SHEEN}
-        strokeWidth={1.4}
-        strokeLinecap="round"
-        opacity={0.75}
       />
       <GlyphLabel cx={cx} cy={cy} bodyH={r} label={label} />
     </g>

@@ -114,25 +114,16 @@ export function PlaceValueDialLab({
     </div>
   );
 
-  const representation = (
-    <>
-      <span>
-        {digits.map(digitChar).join('')}
-        <sub>{base}</sub>
-      </span>
-      <span>decimal {v}</span>
-    </>
-  );
-
   return (
-    <Activity.Root className="ict-number-activity">
+    <Activity.Root className="ict-number-activity" focusLayout="compact">
       <Activity.Header>
         <Activity.Heading eyebrow="Number systems" title={title} description={prompt} />
         <Activity.FocusButton />
       </Activity.Header>
       <Activity.Status>
         <strong>Place value</strong>
-        {representation}
+        <span>{digits.map(digitChar).join('')}<sub>{base}</sub></span>
+        <span>= {v}<sub>10</sub></span>
       </Activity.Status>
       <Activity.Workspace>
         <Activity.Canvas label="Interactive place-value dial">{figure}</Activity.Canvas>
@@ -149,11 +140,8 @@ export function PlaceValueDialLab({
           <Minus aria-hidden="true" />
         </IconButton>
         <div className="ict-transport-state" aria-live="polite">
-          <strong>{v}</strong>
-          <span>
-            {digits.map(digitChar).join('')}
-            <sub>{base}</sub>
-          </span>
+          <strong>{v >= cap ? 'Dial full' : 'Count by one'}</strong>
+          <span>{base === 2 ? 'Tap any bit to toggle its place' : 'Tap a wheel to change one place'}</span>
         </div>
         <IconButton label="Increase count" onClick={() => bump(1)} disabled={v >= cap}>
           <Plus aria-hidden="true" />

@@ -1,7 +1,7 @@
 'use client';
 import { useMemo, useState, type ComponentType, type ReactNode } from 'react';
 import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js';
-import { Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Segmented, Slider } from '../../kit/controls.js';
 import { Field, Readout } from '../../kit/frame.js';
 import { spatialLorentzActivity } from './spatial-activity.js';
 import {
@@ -114,14 +114,15 @@ export function SpatialLorentzLab({
   const controls = (
     <>
       <Field label="field setup">
-        <Segmented
+        <ActivitySelect
           ariaLabel="field setup"
           value={mode}
           onChange={setMode}
-          options={(['electric', 'magnetic', 'crossed'] as SpatialFieldMode[]).map((v) => ({
-            value: v,
-            label: v,
-          }))}
+          options={[
+            { value: 'electric', label: 'Electric field' },
+            { value: 'magnetic', label: 'Magnetic field' },
+            { value: 'crossed', label: 'Crossed E + B' },
+          ]}
         />
       </Field>
       <Field label="charge">

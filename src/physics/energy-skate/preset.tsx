@@ -19,7 +19,7 @@
 
 import { useRef, useState, type ReactNode } from 'react';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
-import { Stage, Segment, Polyline, Label, useInView, type Vec2 } from '@classytic/stage';
+import { Stage, Segment, Polyline, Polygon, Label, Dot, useInView, type Vec2 } from '@classytic/stage';
 import { Slider, Chip } from '../../kit/controls.js';
 import { Field, Control, MeterBar, LiveRegion, type ControlConfig } from '../../kit/frame.js';
 import { useReducedMotion, useFrameTick } from '../../kit/anim.js';
@@ -27,6 +27,7 @@ import { clamp } from '../../core/util.js';
 import { MechanicsActivity } from '../mechanics/activity.js';
 import { SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { energySnapshot, parabolicTrackHeight } from '../mechanics/core.js';
+import { SkaterGlyph } from '../mechanics/glyphs.js';
 
 export interface EnergySkateProps {
   startHeight?: number;
@@ -128,16 +129,25 @@ export function EnergySkateLab({
 
   const track: Vec2[] = [];
   for (let i = -X; i <= X + 1e-9; i += 0.25) track.push({ x: i, y: yAt(i) });
+  const trackFill: Vec2[] = [{ x: -X, y: 0 }, ...track, { x: X, y: 0 }];
   const view = { xMin: -X - 1, xMax: X + 1, yMin: -1, yMax: H + 1 };
 
   const figure = (
-    <SceneSurface ref={viewRef}>
+    <SceneSurface ref={viewRef} tone="grid" className="physics-energy-skate-scene">
       <Stage
         view={view}
-        height={240}
+        height={250}
         preserveAspect={false}
         ariaLabel={`Skater on a ramp released from ${h0.toFixed(1)} m${fric ? ', with friction' : ''}`}
       >
+        <Polygon
+          points={trackFill}
+          fill="var(--stage-primary)"
+          fillOpacity={0.08}
+          color="var(--stage-primary)"
+          opacity={0}
+          weight={0}
+        />
         {/* ground */}
         <Segment
           from={{ x: view.xMin, y: 0 }}
@@ -155,19 +165,20 @@ export function EnergySkateLab({
           weight={1}
           dashed
         />
+        <Dot x={x0} y={h0} r={4} color="var(--stage-primary)" />
         <Label
-          x={view.xMin}
+          x={x0}
           y={h0}
-          text={`release ${h0.toFixed(1)} m`}
+          text={`${h0.toFixed(1)} m start`}
           color="var(--stage-muted)"
           size={10}
-          anchor="start"
-          dy={-3}
+          anchor="middle"
+          dy={-12}
         />
         {/* the ramp */}
-        <Polyline points={track} color="var(--stage-fg)" weight={2.5} />
-        {/* skater (emoji avoids aspect-stretch into an ellipse) */}
-        <Label x={x} y={y + 0.4} text="🛹" color="var(--stage-fg)" size={30} />
+        <Polyline points={track} color="var(--stage-primary)" weight={4} />
+        <Label x={0} y={0.35} text="lowest PE · fastest" color="var(--stage-muted)" size={10} anchor="middle" />
+        <SkaterGlyph at={{ x, y: y + 0.18 }} direction={dirRef.current > 0 ? 1 : -1} />
       </Stage>
     </SceneSurface>
   );
@@ -189,7 +200,7 @@ export function EnergySkateLab({
       />
       {fric && (
         <MeterBar
-          label="thermal (friction) 🔥"
+          label="thermal energy"
           frac={q * ebar}
           color="var(--stage-warn)"
           value={`${q.toFixed(1)} J`}
@@ -219,7 +230,7 @@ export function EnergySkateLab({
             qRef.current = 0;
           }}
         >
-          friction {fric ? 'on 🔥' : 'off'}
+          friction {fric ? 'on' : 'off'}
         </Chip>
       </Control>
       <Field label="start height" value={`${h0.toFixed(1)} m`}>

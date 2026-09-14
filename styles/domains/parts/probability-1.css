@@ -52,13 +52,3 @@
 .probability-result-value {
   color: var(--stage-accent);
 }
-.discrete-stage-scene {
-  overflow: hidden;
-  border: 1px solid var(--stage-grid);
-  border-radius: var(--lab-r-md);
-  background: var(--stage-bg);
-}
-.discrete-path-status {
-  color: var(--stage-muted);
-  font-size: var(--lab-t-eyebrow);
-}

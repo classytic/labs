@@ -72,17 +72,22 @@
     font-variant-numeric: tabular-nums;
   }
   .modern-experiment-transport {
-    display: grid;
-    grid-template-columns: auto auto minmax(7rem, 1fr) auto;
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: flex-end;
     gap: var(--lab-sp-8);
     width: 100%;
+  }
+  .modern-experiment-transport .lab-transport-state {
+    min-width: 0;
+    margin-inline: auto;
   }
   /* The scrubber spans its own row under the buttons. It moved from a raw range input to the
      shared Slider (a div), so matching only `input[type="range"]` left it as a 4th grid item
      squeezed into an `auto` column: a ~30px stub floating under the transport buttons. */
   .modern-experiment-transport > :is(input[type="range"], .lab-slider, [data-slot="slider"]) {
-    grid-column: 1 / -1;
+    flex: 1 0 100%;
     width: 100%;
     accent-color: var(--stage-primary);
   }
@@ -125,8 +130,6 @@
        label took 229px of a 246px row and squeezed the trailing icon button to a 1px column that
        then overhung the card. Icon buttons keep their size; the label gives way. */
     .modern-experiment-transport {
-      display: flex;
-      flex-wrap: wrap;
       justify-content: center;
     }
     .modern-experiment-transport > * {
@@ -138,6 +141,15 @@
     }
     .modern-fission-ledger {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1120px) {
+    .modern-linked-scene--linked {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .modern-linked-scene--linked > section + section {
+      border-block-start: 0;
+      border-inline-start: 1px solid var(--stage-grid);
     }
   }
 }

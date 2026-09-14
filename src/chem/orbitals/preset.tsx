@@ -7,6 +7,7 @@ import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { atomicOrbitalActivity } from './activity.js';
 import { orbitalCloud, orbitalFacts, projectOrbital, type OrbitalKind } from './core.js';
+import { ProjectedAtom } from '../visual/atom.js';
 
 export interface AtomicOrbitalProps {
   orbital?: OrbitalKind;
@@ -65,12 +66,19 @@ export function AtomicOrbitalProjectedScene({
             opacity={Math.min(0.82, 0.2 + point.density * 0.68)}
           />
         ))}
-        <circle cx="210" cy="150" r="9" className="chem-orbital-nucleus" />
-        <circle cx="210" cy="150" r="3" fill="var(--stage-bg)" />
+        <ProjectedAtom
+          x={210}
+          y={150}
+          radius={11}
+          symbol="+"
+          fill="var(--stage-bg)"
+          stroke="var(--stage-fg)"
+        />
       </svg>
       <figcaption>
         <span><i className="chem-phase-dot" data-phase="positive" />positive phase</span>
         <span><i className="chem-phase-dot" data-phase="negative" />negative phase</span>
+        <span>+ nucleus</span>
         <span>Dots sample |ψ|²—not an electron path.</span>
       </figcaption>
     </figure>

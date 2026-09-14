@@ -25,7 +25,12 @@ export function GraphView({
   const pathEdges = new Set(path.slice(1).map((id, index) => `${path[index]}:${id}`));
   return (
     <div className="algorithm-graph">
-      <svg className="algorithm-scene-svg" viewBox="0 0 100 100" role="img" aria-label="Algorithm graph">
+      <svg
+        className="algorithm-scene-svg"
+        viewBox="-4 -4 108 112"
+        role="img"
+        aria-label="Algorithm graph"
+      >
         <defs>
           <marker
             id={markerId}
@@ -85,12 +90,17 @@ export function GraphView({
             data-visited={visited.has(node.id) || undefined}
             data-discovered={discovered.has(node.id) || undefined}
           >
-            <circle r="7" />
+            <circle r="5.1" />
             <text className="algorithm-scene-label" textAnchor="middle" dominantBaseline="central">
               {node.label ?? node.id}
             </text>
             {distances && (
-              <text className="algorithm-distance algorithm-scene-meta" textAnchor="middle" y="12">
+              <text
+                className="algorithm-distance algorithm-scene-meta"
+                textAnchor="middle"
+                dominantBaseline="central"
+                y="9.25"
+              >
                 {Number.isFinite(distances[node.id]!) ? distances[node.id] : '∞'}
               </text>
             )}

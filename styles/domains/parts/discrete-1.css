@@ -140,29 +140,3 @@
   color: var(--primary, var(--stage-accent));
   box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary, var(--stage-accent)) 18%, transparent);
 }
-.complex-rule-pair {
-  display: grid;
-  gap: var(--lab-sp-10);
-}
-@container rule-card (min-width: 32rem) {
-  .complex-rule-pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@container rule-card (min-width: 34rem) {
-  .trig-rule-figures {
-    grid-template-columns: minmax(12rem, 0.85fr) minmax(15rem, 1.15fr);
-    align-items: center;
-  }
-}
-.math-signed-value[data-sign="zero"] {
-  color: var(--stage-muted);
-}
-
-.math-trig-values {
-  display: flex;
-  justify-content: center;
-  gap: var(--lab-sp-14);
-  margin-top: 2px;
-  font-size: var(--lab-t-eyebrow);
-}

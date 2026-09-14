@@ -241,7 +241,7 @@ export function AtwoodLab({
     <SceneSurface ref={viewRef} tone="grid">
       <Stage
         view={view}
-        height={300}
+        height={270}
         preserveAspect
         ariaLabel={`Atwood machine, ${ma} kg versus ${mb} kg, acceleration ${Math.abs(a).toFixed(2)} m/s²`}
       >
@@ -301,8 +301,8 @@ export function AtwoodLab({
         {/* Keep force vectors outside the blocks. The mass plates carry values;
             the arrows carry roles, so neither layer has to compete for ink. */}
         <MechanicsVector
-          tail={{ x: LX + 0.58, y: leftBottom + 0.12 }}
-          tip={{ x: LX + 0.58, y: leftBottom + 0.12 - armOf(ma) }}
+          tail={{ x: LX + 0.78, y: leftBottom + 0.12 }}
+          tip={{ x: LX + 0.78, y: leftBottom + 0.12 - armOf(ma) }}
           color="var(--stage-accent)"
           label="W₁"
           labelDx={12}
@@ -310,8 +310,8 @@ export function AtwoodLab({
           labelSize={11}
         />
         <MechanicsVector
-          tail={{ x: RX - 0.58, y: rightBottom + 0.12 }}
-          tip={{ x: RX - 0.58, y: rightBottom + 0.12 - armOf(mb) }}
+          tail={{ x: RX - 0.78, y: rightBottom + 0.12 }}
+          tip={{ x: RX - 0.78, y: rightBottom + 0.12 - armOf(mb) }}
           color="var(--stage-accent-2)"
           label="W₂"
           labelDx={-12}
@@ -320,16 +320,16 @@ export function AtwoodLab({
         />
         {/* the one tension, up each side of the rope, beside it so the rope stays readable */}
         <MechanicsVector
-          tail={{ x: LX - 0.58, y: yL - 0.1 }}
-          tip={{ x: LX - 0.58, y: yL - 0.1 + tensionArm }}
+          tail={{ x: LX - 0.78, y: yL - 0.1 }}
+          tip={{ x: LX - 0.78, y: yL - 0.1 + tensionArm }}
           color="var(--stage-good)"
           label="T"
           labelDx={-12}
           labelDy={-2}
         />
         <MechanicsVector
-          tail={{ x: RX + 0.58, y: yR - 0.1 }}
-          tip={{ x: RX + 0.58, y: yR - 0.1 + tensionArm }}
+          tail={{ x: RX + 0.78, y: yR - 0.1 }}
+          tip={{ x: RX + 0.78, y: yR - 0.1 + tensionArm }}
           color="var(--stage-good)"
           label="T"
           labelDx={12}
@@ -338,11 +338,18 @@ export function AtwoodLab({
         {/* which way the pair actually goes, beside the falling block */}
         {moving && (
           <MechanicsVector
-            tail={{ x: -2.9, y: Y0 }}
-            tip={{ x: -2.9, y: Y0 + dirL * 0.9 }}
+            tail={{ x: dirL < 0 ? LX - 1.05 : RX + 1.05, y: dirL < 0 ? yL - 0.15 : yR - 0.15 }}
+            tip={{
+              x: dirL < 0 ? LX - 1.05 : RX + 1.05,
+              y: (dirL < 0 ? yL - 0.15 : yR - 0.15) - 0.82,
+            }}
             color="var(--stage-warn)"
+            // Symbol only. The magnitude is already in the readout at full precision, and this
+            // canvas is dense enough that a second, rounder copy of it just crowds the drawing.
             label="a"
-            labelDx={-14}
+            labelDx={dirL < 0 ? -18 : 18}
+            labelDy={8}
+            labelSize={10}
             weight={2.4}
           />
         )}
@@ -417,7 +424,8 @@ export function AtwoodLab({
 
   return (
     <AuthoredActivityRuntime
-      focusLayout="immersive"
+      className="physics-atwood-activity"
+      focusLayout="compact"
       activity={{ ...authoredActivity, objectives: objectives ?? authoredActivity.objectives }}
       activityId={activityId}
       eyebrow="Mechanics"

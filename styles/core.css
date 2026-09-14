@@ -254,18 +254,13 @@
   width: max(100%, 42rem);
   max-width: none;
 }
+/* The shared :focus-visible rule already reaches this (it is a tabbable scroll
+   box); only the offset changes sign, so the ring sits inside the container
+   instead of being clipped by the overflow it is announcing. */
 .lab-scene-viewport[data-overflow="scroll"]:focus-visible {
-  outline: 2px solid var(--ring, var(--stage-primary));
-  outline-offset: -2px;
+  outline-offset: calc(-1 * var(--lab-focus-offset));
 }
 
-.lab-field-help {
-  display: block;
-  min-height: 2.5em;
-  color: var(--lab-muted);
-  font-size: var(--lab-t-sm);
-  line-height: var(--lab-lh-title);
-}
 .tree-scene svg {
   display: block;
   width: 100%;
@@ -2217,14 +2212,6 @@
 }
 
 /* ── In-lab stepper (teach one idea at a time) ─────────────────────────────── */
-.lab-step-caption {
-  margin: 0 0 var(--lab-sp-14);
-  font-size: var(--lab-t-body);
-  line-height: var(--lab-lh-ui);
-  font-weight: var(--lab-w-medium);
-  color: var(--lab-fg);
-  max-width: 62ch;
-}
 .lab-stepnav {
   display: flex;
   align-items: center;
@@ -2859,9 +2846,6 @@
 }
 .lang-feedback {
   margin-top: var(--lab-sp-12);
-}
-.lang-ask-centered {
-  justify-content: center;
 }
 .lang-match[data-layout="picture"] {
   grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
@@ -3746,10 +3730,15 @@
 .lab-activity-progress {
   display: grid;
   gap: var(--lab-sp-4);
+  width: 100%;
   min-width: 0;
+  overflow: hidden;
 }
 .lab-activity-progress div {
   display: flex;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
   justify-content: center;
   gap: var(--lab-sp-4);
   color: var(--muted-foreground, var(--stage-muted));
@@ -3854,14 +3843,6 @@
   }
   .lab-activity[data-focus] .network-scene svg {
     height: clamp(350px, 58vh, 680px);
-  }
-  .physics-activity .lab-activity-inspector {
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-  }
-  .physics-activity .lab-activity-inspector-section {
-    padding: var(--lab-sp-16);
   }
 }
 @container lab-activity (max-width: 59.99rem) {

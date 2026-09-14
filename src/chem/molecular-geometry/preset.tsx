@@ -7,6 +7,7 @@ import { ActivitySelect, Chip, Segmented, Slider } from '../../kit/controls.js';
 import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { molecularGeometryActivity } from './activity.js';
 import { DiagramLabel } from '../../kit/annotate.js';
+import { ProjectedAtom } from '../visual/atom.js';
 import {
   MOLECULES,
   hasDirectionalHybridModel,
@@ -112,24 +113,14 @@ export function MolecularGeometryProjectedScene({
                   strokeWidth={item.depth > 0 ? 9 : 5}
                   strokeLinecap="round"
                 />
-                <circle
-                  cx={x}
-                  cy={y}
-                  r={item.depth > 0 ? 21 : 17}
+                <ProjectedAtom
+                  x={x}
+                  y={y}
+                  radius={item.depth > 0 ? 22 : 19}
+                  symbol={spec.outer}
                   fill="var(--stage-bg)"
                   stroke="var(--stage-accent-2)"
-                  strokeWidth="3"
                 />
-                <text
-                  x={x}
-                  y={y + 5}
-                  textAnchor="middle"
-                  fontSize="14"
-                  fontWeight="800"
-                  fill="var(--stage-fg)"
-                >
-                  {spec.outer}
-                </text>
                 {showDipoles && (
                   <path
                     d={`M ${(cx + x) / 2 - 7} ${(cy + y) / 2} l 14 0 l -4 -4 m 4 4 l -4 4`}
@@ -158,30 +149,18 @@ export function MolecularGeometryProjectedScene({
           </g>
         );
       })}
-      <circle
-        cx={cx}
-        cy={cy}
-        r="30"
-        fill="var(--stage-accent)"
-        stroke="color-mix(in oklab, var(--stage-accent) 60%, var(--stage-fg))"
-        strokeWidth="3"
-      />
-      <text
+      <ProjectedAtom
         x={cx}
-        y={cy + 7}
-        textAnchor="middle"
-        fontSize="19"
-        fontWeight="900"
-        fill="var(--stage-accent-fg, white)"
-        stroke="color-mix(in oklab, var(--stage-fg) 28%, transparent)"
-        strokeWidth="0.75"
-        paintOrder="stroke"
-      >
-        {spec.central}
-      </text>
+        y={cy}
+        radius={31}
+        symbol={spec.central}
+        fill="color-mix(in oklab, var(--stage-accent) 82%, var(--stage-fg))"
+        stroke="var(--stage-accent)"
+        labelColor="var(--stage-accent-fg, white)"
+      />
       </svg>
       <figcaption>
-        Rotate to resolve depth. VSEPR predicts an approximate geometry, not a rigid sculpture.
+        Rotate to resolve depth. VSEPR describes average molecular geometry.
       </figcaption>
     </figure>
   );

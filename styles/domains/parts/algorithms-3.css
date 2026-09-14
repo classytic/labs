@@ -77,3 +77,15 @@
   flex-wrap: wrap;
   gap: var(--lab-sp-6);
 }
+
+.recurrence-rule {
+  display: grid;
+  gap: var(--lab-sp-10);
+  margin-block-start: var(--lab-sp-16);
+  padding: var(--lab-sp-14);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-sunken);
+}
+.recurrence-rule span:last-child {
+  color: var(--lab-muted);
+}

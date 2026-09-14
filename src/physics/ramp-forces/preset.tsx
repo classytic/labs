@@ -26,6 +26,7 @@ import { Field, Control, LiveRegion, type ControlConfig } from '../../kit/frame.
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 import { MechanicsVector, SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
+import { MechanicsCrateGlyph } from '../mechanics/glyphs.js';
 import { rampForceState } from '../mechanics/core.js';
 
 const RAMP_ACTIVITY: AuthoredActivity = {
@@ -139,11 +140,12 @@ export interface RampForcesProps {
 
 const L = 4.2; // slope length (metres)
 const HS = 0.52; // crate half-size (metres)
-const WLEN = 2.4; // weight-arrow length in metres (mg maps here; others scale off it)
+const WLEN = 1.55; // compact reference length; keeps the complete force diagram inside the focused viewport
 const LANE = 0.17; // perpendicular gap so the along-slope arrows sit in separate lanes
+const CRATE_EDGE = 0.43; // vectors begin outside the glyph instead of disappearing behind it
 
 const C_MG = 'var(--stage-fg)';
-const C_N = 'var(--stage-accent-2)';
+const C_N = 'var(--stage-primary)';
 const C_FRIC = 'var(--stage-warn)';
 const C_GRAV = 'color-mix(in oklab, var(--stage-fg) 50%, transparent)';
 const C_APPLIED = 'var(--stage-accent)';
@@ -258,23 +260,21 @@ export function RampForcesLab({
     return { x: tip.x, y: tip.y, dx: (dir.x / d) * off, dy: (-dir.y / d) * off };
   };
 
-  const crate = [
-    { x: O.x - HS * u.x - HS * nrm.x, y: O.y - HS * u.y - HS * nrm.y },
-    { x: O.x + HS * u.x - HS * nrm.x, y: O.y + HS * u.y - HS * nrm.y },
-    { x: O.x + HS * u.x + HS * nrm.x, y: O.y + HS * u.y + HS * nrm.y },
-    { x: O.x - HS * u.x + HS * nrm.x, y: O.y - HS * u.y + HS * nrm.y },
-  ];
-
   // along-slope arrows live in separate perpendicular LANES so they never overlap
-  const mgTip: Vec2 = { x: O.x, y: O.y - WLEN };
-  const nTip = add(surf, arrow(nrm, N));
+  const mgTail: Vec2 = { x: O.x, y: O.y - CRATE_EDGE };
+  const mgTip: Vec2 = { x: mgTail.x, y: mgTail.y - WLEN };
+  const nTail = add(O, { x: nrm.x * CRATE_EDGE, y: nrm.y * CRATE_EDGE });
+  const nTip = add(nTail, arrow(nrm, N));
   const appDir = applied >= 0 ? u : dn;
-  const appTail = lane(1); // above the box
+  const appLane = lane(1);
+  const appTail = add(appLane, { x: appDir.x * CRATE_EDGE, y: appDir.y * CRATE_EDGE });
   const appTip = add(appTail, arrow(appDir, Math.abs(applied)));
   const fricDir = frictionUp >= 0 ? u : dn;
-  const fricTail = lane(-1); // below the box
+  const fricLane = lane(-1);
+  const fricTail = add(fricLane, { x: fricDir.x * CRATE_EDGE, y: fricDir.y * CRATE_EDGE });
   const fricTip = add(fricTail, arrow(fricDir, Math.abs(frictionUp)));
-  const gravTip = add(O, arrow(dn, gravAlong)); // mg sinθ (centre lane)
+  const gravTail = add(O, { x: dn.x * CRATE_EDGE, y: dn.y * CRATE_EDGE });
+  const gravTip = add(gravTail, arrow(dn, gravAlong)); // mg sinθ (centre lane)
 
   useFrameLoop(
     (f) => {
@@ -311,13 +311,16 @@ export function RampForcesLab({
       setLanded(false);
     };
 
-  const view = { xMin: -2.0, xMax: L + 3.9, yMin: -3.2, yMax: L + 1 };
+  // Keep the experiment dominant in the viewport. The old square-ish world
+  // bounds shrank the ramp into the middle of a wide card and made every
+  // annotation feel like a tiny technical footnote.
+  const view = { xMin: -1.15, xMax: L + 1.45, yMin: -1.55, yMax: 3.8 };
 
   const figure = (
     <SceneSurface ref={viewRef}>
       <Stage
         view={view}
-        height={300}
+        height={280}
         preserveAspect
         ariaLabel={`Ramp at ${deg} degrees, applied force ${applied} newtons; ${held ? 'held by friction' : `sliding ${slidesUp ? 'up' : 'down'} at ${a.toFixed(1)} metres per second squared`}`}
       >
@@ -343,24 +346,18 @@ export function RampForcesLab({
           label={`${deg}°`}
           color="var(--stage-fg)"
         />
-        <Polygon
-          points={crate}
-          color="color-mix(in oklab, var(--stage-accent-2) 60%, black)"
-          fill="var(--stage-accent-2)"
-          fillOpacity={0.9}
-          weight={1.5}
-        />
+        <MechanicsCrateGlyph at={O} angleDeg={deg} />
 
         {/* weight mg (down) + normal N (out), non-collinear with the slope */}
         <MechanicsVector
-          tail={O}
+          tail={mgTail}
           tip={mgTip}
           labelAt={beyond(mgTip, { x: 0, y: -1 })}
           label="mg"
           color={C_MG}
         />
         <MechanicsVector
-          tail={surf}
+          tail={nTail}
           tip={nTip}
           labelAt={nTip}
           labelDx={8}
@@ -374,7 +371,7 @@ export function RampForcesLab({
         {comps && gravAlong > 0.5 && (
           <>
             <MechanicsVector
-              tail={O}
+              tail={gravTail}
               tip={gravTip}
               labelAt={gravTip}
               labelDx={-44}

@@ -5,7 +5,7 @@ import {
   AuthoredActivityRuntime,
   type AuthoredActivityContext,
 } from '../../../kit/authored-activity-runtime.js';
-import { Segmented, Slider } from '../../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../../kit/controls.js';
 import { Field, Readout } from '../../../kit/frame.js';
 import { Arrow, Ball, FigText, Figure, Guide, HUE, Track } from '../../../kit/figure/index.js';
 import { lorentzExplorerActivity } from './explorer-activity.js';
@@ -25,7 +25,11 @@ const presets = {
   spacelike: { x: 3, ct: 1 },
 } as const;
 type PresetKind = keyof typeof presets;
-const PRESET_KINDS = Object.keys(presets) as PresetKind[];
+const EVENT_PRESETS: ReadonlyArray<{ value: PresetKind; label: string }> = [
+  { value: 'timelike', label: 'Timelike event' },
+  { value: 'lightlike', label: 'Lightlike event' },
+  { value: 'spacelike', label: 'Spacelike event' },
+];
 
 const W = 720;
 const H = 392;
@@ -66,11 +70,11 @@ export function LorentzTransformationLab({
   const controls = (
       <>
         <Field label="event type">
-          <Segmented<PresetKind>
+          <ActivitySelect<PresetKind>
             ariaLabel="event type"
             value={s.kind}
             onChange={(k) => setEvent(presets[k])}
-            options={PRESET_KINDS.map((k) => ({ value: k, label: k }))}
+            options={EVENT_PRESETS}
           />
         </Field>
         <Field label="frame speed β" value={beta.toFixed(2)}>

@@ -6,6 +6,7 @@ import { AuthoredActivityRuntime } from '../../kit/authored-activity-runtime.js'
 import { ActivitySelect, Chip, Segmented, Slider } from '../../kit/controls.js';
 import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { stereochemistryActivity } from './activity.js';
+import { ProjectedAtom } from '../visual/atom.js';
 import {
   CHIRAL_MOLECULES,
   TETRAHEDRAL_ANGLE,
@@ -72,10 +73,7 @@ function ProjectedMolecule({
               strokeDasharray={vector.z < -0.25 ? '5 5' : undefined}
               strokeLinecap="round"
             />
-            <circle cx={x} cy={y} r="22" fill="var(--stage-bg)" stroke={color} strokeWidth="3" />
-            <text x={x} y={y + 5} textAnchor="middle" fontSize="13" fontWeight="800" fill="var(--stage-fg)">
-              {group.label}
-            </text>
+            <ProjectedAtom x={x} y={y} radius={22} symbol={group.label} fill="var(--stage-bg)" stroke={color} />
             {showPriorities && (
               <g>
                 <circle cx={x + 18} cy={y - 18} r="10" fill="var(--stage-fg)" />
@@ -94,10 +92,15 @@ function ProjectedMolecule({
           </g>
         );
       })}
-      <circle cx={cx} cy={cy} r="24" fill="var(--stage-accent)" />
-      <text x={cx} y={cy + 6} textAnchor="middle" fontWeight="900" fill="white">
-        {spec.center}
-      </text>
+      <ProjectedAtom
+        x={cx}
+        y={cy}
+        radius={25}
+        symbol={spec.center}
+        fill="color-mix(in oklab, var(--stage-accent) 82%, var(--stage-fg))"
+        stroke="var(--stage-accent)"
+        labelColor="var(--stage-accent-fg, white)"
+      />
       <text x={cx} y="292" textAnchor="middle" fontSize="14" fontWeight="800" fill="var(--stage-fg)">
         {enantiomer}
       </text>

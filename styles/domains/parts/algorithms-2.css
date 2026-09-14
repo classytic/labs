@@ -120,17 +120,3 @@
     grid-column: auto;
   }
 }
-@container lab-activity (min-width: 60rem) {
-  .circuit-editor-activity .lab-activity-workspace {
-    grid-template-columns: 11rem minmax(28rem, 1fr) 16rem;
-  }
-  .circuit-editor-activity[data-focus] .lab-activity-workspace {
-    grid-template-columns: 12rem minmax(32rem, 1fr) 18rem;
-  }
-  .logic-editor-activity .lab-activity-workspace {
-    grid-template-columns: 11.5rem minmax(28rem, 1fr) 15rem;
-  }
-  .logic-editor-activity[data-focus] .lab-activity-workspace {
-    grid-template-columns: 12rem minmax(32rem, 1fr) 17rem;
-  }
-}

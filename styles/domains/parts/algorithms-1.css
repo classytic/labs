@@ -1,6 +1,6 @@
 /* Algorithm lessons share one semantic trace UI across CS and networking. */
 .algorithm-graph {
-  min-height: 21rem;
+  min-height: 18rem;
   border: 1px solid var(--border, var(--stage-grid));
   border-radius: var(--lab-r-md);
   background:
@@ -15,34 +15,45 @@
 .algorithm-graph svg {
   display: block;
   width: 100%;
-  height: clamp(21rem, 42cqw, 34rem);
+  height: clamp(18rem, 36cqw, 26rem);
   overflow: visible;
 }
 /* Normalized algorithm diagrams use a 0–100 viewBox. Their labels therefore
    need SVG-user-unit sizes, not the rem typography used by surrounding UI. */
 .algorithm-scene-svg .algorithm-scene-label {
-  font-size: 4.2px;
+  font-size: 2.65px;
   font-weight: var(--lab-w-bold);
 }
 .algorithm-scene-svg .algorithm-scene-meta {
-  font-size: 3.2px;
+  font-size: 2.2px;
   font-weight: var(--lab-w-semibold);
 }
+.algorithm-scene-svg text {
+  pointer-events: none;
+}
 .algorithm-edge line {
-  stroke: var(--border, var(--stage-grid));
-  stroke-width: 1.4;
+  stroke: color-mix(
+    in oklab,
+    var(--foreground, var(--stage-fg)) 28%,
+    var(--border, var(--stage-grid))
+  );
+  stroke-width: 1.6;
   vector-effect: non-scaling-stroke;
   transition:
     stroke var(--lab-dur-base) var(--lab-ease),
     stroke-width var(--lab-dur-base) var(--lab-ease);
 }
 .algorithm-edge text {
-  fill: var(--muted-foreground, var(--stage-muted));
+  fill: color-mix(
+    in oklab,
+    var(--foreground, var(--stage-fg)) 78%,
+    var(--muted-foreground, var(--stage-muted))
+  );
   font-size: var(--lab-t-micro);
   font-weight: var(--lab-w-semibold);
   paint-order: stroke;
   stroke: var(--card, var(--stage-bg));
-  stroke-width: 2px;
+  stroke-width: 3px;
 }
 .algorithm-edge marker path,
 .algorithm-graph marker path {
@@ -57,9 +68,13 @@
   stroke-width: 3;
 }
 .algorithm-node circle {
-  fill: var(--card, var(--stage-bg));
-  stroke: var(--border, var(--stage-grid));
-  stroke-width: 1.2;
+  fill: color-mix(in oklab, var(--card, var(--stage-bg)) 96%, var(--foreground, var(--stage-fg)));
+  stroke: color-mix(
+    in oklab,
+    var(--foreground, var(--stage-fg)) 24%,
+    var(--border, var(--stage-grid))
+  );
+  stroke-width: 1.35;
   vector-effect: non-scaling-stroke;
   transition:
     fill var(--lab-dur-base) var(--lab-ease),
@@ -67,7 +82,6 @@
 }
 .algorithm-node > text:not(.algorithm-distance) {
   fill: var(--foreground, var(--stage-fg));
-  font-size: var(--lab-t-micro);
   font-weight: var(--lab-w-bold);
 }
 .algorithm-node[data-discovered] circle {
@@ -80,7 +94,7 @@
 }
 .algorithm-node[data-current] circle {
   stroke: var(--primary, var(--stage-accent));
-  stroke-width: 3;
+  stroke-width: 2.5;
 }
 .algorithm-legend {
   display: flex;
@@ -177,8 +191,11 @@
 }
 .algorithm-distance {
   fill: var(--muted-foreground, var(--stage-muted));
-  font-size: var(--lab-t-micro);
   font-weight: var(--lab-w-semibold);
+  paint-order: stroke;
+  stroke: var(--card, var(--stage-bg));
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
 }
 .algorithm-inspector {
   display: grid;
@@ -231,6 +248,7 @@
 }
 .algorithm-playback {
   display: flex;
+  flex: none;
   align-items: center;
   gap: var(--lab-sp-6);
 }
@@ -252,11 +270,28 @@
   height: 1rem;
 }
 .algorithm-transport-message {
+  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
+  appearance: none;
+  border: 0;
+  background: transparent;
   color: var(--foreground, var(--stage-fg));
+  cursor: help;
+  font: inherit;
+  text-align: start;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.algorithm-transport-message:focus-visible {
+  border-radius: var(--lab-radius-sm);
+  outline: 2px solid var(--stage-ring, var(--stage-primary));
+  outline-offset: 2px;
+}
+.algorithm-transport-tooltip {
+  max-width: min(28rem, calc(100vw - 2rem));
+  white-space: normal;
+  line-height: 1.45;
 }
 .algorithm-step-count {
   flex: none;
@@ -264,7 +299,15 @@
   font-weight: var(--lab-w-bold);
   font-variant-numeric: tabular-nums;
 }
+.algorithm-activity .lab-activity-progress {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
 .algorithm-activity .lab-activity-progress > div {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
   justify-content: flex-start;
 }
 .dp-board {
@@ -302,13 +345,15 @@
 .dp-grid {
   display: grid;
   gap: var(--lab-sp-8);
-  width: min(100%, 36rem);
+  width: 100%;
+  justify-content: center;
   margin: auto;
-  padding: var(--lab-sp-16);
+  padding: var(--lab-sp-12) var(--lab-sp-16) var(--lab-sp-16);
 }
 .dp-grid > div {
   display: grid;
   aspect-ratio: 1;
+  min-height: 3rem;
   min-width: 0;
   place-items: center;
   border: 1px solid var(--border, var(--stage-grid));
@@ -470,5 +515,7 @@
   }
   .algorithm-activity .lab-activity-transport {
     grid-template-columns: auto minmax(5rem, 1fr) auto;
+    gap: var(--lab-sp-6);
+    padding-inline: var(--lab-sp-8);
   }
 }

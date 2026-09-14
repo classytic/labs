@@ -8,6 +8,7 @@
  */
 
 import type { ReactNode } from 'react';
+import { figUrl, useFigureId } from '../figure/index.js';
 
 export function LampGlyph({
   cx,
@@ -20,6 +21,7 @@ export function LampGlyph({
   brightness: number;
   r?: number;
 }): ReactNode {
+  const uid = useFigureId();
   const b = Math.max(0, Math.min(1, brightness));
   const hot = b > 0.04;
   // filament colour: cool metal at b=0 → warm at b=1 (cross-fade via color-mix %)
@@ -33,7 +35,7 @@ export function LampGlyph({
       {hot && (
         <>
           <defs>
-            <radialGradient id="lamp-halo" cx="0.5" cy="0.5" r="0.5">
+            <radialGradient id={`${uid}-lamp-halo`} cx="0.5" cy="0.5" r="0.5">
               <stop
                 offset="0"
                 stopColor="color-mix(in oklab, white 55%, var(--stage-warn))"
@@ -48,7 +50,7 @@ export function LampGlyph({
             cx={cx}
             cy={cy}
             r={r + 3 + b * 18}
-            fill="url(#lamp-halo)"
+            fill={figUrl(uid, 'lamp-halo')}
             opacity={0.32 + 0.5 * b}
             pointerEvents="none"
           />

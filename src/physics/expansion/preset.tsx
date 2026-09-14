@@ -22,6 +22,7 @@ import { Field, type ControlConfig } from '../../kit/frame.js';
 import { thermalColor } from '../../kit/thermal.js';
 import { DiagramLabel } from '../../kit/annotate.js';
 import { Tex } from '../../core/tex.js';
+import { Figure, HUE } from '../../kit/figure/index.js';
 import { ResetTransport, SceneSurface } from '../mechanics/presentation.js';
 import { ThermalActivity } from '../thermal/activity.js';
 
@@ -86,12 +87,7 @@ export function ThermalExpansionLab({
     const L1 = L0 * (1 + frac * MAG);
     const dLmm = 1000 * frac; // real ΔL for a 1 m rod, mm
     figure = expansionWrap(
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        width="100%"
-        role="img"
-        aria-label={`Rod expands by ${dLmm.toFixed(2)} millimetres`}
-      >
+      <Figure viewBox={[W, H]} domain="physics" label={`Rod expands by ${dLmm.toFixed(2)} millimetres`}>
         {/* original (dashed outline) */}
         <rect
           x={x0}
@@ -160,14 +156,14 @@ export function ThermalExpansionLab({
         <DiagramLabel
           x={x0 + L0 / 2}
           y={y - h / 2 - 16}
-          text={`drawing ×${MAG} · real ΔL ${dLmm.toFixed(2)} mm per metre`}
+          text="original length → heated length"
           tone="muted"
           fontSize={13}
           fontWeight={650}
           maxChars={52}
           bounds={{ left: 8, right: W - 8, top: 8, bottom: H - 8 }}
         />
-      </svg>,
+      </Figure>,
     );
     aside = expansionAside(
       <Tex tex={'\\Delta L = \\alpha\\,L\\,\\Delta T'} block />,
@@ -185,12 +181,7 @@ export function ThermalExpansionLab({
     const s1 = s0 * (1 + frac * MAG);
     const dAcm2 = 10000 * 2 * frac; // real ΔA for a 1 m² plate, cm²
     figure = expansionWrap(
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        width="100%"
-        role="img"
-        aria-label={`Plate area grows by ${dAcm2.toFixed(1)} square centimetres`}
-      >
+      <Figure viewBox={[W, H]} domain="physics" label={`Plate area grows by ${dAcm2.toFixed(1)} square centimetres`}>
         <rect
           x={cx - s0 / 2}
           y={cy - s0 / 2}
@@ -221,14 +212,14 @@ export function ThermalExpansionLab({
         <DiagramLabel
           x={cx}
           y={cy - s1 / 2 - 12}
-          text={`drawing ×${MAG} · grows in both directions (2α)`}
+          text="width and height expand"
           tone="muted"
           fontSize={13}
           fontWeight={650}
           maxChars={48}
           bounds={{ left: 8, right: W - 8, top: 8, bottom: H - 8 }}
         />
-      </svg>,
+      </Figure>,
     );
     aside = expansionAside(
       <Tex tex={'\\Delta A = 2\\alpha\\,A\\,\\Delta T'} block />,
@@ -246,12 +237,7 @@ export function ThermalExpansionLab({
     const r1 = r0 * (1 + frac * MAG);
     const dVcm3 = 1000 * 3 * frac; // real ΔV for a 1 L block, cm³
     figure = expansionWrap(
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        width="100%"
-        role="img"
-        aria-label={`Volume grows by ${dVcm3.toFixed(1)} cubic centimetres`}
-      >
+      <Figure viewBox={[W, H]} domain="physics" label={`Volume grows by ${dVcm3.toFixed(1)} cubic centimetres`}>
         <defs>
           {/* spherical shading: warm body, dark rim (curvature), bright top-left specular */}
           <radialGradient id={`${gid}-rim`} cx="50%" cy="50%" r="50%">
@@ -304,14 +290,14 @@ export function ThermalExpansionLab({
         <DiagramLabel
           x={cx}
           y={cy - r1 - 14}
-          text={`drawing ×${MAG} · grows in all three directions (3α)`}
+          text="every dimension expands"
           tone="muted"
           fontSize={13}
           fontWeight={650}
           maxChars={52}
           bounds={{ left: 8, right: W - 8, top: 8, bottom: H - 8 }}
         />
-      </svg>,
+      </Figure>,
     );
     aside = expansionAside(
       <Tex tex={'\\Delta V = 3\\alpha\\,V\\,\\Delta T'} block />,
@@ -358,18 +344,17 @@ export function ThermalExpansionLab({
     const contactY = y0 + 150,
       on = tip.y >= contactY - 6;
     figure = expansionWrap(
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        width="100%"
-        role="img"
-        aria-label={`Bimetallic strip bent ${(theta * 57).toFixed(
+      <Figure
+        viewBox={[W, H]}
+        domain="physics"
+        label={`Bimetallic strip bent ${(theta * 57).toFixed(
           0,
         )} degrees, contact ${on ? 'closed' : 'open'}`}
       >
         {/* clamp */}
         <rect x={x0 - 16} y={y0 - 14} width={16} height={28} fill="var(--stage-metal)" />
         {/* brass (outer/top) and steel (inner/bottom) */}
-        <polyline points={off(1)} fill="none" stroke="#c9912f" strokeWidth={thick} strokeLinecap="round" />
+        <polyline points={off(1)} fill="none" stroke={HUE.warn} strokeWidth={thick} strokeLinecap="round" />
         <polyline
           points={off(-1)}
           fill="none"
@@ -406,8 +391,8 @@ export function ThermalExpansionLab({
         />
         {/* legend */}
         <g fontSize={13} fontWeight={650}>
-          <rect x={470} y={70} width={12} height={12} fill="#c9912f" />
-          <DiagramLabel x={488} y={80} text="brass (α high), outside" anchor="start" halo={false} />
+          <rect x={470} y={70} width={12} height={12} fill={HUE.warn} />
+          <DiagramLabel x={488} y={80} text="brass · outer layer" anchor="start" />
           <rect
             x={470}
             y={90}
@@ -415,9 +400,9 @@ export function ThermalExpansionLab({
             height={12}
             fill="color-mix(in oklab, var(--stage-metal) 70%, var(--stage-fg))"
           />
-          <DiagramLabel x={488} y={100} text="steel (α low), inside" anchor="start" halo={false} />
+          <DiagramLabel x={488} y={100} text="steel · inner layer" anchor="start" />
         </g>
-      </svg>,
+      </Figure>,
     );
     aside = expansionAside(
       <Tex tex={'\\text{brass } \\alpha > \\text{steel } \\alpha'} block />,

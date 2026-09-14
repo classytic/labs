@@ -1,0 +1,115 @@
+.expression-order-scene{display:grid;gap:var(--lab-space-4);padding:var(--lab-space-4);align-content:center;min-height:clamp(19rem,44vh,29rem)}
+.expression-order-formula{display:grid;place-items:center;min-height:5.5rem;font-size:clamp(1.65rem,4vw,2.75rem);color:var(--foreground)}
+.expression-order-question{display:grid;gap:var(--lab-space-3);max-width:54rem;width:100%;margin-inline:auto}
+.expression-order-rule{display:flex;align-items:flex-start;gap:var(--lab-space-3);max-width:44rem;margin-inline:auto;color:var(--muted-foreground)}
+.expression-order-rule>span{display:grid;place-items:center;flex:0 0 auto;width:2rem;height:2rem;border-radius:999px;background:var(--primary);color:var(--primary-foreground);font-weight:700}
+.expression-order-rule p{margin:0;padding-block:.3rem}
+.expression-order-trail{display:flex;justify-content:center;align-items:stretch;gap:var(--lab-space-2);padding:0;margin:0;list-style:none;overflow-x:auto}
+.expression-order-trail li{display:grid;gap:.25rem;min-width:7rem;padding:.75rem 1rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
+.expression-order-trail li[data-current]{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary)}
+.expression-order-trail li>span{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-foreground)}
+
+/* Number-system workbenches share one compact, manipulation-first layout. */
+.math-number-structure .lab-activity-canvas{min-height:clamp(18rem,38vh,23rem)}
+.math-division-workbench .lab-activity-canvas{min-height:clamp(18rem,36vh,22rem)}
+.math-number-structure .lab-activity-canvas>svg,
+.math-division-workbench .lab-activity-canvas>svg{max-height:22rem}
+.math-number-structure .lab-activity-dock,
+.math-division-workbench .lab-activity-dock{align-content:start}
+.math-number-structure .lab-evidence-surface,
+.math-division-workbench .lab-evidence-surface{grid-column:1/-1}
+@container lab-activity (min-width:56rem){
+  .math-number-structure .lab-activity-workspace,
+  .math-division-workbench .lab-activity-workspace{grid-template-columns:minmax(0,1.45fr) minmax(17rem,.55fr)}
+}
+@media(max-width:40rem){.expression-order-scene{padding:var(--lab-space-3);min-height:auto}.expression-order-trail{justify-content:flex-start}.expression-order-trail li{min-width:6rem}}
+
+.complex-rule-pair {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+@container rule-card (min-width: 32rem) {
+  .complex-rule-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@container rule-card (min-width: 34rem) {
+  .trig-rule-figures {
+    grid-template-columns: minmax(12rem, 0.85fr) minmax(15rem, 1.15fr);
+    align-items: center;
+  }
+}
+.math-signed-value[data-sign="zero"] {
+  color: var(--stage-muted);
+}
+
+.math-trig-values {
+  display: flex;
+  justify-content: center;
+  gap: var(--lab-sp-14);
+  margin-top: 2px;
+  font-size: var(--lab-t-eyebrow);
+}
+.invariant-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-10);
+  min-block-size: 192px;
+  align-items: center;
+  justify-content: center;
+}
+.invariant-track span,
+.invariant-track strong {
+  display: grid;
+  min-inline-size: 48px;
+  min-block-size: 48px;
+  padding: var(--lab-sp-6);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-r-md);
+  background: var(--lab-sunken);
+  place-items: center;
+}
+.invariant-track [data-kind="start"] {
+  border-color: var(--lab-accent);
+}
+.invariant-track [data-kind="target"] {
+  border-style: dashed;
+}
+.invariant-ledger {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--lab-sp-10);
+}
+.invariant-ledger span {
+  padding: var(--lab-sp-14);
+  border-block-start: 1px solid var(--lab-border);
+  text-align: center;
+}
+
+.math-equation-line {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lab-sp-6);
+}
+
+.math-equation-label {
+  color: var(--stage-muted);
+}
+
+.math-equation-derivative {
+  color: var(--stage-good);
+}
+
+.math-svg-passive {
+  pointer-events: none;
+}
+
+.math-reading-value[data-state="correct"] {
+  color: var(--stage-good);
+}
+.math-reading-value[data-state="moved"] {
+  color: var(--stage-warn);
+}
+.math-reading-value[data-state="idle"] {
+  color: var(--stage-fg);
+}

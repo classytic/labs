@@ -6,7 +6,7 @@ import {
   AuthoredMetricGate,
   type AuthoredActivityContext,
 } from '../../../kit/authored-activity-runtime.js';
-import { Segmented, Slider } from '../../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../../kit/controls.js';
 import { Field, Readout } from '../../../kit/frame.js';
 import { lightClockActivity } from './activity.js';
 import { lightClockState } from './core.js';
@@ -43,14 +43,14 @@ export function RelativityLightClockLab({
   const controls = (
     <>
       <Field label="view">
-        <Segmented
+        <ActivitySelect
           ariaLabel="view"
           value={view}
           onChange={setView}
           options={[
-            { value: 'experiment', label: 'experiment' },
-            { value: 'spacetime', label: 'spacetime' },
-            { value: 'linked', label: 'linked' },
+            { value: 'experiment', label: 'Light-clock experiment' },
+            { value: 'spacetime', label: 'Spacetime diagram' },
+            { value: 'linked', label: 'Linked comparison' },
           ]}
         />
       </Field>
@@ -98,6 +98,12 @@ export function RelativityLightClockLab({
     ['act', 'transfer'].includes(context.sequence.current.phase) ? controls : null;
   const showEvidence = (context: AuthoredActivityContext): ReactNode =>
     ['observe', 'explain', 'transfer'].includes(context.sequence.current.phase) ? evidence : null;
+  const observation =
+    timeline.progress <= 0
+      ? 'Run the pulse to compare the same emission and return events in both frames.'
+      : timeline.progress < 1
+        ? `${state.event}. The ship clock reads ${state.properElapsed.toFixed(2)} s while the platform assigns ${state.coordinateElapsed.toFixed(2)} s.`
+        : `One ${properTick.toFixed(1)} s ship tick spans ${(state.gamma * properTick).toFixed(2)} s in the platform frame because light follows a longer path at the same speed c.`;
   return (
     <AuthoredActivityRuntime
       focusLayout="immersive"
@@ -114,7 +120,7 @@ export function RelativityLightClockLab({
       }
       controls={showControls}
       evidence={showEvidence}
-      observation={`One ${properTick.toFixed(1)} s ship tick spans ${(state.gamma * properTick).toFixed(2)} s in the platform frame because light follows a longer path at the same speed c.`}
+      observation={observation}
       transcript={
         <p>
           {state.event}. The ship clock reads {state.properElapsed.toFixed(2)} seconds and the platform frame
@@ -126,13 +132,11 @@ export function RelativityLightClockLab({
       {(context) => {
         const phase = context.sequence.current.phase,
           activeView =
-            phase === 'predict'
+            phase === 'predict' || phase === 'observe'
               ? 'experiment'
-              : phase === 'observe' || phase === 'transfer'
-                ? 'linked'
-                : phase === 'explain'
-                  ? 'spacetime'
-                  : view;
+              : phase === 'explain'
+                ? 'spacetime'
+                : view;
         return (
           <>
             <AuthoredMetricGate

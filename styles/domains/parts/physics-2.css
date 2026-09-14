@@ -102,8 +102,31 @@
 .physics-force-row[data-bold="true"] .physics-force-fill {
   opacity: 1;
 }
-.physics-terminal-velocity .physics-trace-card > div {
+.physics-terminal-instrument {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: var(--lab-sp-10);
+  min-width: 0;
+}
+.physics-terminal-instrument > * {
+  min-width: 0;
+}
+.physics-terminal-drop-zone,
+.physics-terminal-trace {
+  min-height: 15.625rem;
+}
+.physics-terminal-drop-zone > div,
+.physics-terminal-trace > div {
   width: 100%;
+}
+@container lab-activity (max-width: 46rem) {
+  .physics-terminal-instrument {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .physics-terminal-drop-zone,
+  .physics-terminal-trace {
+    min-height: 13.125rem;
+  }
 }
 .physics-stopping-graphs {
   display: grid;
@@ -136,7 +159,13 @@
   height: auto;
   max-height: 36rem;
 }
-.physics-water-density-scene svg,
+.physics-water-density-scene svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: 28rem;
+}
 .physics-carnot-scene svg,
 .physics-gas-process-scene svg {
   display: block;
@@ -149,6 +178,16 @@
   height: auto;
   min-height: 0;
   max-height: 28rem;
+}
+.physics-expansion-scene {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 42%, color-mix(in oklab, var(--stage-primary) 7%, transparent), transparent 52%),
+    var(--stage-bg);
+}
+.physics-expansion-scene .lab-figure {
+  max-width: 48rem;
+  margin-inline: auto;
 }
 .physics-temperature-scales-scene svg {
   display: block;
@@ -189,6 +228,23 @@
 .physics-temperature-scales .physics-controls > .lab-field:first-child {
   grid-column: 1 / -1;
 }
+@container lab-activity (min-width: 58rem) {
+  .physics-expansion .physics-controls {
+    grid-template-columns: minmax(11rem, 0.8fr) minmax(12rem, 1fr) minmax(14rem, 1.2fr);
+  }
+  .physics-expansion .physics-controls > .lab-field:first-child {
+    grid-column: auto;
+  }
+  .physics-stress-strain .lab-authored-controls {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .physics-stress-strain .lab-authored-controls > .lab-field:nth-child(-n + 2) {
+    grid-column: span 3;
+  }
+  .physics-stress-strain .lab-authored-controls > .lab-field:nth-child(n + 3) {
+    grid-column: span 2;
+  }
+}
 .physics-efficiency .lab-activity-workspace {
   width: 100%;
   max-width: 90rem;
@@ -217,33 +273,6 @@
 }
 .physics-efficiency .physics-controls > .lab-field {
   width: 100%;
-}
-.physics-efficiency .physics-device-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--lab-sp-6);
-  width: 100%;
-}
-.physics-efficiency .physics-device-grid .lab-chip {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--lab-sp-8);
-  min-height: 3rem;
-  padding: var(--lab-sp-8) var(--lab-sp-10);
-  text-align: left;
-}
-.physics-efficiency .physics-device-grid .lab-chip span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.physics-efficiency .physics-device-grid .lab-chip strong {
-  color: var(--muted-foreground, var(--stage-muted));
-  font-size: var(--lab-t-eyebrow);
-  font-variant-numeric: tabular-nums;
-}
-.physics-efficiency .physics-device-grid .lab-chip[data-sel="true"] strong {
-  color: var(--primary, var(--stage-accent));
 }
 .physics-efficiency-ledger {
   display: grid;

@@ -140,82 +140,33 @@
 }
 .arrangement-tile {
   display: inline-flex;
-  width: 1.875rem;
-  height: 1.875rem;
+  position: relative;
+  width: clamp(2.5rem, 9cqi, 3.5rem);
+  height: clamp(2.75rem, 10cqi, 3.75rem);
   align-items: center;
   justify-content: center;
-  border-radius: var(--lab-r-sm);
-  background: var(--arrangement-color);
+  border: 1px solid color-mix(in oklab, var(--arrangement-color) 72%, var(--stage-fg));
+  border-radius: var(--lab-r-md);
+  background: linear-gradient(145deg, color-mix(in oklab, var(--arrangement-color) 78%, white), var(--arrangement-color));
   color: white;
-  font-size: var(--lab-t-sm);
+  font-size: var(--lab-t-lg);
   font-weight: var(--lab-w-bold);
+  box-shadow: 0 3px 0 color-mix(in oklab, var(--arrangement-color) 65%, black), 0 7px 14px color-mix(in oklab, var(--arrangement-color) 18%, transparent);
 }
 .arrangement-tile[data-ringed="true"] {
-  box-shadow: 0 0 0 2px var(--stage-fg);
+  box-shadow: 0 0 0 3px var(--stage-bg), 0 0 0 5px var(--stage-fg), 0 5px 14px color-mix(in oklab, var(--arrangement-color) 24%, transparent);
 }
 .arrangement-emphasis {
   color: var(--arrangement-color);
 }
 .arrangement-formula {
   display: grid;
-  gap: var(--lab-sp-4);
+  gap: var(--lab-sp-6);
+  border-style: solid;
+  border-color: color-mix(in oklab, var(--stage-accent) 28%, var(--stage-grid));
+  background: color-mix(in oklab, var(--stage-accent) 5%, var(--stage-bg));
 }
-.logic-minimal-constant {
-  font-size: var(--lab-t-lg);
-}
-.kmap-svg {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-}
-.kmap-cell {
-  cursor: default;
-  outline: none;
-}
-.kmap-cell[data-tappable="true"] {
-  cursor: pointer;
-}
-.kmap-cell:focus-visible {
-  filter: drop-shadow(0 0 4px var(--stage-accent));
-}
-.logic-svg-passive {
-  pointer-events: none;
-}
-.logic-panel-title {
-  margin: 0 0 var(--lab-sp-6);
-  font-weight: var(--lab-w-semibold);
-}
-.logic-minimal-form {
-  padding: var(--lab-sp-8) var(--lab-sp-12);
-  border-radius: var(--lab-r-sm);
-  background: color-mix(in oklab, var(--stage-accent) 10%, transparent);
-  font-size: var(--lab-t-lg);
-}
-.logic-panel-copy {
-  margin-top: var(--lab-sp-8);
-  color: var(--stage-muted);
-  font-size: var(--lab-t-eyebrow);
-  line-height: var(--lab-lh-ui);
-}
-.kmap-group-list {
-  margin: var(--lab-sp-4) 0;
-  padding-inline-start: var(--lab-sp-16);
-}
-.kmap-group-list li {
-  color: var(--group-color);
-}
-.kmap-selection-status {
-  margin-top: var(--lab-sp-6);
-  font-size: var(--lab-t-eyebrow);
-}
-.logic-error-text {
-  color: var(--stage-danger);
-}
-.kmap-actions {
-  gap: var(--lab-sp-8);
-  margin-top: var(--lab-sp-8);
-}
-.kmap-complete {
-  margin-top: var(--lab-sp-8);
+.arrangement-token-row {
+  gap: var(--lab-sp-10);
+  padding-block: var(--lab-sp-10) var(--lab-sp-6);
 }

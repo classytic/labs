@@ -169,12 +169,6 @@
 .probability-prompt {
   font-size: var(--lab-t-eyebrow);
 }
-.expected-value-axis-number {
-  font-variant-numeric: tabular-nums;
-}
-.expected-value-fulcrum {
-  transition: transform var(--lab-dur-fast);
-}
 .expected-value-verdict {
   color: var(--stage-danger);
   font-weight: var(--lab-w-semibold);

@@ -114,7 +114,7 @@
   margin: 0 auto var(--lab-sp-8);
   padding-inline: var(--lab-sp-12);
   color: var(--stage-muted);
-  font-size: var(--lab-t-eyebrow);
+  font-size: var(--lab-t-xs);
   line-height: var(--lab-lh-ui);
   text-align: center;
 }
@@ -170,15 +170,9 @@
   stroke: color-mix(in oklab, currentColor 20%, var(--stage-fg));
   stroke-width: 1.5;
 }
-.chem-orbital-nucleus {
-  fill: var(--stage-bg);
-  stroke: var(--stage-fg);
-  stroke-width: 2;
-}
-.chem-orbital-nucleus-label,
 .chem-orbital-node-label {
   fill: var(--stage-fg);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
 }
 .chem-orbital-node {
@@ -215,20 +209,6 @@
 }
 .chem-solution-field {
   position: relative;
-}
-.chem-probe-readout {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.625rem;
-  padding: 2px var(--lab-sp-8);
-  border: 1px solid var(--stage-grid);
-  border-radius: var(--lab-r-sm);
-  background: color-mix(in oklab, var(--stage-bg) 80%, transparent);
-  color: var(--stage-accent);
-  font-size: var(--lab-t-eyebrow);
-  font-weight: var(--lab-w-semibold);
-  font-variant-numeric: tabular-nums;
-  backdrop-filter: blur(6px);
 }
 .chem-equation-stack {
   display: grid;

@@ -209,6 +209,7 @@ export function HarmonicFormLab({
   return (
     <MathActivity
       className="math-harmonic-form"
+      focusLayout="compact"
       eyebrow="Trigonometry · harmonic form"
       title={title}
       description={prompt}

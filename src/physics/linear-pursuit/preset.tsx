@@ -3,7 +3,7 @@
 import { useRef, useState, type ReactNode } from 'react';
 import { useFrameLoop, useInView } from '@classytic/stage';
 import { Field, Readout, Stat, StatList } from '../../kit/frame.js';
-import { Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Slider } from '../../kit/controls.js';
 import {
   Figure,
   FigText,
@@ -140,7 +140,7 @@ export function LinearPursuitLab({
   const controls = (
     <>
       <Field label="vehicles">
-        <Segmented
+        <ActivitySelect
           ariaLabel="vehicle scenario"
           value={scenario}
           onChange={(value) => change(() => setScenario(value as LinearPursuitScenario))}

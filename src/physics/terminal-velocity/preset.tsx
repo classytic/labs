@@ -29,6 +29,7 @@ import { clamp } from '../../core/util.js';
 import { MechanicsActivity } from '../mechanics/activity.js';
 import { MechanicsVector, SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { terminalVelocityState } from '../mechanics/core.js';
+import { FallingBodyGlyph } from '../mechanics/glyphs.js';
 
 const TERMINAL_CHALLENGE: ChallengeQuestion[] = [
   {
@@ -70,7 +71,6 @@ export interface TerminalVelocityProps {
 
 const G = 9.8;
 const WIN = 14; // s of v–t graph
-const VMAX = 65; // m/s, fixed graph axis
 const CHUTE = 70; // parachute multiplies the drag factor
 
 export function TerminalVelocityLab({
@@ -94,32 +94,67 @@ export function TerminalVelocityLab({
     activity: 'terminal-velocity',
   });
 
-  const tRef = useRef(0);
+  const motionRef = useRef({ time: 0, speed: 0, distance: 0 });
+  const trailRef = useRef<Vec2[]>([{ x: 0, y: 0 }]);
 
   const b = d * (chute ? CHUTE : 1);
-  const terminal = terminalVelocityState(m, G, b, tRef.current);
+  const terminal = terminalVelocityState(m, G, b, 0);
   const vt = terminal.terminalSpeed;
-  const tau = terminal.timeConstant;
+  const motion = motionRef.current;
+  const graphMax = Math.max(55, Math.ceil((Math.max(vt, motion.speed) * 1.16) / 10) * 10);
 
   useFrameTick(gate.running, (f) => {
-    tRef.current += Math.min(0.05, f.dtMs / 1000);
-    if (tRef.current > WIN + 2) tRef.current = 0; // loop the drop
+    const elapsed = Math.min(0.05, f.dtMs / 1000);
+    const steps = Math.max(1, Math.ceil(elapsed / 0.0125));
+    const dt = elapsed / steps;
+
+    // RK4 keeps velocity continuous when the learner changes mass, drag, or
+    // deploys the parachute. The old from-rest tanh expression teleported the
+    // diver to a different trajectory whenever b changed mid-fall.
+    const accelerationAt = (speed: number): number => G - (b / m) * speed * Math.abs(speed);
+    for (let step = 0; step < steps; step += 1) {
+      const v0 = motionRef.current.speed;
+      const k1 = accelerationAt(v0);
+      const k2 = accelerationAt(v0 + (k1 * dt) / 2);
+      const k3 = accelerationAt(v0 + (k2 * dt) / 2);
+      const k4 = accelerationAt(v0 + k3 * dt);
+      const nextSpeed = Math.max(0, v0 + (dt / 6) * (k1 + 2 * k2 + 2 * k3 + k4));
+      motionRef.current.distance += ((v0 + nextSpeed) / 2) * dt;
+      motionRef.current.speed = nextSpeed;
+      motionRef.current.time += dt;
+    }
+
+    if (motionRef.current.time > WIN) {
+      motionRef.current = { time: 0, speed: 0, distance: 0 };
+      trailRef.current = [{ x: 0, y: 0 }];
+    } else {
+      const latest = trailRef.current.at(-1);
+      if (!latest || motionRef.current.time - latest.x >= 0.06) {
+        trailRef.current = [
+          ...trailRef.current,
+          { x: motionRef.current.time, y: motionRef.current.speed },
+        ].slice(-240);
+      }
+    }
   });
 
-  const t = tRef.current;
-  const v = terminal.speed;
-  const dragFrac = terminal.dragRatio;
-  const fallDist = terminal.distance;
+  const t = motion.time;
+  const v = motion.speed;
+  const dragForce = b * v * v;
+  const weightForce = m * G;
+  const dragFrac = dragForce / weightForce;
+  const acceleration = G - dragForce / m;
+  const fallDist = motion.distance;
 
   // ---- falling-body scene (body fixed; background scrolls up to show motion) ----
-  const WLEN = 1.5; // weight arrow length (world)
+  const WLEN = 1.45; // weight arrow length (world)
   const scroll = (fallDist * 0.25) % 1.6; // marker scroll offset
   const marks: number[] = [];
   for (let i = -1; i <= 4; i++) marks.push(2.2 - i * 1.6 + scroll);
   const scene = (
     <Stage
       view={{ xMin: -3, xMax: 3, yMin: -2.6, yMax: 2.6 }}
-      height={180}
+      height={250}
       preserveAspect={false}
       ariaLabel={`Skydiver falling at ${v.toFixed(0)} m/s of terminal ${vt.toFixed(0)}`}
     >
@@ -148,26 +183,29 @@ export function TerminalVelocityLab({
           />
         ) : null,
       )}
-      {/* body */}
-      <Label x={0} y={0.1} text={chute ? '🪂' : '🧍'} color="var(--stage-fg)" size={chute ? 40 : 32} />
+      <FallingBodyGlyph at={{ x: 0, y: 0.15 }} parachute={chute} />
       {/* weight (constant, down) */}
       <MechanicsVector
-        tail={{ x: -0.9, y: 0 }}
-        tip={{ x: -0.9, y: -WLEN }}
+        tail={{ x: -0.72, y: 0.05 }}
+        tip={{ x: -0.72, y: -WLEN }}
         color="var(--stage-fg)"
-        label="weight mg"
+        label={`weight ${Math.round(weightForce)} N`}
+        labelAt={{ x: -0.82, y: -WLEN }}
+        labelDx={-4}
         labelDy={14}
         weight={3}
         labelSize={11}
       />
       {/* drag (grows, up) */}
-      {dragFrac > 0.01 && (
+      {dragFrac > 0.005 && (
         <MechanicsVector
-          tail={{ x: 0.9, y: 0 }}
-          tip={{ x: 0.9, y: WLEN * dragFrac }}
+          tail={{ x: 0.72, y: 0.05 }}
+          tip={{ x: 0.72, y: WLEN * Math.min(dragFrac, 1.18) }}
           color="var(--stage-warn)"
           weight={3}
-          label="drag ∝ v²"
+          label={`drag ${Math.round(dragForce)} N`}
+          labelAt={{ x: 0.82, y: WLEN * Math.min(dragFrac, 1.18) }}
+          labelDx={4}
           labelDy={-6}
           labelSize={11}
           active={dragFrac > 0.92}
@@ -177,15 +215,11 @@ export function TerminalVelocityLab({
   );
 
   // ---- v–t graph ----
-  const curve: Vec2[] = [];
-  for (let i = 0; i <= 120; i++) {
-    const tau2 = (i / 120) * WIN;
-    curve.push({ x: tau2, y: vt * Math.tanh(tau2 / tau) });
-  }
+  const curve = trailRef.current;
   const graph = (
     <Stage
-      view={{ xMin: 0, xMax: WIN, yMin: 0, yMax: VMAX }}
-      height={150}
+      view={{ xMin: 0, xMax: WIN, yMin: 0, yMax: graphMax }}
+      height={250}
       preserveAspect={false}
       ariaLabel={`Speed versus time approaching terminal velocity ${vt.toFixed(0)} m/s`}
     >
@@ -198,12 +232,12 @@ export function TerminalVelocityLab({
       />
       <Segment
         from={{ x: 0, y: 0 }}
-        to={{ x: 0, y: VMAX }}
+        to={{ x: 0, y: graphMax }}
         color="var(--stage-fg)"
         opacity={0.5}
         weight={1.5}
       />
-      <Label x={0} y={VMAX} text="speed (m/s)" color="var(--stage-fg)" size={10} anchor="start" dy={-2} />
+      <Label x={0} y={graphMax} text="speed (m/s)" color="var(--stage-fg)" size={10} anchor="start" dy={-2} />
       <Label x={WIN} y={0} text="time →" color="var(--stage-fg)" size={10} anchor="end" dy={14} />
       {/* terminal asymptote */}
       <Segment
@@ -223,7 +257,7 @@ export function TerminalVelocityLab({
         anchor="end"
         dy={-3}
       />
-      <Polyline points={curve} color="var(--stage-accent)" weight={2.5} />
+      {curve.length > 1 ? <Polyline points={curve} color="var(--stage-accent)" weight={3} /> : null}
       <Polyline
         points={[
           { x: clamp(t, 0, WIN), y: 0 },
@@ -246,9 +280,11 @@ export function TerminalVelocityLab({
   );
 
   const figure = (
-    <div ref={gate.ref} className="physics-visual-stack">
-      <SceneSurface>{scene}</SceneSurface>
-      <div className="physics-trace-card">{graph}</div>
+    <div ref={gate.ref} className="physics-terminal-instrument">
+      <SceneSurface className="physics-terminal-drop-zone" tone="grid">
+        {scene}
+      </SceneSurface>
+      <div className="physics-trace-card physics-terminal-trace">{graph}</div>
     </div>
   );
 
@@ -259,7 +295,7 @@ export function TerminalVelocityLab({
           <span>Terminal speed · √(mg/b)</span>
           <strong>{vt.toFixed(0)} m/s</strong>
         </div>
-        <div data-highlight>
+        <div data-highlight={Math.abs(dragFrac - 1) < 0.02 || undefined}>
           <span>Speed now</span>
           <strong>
             {v.toFixed(0)} m/s · {Math.round((v / vt) * 100)}%
@@ -271,21 +307,21 @@ export function TerminalVelocityLab({
         </div>
       </div>
       <p className="physics-explain">
-        At v_t the drag exactly cancels the weight, zero net force, zero acceleration, constant speed. A
-        parachute multiplies the drag, so v_t drops from a deadly ~{Math.round(Math.sqrt((m * G) / d))} m/s to
-        a soft landing.
+        At v_t the drag exactly cancels the weight: zero net force, zero acceleration, constant speed. Opening
+        the parachute increases drag without teleporting the diver's velocity, so the diver slows toward a new,
+        lower terminal speed.
       </p>
-      <LiveRegion>{`Falling at ${v.toFixed(0)} of terminal ${vt.toFixed(
-        0,
-      )} metres per second; drag is ${Math.round(dragFrac * 100)} percent of weight.`}</LiveRegion>
+      <LiveRegion>{`Falling at about ${Math.round(v / 5) * 5} metres per second; drag is about ${
+        Math.round(dragFrac * 10) * 10
+      } percent of weight.`}</LiveRegion>
     </>
   );
 
   const controls = (
     <>
       <Control name="parachute">
-        <Chip selected={chute} onClick={() => setChute((c) => !c)}>
-          parachute {chute ? '🪂 open' : 'closed'}
+        <Chip selected={chute} onClick={() => setChute((c) => !c)} aria-pressed={chute}>
+          parachute {chute ? 'open' : 'closed'}
         </Chip>
       </Control>
       <Field label="mass" value={`${m} kg`}>
@@ -299,7 +335,8 @@ export function TerminalVelocityLab({
 
   const reset = (): void => {
     gate.setPlaying(false);
-    tRef.current = 0;
+    motionRef.current = { time: 0, speed: 0, distance: 0 };
+    trailRef.current = [{ x: 0, y: 0 }];
   };
   const transport = (
     <SimulationTransport
@@ -320,18 +357,26 @@ export function TerminalVelocityLab({
       prompt={prompt}
       status={
         <>
-          <strong>{dragFrac > 0.98 ? 'Forces balanced' : 'Accelerating downward'}</strong>
+          <strong>
+            {Math.abs(dragFrac - 1) < 0.02
+              ? 'Forces balanced'
+              : acceleration < 0
+                ? 'Slowing downward'
+                : 'Accelerating downward'}
+          </strong>
           <span>v {v.toFixed(0)} m/s</span>
           <span>vₜ {vt.toFixed(0)} m/s</span>
-          <span>a {terminal.acceleration.toFixed(1)} m/s²</span>
+          <span>a {acceleration.toFixed(1)} m/s²</span>
         </>
       }
       figure={figure}
       instruments={aside}
       controls={controls}
       feedback={
-        dragFrac > 0.98
+        Math.abs(dragFrac - 1) < 0.02
           ? 'Drag now matches weight: net force and acceleration approach zero while the diver keeps moving.'
+          : acceleration < 0
+            ? `Drag is ${Math.round(dragFrac * 100)}% of weight, so the diver slows toward the new terminal speed.`
           : `Drag is ${Math.round(dragFrac * 100)}% of weight and grows with speed squared.`
       }
       objectives={objectives}

@@ -21,6 +21,12 @@ describe('solid-net geometry', () => {
     expect(areas[0]).toBeCloseTo(areas[1], 6);
     expect(areas[2]).toBeCloseTo(areas[3], 6);
     expect(areas[4]).toBeCloseTo(areas[5], 6);
+    expect(faces.map((face) => face.pair).sort()).toEqual([0, 0, 1, 1, 2, 2]);
+    for (const pair of [0, 1, 2]) {
+      const matching = faces.filter((face) => face.pair === pair);
+      expect(matching).toHaveLength(2);
+      expect(matching[0]?.label).toBe(matching[1]?.label);
+    }
   });
 
   it('agrees with the cuboid formulas', () => {

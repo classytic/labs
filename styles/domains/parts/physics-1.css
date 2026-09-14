@@ -211,23 +211,38 @@
 }
 .physics-scene-surface text {
   font-family: inherit;
-  paint-order: stroke fill;
-  stroke: var(--card, var(--stage-bg));
-  stroke-width: 3px;
-  stroke-linejoin: round;
-}
-.physics-scene-surface :is(.physics-svg-no-halo, .physics-svg-on-fill) {
   paint-order: normal;
   stroke: none;
 }
+.physics-scene-surface .fig-text {
+  paint-order: stroke fill;
+  stroke: var(--card, var(--stage-bg));
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+/* Give back the halo to labels that ASK for one. A presentation attribute loses to any author
+   rule, so the reset above was silently stripping the halo off every label that sets one in props
+   (DiagramLabel, the vector labels, the apparatus glyphs): the scene declared paint-order="stroke"
+   and the browser computed `normal`, which is why the heating curve drew its melt and boil
+   captions straight through the curve. Matched on the attribute at the same specificity as the
+   reset and placed after it, so it wins there and still loses to .fig-text above. The width comes
+   from the element's own stroke-width, which the reset never touched. */
+.physics-scene-surface text[paint-order] {
+  paint-order: stroke;
+  stroke: var(--stage-bg);
+}
 .physics-scene-surface .physics-svg-on-fill {
+  paint-order: normal;
+  stroke: none;
   fill: var(--primary-foreground, var(--stage-bg));
 }
 .physics-heat-transfer-scene svg,
 .physics-entropy-scene svg {
   display: block;
   width: 100%;
-  min-height: 21rem;
+  height: auto;
+  min-height: 0;
+  max-height: 28rem;
 }
 .physics-heat-transfer-scene {
   background:

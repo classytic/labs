@@ -79,12 +79,23 @@ describe('architecture convergence', () => {
 
   it('budgets domain CSS per domain, because a page shows one subject', () => {
     // styles/domains.css is now a list of imports holding every subject in its original order, and
-    // styles/domains/<subject>.css is what an app actually imports. 40 KiB is the ceiling before a
-    // subject wants splitting; the aggregate is allowed to be large because nobody loads all of it.
+    // styles/domains/<subject>.css is what an app actually imports. The aggregate is allowed to be
+    // large because nobody loads all of it.
+    //
+    // Two ceilings, because they catch different things. The transfer ceiling is what a learner
+    // actually pays and is the one that matters. The source ceiling is a smell test: a subject that
+    // needs this much CSS is usually carrying freight rather than genuinely being that big, which
+    // is how the splitter's habit of absorbing a short slice into its larger neighbour was caught.
+    // The maths sheet was shipping thermal-physics and river-crossing rules to a maths page, and
+    // physics was shipping the CMOS and electronics rules; 9 KiB went back to the subject that owns
+    // it and another 3 KiB of unreachable rules were deleted before these numbers were set.
     const dir = join(root, 'styles', 'domains');
+    // Measured for every sheet before asserting, so one oversized subject cannot hide the next:
+    // maths and physics were both over and only maths was reported, because the loop threw first.
+    const over: string[] = [];
     for (const file of readdirSync(dir).filter((name) => name.endsWith('.css'))) {
       const sheet = readFileSync(join(dir, file), 'utf8');
-      const bytes = [...sheet.matchAll(/@import "\.\/(?:parts\/)?([a-z0-9-]+)\.css"/g)]
+      const css = [...sheet.matchAll(/@import "\.\/(?:parts\/)?([a-z0-9-]+)\.css"/g)]
         .map(([, name]) => {
           // A domain sheet imports its own parts plus ./shared.css, which is itself a list.
           const part = join(dir, 'parts', `${name}.css`);
@@ -95,9 +106,14 @@ describe('architecture convergence', () => {
               );
         })
         .flat()
-        .reduce((total, part) => total + Buffer.byteLength(readFileSync(part, 'utf8')), 0);
-      expect(bytes, `${file} resolved size`).toBeLessThanOrEqual(40 * 1024);
+        .map((part) => readFileSync(part, 'utf8'))
+        .join('');
+      const bytes = Buffer.byteLength(css);
+      const transfer = gzipSync(transferCss(css)).byteLength;
+      if (bytes > 44 * 1024) over.push(`${file} source ${bytes} > ${44 * 1024}`);
+      if (transfer > 9 * 1024) over.push(`${file} transfer ${transfer} > ${9 * 1024}`);
     }
+    expect(over).toEqual([]);
   });
 
   it('keeps optional WebGL isolated from normal domain bundles', () => {

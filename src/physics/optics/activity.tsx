@@ -21,6 +21,7 @@ export interface OpticsActivityProps {
   objectives?: string[];
   onReset?: () => void;
   eyebrow?: string;
+  focusLayout?: 'compact' | 'standard' | 'immersive';
 }
 
 /** Canonical authored composition for geometric-optics investigations. */
@@ -39,12 +40,13 @@ export function OpticsActivity({
   objectives,
   onReset,
   eyebrow = 'Geometric optics',
+  focusLayout = 'immersive',
 }: OpticsActivityProps): ReactNode {
   const authoredActivity = typeof activity === 'object' ? activity : opticsActivity;
   const resolvedId = typeof activity === 'string' ? activity : activityId;
   return (
     <AuthoredActivityRuntime
-      focusLayout="immersive"
+      focusLayout={focusLayout}
       activity={withAuthoredObjectives(authoredActivity, objectives)}
       activityId={resolvedId}
       eyebrow={eyebrow}

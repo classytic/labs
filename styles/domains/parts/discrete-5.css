@@ -101,52 +101,6 @@
   color: var(--lab-border-strong);
   font-style: normal;
 }
-.invariant-track {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--lab-sp-10);
-  min-block-size: 192px;
-  align-items: center;
-  justify-content: center;
-}
-.invariant-track span,
-.invariant-track strong {
-  display: grid;
-  min-inline-size: 48px;
-  min-block-size: 48px;
-  padding: var(--lab-sp-6);
-  border: 1px solid var(--lab-border);
-  border-radius: var(--lab-r-md);
-  background: var(--lab-sunken);
-  place-items: center;
-}
-.invariant-track [data-kind="start"] {
-  border-color: var(--lab-accent);
-}
-.invariant-track [data-kind="target"] {
-  border-style: dashed;
-}
-.invariant-ledger {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--lab-sp-10);
-}
-.invariant-ledger span {
-  padding: var(--lab-sp-14);
-  border-block-start: 1px solid var(--lab-border);
-  text-align: center;
-}
-.recurrence-rule {
-  display: grid;
-  gap: var(--lab-sp-10);
-  margin-block-start: var(--lab-sp-16);
-  padding: var(--lab-sp-14);
-  border-radius: var(--lab-r-md);
-  background: var(--lab-sunken);
-}
-.recurrence-rule span:last-child {
-  color: var(--lab-muted);
-}
 @media (max-width: 40rem) {
   .modular-clock {
     inline-size: min(100%, 18rem);

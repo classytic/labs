@@ -61,6 +61,13 @@ const ACTIVITY: AuthoredActivity = {
 const VIEW = { xMin: -10, xMax: 10, yMin: -6, yMax: 6 };
 const R = 1.7;
 
+/** Keep authored element symbols readable without letting longer labels fill the atom. */
+function atomLabelSize(label: string): number {
+  if (label.length <= 2) return 24;
+  if (label.length <= 4) return 19;
+  return 15;
+}
+
 export function ReactionLab({
   a = 'A',
   b = 'B',
@@ -124,7 +131,14 @@ export function ReactionLab({
           fillOpacity={1}
           weight={0}
         />
-        <Label x={cxA} y={yA} text={a} color="var(--stage-bg)" size={18} weight={700} />
+        <Label
+          x={cxA}
+          y={yA}
+          text={a}
+          color="var(--stage-fg)"
+          size={atomLabelSize(a)}
+          weight={800}
+        />
         <Circle
           center={{ x: cxB, y: yB }}
           r={R}
@@ -133,7 +147,14 @@ export function ReactionLab({
           fillOpacity={1}
           weight={0}
         />
-        <Label x={cxB} y={yB} text={b} color="var(--stage-bg)" size={18} weight={700} />
+        <Label
+          x={cxB}
+          y={yB}
+          text={b}
+          color="var(--stage-fg)"
+          size={atomLabelSize(b)}
+          weight={800}
+        />
         <Label
           x={0}
           y={VIEW.yMin + 0.8}

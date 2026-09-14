@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import { ChevronLeft, ChevronRight, Gauge, Pause, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Activity } from '../kit/activity.js';
 import { useReducedMotion } from '../kit/anim.js';
 
@@ -123,9 +124,22 @@ export function TraceTransport({ step, count, message, setStep, canAdvance = tru
             <span className="algorithm-step-count">
               {step + 1}/{count}
             </span>
-            <span className="algorithm-transport-message" aria-live="polite">
-              {message}
-            </span>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <button
+                    className="algorithm-transport-message"
+                    type="button"
+                    aria-label={`Current step: ${message}`}
+                  >
+                    <span aria-live="polite">{message}</span>
+                  </button>
+                }
+              />
+              <TooltipContent side="top" align="start" className="algorithm-transport-tooltip">
+                {message}
+              </TooltipContent>
+            </Tooltip>
           </>
         }
       />

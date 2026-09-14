@@ -92,20 +92,6 @@
   font-size: var(--lab-t-micro);
   font-weight: var(--lab-w-semibold);
 }
-
-.math-equation-line {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--lab-sp-6);
-}
-
-.math-equation-label {
-  color: var(--stage-muted);
-}
-
-.math-equation-derivative {
-  color: var(--stage-good);
-}
 .physics-canvas-overlay {
   position: absolute;
   inset: 0;
@@ -114,75 +100,6 @@
 
 .physics-field-thread-value {
   color: var(--stage-good);
-}
-
-.math-svg-passive {
-  pointer-events: none;
-}
-
-.math-reading-value[data-state="correct"] {
-  color: var(--stage-good);
-}
-.math-reading-value[data-state="moved"] {
-  color: var(--stage-warn);
-}
-.math-reading-value[data-state="idle"] {
-  color: var(--stage-fg);
-}
-.cmos-scene {
-  overflow: hidden;
-  border: 1px solid var(--border, var(--stage-grid));
-  border-radius: var(--lab-r-md);
-  background: var(--card, var(--stage-bg));
-}
-
-.cmos-scene-centered,
-.electronics-scene-centered {
-  width: 100%;
-  max-width: 60rem;
-  margin-inline: auto;
-}
-
-.cmos-visual-stack,
-.cmos-inspector-stack {
-  display: grid;
-  gap: var(--lab-sp-10);
-}
-
-.cmos-truth-table {
-  border-collapse: collapse;
-  font-size: var(--lab-t-eyebrow);
-  font-variant-numeric: tabular-nums;
-}
-
-.cmos-truth-table th,
-.cmos-truth-table td {
-  padding: var(--lab-sp-4) var(--lab-sp-14) var(--lab-sp-4) 0;
-  text-align: left;
-}
-
-.cmos-truth-table tr[data-current="true"] {
-  background: color-mix(in oklab, var(--stage-accent) 12%, transparent);
-  font-weight: var(--lab-w-bold);
-}
-
-.cmos-truth-table td[data-high="true"] {
-  color: var(--stage-good);
-}
-
-.cmos-output-readout {
-  margin-top: var(--lab-sp-6);
-  color: var(--stage-muted);
-  font-size: var(--lab-t-eyebrow);
-  font-variant-numeric: tabular-nums;
-}
-
-.cmos-explanation {
-  font-size: var(--lab-t-eyebrow);
-  line-height: var(--lab-lh-ui);
-}
-.electronics-svg-passive {
-  pointer-events: none;
 }
 
 .semiconductor-scene {
@@ -262,65 +179,214 @@
   flex-wrap: wrap;
   gap: var(--lab-sp-6);
 }
-.electronics-scene {
-  overflow: hidden;
-  border: 1px solid var(--border, var(--stage-grid));
-  border-radius: var(--lab-r-md);
-  background: var(--card, var(--stage-bg));
+
+/* Compact apparatus labs should read like a bench experiment in focus mode, not stretch their
+   controls into a dashboard-width toolbar. The authored runtime still owns the shell; these
+   classes only declare each model's natural control grouping. */
+.physics-atwood-activity .lab-authored-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.electronics-visual-stack,
-.electronics-inspector,
-.electronics-readout {
+.physics-energy-skate .lab-authored-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.physics-energy-skate-scene {
+  min-height: 15.625rem;
+}
+
+.physics-collision-activity .lab-authored-controls {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.physics-collision-activity .lab-authored-controls > .lab-pill {
+  align-self: center;
+  justify-self: start;
+}
+
+.physics-collision-presets {
   display: grid;
-  gap: var(--lab-sp-10);
+  grid-column: span 2;
+  gap: var(--lab-sp-2);
+  min-width: 0;
 }
 
-.electronics-readout {
-  gap: var(--lab-sp-6);
-  font-size: var(--lab-t-eyebrow);
-  font-variant-numeric: tabular-nums;
+.physics-collision-presets .lab-segmented {
+  width: 100%;
 }
 
-.electronics-readout-relaxed {
-  line-height: var(--lab-lh-prose);
+.physics-collision-fine-tune {
+  grid-column: 1 / -1;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-radius-md);
+  background: var(--background, var(--stage-surface));
 }
 
-.electronics-explanation {
-  color: var(--stage-muted);
-  line-height: var(--lab-lh-ui);
+.physics-collision-fine-tune > summary {
+  cursor: pointer;
+  padding: var(--lab-sp-4) var(--lab-sp-6);
+  color: var(--foreground, var(--stage-fg));
+  font-size: var(--lab-t-sm);
+  font-weight: 650;
 }
 
-.electronics-note-small {
-  font-size: var(--lab-t-eyebrow);
+.physics-collision-fine-tune-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lab-sp-6) var(--lab-sp-8);
+  padding: 0 var(--lab-sp-6) var(--lab-sp-6);
+  border-top: 1px solid var(--border, var(--stage-grid));
 }
 
-.electronics-invalid {
-  color: var(--stage-danger);
+.physics-collision-fine-tune-grid > .lab-field {
+  padding-top: var(--lab-sp-6);
+}
+
+@container lab-activity (min-width: 64rem) {
+  .physics-energy-skate[data-focus] .lab-activity-workspace {
+    grid-template-columns: minmax(0, 1.65fr) minmax(18rem, 0.75fr);
+    align-items: stretch;
+  }
+
+  .physics-energy-skate[data-focus] .lab-activity-dock {
+    border-top: 0;
+    border-inline-start: 1px solid var(--border, var(--stage-grid));
+  }
+
+  .physics-energy-skate[data-focus] .lab-authored-controls {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+  }
+
+  :is(.physics-atwood-activity, .physics-collision-activity)[data-focus]
+    .lab-activity-workspace {
+    grid-template-columns: minmax(0, 2fr) minmax(18rem, 0.9fr);
+    align-items: stretch;
+    gap: 0;
+    padding: var(--lab-sp-12) 0 0 var(--lab-sp-12);
+  }
+
+  :is(.physics-atwood-activity, .physics-collision-activity)[data-focus]
+    .lab-activity-canvas {
+    grid-column: 1;
+    padding: 0 var(--lab-sp-12) var(--lab-sp-12) 0;
+  }
+
+  :is(.physics-atwood-activity, .physics-collision-activity)[data-focus]
+    .lab-activity-dock {
+    grid-column: 2;
+    border-top: 0;
+    border-inline-start: 1px solid var(--border, var(--stage-grid));
+  }
+
+  :is(.physics-atwood-activity, .physics-collision-activity)[data-focus]
+    .lab-authored-controls {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    height: 100%;
+  }
+
+  .physics-collision-activity[data-focus] .physics-collision-presets {
+    grid-column: auto;
+  }
+
+  .physics-collision-activity[data-focus] .physics-collision-fine-tune-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :is(.physics-atwood-activity, .physics-collision-activity)[data-focus]
+    .lab-activity-inspector {
+    grid-column: 1 / -1;
+  }
+}
+
+@container lab-activity (max-width: 42rem) {
+  .physics-energy-skate .lab-authored-controls,
+  .physics-atwood-activity .lab-authored-controls,
+  .physics-collision-activity .lab-authored-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .physics-collision-presets {
+    grid-column: auto;
+  }
+
+  .physics-collision-fine-tune-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.physics-emphasis {
+  color: var(--stage-fg);
   font-weight: var(--lab-w-semibold);
 }
 
-.electronics-choice-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--lab-sp-10);
-}
-.electronics-slider-compact {
-  width: min(100%, 7rem);
+.physics-thermal-hot {
+  color: var(--stage-danger, #e03131);
 }
 
-.electronics-slider-medium {
-  width: min(100%, 10rem);
+.physics-thermal-cold {
+  color: var(--stage-accent, #3b82f6);
 }
 
-.electronics-equation-stack {
-  display: grid;
-  gap: var(--lab-sp-4);
+.physics-thermal-sensible {
+  color: var(--stage-accent);
+  font-weight: var(--lab-w-bold);
+}
+
+.physics-thermal-latent {
+  color: var(--stage-warn);
+  font-weight: var(--lab-w-bold);
+}
+
+.physics-svg-numeric {
   font-variant-numeric: tabular-nums;
 }
 
-.electronics-equation-stack {
-  gap: var(--lab-sp-6);
-  padding: var(--lab-sp-8) 2px 0;
+/* River crossing: the aims, and the one that ran out of physics. */
+.physics-river-aims {
+  flex-wrap: wrap;
+}
+.physics-river-why {
+  margin: var(--lab-sp-6) 0 0;
+  color: var(--lab-muted);
   font-size: var(--lab-t-sm);
+  line-height: var(--lab-lh-ui);
+}
+.physics-river-why strong {
+  color: var(--lab-fg);
+}
+.physics-river-compare {
+  width: 100%;
+  margin-block-start: var(--lab-sp-10);
+  border-collapse: collapse;
+  font-size: var(--lab-t-sm);
+  font-variant-numeric: tabular-nums;
+}
+.physics-river-compare caption {
+  margin-bottom: var(--lab-sp-4);
+  color: var(--lab-muted);
+  font-size: var(--lab-t-eyebrow);
+  letter-spacing: var(--lab-ls-caps);
+  text-align: start;
+  text-transform: uppercase;
+}
+.physics-river-compare th,
+.physics-river-compare td {
+  padding: var(--lab-sp-4) var(--lab-sp-6);
+  border-bottom: 1px solid var(--lab-border);
+  text-align: end;
+}
+.physics-river-compare thead th,
+.physics-river-compare tbody th {
+  color: var(--lab-muted);
+  font-weight: var(--lab-w-medium);
+  text-align: start;
+}
+.physics-river-compare tbody th {
+  color: var(--lab-fg);
+}
+/* The unavailable aim stays in the table so the comparison keeps its shape. */
+.physics-river-compare tr[data-dead] {
+  opacity: 0.55;
 }

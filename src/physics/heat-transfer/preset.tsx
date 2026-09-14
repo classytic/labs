@@ -27,6 +27,7 @@ import { BurnerGlyph, thermalColor } from '../../kit/thermal.js';
 import { Tex } from '../../core/tex.js';
 import { SceneSurface, SimulationTransport } from '../mechanics/presentation.js';
 import { ThermalActivity } from '../thermal/activity.js';
+import { figUrl, useFigureId } from '../../kit/figure/index.js';
 
 type Mode = 'conduction' | 'convection' | 'radiation';
 
@@ -69,6 +70,7 @@ export function HeatTransferLab({
   controlConfig,
   activity,
 }: HeatTransferProps = {}): ReactNode {
+  const figureId = useFigureId();
   const [mode, setMode] = useState<Mode>(mode0);
   // conduction
   const [material, setMaterial] = useState('copper');
@@ -118,11 +120,11 @@ export function HeatTransferLab({
           aria-label={`Conduction through ${material}, rate ${condRate.toFixed(1)} watts`}
         >
           <defs>
-            <linearGradient id="conduction-rod" x1="0" x2="1">
+            <linearGradient id={`${figureId}-conduction-rod`} x1="0" x2="1">
               <stop offset="0" stopColor={thermalColor(1)} />
               <stop offset="1" stopColor={thermalColor(0)} />
             </linearGradient>
-            <marker id="heat-flow-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+            <marker id={`${figureId}-heat-flow-arrow`} markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
               <path d="M0,0 L0,7 L6,3.5 Z" fill="var(--stage-warn)" />
             </marker>
           </defs>
@@ -170,7 +172,7 @@ export function HeatTransferLab({
             COLD
           </text>
           {/* rod, segmented hot→cold gradient */}
-          <rect x={x0} y={yMid - rodH / 2} width={len} height={rodH} fill="url(#conduction-rod)" />
+          <rect x={x0} y={yMid - rodH / 2} width={len} height={rodH} fill={figUrl(figureId, 'conduction-rod')} />
           {Array.from({ length: NSEG - 1 }, (_, i) => (
             <line
               key={i}
@@ -199,7 +201,7 @@ export function HeatTransferLab({
             y2={70}
             stroke="var(--stage-warn)"
             strokeWidth={2}
-            markerEnd="url(#heat-flow-arrow)"
+            markerEnd={figUrl(figureId, 'heat-flow-arrow')}
           />
           <text x={360} y={57} textAnchor="middle" fontSize={11} fontWeight={700} fill="var(--stage-muted)">
             ENERGY FLOW

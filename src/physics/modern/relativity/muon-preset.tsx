@@ -34,6 +34,12 @@ export function MuonSurvivalLab({
   const cohort = useMemo(() => createMuonCohort(24), []);
   const timeline = useExperimentTimeline({ durationMs: 5200, stops: [0, 0.25, 0.5, 0.75, 1] });
   const experiment = muonExperimentAt(state, cohort, timeline.progress);
+  const observation =
+    timeline.progress <= 0
+      ? 'Run both cohorts. Every dot represents the same sampled rest lifetime in both models.'
+      : timeline.progress < 1
+        ? `The same muons travel farther in the relativistic lane because only ${(experiment.properElapsedS * 1e6).toFixed(1)} μs has elapsed on their clock.`
+        : `${experiment.relativisticArrivals} of ${cohort.length} sampled muons reach the detector with time dilation, compared with ${experiment.withoutDilationArrivals} without it.`;
   const controls = (
     <>
       <Field label="speed β = v/c" value={state.beta.toFixed(3)}>
@@ -108,7 +114,7 @@ export function MuonSurvivalLab({
       }
       controls={controls}
       evidence={evidence}
-      observation="The muon lives through less proper time than Earth clocks measure for the trip, so far more survive than the decay law predicts without dilation."
+      observation={observation}
       transcript={
         <p>
           Muons begin {altitudeKm.toFixed(1)} kilometres above the detector at {state.beta.toFixed(3)} c.

@@ -178,41 +178,48 @@ export function ProofBuilderLab({
         {/* Only when the author names one. It used to default to "contradiction" and print that
             over a direct geometry proof, labelling the argument as something it is not. */}
         {strategy ? <span>{strategy}</span> : null}
-        <span>target: {graph.target}</span>
       </Activity.Status>
       <Activity.Workspace>
         <Activity.Canvas label="Proof argument under construction">
-          {graph.figure ? <ProofDiagram figure={graph.figure} lit={lit} /> : null}
-          <div className="proof-claim">
-            <span className="lab-field-label">Given</span>
-            {graph.premises.map((premise) => (
-              <strong key={premise}>{premise}</strong>
-            ))}
-          </div>
-          <ol className="proof-chain">
-            {chosenNodes.length === 0 ? (
-              <li className="proof-placeholder">
-                <span aria-hidden="true">1</span>
-                <div>
-                  <strong>Choose the first justified inference</strong>
-                  <small>It must follow from what is given.</small>
-                </div>
-              </li>
-            ) : (
-              chosenNodes.map((node, index) => (
-                <li key={node.id}>
-                  <span>{index + 1}</span>
-                  <div>
-                    <strong>{node.statement}</strong>
-                    <small>{node.justification}</small>
-                  </div>
-                </li>
-              ))
-            )}
-          </ol>
-          <div className="proof-target">
-            <span className="lab-field-label">Target</span>
-            <strong>{graph.target}</strong>
+          <div className="proof-composition" data-has-figure={graph.figure ? '' : undefined}>
+            {graph.figure ? (
+              <div className="proof-figure">
+                <ProofDiagram figure={graph.figure} lit={lit} />
+              </div>
+            ) : null}
+            <div className="proof-argument">
+              <div className="proof-claim">
+                <span className="lab-field-label">Given</span>
+                {graph.premises.map((premise) => (
+                  <strong key={premise}>{premise}</strong>
+                ))}
+              </div>
+              <ol className="proof-chain">
+                {chosenNodes.length === 0 ? (
+                  <li className="proof-placeholder">
+                    <span aria-hidden="true">1</span>
+                    <div>
+                      <strong>Choose the first justified inference</strong>
+                      <small>It must follow from what is given.</small>
+                    </div>
+                  </li>
+                ) : (
+                  chosenNodes.map((node, index) => (
+                    <li key={node.id}>
+                      <span>{index + 1}</span>
+                      <div>
+                        <strong>{node.statement}</strong>
+                        <small>{node.justification}</small>
+                      </div>
+                    </li>
+                  ))
+                )}
+              </ol>
+              <div className="proof-target">
+                <span className="lab-field-label">Target</span>
+                <strong>{graph.target}</strong>
+              </div>
+            </div>
           </div>
         </Activity.Canvas>
         {/* Stays on the shared Inspector primitive, which `architecture-convergence` requires of

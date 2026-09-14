@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { RotateCcw } from 'lucide-react';
-import { Activity, RunTransport } from '../kit/activity.js';
+import { Activity, RunTransport, type ActivityRootProps } from '../kit/activity.js';
 import { ControlPolicy, type ControlConfig } from '../kit/frame.js';
 import { IconButton } from '../kit/controls.js';
 
@@ -19,6 +19,7 @@ export interface MathActivityProps {
   graphLabel: string;
   inspectorLabel?: string;
   controlConfig?: ControlConfig;
+  focusLayout?: ActivityRootProps['focusLayout'];
 }
 
 export function MathExpressionError({
@@ -57,10 +58,11 @@ export function MathActivity({
   graphLabel,
   inspectorLabel = 'Values and controls',
   controlConfig,
+  focusLayout = 'standard',
 }: MathActivityProps): ReactNode {
   return (
     <ControlPolicy config={controlConfig}>
-      <Activity.Root className={`math-activity ${className}`}>
+      <Activity.Root className={`math-activity ${className}`} focusLayout={focusLayout}>
         <Activity.Header>
           <Activity.Heading eyebrow={eyebrow} title={title} description={description} />
           <Activity.FocusButton />

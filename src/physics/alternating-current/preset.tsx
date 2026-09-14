@@ -31,7 +31,7 @@ import {
   type RectifierMode,
 } from './core.js';
 import { Field, Readout, Stat, StatList } from '../../kit/frame.js';
-import { Segmented, Slider } from '../../kit/controls.js';
+import { ActivitySelect, Segmented, Slider } from '../../kit/controls.js';
 import { Tex } from '../../core/tex.js';
 import { AuthoredActivityRuntime, AuthoredMetricGate } from '../../kit/authored-activity-runtime.js';
 import type { AuthoredActivity } from '../../kit/activity-authoring.js';
@@ -771,7 +771,7 @@ export function AlternatingCurrentLab({
   const controls = (
     <>
       <Field label="view">
-        <Segmented
+        <ActivitySelect
           ariaLabel="view"
           value={view}
           onChange={setView}

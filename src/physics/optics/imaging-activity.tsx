@@ -59,6 +59,7 @@ export function ImagingActivity(props: ImagingActivityProps): ReactNode {
   );
   return (
     <OpticsActivity
+      focusLayout="compact"
       activity={activity}
       activityId={activityId}
       eyebrow={`${kind} imaging`}

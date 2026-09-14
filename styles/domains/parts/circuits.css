@@ -191,3 +191,159 @@
   flex-wrap: wrap;
   gap: var(--lab-sp-6);
 }
+
+@container lab-activity (min-width: 60rem) {
+  .circuit-editor-activity .lab-activity-workspace {
+    grid-template-columns: 11rem minmax(28rem, 1fr) 16rem;
+  }
+  .circuit-editor-activity[data-focus] .lab-activity-workspace {
+    grid-template-columns: 12rem minmax(32rem, 1fr) 18rem;
+  }
+  .logic-editor-activity .lab-activity-workspace {
+    grid-template-columns: 11.5rem minmax(28rem, 1fr) 15rem;
+  }
+  .logic-editor-activity[data-focus] .lab-activity-workspace {
+    grid-template-columns: 12rem minmax(32rem, 1fr) 17rem;
+  }
+}
+.cmos-scene {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+
+.cmos-scene-centered,
+.electronics-scene-centered {
+  width: 100%;
+  max-width: 60rem;
+  margin-inline: auto;
+}
+
+.cmos-visual-stack,
+.cmos-inspector-stack {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+
+.cmos-truth-table {
+  border-collapse: collapse;
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+
+.cmos-truth-table th,
+.cmos-truth-table td {
+  padding: var(--lab-sp-4) var(--lab-sp-14) var(--lab-sp-4) 0;
+  text-align: left;
+}
+
+.cmos-truth-table tr[data-current="true"] {
+  background: color-mix(in oklab, var(--stage-accent) 12%, transparent);
+  font-weight: var(--lab-w-bold);
+}
+
+.cmos-truth-table td[data-high="true"] {
+  color: var(--stage-good);
+}
+
+.cmos-output-readout {
+  margin-top: var(--lab-sp-6);
+  color: var(--stage-muted);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+
+.cmos-explanation {
+  font-size: var(--lab-t-eyebrow);
+  line-height: var(--lab-lh-ui);
+}
+.electronics-svg-passive {
+  pointer-events: none;
+}
+.electronics-scene {
+  overflow: hidden;
+  border: 1px solid var(--border, var(--stage-grid));
+  border-radius: var(--lab-r-md);
+  background: var(--card, var(--stage-bg));
+}
+
+.electronics-visual-stack,
+.electronics-inspector,
+.electronics-readout {
+  display: grid;
+  gap: var(--lab-sp-10);
+}
+
+.electronics-readout {
+  gap: var(--lab-sp-6);
+  font-size: var(--lab-t-eyebrow);
+  font-variant-numeric: tabular-nums;
+}
+
+.electronics-readout-relaxed {
+  line-height: var(--lab-lh-prose);
+}
+
+.electronics-explanation {
+  color: var(--stage-muted);
+  line-height: var(--lab-lh-ui);
+}
+
+.electronics-note-small {
+  font-size: var(--lab-t-eyebrow);
+}
+
+.electronics-invalid {
+  color: var(--stage-danger);
+  font-weight: var(--lab-w-semibold);
+}
+
+.electronics-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lab-sp-10);
+}
+.electronics-slider-compact {
+  width: min(100%, 7rem);
+}
+
+.electronics-slider-medium {
+  width: min(100%, 10rem);
+}
+
+.electronics-equation-stack {
+  display: grid;
+  gap: var(--lab-sp-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.electronics-equation-stack {
+  gap: var(--lab-sp-6);
+  padding: var(--lab-sp-8) 2px 0;
+  font-size: var(--lab-t-sm);
+}
+@container lab-activity (max-width: 42.5rem) {
+  .circuit-editor-activity .lab-activity-canvas > div:last-child,
+  .logic-editor-activity .lab-activity-canvas > div:last-child {
+    height: min(65dvh, 32rem);
+    min-height: 22rem;
+  }
+  .circuit-editor-guidance {
+    font-size: var(--lab-t-micro);
+  }
+  .circuit-editor-status-hint {
+    display: none;
+  }
+  .circuit-editor-history button {
+    padding-inline: var(--lab-sp-8) !important;
+  }
+  .circuit-editor-history button span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}

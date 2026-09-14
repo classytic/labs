@@ -21,7 +21,6 @@ import type { AuthoredActivity } from '../../kit/activity-authoring.js';
 import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field } from '../../kit/frame.js';
 import { thermalColor } from '../../kit/thermal.js';
-import { DiagramLabel } from '../../kit/annotate.js';
 import { ResetTransport, SceneSurface } from '../mechanics/presentation.js';
 import { ThermalActivity } from '../thermal/activity.js';
 
@@ -105,8 +104,10 @@ export function WaterDensityLab({
           {/* axes */}
           <line x1={GX0} y1={GY0} x2={GX0} y2={GY1} stroke="var(--stage-fg)" strokeWidth={1.5} />
           <line x1={GX0} y1={GY1} x2={GX1} y2={GY1} stroke="var(--stage-fg)" strokeWidth={1.5} />
-          <text x={GX0 - 6} y={GY0 + 2} textAnchor="end" fontSize={13} fill="var(--stage-muted)">
-            ρ (kg/m³)
+          {/* Sits above the axis rather than outside it: anchored "end" at GX0 - 6 the caption ran
+              off the left of the viewBox, since 70px of margin cannot hold a 16-character word. */}
+          <text x={GX0} y={GY0 - 12} textAnchor="start" fontSize={12} fill="var(--stage-muted)">
+            density (zoomed)
           </text>
           <text x={(GX0 + GX1) / 2} y={GY1 + 32} textAnchor="middle" fontSize={13} fill="var(--stage-muted)">
             temperature (°C) →
@@ -120,7 +121,7 @@ export function WaterDensityLab({
               </text>
             </g>
           ))}
-          {/* max-density guide at 4 °C (haloed so it reads over the curve peak) */}
+          {/* The graph carries only data. Explanations live in the instrument panel. */}
           <line
             x1={PX(4)}
             y1={GY0}
@@ -129,16 +130,6 @@ export function WaterDensityLab({
             stroke="var(--stage-good)"
             strokeWidth={1}
             strokeDasharray="4 4"
-          />
-          <DiagramLabel
-            x={PX(4) + 8}
-            y={GY0 + 14}
-            text="densest at 4 °C"
-            tone="good"
-            fontSize={14}
-            fontWeight={700}
-            anchor="start"
-            bounds={{ left: 8, right: W - 8, top: 8, bottom: H - 8 }}
           />
           {/* curve */}
           <polyline
@@ -150,6 +141,9 @@ export function WaterDensityLab({
             strokeLinecap="round"
           />
           <circle cx={PX(4)} cy={PY(999.97)} r={5} fill="var(--stage-good)" />
+          <text x={PX(4) + 10} y={PY(999.97) - 10} fontSize={12} fontWeight={700} fill="var(--stage-good)">
+            maximum at 4 °C
+          </text>
           {/* live marker */}
           <circle
             cx={PX(tC)}
@@ -169,41 +163,21 @@ export function WaterDensityLab({
             strokeDasharray="3 3"
             opacity={0.5}
           />
-          {/* cooling-direction notes, kept CLEAR of the curve + haloed */}
-          <DiagramLabel
-            x={PX(15)}
-            y={PY(997.55)}
-            text="25 → 4 °C: denser, sinks"
-            tone="muted"
-            fontSize={13}
-            fontWeight={600}
-            bounds={{ left: 8, right: W - 8, top: 8, bottom: H - 8 }}
-          />
-          <DiagramLabel
-            x={PX(2)}
-            y={PY(999.45)}
-            text="4 → 0 °C: lighter, rises"
-            tone="muted"
-            fontSize={13}
-            fontWeight={600}
-            anchor="start"
-            bounds={{ left: 8, right: W - 8, top: 8, bottom: H - 8 }}
-          />
         </svg>
       </SceneSurface>
     );
   } else {
     // frozen-lake cross-section
-    const lx = 60,
-      rx = 580,
+    const lx = 72,
+      rx = 520,
       top = 60,
       bot = 300;
     const iceBot = top + 34;
     const bands = [
-      { y0: iceBot, y1: top + 90, t: 0, label: '0 °C: just above freezing' },
+      { y0: iceBot, y1: top + 90, t: 0, label: '0 °C' },
       { y0: top + 90, y1: top + 150, t: 2, label: '2 °C' },
       { y0: top + 150, y1: top + 210, t: 3, label: '3 °C' },
-      { y0: top + 210, y1: bot, t: 4, label: '4 °C: densest water sinks here' },
+      { y0: top + 210, y1: bot, t: 4, label: '4 °C' },
     ];
     figure = (
       <SceneSurface className="physics-water-density-scene">
@@ -235,16 +209,16 @@ export function WaterDensityLab({
                 fill={thermalColor(b.t / T_MAX)}
                 opacity={0.4}
               />
-              <DiagramLabel
-                x={rx - 10}
+              <text
+                x={rx + 20}
                 y={(b.y0 + b.y1) / 2}
-                text={b.label}
-                tone="foreground"
-                anchor="end"
-                fontSize={14}
-                fontWeight={650}
-                bounds={{ left: lx + 8, right: rx - 8, top: top, bottom: bot }}
-              />
+                dominantBaseline="middle"
+                fontSize={13}
+                fontWeight={700}
+                fill="var(--stage-fg)"
+              >
+                {b.label}
+              </text>
             </g>
           ))}
           {/* ice cap on top (less dense → floats) */}
@@ -253,12 +227,12 @@ export function WaterDensityLab({
             y={top}
             width={rx - lx}
             height={iceBot - top}
-            fill="color-mix(in oklab, #cfeaff 75%, var(--stage-bg))"
-            stroke="color-mix(in oklab, #2b7fff 40%, transparent)"
+            fill="color-mix(in oklab, var(--stage-accent) 14%, var(--stage-bg))"
+            stroke="color-mix(in oklab, var(--stage-accent) 52%, transparent)"
             strokeWidth={1.5}
           />
-          <text x={lx + 10} y={top + 22} fontSize={12} fontWeight={800} fill="#2b6fb8">
-            ICE floats (less dense)
+          <text x={lx + 10} y={top + 22} fontSize={12} fontWeight={750} fill="var(--stage-accent)">
+            floating ice · less dense
           </text>
           {/* fish surviving at the bottom */}
           {(
@@ -281,9 +255,17 @@ export function WaterDensityLab({
             stroke="var(--stage-metal)"
             strokeWidth={3}
           />
-          {/* sink arrow */}
-          <text x={lx + 30} y={bot - 14} fontSize={16} fill="var(--stage-accent)">
-            ↓ 4 °C sinks
+          <path d={`M ${rx + 74} ${top + 165} V ${bot - 24}`} stroke="var(--stage-good)" strokeWidth="2" />
+          <path d={`M ${rx + 67} ${bot - 32} L ${rx + 74} ${bot - 20} L ${rx + 81} ${bot - 32}`} fill="none" stroke="var(--stage-good)" strokeWidth="2" />
+          <text
+            x={W - 16}
+            y={bot + 20}
+            textAnchor="end"
+            fontSize={12}
+            fontWeight={700}
+            fill="var(--stage-good)"
+          >
+            4 °C water sinks
           </text>
         </svg>
       </SceneSurface>

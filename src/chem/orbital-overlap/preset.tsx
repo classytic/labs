@@ -5,6 +5,7 @@ import { ActivitySelect, Slider } from '../../kit/controls.js';
 import { Field, Readout, SceneViewport } from '../../kit/frame.js';
 import { orbitalOverlapActivity } from './activity.js';
 import { OVERLAP_FACTS, overlapStrength, type OverlapMode, type OverlapPhase } from './core.js';
+import { ProjectedAtom } from '../visual/atom.js';
 export interface OrbitalOverlapSceneProps {
   mode: OverlapMode;
   phase: OverlapPhase;
@@ -69,10 +70,14 @@ export function OrbitalOverlapProjectedScene({
                 className="chem-orbital-lobe"
               />
             ))}
-            <circle r="9" className="chem-orbital-nucleus" />
-            <text y="4" textAnchor="middle" className="chem-orbital-nucleus-label">
-              {side < 0 ? 'A' : 'B'}
-            </text>
+            <ProjectedAtom
+              x={0}
+              y={0}
+              radius={12}
+              symbol={side < 0 ? 'A' : 'B'}
+              fill="var(--stage-bg)"
+              stroke="var(--stage-fg)"
+            />
           </g>
         ))}
         {phase === 'antibonding' && (

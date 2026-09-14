@@ -154,7 +154,7 @@ export function ArrangementsLab({
     <div className="discrete-counting-scene">
       <div>
         <p className="lab-field-label">{n} items in a row, identical ones share a colour</p>
-        <div className="discrete-token-row">
+        <div className="discrete-token-row arrangement-token-row" aria-label="Current repeated arrangement">
           {tiles.map((g, i) => {
             const isSwap = swapGroup && g.label === swapGroup.label;
             const swapIdx = isSwap ? tiles.filter((t, j) => j < i && t.label === g.label).length : -1;
@@ -184,7 +184,7 @@ export function ArrangementsLab({
 
       {/* derivation → formula */}
       <div className="discrete-formula-panel arrangement-formula">
-        <span className="discrete-formula-label">📐 WHY THE FORMULA</span>
+        <span className="discrete-formula-label">Why the division is necessary</span>
         <span>
           if all {n} were different: <b>{n}!</b>
           {checked ? <> = {nFact.toLocaleString()} orders</> : <> possible labelled orders</>}
@@ -274,7 +274,7 @@ export function ArrangementsLab({
   );
 
   return (
-    <Activity.Root className="discrete-arrangements-activity">
+    <Activity.Root className="discrete-arrangements-activity" focusLayout="compact">
       <Activity.Header>
         <Activity.Heading
           eyebrow="Repeated arrangements"

@@ -43,13 +43,14 @@
 .ict-odometer-scene {
   overflow: auto;
   min-width: 0;
-  border: 1px solid var(--border, var(--stage-grid));
-  border-radius: var(--lab-r-md);
-  background: var(--card, var(--stage-bg));
   color: var(--foreground, var(--stage-fg));
 }
 .ict-number-scene {
-  padding: var(--lab-sp-16) var(--lab-sp-14);
+  display: grid;
+  min-height: clamp(10rem, 24vw, 15rem);
+  place-content: center;
+  gap: var(--lab-sp-12);
+  padding: var(--lab-sp-16) var(--lab-sp-10);
 }
 .ict-bit-groups {
   display: flex;
@@ -68,7 +69,7 @@
   display: flex;
   gap: var(--lab-sp-4);
   padding: var(--lab-sp-6);
-  border: 1px dashed var(--border, var(--stage-grid));
+  border: 1px solid var(--border, var(--stage-grid));
   border-radius: var(--lab-r-sm);
 }
 .ict-bit-group-cells[data-partial="true"] {
@@ -84,7 +85,7 @@
   color: var(--muted-foreground, var(--stage-muted));
 }
 .ict-number-equation {
-  margin-top: var(--lab-sp-12);
+  margin: 0;
   color: var(--foreground, var(--stage-fg));
   font-size: var(--lab-t-sm);
   font-weight: var(--lab-w-semibold);
@@ -130,7 +131,10 @@
   display: flex;
   flex-direction: column;
   gap: var(--lab-sp-12);
-  padding: var(--lab-sp-16) var(--lab-sp-14);
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  padding: var(--lab-sp-12) var(--lab-sp-8);
 }
 .ict-odometer-row {
   display: flex;
@@ -141,6 +145,9 @@
 .ict-odometer-row[data-highlighted="true"] {
   padding: var(--lab-sp-6) var(--lab-sp-8);
   background: color-mix(in oklab, var(--lab-good, var(--stage-good)) 12%, transparent);
+}
+.ict-number-activity .lab-activity-inspector-section {
+  gap: var(--lab-sp-8);
 }
 .ict-base-label {
   width: 2.625rem;
@@ -196,11 +203,6 @@
   min-width: max-content;
 }
 @container lab-activity (max-width: 34rem) {
-  .ict-number-scene,
-  .ict-odometer-scene {
-    border-inline: 0;
-    border-radius: var(--lab-r-md);
-  }
   .ict-odometer-row {
     gap: var(--lab-sp-8);
   }

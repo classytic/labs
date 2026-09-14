@@ -12,7 +12,12 @@ describe('relativity learning progression', () => {
     expect(view.getByText('Trace one complete tick')).toBeTruthy();
     expect(view.getByLabelText('light clock event progress')).toBeTruthy();
     fireEvent.click(view.getByRole('button', { name: 'Continue' }));
+    // Observe keeps the learner on the experiment they just predicted about, so the reading they
+    // are asked to link is still on screen; the spacetime diagram is the EXPLAIN step's evidence.
     expect(view.getByText('Link path and clocks')).toBeTruthy();
+    expect(view.getByLabelText('Light clock experiment')).toBeTruthy();
+    fireEvent.click(view.getByRole('button', { name: 'Continue' }));
+    expect(view.getByText('Name the proper interval')).toBeTruthy();
     expect(view.getByLabelText('Spacetime evidence')).toBeTruthy();
   });
 

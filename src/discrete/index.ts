@@ -34,6 +34,14 @@ export {
 // ── general lab families (built on the kernels above) ──
 export { TruthTableLab, type TruthTableProps, type TruthTableMode } from './truth-table/index.js';
 export {
+  StatementLogicLab,
+  DEFAULT_STATEMENT_ROUNDS,
+  type StatementLogicProps,
+  type StatementLogicMessages,
+  type StatementLogicRound,
+  type StatementClass,
+} from './statement-logic/index.js';
+export {
   CountingTreeLab,
   type CountingTreeProps,
   type TreeBranch,
