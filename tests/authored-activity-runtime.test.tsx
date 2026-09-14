@@ -117,11 +117,14 @@ describe('AuthoredActivityRuntime', () => {
     expect(task.textContent).toContain('Commit before running the model.');
     expect(task.textContent).toContain('Task for Predict');
     expect(task.contains(view.getByText('Which way?'))).toBe(true);
+    // Withheld while the prediction is open, on the same rule as the observation below it: a
+    // question the measurement already answers is not a prediction.
+    expect(view.queryByText('Measured evidence')).toBeNull();
+    expect(view.queryByText('Compare the measured direction.')).toBeNull();
+    fireEvent.click(view.getByRole('radio', { name: 'Right' }));
     expect(view.getByRole('region', { name: 'Evidence' }).textContent).toContain('Measured evidence');
     const evidence = view.getByText('Explore evidence').closest('details');
     expect(evidence?.open).toBe(false);
-    expect(view.queryByText('Compare the measured direction.')).toBeNull();
-    fireEvent.click(view.getByRole('radio', { name: 'Right' }));
     expect(
       view.getByText('Compare the measured direction.').closest('.lab-activity-feedback'),
     ).not.toBeNull();
@@ -145,6 +148,9 @@ describe('AuthoredActivityRuntime', () => {
       </AuthoredActivityRuntime>,
     );
 
+    // Answer first: this is about where evidence sits once it is earned, not about whether a
+    // prediction can see it.
+    fireEvent.click(view.getByRole('radio', { name: 'Right' }));
     const workspace = view.container.querySelector('.lab-activity-workspace');
     const canvas = workspace?.querySelector('.lab-activity-canvas');
     const dock = workspace?.querySelector('.lab-activity-dock');

@@ -139,7 +139,20 @@ export function AuthoredActivityRuntime({
       : undefined;
   const question = questionPosition == null ? undefined : authored.questions?.[questionPosition];
   const solved = sequence.index === sequence.total - 1 && sequence.canAdvance;
-  const observationUnlocked = sequence.current.phase !== 'predict' || sequence.canAdvance;
+  /**
+   * Whether the learner has earned the answer yet.
+   *
+   * A prediction is only a prediction if the evidence is not already on the page. The runtime has
+   * always withheld `observation` on this rule and shown `evidence` regardless, which meant a lab
+   * could ask "where is the speed greatest?" while the measured speed, the period and the finished
+   * displacement trace sat two inches below the question. 116 labs declare a predict phase and
+   * four of them hand-rolled this gate; the rest were asking questions they had already answered.
+   *
+   * `evidence` is the slot the runtime documents as "measurements, results, or other evidence used
+   * to interpret the model", so it is exactly the thing a prediction must not see. `inspector`
+   * stays put: it holds controls for exploring, not the answer.
+   */
+  const evidenceEarned = sequence.current.phase !== 'predict' || sequence.canAdvance;
   useCheckpoint({ solved, activity: activityId });
   useEffect(() => {
     if (solved) onComplete?.();
@@ -215,13 +228,13 @@ export function AuthoredActivityRuntime({
               </section>
             </Activity.Dock>
           ) : null}
-          {renderedEvidence || renderedInspector ? (
+          {(renderedEvidence && evidenceEarned) || renderedInspector ? (
             <Activity.Inspector
               label="Explore evidence"
               defaultOpen={inspectorLayout === 'side'}
               responsive={false}
             >
-              {renderedEvidence ? (
+              {renderedEvidence && evidenceEarned ? (
                 <section className="lab-authored-evidence" aria-label="Evidence">
                   {renderedEvidence}
                 </section>
@@ -230,7 +243,7 @@ export function AuthoredActivityRuntime({
             </Activity.Inspector>
           ) : null}
         </Activity.Workspace>
-        {renderedObservation && observationUnlocked ? (
+        {renderedObservation && evidenceEarned ? (
           <Activity.Feedback>
             <span>Observe</span>
             <div>{renderedObservation}</div>

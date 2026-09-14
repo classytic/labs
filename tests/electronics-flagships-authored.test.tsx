@@ -76,8 +76,12 @@ describe('electronics flagship authored convergence', () => {
       expect(result.container.querySelector('.lab-frame')).toBeNull();
     });
 
+  // The readout lives in the evidence slot, which a prediction no longer sees, so the wording is
+  // checked once the learner has earned it. In an intrinsic lattice neither carrier is a majority:
+  // heat makes pairs, so calling either one "majority" would teach the doped case by accident.
   it('labels intrinsic carriers without calling either one a majority', () => {
     const result = render(<SiliconLatticeLab mode="intrinsic" />);
+    fireEvent.click(result.getByRole('radio', { name: 'a mobile electron: n-type' }));
     expect(result.container.textContent).toMatch(/intrinsic carriers/i);
     expect(result.container.textContent).not.toContain('majority carriers');
   });
@@ -91,6 +95,9 @@ describe('electronics flagship authored convergence', () => {
 
   it('keeps fixed ions inside the PN depletion region and exposes authored initial bias', () => {
     const result = render(<PnJunctionLab bias={0.8} showCarriers={false} />);
+    // The bias readout is evidence, and evidence is withheld while the prediction about bias is
+    // still open, which is the whole point of asking it.
+    fireEvent.click(result.getByRole('radio', { name: 'forward bias' }));
     const depletion = result.getByTestId('depletion-region');
     const depletionLeft = Number(depletion.getAttribute('x'));
     const depletionRight = depletionLeft + Number(depletion.getAttribute('width'));
