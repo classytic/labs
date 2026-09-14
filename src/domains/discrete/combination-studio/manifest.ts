@@ -16,6 +16,8 @@ export default defineLab({
       categories: z
         .array(
           z.object({
+            title: z.string().optional(),
+            prompt: z.string().optional(),
             id: z.string().trim().min(1).max(30),
             label: z.string().trim().min(1).max(40),
             slot: z.enum(['top', 'bottom', 'hat', 'hold', 'none']).optional(),

@@ -7,7 +7,8 @@ export default defineLab({
   group: 'Chemistry',
   title: 'Reaction lab',
   description: 'Atoms collide and bond, A + B → A–B, with a temperature/kinetics knob.',
-  schema: z.object({ a: z.string().optional(), b: z.string().optional(), title: z.string().optional() }),
+  schema: z.object({
+    prompt: z.string().optional(), a: z.string().optional(), b: z.string().optional(), title: z.string().optional() }),
   experience: {
     objectives: [
       'Distinguish particle collision from successful bond-forming collision',

@@ -11,6 +11,7 @@ export default defineLab({
   description:
     'Trace first-order initial-value problems through a slope field and compare guarded Euler and RK4 integration.',
   schema: z.object({
+    prompt: z.string().optional(),
     equation: calculusExpressionSchema.optional(),
     xRange: calculusRangeSchema.optional(),
     yRange: calculusRangeSchema.optional(),

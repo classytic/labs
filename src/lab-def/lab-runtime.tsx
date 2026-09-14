@@ -141,6 +141,14 @@ export function LabRuntime({ loader, attributes }: LabRuntimeProps): ReactNode {
    * lab learns that the surrounding lesson has already introduced it. Importing a lab
    * component directly (gallery, stage-preview, authoring) bypasses this and keeps the
    * full self-introducing heading, which is correct: there, nothing else names it.
+   *
+   * The authored title/prompt ride the same provider rather than relying on the lab to
+   * thread them: most labs never declared the props, so a lesson could not rename them.
+   * They are still passed to the component too, for the labs that do take them.
    */
-  return createElement(LabEmbedProvider, null, createElement(state.Comp, attributes));
+  return createElement(
+    LabEmbedProvider,
+    { title: attributes.title, prompt: attributes.prompt },
+    createElement(state.Comp, attributes),
+  );
 }

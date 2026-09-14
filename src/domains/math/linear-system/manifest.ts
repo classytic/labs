@@ -10,6 +10,8 @@ export default defineLab({
   description:
     'Two clue lines on a grid, drag to the crossing point that obeys both. The advanced "find x and y" lab.',
   schema: z.object({
+    title: z.string().optional(),
+    prompt: z.string().optional(),
     m1: z.number().default(1),
     b1: z.number().default(1),
     m2: z.number().default(-1),

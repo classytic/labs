@@ -14,6 +14,8 @@ export default defineLab({
   title: 'Projectile lab',
   description: 'Interactive projectile motion, tune angle & speed, hit a target.',
   schema: z.object({
+    title: z.string().optional(),
+    prompt: z.string().optional(),
     targetMeters: z.number().min(1).max(500).optional().describe('Distance to the target, in metres'),
     g: z.number().min(1).max(30).optional().describe('Gravitational acceleration (m/s²) — 9.8 on Earth'),
   }),

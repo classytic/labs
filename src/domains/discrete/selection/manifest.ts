@@ -15,6 +15,8 @@ export default defineLab({
       groups: z
         .array(
           z.object({
+            title: z.string().optional(),
+            prompt: z.string().optional(),
             label: z.string().trim().min(1).max(30),
             count: z.number().int().min(1).max(40),
             color: z.string().max(40).optional(),

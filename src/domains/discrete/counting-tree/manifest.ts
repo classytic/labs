@@ -15,6 +15,8 @@ export default defineLab({
       stages: z
         .array(
           z.object({
+            title: z.string().optional(),
+            prompt: z.string().optional(),
             label: z.string().trim().min(1).max(60).optional(),
             branches: z
               .array(

@@ -11,6 +11,7 @@ export default defineLab({
   description:
     'Explore author-defined two-variable dynamical systems through a vector field and guarded Euler/RK4 trajectories.',
   schema: z.object({
+    prompt: z.string().optional(),
     dx: calculusExpressionSchema.optional(),
     dy: calculusExpressionSchema.optional(),
     xRange: calculusRangeSchema.optional(),

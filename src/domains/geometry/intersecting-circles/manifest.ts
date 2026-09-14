@@ -7,7 +7,8 @@ export default defineLab({
   group: 'Geometry',
   title: 'Intersecting circles',
   description: 'Common chord of two circles, drag the centres, chord length by Pythagoras.',
-  schema: z.object({ r1: z.number().optional(), r2: z.number().optional(), title: z.string().optional() }),
+  schema: z.object({
+    prompt: z.string().optional(), r1: z.number().optional(), r2: z.number().optional(), title: z.string().optional() }),
   experience: {
     objectives: [
       'Predict whether two circles intersect from radii and centre distance',

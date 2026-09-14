@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useLabEmbed } from './embed.js';
+import { useAuthoredHeadline, useLabEmbed } from './embed.js';
 import {
   createContext,
   useContext,
@@ -169,19 +169,28 @@ function Heading({
    * accessible name and the document outline would otherwise gain a nameless block.
    */
   const embedded = useLabEmbed();
+  /**
+   * A lesson's own words beat the preset's general ones. The preset writes its heading once
+   * for every use; the lesson knows which use this is, and in which language. Note the title
+   * still matters when embedded even though it is not painted: it is this region's
+   * accessible name, so a Bangla lesson needs it in Bangla for a screen reader.
+   */
+  const lesson = useAuthoredHeadline();
+  const shownTitle = lesson.title ?? title;
+  const shownDescription = lesson.prompt ?? description;
   if (embedded) {
     return (
       <div className="lab-activity-heading" data-embedded="true">
-        <h3 className="lab-sr-only">{title}</h3>
-        {description && <div className="lab-activity-description">{description}</div>}
+        <h3 className="lab-sr-only">{shownTitle}</h3>
+        {shownDescription && <div className="lab-activity-description">{shownDescription}</div>}
       </div>
     );
   }
   return (
     <div className="lab-activity-heading">
       {eyebrow && <span className="lab-activity-eyebrow">{eyebrow}</span>}
-      <h3>{title}</h3>
-      {description && <div className="lab-activity-description">{description}</div>}
+      <h3>{shownTitle}</h3>
+      {shownDescription && <div className="lab-activity-description">{shownDescription}</div>}
     </div>
   );
 }

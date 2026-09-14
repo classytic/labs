@@ -40,6 +40,7 @@ export default defineLab({
   description:
     'Place parts on a canvas, drag to arrange, click pins to wire. Any topology (Kirchhoff), solved live. Learners tap switches to operate it.',
   schema: z.object({
+    prompt: z.string().optional(),
     doc: cDoc.optional(),
     title: z.string().trim().min(1).optional(),
     flow: z.boolean().optional(),

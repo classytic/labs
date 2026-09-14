@@ -7,7 +7,8 @@ export default defineLab({
   group: 'Chemistry',
   title: 'Bohr atom',
   description: 'Animated shell model, drag Z to walk the first 20 elements; shells fill 2, 8, 8.',
-  schema: z.object({ protons: z.number().optional(), title: z.string().optional() }),
+  schema: z.object({
+    prompt: z.string().optional(), protons: z.number().optional(), title: z.string().optional() }),
   experience: {
     objectives: [
       'Relate atomic number to proton and electron count in a neutral atom',

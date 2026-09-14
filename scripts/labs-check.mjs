@@ -36,6 +36,30 @@ const HEAVY_PACKAGES = [
 // checked to ensure they never pull the renderer tier back into default bundles.
 const HEAVY_OK = /[/\\](?:domains[/\\][^/\\]+[/\\][^/\\]+[/\\](?:runtime|core)(?:\.tsx?$|[/\\])|three[/\\])/;
 
+/**
+ * The TOP LEVEL of a manifest's `schema: z.object({ ... })`, with every nested region removed,
+ * so a key can be found without a line ever mattering: some manifests put the whole schema on
+ * one line, and others break the call as `schema: z\n  .object({`. Returns null when the shape
+ * is something this cannot read, which is a reason to stay quiet rather than to fail a build.
+ */
+function schemaBody(src) {
+  const at = src.indexOf('schema:');
+  if (at < 0) return null;
+  const open = /\bz\s*\.\s*object\s*\(\s*\{/.exec(src.slice(at));
+  if (!open) return null;
+  let depth = 1;
+  let flat = '';
+  for (let i = at + open.index + open[0].length; i < src.length; i += 1) {
+    const c = src[i];
+    if (c === '{' || c === '(' || c === '[') depth += 1;
+    else if (c === '}' || c === ')' || c === ']') {
+      depth -= 1;
+      if (depth === 0) return flat;
+    } else if (depth === 1) flat += c;
+  }
+  return null;
+}
+
 function walkSrc(dir, out = []) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     const p = new URL(`${dir.pathname}${e.name}${e.isDirectory() ? '/' : ''}`, dir);
@@ -240,6 +264,29 @@ for (const r of rows) {
     existsSync(new URL('runtime.ts', base)) ||
     existsSync(new URL('runtime/index.tsx', base)) ||
     existsSync(new URL('runtime/index.ts', base));
+  /**
+   * A lesson must be able to name the lab it uses. The heading a preset writes is the general
+   * case; the lesson knows the specific one, and in a Bangla course it is the only way the
+   * heading is in Bangla at all. `LabRuntime` delivers the value through the embed context, so
+   * no lab has to thread the prop, but the schema is still the authoring contract: an attribute
+   * it does not declare is rejected before it reaches a page.
+   */
+  const manifestPath = new URL('manifest.ts', base);
+  if (existsSync(manifestPath)) {
+    const body = schemaBody(readFileSync(manifestPath, 'utf8'));
+    if (body !== null && !/\.\.\.\s*commonLabProps/.test(body)) {
+      for (const prop of ['title', 'prompt']) {
+        if (!new RegExp(`\\b${prop}\\s*:`).test(body)) {
+          console.error(
+            `✗ ${r.domain}/${r.id}: schema does not declare '${prop}', so a lesson cannot name this lab. ` +
+              `Add \`${prop}: z.string().optional()\` or spread \`...commonLabProps\`.`,
+          );
+          failed++;
+        }
+      }
+    }
+  }
+
   if (!hasRuntime) {
     console.error(`✗ ${r.domain}/${r.id} has no runtime (runtime.tsx or runtime/index.tsx)`);
     failed++;

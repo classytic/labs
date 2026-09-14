@@ -11,6 +11,7 @@ export default defineLab({
   description:
     'Use successive tangent intercepts to solve f(x)=0; see convergence, flat derivatives, cycles, and divergence.',
   schema: z.object({
+    prompt: z.string().optional(),
     equation: calculusExpressionSchema.optional(),
     xRange: calculusRangeSchema.optional(),
     startX: z.number().finite().optional(),

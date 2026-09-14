@@ -11,6 +11,7 @@ export default defineLab({
   description:
     'Build a local polynomial from exact symbolic derivatives and inspect approximation error across the graph.',
   schema: z.object({
+    prompt: z.string().optional(),
     equation: calculusExpressionSchema.optional(),
     xRange: calculusRangeSchema.optional(),
     center: z.number().finite().optional(),

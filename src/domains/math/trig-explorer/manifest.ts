@@ -8,6 +8,8 @@ export default defineLab({
   title: 'Trig explorer',
   description: 'Unit circle ↔ wave, drag the angle; sin & cos trace out. (tan/cot: use Graph)',
   schema: z.object({
+    title: z.string().optional(),
+    prompt: z.string().optional(),
     functions: z.array(z.enum(['sin', 'cos'])).optional(),
     startDeg: z.number().optional(),
   }),

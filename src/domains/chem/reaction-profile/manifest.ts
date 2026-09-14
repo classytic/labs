@@ -8,6 +8,7 @@ export default defineLab({
   title: 'Reaction profile',
   description: 'Energy diagram, activation energy, ΔH (exo/endothermic), catalyst toggle.',
   schema: z.object({
+    prompt: z.string().optional(),
     deltaH: z.number().min(-80).max(80).optional(),
     activationEnergy: z.number().min(5).max(120).optional(),
     catalyst: z.boolean().optional(),

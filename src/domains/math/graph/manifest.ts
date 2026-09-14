@@ -11,6 +11,7 @@ export default defineLab({
   title: 'Graph (equation)',
   description: 'Plot equations you type, y = a·sin(b·x), x^2, … with learner sliders.',
   schema: z.object({
+    prompt: z.string().optional(),
     equations: z.array(equationSchema).optional(),
     params: z.array(paramSchema).optional(),
     xRange: z.tuple([z.number(), z.number()]).optional(),

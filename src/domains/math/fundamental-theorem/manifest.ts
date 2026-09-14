@@ -11,6 +11,7 @@ export default defineLab({
   description:
     'Link signed area A(x) to its rate of change: move one probe across synchronized f and accumulation graphs.',
   schema: z.object({
+    prompt: z.string().optional(),
     equation: calculusExpressionSchema.optional(),
     xRange: calculusRangeSchema.optional(),
     anchor: z.number().finite().optional(),

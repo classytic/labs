@@ -10,6 +10,7 @@ export default defineLab({
   title: 'Derivation (steps)',
   description: 'A step-by-step equation derivation in LaTeX, revealed one line at a time.',
   schema: z.object({
+    prompt: z.string().optional(),
     steps: z.array(derivationStepSchema).optional(),
     title: z.string().optional(),
     showAll: z.boolean().optional().describe('reveal every line at once, for print or review'),

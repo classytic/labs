@@ -7,7 +7,8 @@ export default defineLab({
   group: 'Chemistry',
   title: 'Battery (galvanic cell)',
   description: 'Trace electrons through the load and ions through the salt bridge; connect half-reactions, EMF, and ideal load current.',
-  schema: z.object({ emf: z.number().optional(), title: z.string().optional() }),
+  schema: z.object({
+    prompt: z.string().optional(), emf: z.number().optional(), title: z.string().optional() }),
   experience: {
     objectives: [
       'Identify oxidation at the anode and reduction at the cathode',

@@ -21,6 +21,8 @@ export default defineLab({
       derivation: z
         .array(
           z.object({
+            title: z.string().optional(),
+            prompt: z.string().optional(),
             tex: z.string().trim().min(1).max(240),
             note: z.string().trim().min(1).max(200).optional(),
           }),

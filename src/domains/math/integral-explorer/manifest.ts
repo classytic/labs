@@ -9,6 +9,7 @@ export default defineLab({
   title: 'Integral explorer',
   description: 'Area under a curve via Riemann rectangles, drag endpoints, add n, converge.',
   schema: z.object({
+    prompt: z.string().optional(),
     equation: calculusExpressionSchema.optional(),
     xRange: calculusRangeSchema.optional(),
     a: z.number().finite().optional(),

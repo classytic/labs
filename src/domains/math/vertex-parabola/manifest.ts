@@ -8,7 +8,9 @@ export default defineLab({
   group: 'Math',
   title: 'Parabola (drag the vertex)',
   description: 'Drag the vertex of y = a(x−h)² + k; the curve + equation update live.',
-  schema: z.object({ a: z.number().default(1) }),
+  schema: z.object({
+    title: z.string().optional(),
+    prompt: z.string().optional(), a: z.number().default(1) }),
   experience: {
     objectives: [
       'Connect vertex-form parameters to a parabola’s position and opening',

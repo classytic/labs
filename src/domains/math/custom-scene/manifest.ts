@@ -12,6 +12,8 @@ export default defineLab({
   description:
     'Invent a new lab skin from a form (an emoji or a shape), no code. Place it ABOVE a lab and pick the new scene by name in that lab.',
   schema: z.object({
+    title: z.string().optional(),
+    prompt: z.string().optional(),
     name: z.string().default('custom'),
     label: z.string().optional(),
     variant: z.enum(['count', 'icons', 'shape']).default('count'),

@@ -9,6 +9,7 @@ export default defineLab({
   title: 'Derivative explorer',
   description: 'Drag a point; the secant becomes the exact tangent. Shows f′(x).',
   schema: z.object({
+    prompt: z.string().optional(),
     equation: calculusExpressionSchema.optional(),
     xRange: calculusRangeSchema.optional(),
     // startX is snapped into the AUTHORED xRange (valueInRange), not a fixed slider range.

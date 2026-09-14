@@ -9,6 +9,7 @@ export default defineLab({
   title: 'Gradient descent',
   description: 'Walk downhill on a loss surface f(x,y) using exact ∂f/∂x, ∂f/∂y, the calculus behind ML.',
   schema: z.object({
+    prompt: z.string().optional(),
     equation: calculusExpressionSchema.optional(),
     range: calculusRangeSchema.optional(),
     // start is snapped into the AUTHORED range (valueInRange); the only slider is learningRate.

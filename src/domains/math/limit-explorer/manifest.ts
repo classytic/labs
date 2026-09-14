@@ -9,6 +9,7 @@ export default defineLab({
   title: 'Limit explorer',
   description: 'Approach x → c from both sides; see the limit even where f(c) is a hole.',
   schema: z.object({
+    prompt: z.string().optional(),
     equation: calculusExpressionSchema.optional(),
     xRange: calculusRangeSchema.optional(),
     c: z.number().finite().optional(),

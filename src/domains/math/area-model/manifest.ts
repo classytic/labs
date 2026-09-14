@@ -9,6 +9,8 @@ export default defineLab({
   title: 'Area model (algebra tiles)',
   description: '(x+a)(x+b) as a partitioned rectangle, EXPAND (drag x) or FACTOR (find a, b).',
   schema: z.object({
+    title: z.string().optional(),
+    prompt: z.string().optional(),
     a: z.number().default(3),
     b: z.number().default(2),
     mode: z.enum(['expand', 'factor']).default('expand'),
