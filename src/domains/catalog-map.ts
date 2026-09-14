@@ -2356,6 +2356,22 @@ export const generatedManifestCatalog: LabManifestCatalogEntry[] = [
   },
   },
   {
+    key: 'bounds-window',
+    label: 'Bounds through a division',
+    description: 'Two rounded measurements drawn as their own windows, one over the other as a fraction. Drag each marker and the quotient recomputes: right on top makes it grow, right underneath makes it shrink. The greatest value is upper over LOWER, which is the step students reliably invert after learning bounds on an area.',
+    category: 'interactive',
+    void: true,
+    group: 'Math',
+    domain: 'math',
+    taxonomy: {
+    grades: ['9', '10'],
+    outcomes: ['math', 'limits-of-accuracy', 'bounds'],
+    durationMinutes: 8,
+    interaction: 'explorer',
+    authorability: 'simple',
+  },
+  },
+  {
     key: 'broken-tree',
     tag: 'BrokenTreeLab',
     label: 'The broken tree (Pythagoras in a word problem)',

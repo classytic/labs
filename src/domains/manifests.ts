@@ -166,6 +166,7 @@ import areaModel from './math/area-model/manifest.js';
 import areaRearrange from './math/area-rearrange/manifest.js';
 import balanceAlgebra from './math/balance-algebra/manifest.js';
 import bearings from './math/bearings/manifest.js';
+import boundsWindow from './math/bounds-window/manifest.js';
 import brokenTree from './math/broken-tree/manifest.js';
 import circleGeometry from './math/circle-geometry/manifest.js';
 import complexPlane from './math/complex-plane/manifest.js';
@@ -358,13 +359,14 @@ export const labManifests: readonly LabManifest[] = [
   agreement, articleLens, cloze, dictation, errorCorrect, listening, preposition, reading,
   sentenceBuilder, transform, wordMatch,
   // math
-  areaModel, areaRearrange, balanceAlgebra, bearings, brokenTree, circleGeometry, complexPlane, conic,
-  customScene, derivation, derivativeExplorer, differentialEquation, divisionWorkbench, domainRange, expressionOrder, fractionBar,
-  functionMachine, fundamentalTheorem, geometryFoundations, geometryTransform, gradientDescent, graph, growingPattern, harmonicForm,
-  identityProof, integralExplorer, interactiveProblem, iteration, limitExplorer, linearModel, linearSystem, linesInSpace,
-  measurement, mysteryBucket, newtonMethod, numberLine, numberStructure, obliqueTriangle, partialFractions, percentBar,
-  phasePortrait, polynomialSolver, radianWrap, rateMachine, ratioShare, receiptTotals, sequencePredict, slideRule,
-  solidNet, straightLine, systemSolve, taylorSeries, triangleTrig, trigExplorer, trigSigns, vertexParabola,
+  areaModel, areaRearrange, balanceAlgebra, bearings, boundsWindow, brokenTree, circleGeometry, complexPlane,
+  conic, customScene, derivation, derivativeExplorer, differentialEquation, divisionWorkbench, domainRange, expressionOrder,
+  fractionBar, functionMachine, fundamentalTheorem, geometryFoundations, geometryTransform, gradientDescent, graph, growingPattern,
+  harmonicForm, identityProof, integralExplorer, interactiveProblem, iteration, limitExplorer, linearModel, linearSystem,
+  linesInSpace, measurement, mysteryBucket, newtonMethod, numberLine, numberStructure, obliqueTriangle, partialFractions,
+  percentBar, phasePortrait, polynomialSolver, radianWrap, rateMachine, ratioShare, receiptTotals, sequencePredict,
+  slideRule, solidNet, straightLine, systemSolve, taylorSeries, triangleTrig, trigExplorer, trigSigns,
+  vertexParabola,
   // ml
   classifierThreshold, decisionBoundary, embeddingSpace, kmeans, knn, nextToken, regression,
   // networking

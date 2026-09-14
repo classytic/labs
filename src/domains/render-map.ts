@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 
 export type LabRuntimeLoader = () => Promise<{ default: (attrs: any) => ReactNode }>;
 
-/** 283 labs, keyed by lab id. */
+/** 284 labs, keyed by lab id. */
 export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'apportion': () => import('./accounting/apportion/runtime.js'),
   'break-even': () => import('./accounting/break-even/runtime.js'),
@@ -149,6 +149,7 @@ export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'area-rearrange': () => import('./math/area-rearrange/runtime.js'),
   'balance-algebra': () => import('./math/balance-algebra/runtime.js'),
   'bearings': () => import('./math/bearings/runtime.js'),
+  'bounds-window': () => import('./math/bounds-window/runtime.js'),
   'broken-tree': () => import('./math/broken-tree/runtime.js'),
   'circle-geometry': () => import('./math/circle-geometry/runtime.js'),
   'complex-plane': () => import('./math/complex-plane/runtime.js'),
@@ -436,6 +437,7 @@ export const labTags: Record<string, string> = {
   'area-rearrange': 'AreaRearrange',
   'balance-algebra': 'BalanceAlgebra',
   'bearings': 'Bearings',
+  'bounds-window': 'BoundsWindow',
   'broken-tree': 'BrokenTreeLab',
   'circle-geometry': 'CircleLab',
   'complex-plane': 'ComplexPlane',
