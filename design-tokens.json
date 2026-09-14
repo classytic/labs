@@ -337,6 +337,14 @@
           "value": 24,
           "unit": "px"
         },
+        "$description": "The one editorial size. Everything above is UI: a scale that stops at 24px spans 2.4x and\n     reads as a control panel with labels, however well spaced, because nothing on the page is\n     allowed to behave like a heading. This takes the range to 3.2x and is for ONE thing per lab,\n     the title a learner arrives at. Set it with --lab-lh-title and --lab-ls-tight: at this size\n     default leading is too loose and default tracking too wide."
+      },
+      "display": {
+        "$type": "dimension",
+        "$value": {
+          "value": 32,
+          "unit": "px"
+        },
         "$description": "── type roles: weight, leading, tracking ───────────────────────────────────\n     Four weights, four leadings, two trackings. A size on its own does not make\n     a hierarchy; the pairing does. The sheets carried ten weights (400 to 850)\n     and seventeen line-heights, which read as no hierarchy at all."
       }
     },
@@ -399,7 +407,7 @@
           "value": -0.015,
           "unit": "em"
         },
-        "$description": "large numerals only"
+        "$description": "large numerals and display type"
       }
     }
   },
@@ -414,7 +422,7 @@
     "compact": {
       "$type": "dimension",
       "$value": {
-        "value": 36,
+        "value": 44,
         "unit": "px"
       },
       "$description": "── state tints ─────────────────────────────────────────────────────────────\n     Every surface that reacts uses the SAME four steps, so \"picked\" looks like\n     picked everywhere and \"right\" is one green, not twenty. The mix is toward\n     the surface, not transparent, so the result is identical on a card and on\n     the sunken dock. Ink variants keep 4.5:1 for text on those tints."

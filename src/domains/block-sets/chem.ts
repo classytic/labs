@@ -3,6 +3,7 @@ import { manifestToBlock } from '../../lab-def/to-block.js';
 import atomicOrbital from '../chem/atomic-orbital/manifest.js';
 import battery from '../chem/battery/manifest.js';
 import bohrAtom from '../chem/bohr-atom/manifest.js';
+import chemQualitativeAnalysis from '../chem/chem-qualitative-analysis/manifest.js';
 import crystalLattice from '../chem/crystal-lattice/manifest.js';
 import dilution from '../chem/dilution/manifest.js';
 import electrochem from '../chem/electrochem/manifest.js';
@@ -19,4 +20,4 @@ import stereochemistry from '../chem/stereochemistry/manifest.js';
 import stoichiometry from '../chem/stoichiometry/manifest.js';
 import titration from '../chem/titration/manifest.js';
 
-export const blocks = [atomicOrbital, battery, bohrAtom, crystalLattice, dilution, electrochem, gasBox, kinetics, leChatelier, molecularGeometry, orbitalOverlap, periodicTrends, reactionLab, reactionProfile, solutionBox, stereochemistry, stoichiometry, titration].map(manifestToBlock);
+export const blocks = [atomicOrbital, battery, bohrAtom, chemQualitativeAnalysis, crystalLattice, dilution, electrochem, gasBox, kinetics, leChatelier, molecularGeometry, orbitalOverlap, periodicTrends, reactionLab, reactionProfile, solutionBox, stereochemistry, stoichiometry, titration].map(manifestToBlock);

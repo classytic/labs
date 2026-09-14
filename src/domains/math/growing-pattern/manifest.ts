@@ -12,6 +12,8 @@ export default defineLab({
     a: z.number().default(2),
     b: z.number().default(3),
     steps: z.number().default(4),
+    title: z.string().optional(),
+    prompt: z.string().optional(),
     controlId: z.string().optional(),
   }),
   experience: {

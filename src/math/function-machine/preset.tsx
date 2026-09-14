@@ -14,6 +14,7 @@ import { Activity } from '../../kit/activity.js';
 import { useCheckpoint } from '../../kit/pedagogy.js';
 
 export interface FunctionMachineProps {
+  title?: string;
   prompt?: string;
   inputs: (string | number)[];
   outputs: (string | number)[];
@@ -32,6 +33,7 @@ function rect(x0: number, y0: number, x1: number, y1: number): Vec2[] {
 }
 
 export function FunctionMachineLab({
+  title = 'Discover the rule',
   prompt = 'Which rule produces these outputs?',
   inputs,
   outputs,
@@ -132,7 +134,7 @@ export function FunctionMachineLab({
   return (
     <Activity.Root className="math-function-machine-activity" focusLayout="compact">
       <Activity.Header>
-        <Activity.Heading eyebrow="Functions" title="Discover the rule" description={prompt} />
+        <Activity.Heading eyebrow="Functions" title={title} description={prompt} />
         <Activity.FocusButton />
       </Activity.Header>
       <Activity.Status>

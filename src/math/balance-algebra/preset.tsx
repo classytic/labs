@@ -106,6 +106,8 @@ export interface BalanceAlgebraProps {
   addend?: number;
   rhs?: number;
   answer?: number;
+  title?: string;
+  prompt?: string;
   controlId?: string;
   height?: number;
 }
@@ -115,6 +117,8 @@ export function BalanceAlgebraLab({
   addend = 1,
   rhs = 7,
   answer = 3,
+  title = 'Balance-scale algebra',
+  prompt,
   controlId,
   height = 280,
 }: BalanceAlgebraProps): ReactNode {
@@ -186,8 +190,8 @@ export function BalanceAlgebraLab({
       <Activity.Header>
         <Activity.Heading
           eyebrow="Linear equations"
-          title="Balance-scale algebra"
-          description={`Adjust x until both sides of ${eqLabel} balance.`}
+          title={title}
+          description={prompt ?? `Adjust x until both sides of ${eqLabel} balance.`}
         />
         <Activity.FocusButton />
       </Activity.Header>

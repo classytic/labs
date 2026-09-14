@@ -24,6 +24,8 @@ export interface ExpressionOrderMessages {
   reset: string;
   correct: string;
   tryAgain: string;
+  /** Fallback only. A round that names its own distractors says something better than this. */
+  tryAgainWhy: string;
   start: string;
   result: string;
 }
@@ -40,7 +42,9 @@ const DEFAULT_MESSAGES: ExpressionOrderMessages = {
   eyebrow: 'Order of operations', title: 'Make every operation wait its turn',
   description: 'Predict the first move, then reduce one valid step at a time.', choose: 'Choose the first operation',
   check: 'Check', nextStep: 'Show next step', nextPuzzle: 'Next puzzle', previous: 'Previous puzzle', reset: 'Start again',
-  correct: 'Good first move', tryAgain: 'That operation must wait', start: 'Start', result: 'Result',
+  correct: 'Good first move', tryAgain: 'That operation must wait',
+  tryAgainWhy: 'Check which operations share a level, and which brackets the sign sits inside.',
+  start: 'Start', result: 'Result',
 };
 
 export function ExpressionOrderLab({ rounds = DEFAULT_EXPRESSION_ORDER_ROUNDS, startAt = 0, title, prompt, messages }: ExpressionOrderProps = {}): ReactNode {
@@ -74,7 +78,7 @@ export function ExpressionOrderLab({ rounds = DEFAULT_EXPRESSION_ORDER_ROUNDS, s
         </ol>
       </div>
     </Activity.Canvas></Activity.Workspace>
-    {checked ? <Activity.Feedback><span>{correct ? copy.correct : copy.tryAgain}</span><p>{correct ? round.steps[0]?.rule : 'Compare operations at the same precedence level from left to right.'}</p></Activity.Feedback> : null}
+    {checked ? <Activity.Feedback><span>{correct ? copy.correct : copy.tryAgain}</span><p>{round.choices.find((choice) => choice.value === selected)?.feedback ?? (correct ? round.steps[0]?.rule : copy.tryAgainWhy)}</p></Activity.Feedback> : null}
     <Activity.Transport>
       <IconButton label={copy.reset} onClick={reset}><RotateCcw aria-hidden="true" /></IconButton>
       <IconButton label={copy.previous} onClick={() => changeRound(Math.max(0, index - 1))} disabled={index === 0}><ChevronLeft aria-hidden="true" /></IconButton>

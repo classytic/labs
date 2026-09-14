@@ -60,11 +60,29 @@ export function AuthoredResponse({
     setResult(correct);
     onRespond?.({ questionId: question.id, response: value, correct });
   };
+  /**
+   * What the learner is told, and the one place a lab can beat an explainer.
+   *
+   * A generic "not yet" is the same sentence whichever wrong answer was picked, so it carries no
+   * information: the learner already knew they were wrong. A distractor, though, usually encodes a
+   * specific piece of thinking, and naming that thinking is the whole value. `AuthoredChoice` has
+   * carried a `feedback` field the whole time and nothing read it, so every author who wrote one
+   * had it silently dropped.
+   *
+   * The picked choice's own feedback wins when there is one, for a right answer as much as a wrong
+   * one: an author who writes "Yes, and notice it is the DIFFERENCE that matters" means it to be
+   * read. `explain` and `tryAgain` stay as the question-level fallback.
+   */
+  const pickedFeedback =
+    (!question.kind || question.kind === 'choice') && typeof value === 'string'
+      ? question.choices.find((choice) => choice.value === value)?.feedback
+      : undefined;
   const feedback =
     result === true
-      ? (question.explain ?? 'Correct.')
+      ? (pickedFeedback ?? question.explain ?? 'Correct.')
       : result === false
-        ? (('tryAgain' in question ? question.tryAgain : undefined) ??
+        ? (pickedFeedback ??
+          ('tryAgain' in question ? question.tryAgain : undefined) ??
           'Not yet. Revisit the evidence and try again.')
         : result === null
           ? 'Response saved. Compare it with the criteria.'

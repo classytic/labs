@@ -48,6 +48,10 @@
   --lab-t-lg: 18px;
   --lab-t-title: 20px;
   --lab-t-hero: 24px;
+  /* The one editorial size, for ONE thing per lab: the title. A scale stopping at 24px spans 2.4x
+     and reads as a control panel, because nothing is allowed to behave like a heading. Pair it
+     with --lab-lh-title and --lab-ls-tight. */
+  --lab-t-display: 32px;
 
   /* ── type roles: weight, leading, tracking ───────────────────────────────────
      Four weights, four leadings, two trackings. A size on its own does not make
@@ -62,15 +66,15 @@
   --lab-lh-ui: 1.45; /* everything a learner acts on */
   --lab-lh-prose: 1.55; /* explanations, observe text */
   --lab-ls-caps: 0.06em; /* small uppercase labels only */
-  --lab-ls-tight: -0.015em; /* large numerals only */
+  --lab-ls-tight: -0.015em; /* large numerals and display type */
 
   /* ── targets ─────────────────────────────────────────────────────────────────
      44px for anything the learner commits with (answers, primary actions,
-     transport, sliders' hit area). 36px for dense secondary controls inside a
-     dock (chips, segments, icon buttons), still above the WCAG 2.2 AA minimum
-     of 24px and spaced at least 8px apart. */
+     transport, sliders' hit area). Compact secondary controls use the same 44px
+     hit target; their visual glyph may remain smaller, but the tappable area does
+     not require precision and adjacent controls stay at least 8px apart. */
   --lab-target: 44px;
-  --lab-target-compact: 36px;
+  --lab-target-compact: 44px;
 
   /* ── state tints ─────────────────────────────────────────────────────────────
      Every surface that reacts uses the SAME four steps, so "picked" looks like
@@ -148,6 +152,11 @@
    has to (SVG geometry with no box to outline); it never restates them. */
 
 /* Focus: one ring for every keyboard focus under a lab root. */
+:is(.lab-activity, .lab-scene-studio) button {
+  min-block-size: var(--lab-target);
+  min-inline-size: var(--lab-target);
+}
+
 :is(.lab-activity, .lab-scene-studio)
   :is(
     button,
@@ -2254,7 +2263,6 @@
   margin-inline: auto;
 }
 .lang-sentence,
-.lang-choices,
 .lang-listen-play,
 .lang-dictation-foot,
 .lang-bank,
@@ -2494,7 +2502,6 @@
   .language-activity-support {
     padding-inline: var(--lab-sp-12);
   }
-  .language-activity .lang-choices,
   .language-activity .lang-match {
     gap: var(--lab-sp-8);
   }
@@ -2709,11 +2716,6 @@
 .lang-link {
   color: var(--lab-good);
   font-weight: var(--lab-w-bold);
-}
-.lang-choices {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--lab-sp-10);
 }
 .lang-why {
   font-size: var(--lab-t-body);
@@ -3113,18 +3115,23 @@
   letter-spacing: var(--lab-ls-caps);
   text-transform: uppercase;
 }
+/* The one thing allowed to be a heading. Capped at 20px it matched the step lead and the readout
+   values, so a learner met no hierarchy at all. Scales with the column: phone to full width. */
 .lab-activity-heading h3 {
   margin: 0;
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-size: clamp(var(--lab-t-title), 3.2vw, var(--lab-t-display));
+  font-weight: var(--lab-w-bold);
   line-height: var(--lab-lh-title);
+  letter-spacing: var(--lab-ls-tight);
   text-wrap: balance;
 }
+/* Read, not scanned, so reading size on reading leading. It was 14px: a control-label size. */
 .lab-activity-description {
-  margin: var(--lab-sp-4) 0 0;
+  margin: var(--lab-sp-6) 0 0;
   max-width: 42rem;
   color: var(--muted-foreground, var(--stage-muted));
-  font-size: var(--lab-t-sm);
-  line-height: var(--lab-lh-ui);
+  font-size: var(--lab-t-body);
+  line-height: var(--lab-lh-prose);
   text-wrap: pretty;
 }
 .lab-activity-focus {

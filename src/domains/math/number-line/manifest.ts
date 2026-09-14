@@ -13,6 +13,8 @@ export default defineLab({
     max: z.number().default(8),
     start: z.number().default(0),
     target: z.number().optional(),
+    title: z.string().optional(),
+    prompt: z.string().optional(),
   }),
   experience: {
     objectives: [

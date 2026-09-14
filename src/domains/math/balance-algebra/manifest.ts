@@ -13,6 +13,8 @@ export default defineLab({
     addend: z.number().default(1),
     rhs: z.number().default(7),
     answer: z.number().default(3),
+    title: z.string().optional(),
+    prompt: z.string().optional(),
     controlId: z.string().optional(),
   }),
   experience: {

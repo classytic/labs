@@ -8,9 +8,11 @@ import type { LabManifest } from '../lab-def/define-lab.js';
 
 // accounting
 import apportion from './accounting/apportion/manifest.js';
+import bankReconciliation from './accounting/bank-reconciliation/manifest.js';
 import breakEven from './accounting/break-even/manifest.js';
 import businessLesson from './accounting/business-lesson/manifest.js';
 import compoundInterest from './accounting/compound-interest/manifest.js';
+import controlAccountBuilder from './accounting/control-account-builder/manifest.js';
 import depreciation from './accounting/depreciation/manifest.js';
 import eoq from './accounting/eoq/manifest.js';
 import equationBalance from './accounting/equation-balance/manifest.js';
@@ -41,6 +43,7 @@ import sexLinkedCross from './biology/sex-linked-cross/manifest.js';
 import atomicOrbital from './chem/atomic-orbital/manifest.js';
 import battery from './chem/battery/manifest.js';
 import bohrAtom from './chem/bohr-atom/manifest.js';
+import chemQualitativeAnalysis from './chem/chem-qualitative-analysis/manifest.js';
 import crystalLattice from './chem/crystal-lattice/manifest.js';
 import dilution from './chem/dilution/manifest.js';
 import electrochem from './chem/electrochem/manifest.js';
@@ -195,8 +198,11 @@ import iteration from './math/iteration/manifest.js';
 import limitExplorer from './math/limit-explorer/manifest.js';
 import linearModel from './math/linear-model/manifest.js';
 import linearSystem from './math/linear-system/manifest.js';
+import linearisation from './math/linearisation/manifest.js';
 import linesInSpace from './math/lines-in-space/manifest.js';
+import logLawWorkbench from './math/log-law-workbench/manifest.js';
 import measurement from './math/measurement/manifest.js';
+import modulusCases from './math/modulus-cases/manifest.js';
 import mysteryBucket from './math/mystery-bucket/manifest.js';
 import newtonMethod from './math/newton-method/manifest.js';
 import numberLine from './math/number-line/manifest.js';
@@ -220,6 +226,7 @@ import taylorSeries from './math/taylor-series/manifest.js';
 import triangleTrig from './math/triangle-trig/manifest.js';
 import trigExplorer from './math/trig-explorer/manifest.js';
 import trigSigns from './math/trig-signs/manifest.js';
+import vectorGeometryTwoD from './math/vector-geometry-two-d/manifest.js';
 import vertexParabola from './math/vertex-parabola/manifest.js';
 
 // ml
@@ -284,6 +291,7 @@ import nuclearBindingEnergy from './physics/nuclear-binding-energy/manifest.js';
 import optics from './physics/optics/manifest.js';
 import orbitLab from './physics/orbit-lab/manifest.js';
 import photoelectricEffect from './physics/photoelectric-effect/manifest.js';
+import physicsPracticalStudio from './physics/physics-practical-studio/manifest.js';
 import power from './physics/power/manifest.js';
 import projectileLab from './physics/projectile-lab/manifest.js';
 import quantumGates from './physics/quantum-gates/manifest.js';
@@ -326,15 +334,15 @@ import zTable from './statistics/z-table/manifest.js';
 
 export const labManifests: readonly LabManifest[] = [
   // accounting
-  apportion, breakEven, businessLesson, compoundInterest, depreciation, eoq, equationBalance, journalPoster,
-  limitedCompany, ratioLab, reorderPoint, statementBuilder, statementSorter, warehouseAllocation,
+  apportion, bankReconciliation, breakEven, businessLesson, compoundInterest, controlAccountBuilder, depreciation, eoq,
+  equationBalance, journalPoster, limitedCompany, ratioLab, reorderPoint, statementBuilder, statementSorter, warehouseAllocation,
   // biology
   cellEnergy, cellSystem, centralDogma, enzymeRate, geneticCross, meiosisExplorer, membraneTransport, mitosisExplorer,
   photosynthesisFactors, punnettCross, respiration, sequence, sexLinkedCross,
   // chem
-  atomicOrbital, battery, bohrAtom, crystalLattice, dilution, electrochem, gasBox, kinetics,
-  leChatelier, molecularGeometry, orbitalOverlap, periodicTrends, reactionLab, reactionProfile, solutionBox, stereochemistry,
-  stoichiometry, titration,
+  atomicOrbital, battery, bohrAtom, chemQualitativeAnalysis, crystalLattice, dilution, electrochem, gasBox,
+  kinetics, leChatelier, molecularGeometry, orbitalOverlap, periodicTrends, reactionLab, reactionProfile, solutionBox,
+  stereochemistry, stoichiometry, titration,
   // circuits
   bjtInside, brownout, capacitorLeak, circuit, circuitBuilder, circuitLab, circuitScene, cmosInverter,
   cmosNand, cmosNor, conduction, diode, hallEffect, mosfetInside, pnJunction, rcCharging,
@@ -365,10 +373,10 @@ export const labManifests: readonly LabManifest[] = [
   conic, customScene, derivation, derivativeExplorer, differentialEquation, divisionWorkbench, domainRange, exactTriangle,
   expressionOrder, fractionBar, functionMachine, fundamentalTheorem, geometryFoundations, geometryTransform, gradientDescent, graph,
   growingPattern, harmonicForm, identityProof, integralExplorer, interactiveProblem, iteration, limitExplorer, linearModel,
-  linearSystem, linesInSpace, measurement, mysteryBucket, newtonMethod, numberLine, numberStructure, obliqueTriangle,
-  partialFractions, percentBar, phasePortrait, polynomialSolver, radianWrap, rateMachine, ratioShare, receiptTotals,
-  sequencePredict, slideRule, solidNet, solidSlice, straightLine, systemSolve, taylorSeries, triangleTrig,
-  trigExplorer, trigSigns, vertexParabola,
+  linearSystem, linearisation, linesInSpace, logLawWorkbench, measurement, modulusCases, mysteryBucket, newtonMethod,
+  numberLine, numberStructure, obliqueTriangle, partialFractions, percentBar, phasePortrait, polynomialSolver, radianWrap,
+  rateMachine, ratioShare, receiptTotals, sequencePredict, slideRule, solidNet, solidSlice, straightLine,
+  systemSolve, taylorSeries, triangleTrig, trigExplorer, trigSigns, vectorGeometryTwoD, vertexParabola,
   // ml
   classifierThreshold, decisionBoundary, embeddingSpace, kmeans, knn, nextToken, regression,
   // networking
@@ -379,10 +387,10 @@ export const labManifests: readonly LabManifest[] = [
   fissionChain, fluidPressure, forcePairs, gasProcess, gaussLaw, gravitation, gravityDrop, heatTransfer,
   heatingCurve, impulse, intercept, kepler, lengthContraction, lensImaging, lever, linearPursuit,
   lorentz, lorentzTransformation, magnetism, mirrorImaging, movingLauncher, muonSurvival, nuclearBindingEnergy, optics,
-  orbitLab, photoelectricEffect, power, projectileLab, quantumGates, rainRelative, rampForces, refraction,
-  relativityLightClock, relativitySimultaneity, rippleTank, riverBoat, shm, spatialLorentz, stoppingDistance, stressStrain,
-  stringReflection, temperatureScales, terminalVelocity, thermalExpansion, uncertaintyWavePacket, vectorBoard, vectorTypes, venturi,
-  waterDensity, waveLab, workEnergy, workPotential, xrayAttenuation, xrayTubeSpectrum,
+  orbitLab, photoelectricEffect, physicsPracticalStudio, power, projectileLab, quantumGates, rainRelative, rampForces,
+  refraction, relativityLightClock, relativitySimultaneity, rippleTank, riverBoat, shm, spatialLorentz, stoppingDistance,
+  stressStrain, stringReflection, temperatureScales, terminalVelocity, thermalExpansion, uncertaintyWavePacket, vectorBoard, vectorTypes,
+  venturi, waterDensity, waveLab, workEnergy, workPotential, xrayAttenuation, xrayTubeSpectrum,
   // statistics
   centerSpread, frequencyDensity, galton, histogram, normal, ogive, sampling, series,
   zTable,

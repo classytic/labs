@@ -11,6 +11,8 @@ export default function NumberLine(a: Record<string, unknown>): ReactNode {
       max={typeof a.max === 'number' ? a.max : 8}
       start={typeof a.start === 'number' ? a.start : 0}
       target={a.target as number | undefined}
+      title={a.title as string | undefined}
+      prompt={a.prompt as string | undefined}
     />
   );
 }

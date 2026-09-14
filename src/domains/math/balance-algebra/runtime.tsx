@@ -11,6 +11,8 @@ export default function BalanceAlgebra(a: Record<string, unknown>): ReactNode {
       addend={typeof a.addend === 'number' ? a.addend : 1}
       rhs={typeof a.rhs === 'number' ? a.rhs : 7}
       answer={typeof a.answer === 'number' ? a.answer : 3}
+      title={a.title as string | undefined}
+      prompt={a.prompt as string | undefined}
       controlId={a.controlId as string | undefined}
     />
   );

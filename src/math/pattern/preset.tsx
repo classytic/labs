@@ -36,6 +36,7 @@ export interface GrowingPatternProps {
   a?: number;
   b?: number;
   steps?: number;
+  title?: string;
   prompt?: string;
   check?: 'steppers' | 'mcq';
   choices?: string[];
@@ -108,6 +109,7 @@ export function GrowingPatternLab({
   a = 2,
   b = 3,
   steps = 4,
+  title = 'Find the growing rule',
   prompt = 'Find the rule for the number of tiles.',
   check = 'steppers',
   choices,
@@ -254,7 +256,7 @@ export function GrowingPatternLab({
       <Activity.Header>
         <Activity.Heading
           eyebrow="Patterns and sequences"
-          title="Find the growing rule"
+          title={title}
           description={prompt}
         />
         <Activity.FocusButton />

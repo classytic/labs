@@ -14,6 +14,8 @@ export default defineLab({
     bucketCount: z.number().default(1),
     maxWeights: z.number().default(12),
     start: z.number().default(0),
+    title: z.string().optional(),
+    prompt: z.string().optional(),
   }),
   experience: {
     objectives: [

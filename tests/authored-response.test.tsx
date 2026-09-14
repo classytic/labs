@@ -78,6 +78,37 @@ describe('portable authored responses', () => {
     expect(view.getByRole('status').textContent).toContain('Correct');
   });
 
+  // The whole reason a lab beats an explainer: it can name the thinking behind the answer the
+  // learner actually gave. `AuthoredChoice.feedback` existed in the type from the start and the
+  // runtime never read it, so every wrong answer got one generic sentence the learner already
+  // knew. Two distractors, two different sentences, is the contract.
+  it('answers the distractor the learner picked, not "not yet"', () => {
+    const question = {
+      id: 'atwood',
+      prompt: 'What sets the acceleration?',
+      choices: [
+        { value: 'total', label: 'The total mass', feedback: 'The total mass RESISTS the motion.' },
+        { value: 'heavier', label: 'The heavier mass alone', feedback: 'The lighter one pulls back too.' },
+        { value: 'difference', label: 'The difference in mass' },
+      ],
+      answer: 'difference',
+      tryAgain: 'Not yet. Revisit the evidence and try again.',
+    };
+    // Unmounted between picks: render() appends to the same body, so a second copy would make
+    // every query ambiguous.
+    const pick = (label: string): string => {
+      const view = render(<AuthoredResponse question={question} />);
+      fireEvent.click(view.getByRole('radio', { name: label }));
+      const said = view.getByRole('status').textContent ?? '';
+      view.unmount();
+      return said;
+    };
+    expect(pick('The total mass')).toContain('RESISTS');
+    expect(pick('The heavier mass alone')).toContain('lighter one pulls back');
+    // A distractor with nothing authored still falls back, so the field stays optional.
+    expect(pick('The difference in mass')).not.toContain('RESISTS');
+  });
+
   it('gives choice groups one keyboard tab stop and arrow navigation', () => {
     const onRespond = vi.fn();
     const view = render(

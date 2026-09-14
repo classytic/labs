@@ -10,6 +10,8 @@ export default function GrowingPattern(a: Record<string, unknown>): ReactNode {
       a={typeof a.a === 'number' ? a.a : 2}
       b={typeof a.b === 'number' ? a.b : 3}
       steps={typeof a.steps === 'number' ? a.steps : 4}
+      title={a.title as string | undefined}
+      prompt={a.prompt as string | undefined}
       controlId={a.controlId as string | undefined}
     />
   );

@@ -86,6 +86,38 @@ function longStringWords(text, minChars = 60) {
 }
 
 /**
+ * Remove per-answer diagnostic copy before the prose is counted.
+ *
+ * The budget exists to stop a lab shipping a lesson: exposition belongs in the curriculum MDX,
+ * where it can be edited by whoever teaches the course. A `feedback:` string is not exposition.
+ * It is the lab's reply to one specific wrong answer, it only exists because the learner did
+ * something, and it cannot move to MDX because MDX never sees which distractor was picked. It is
+ * also the one thing a lab can do that an explainer cannot, so charging it against a budget meant
+ * to discourage narration had the rule pushing in exactly the wrong direction.
+ */
+function stripDiagnostics(text) {
+  let out = '';
+  let i = 0;
+  while (i < text.length) {
+    const at = text.indexOf('feedback:', i);
+    if (at < 0) return out + text.slice(i);
+    let j = at + 'feedback:'.length;
+    while (j < text.length && /\s/.test(text[j])) j++;
+    const quote = text[j];
+    if (quote !== "'" && quote !== '"' && quote !== '`') {
+      out += text.slice(i, j);
+      i = j;
+      continue;
+    }
+    j++;
+    while (j < text.length && text[j] !== quote) j += text[j] === '\\' ? 2 : 1;
+    out += text.slice(i, at);
+    i = j + 1;
+  }
+  return out;
+}
+
+/**
  * The source text of every `const DEFAULT_… = …` initialiser in a file.
  *
  * Brackets are matched rather than regexed, because a default is usually a nested array of objects
@@ -160,7 +192,7 @@ for (const file of walkSrc(new URL('../src/', import.meta.url))) {
   // because a lab may have a two-line `DEFAULT_VALUES = [1, 3, 5]` and hundreds of words of that
   // same runtime narration elsewhere in the file. Only the default's own span is the author's
   // baked-in content, so only that span is measured.
-  const proseWords = defaultSpans(source).reduce((n, span) => n + longStringWords(span), 0);
+  const proseWords = defaultSpans(source).reduce((n, span) => n + longStringWords(stripDiagnostics(span)), 0);
   if (proseWords > PROSE_BUDGET) {
     console.error(
       `✗ ${proseWords} words of authored prose in ${path.replace(/^.*[/\\]src[/\\]/, 'src/')} ` +

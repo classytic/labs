@@ -88,7 +88,16 @@ Promotion to `showcase-ready` requires at least 80/100 using the rubric in `LABS
 
 ## Current baseline
 
-The catalog contains 199 registered labs. Seventy-eight currently declare and pass the complete manifest-level experience contract. These include tested references across networking, physics, chemistry, electronics, algorithms, accounting, economics, discrete probability, statistics, machine learning, biology, geography, and the complete language domain. Accounting now covers the connected books workflow plus EOQ, progressive reorder-policy disruption scenarios, general cost apportionment, and warehouse cost allocation. The warehouse preset intentionally teaches cost responsibility rather than pretending to be a warehouse-operations simulator; operational inventory evidence lives in the reorder-policy engine. The other 121 are **unverified**, not automatically rejected. Readiness must be earned cohort by cohort; metadata must never be added merely to raise the score.
+The catalog contains 290 registered labs. The manifest report currently marks 285 contract-ready,
+four incomplete and one undeclared. This is a structural authoring signal—not proof of visual
+quality, accessibility, domain correctness or learner success. Evidence-backed readiness must be
+tracked independently for keyboard use, a non-drag pointer path, text alternatives, reduced motion,
+responsive/zoom behaviour, light/dark visual review, authoring variation and model review. Metadata
+must never be added merely to raise the aggregate score.
+
+The Cambridge P0 cohort now includes Physics Practical Studio, Qualitative Analysis Bench, Bank
+Reconciliation and Control Account Builder. Each has a domain workflow and focused interaction
+tests; broader scenario coverage and human learner review remain separate gates.
 
 ## Non-goals
 

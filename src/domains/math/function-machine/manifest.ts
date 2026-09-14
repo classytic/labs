@@ -10,6 +10,7 @@ export default defineLab({
   description:
     'Inputs go in, outputs come out; the learner picks the rule that produces the outputs. The classic "guess my function" for building the idea of a mapping.',
   schema: z.object({
+    title: z.string().optional(),
     prompt: z.string().optional(),
     inputs: z.array(z.union([z.string(), z.number()])).default([1, 2, 3, 4]),
     outputs: z.array(z.union([z.string(), z.number()])).default([3, 5, 7, 9]),

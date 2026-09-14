@@ -11,6 +11,8 @@ export default function MysteryBucket(a: Record<string, unknown>): ReactNode {
       bucketCount={typeof a.bucketCount === 'number' ? a.bucketCount : 1}
       maxWeights={typeof a.maxWeights === 'number' ? a.maxWeights : 12}
       start={typeof a.start === 'number' ? a.start : 0}
+      title={a.title as string | undefined}
+      prompt={a.prompt as string | undefined}
     />
   );
 }

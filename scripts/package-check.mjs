@@ -70,18 +70,20 @@ walkSheet('styles.css');
 /**
  * CSS budgets.
  *
- * gzip is what a consumer actually downloads and is the strict number. The raw budget is a size
- * discipline on the source, and core.css carries the token layer, the shared interaction rules and
- * the comments explaining both, so it is deliberately the biggest file in the package.
+ * gzip is what a consumer actually downloads and is the strict number. The source budget is a
+ * discipline on how many RULES a layer carries, and counts the CSS with comments removed: this
+ * package explains its CSS at length on purpose (core.css is 18% prose), and counting that prose
+ * made documentation compete with rules for one ceiling, where the cheapest way to pass was to
+ * delete the explanation. Comments cost nothing after gzip, which the transfer budget governs.
  *
  * Domain weight is budgeted PER DOMAIN rather than in aggregate: since the split, an app that shows
  * one subject imports only that subject's sheet, so the number that matters to a learner on a maths
  * page is the size of math.css (29 KiB), not of every domain ever written (169 KiB).
  */
 const cssLayers = [
-  { file: 'styles/core.css', rawBudget: 112 * 1024, gzipBudget: 16 * 1024 },
-  { file: 'styles/commerce.css', rawBudget: 24 * 1024, gzipBudget: 5 * 1024 },
-  { file: 'styles/modern-physics.css', rawBudget: 8 * 1024, gzipBudget: 2 * 1024 },
+  { file: 'styles/core.css', rulesBudget: 96 * 1024, gzipBudget: 16 * 1024 },
+  { file: 'styles/commerce.css', rulesBudget: 22 * 1024, gzipBudget: 5 * 1024 },
+  { file: 'styles/modern-physics.css', rulesBudget: 8 * 1024, gzipBudget: 2 * 1024 },
 ];
 /** No single domain may grow past 40 KiB; past that it wants splitting into its own subjects. */
 for (const file of readdirSync(resolve(root, 'styles', 'domains')).filter((name) => name.endsWith('.css'))) {
@@ -101,16 +103,14 @@ for (const file of readdirSync(resolve(root, 'styles', 'domains')).filter((name)
   if (bytes > 40 * 1024)
     failures.push(`styles/domains/${file} resolves to ${bytes} bytes (budget: ${40 * 1024})`);
 }
-const cssResults = cssLayers.map(({ file, rawBudget, gzipBudget }) => {
+const cssResults = cssLayers.map(({ file, rulesBudget, gzipBudget }) => {
   const css = readFileSync(resolve(root, file));
-  const transferSource = css
-    .toString('utf8')
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/\s+/g, ' ');
-  const transfer = gzipSync(transferSource).byteLength;
-  if (css.byteLength > rawBudget) failures.push(`${file} is ${css.byteLength} bytes (budget: ${rawBudget})`);
+  const rules = css.toString('utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const rulesBytes = Buffer.byteLength(rules);
+  const transfer = gzipSync(rules.replace(/\s+/g, ' ')).byteLength;
+  if (rulesBytes > rulesBudget) failures.push(`${file} is ${rulesBytes} bytes of rules (budget: ${rulesBudget})`);
   if (transfer > gzipBudget) failures.push(`${file} is ${transfer} bytes gzip (budget: ${gzipBudget})`);
-  return `${file} ${css.byteLength} bytes / ${transfer} gzip`;
+  return `${file} ${rulesBytes} bytes of rules / ${transfer} gzip`;
 });
 
 for (const target of runtimeTargets) {

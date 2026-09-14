@@ -1,9 +1,15 @@
 /** Browser reflow smoke test for representative shipped activities. */
 import { readFileSync } from 'node:fs';
+import { register } from 'node:module';
 import { resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { chromium } from 'playwright';
-import { GALLERY } from '../tests/gallery/registry.mjs';
+
+// Register the same minimal host shadcn contract used by package and gallery checks before
+// importing any built lab. A static registry import is resolved before this module executes,
+// which left `@/components/ui/*` unresolved in a bare Node process.
+register('../tests/host-shims/loader.mjs', import.meta.url);
+const { GALLERY } = await import('../tests/gallery/registry.mjs');
 
 const root = resolve(import.meta.dirname, '..');
 const css = [
@@ -65,7 +71,11 @@ for (const { name, element } of scenes) {
   if (!result.hasActivity) failures.push(`${name}: missing canonical Activity root`);
   if (result.overflow > 1) failures.push(`${name}: ${result.overflow}px horizontal overflow at 320px`);
   if (result.undersized.length)
-    failures.push(`${name}: undersized controls ${result.undersized.map((item) => item.label).join(', ')}`);
+    failures.push(
+      `${name}: undersized controls ${result.undersized
+        .map((item) => `${item.label} (${Math.round(item.rect.width)}×${Math.round(item.rect.height)})`)
+        .join(', ')}`,
+    );
   if (result.animated.length)
     failures.push(`${name}: animations remain under reduced motion (${result.animated.join(', ')})`);
 
