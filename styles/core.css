@@ -177,15 +177,18 @@
   outline-offset: var(--lab-focus-offset);
 }
 
-/* Reduced motion: honoured at the root, not per animation. Everything collapses
-   to a single frame; confetti is removed outright because a still burst is
-   noise. A scene that must move to teach keeps a static state that still shows
-   the fact (see the lab-design rulebook). */
+/* Reduced motion: honoured at the root, not per animation. Drop the MOVEMENT, keep the feedback.
+   The preference is about vestibular discomfort from things travelling and scaling, not about
+   colour. Collapsing transition-duration to nothing also killed the tint that says an answer was
+   accepted and the fade that says a panel changed, so a learner who asks for less motion lost the
+   signals telling them the lab had responded at all. Transform and movement snap; colour, border
+   and opacity still cross-fade, quickly. Confetti goes outright: a still burst is just noise. */
 @media (prefers-reduced-motion: reduce) {
   :is(.lab-activity, .lab-scene-studio) :is(*, *::before, *::after) {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-property: color, background-color, border-color, fill, stroke, opacity !important;
+    transition-duration: var(--lab-dur-fast) !important;
     scroll-behavior: auto !important;
   }
   .lab-activity .lab-confetti {
@@ -1241,13 +1244,19 @@
     box-shadow var(--lab-dur-fast),
     transform var(--lab-dur-fast);
 }
-.lab-option:hover:not(:disabled),
-.lab-choice:hover:not(:disabled),
-.lang-choice:hover:not(:disabled),
-.lang-match-cell:hover:not(:disabled) {
-  border-color: var(--lab-accent-edge);
-  background: var(--lab-accent-faint);
-  box-shadow: var(--lab-shadow-md);
+/* Gated on a real pointer. A touch device keeps :hover on the last thing tapped, and this hover is
+   an accent border over an accent-faint fill, which is precisely what PICKED looks like: a learner
+   on a phone tapped A, moved to B, and left A still looking chosen. Most of these learners are on
+   a phone, so the sticky state was the common case, not the edge case. */
+@media (hover: hover) and (pointer: fine) {
+  .lab-option:hover:not(:disabled),
+  .lab-choice:hover:not(:disabled),
+  .lang-choice:hover:not(:disabled),
+  .lang-match-cell:hover:not(:disabled) {
+    border-color: var(--lab-accent-edge);
+    background: var(--lab-accent-faint);
+    box-shadow: var(--lab-shadow-md);
+  }
 }
 .lab-option:active:not(:disabled),
 .lab-choice:active:not(:disabled),
@@ -1442,9 +1451,11 @@
     border-color var(--lab-dur-fast),
     color var(--lab-dur-fast);
 }
-.lab-hint-btn:hover {
-  border-color: var(--lab-accent);
-  color: var(--lab-fg);
+@media (hover: hover) and (pointer: fine) {
+  .lab-hint-btn:hover {
+    border-color: var(--lab-accent);
+    color: var(--lab-fg);
+  }
 }
 .lab-misconception {
   display: inline-flex;
@@ -1473,9 +1484,11 @@
     border-color var(--lab-dur-fast),
     color var(--lab-dur-fast);
 }
-.lab-reveal-btn:hover {
-  border-color: var(--lab-warn);
-  color: var(--lab-fg);
+@media (hover: hover) and (pointer: fine) {
+  .lab-reveal-btn:hover {
+    border-color: var(--lab-warn);
+    color: var(--lab-fg);
+  }
 }
 .lab-solution {
   margin-top: var(--lab-sp-8);
@@ -1706,10 +1719,12 @@
   font-weight: var(--lab-w-medium);
   line-height: var(--lab-lh-tight);
 }
-.lab-challenge-q .lab-choice:hover:not(:disabled) {
-  border-color: var(--lab-accent-edge);
-  background: var(--lab-accent-faint);
-  box-shadow: none;
+@media (hover: hover) and (pointer: fine) {
+  .lab-challenge-q .lab-choice:hover:not(:disabled) {
+    border-color: var(--lab-accent-edge);
+    background: var(--lab-accent-faint);
+    box-shadow: none;
+  }
 }
 .lab-challenge-q .lab-choice[data-picked] {
   font-weight: var(--lab-w-medium);
@@ -2383,8 +2398,10 @@
   cursor: pointer;
   transition: background var(--lab-dur-fast);
 }
-.lang-speak:hover {
-  background: color-mix(in oklab, var(--lab-accent) 22%, transparent);
+@media (hover: hover) and (pointer: fine) {
+  .lang-speak:hover {
+    background: color-mix(in oklab, var(--lab-accent) 22%, transparent);
+  }
 }
 
 .lang-match {
@@ -2636,8 +2653,10 @@
     color var(--lab-dur-fast),
     transform var(--lab-dur-fast);
 }
-.lang-word:hover:not(:disabled) {
-  background: var(--lab-accent-soft);
+@media (hover: hover) and (pointer: fine) {
+  .lang-word:hover:not(:disabled) {
+    background: var(--lab-accent-soft);
+  }
 }
 .lang-word[data-state="no"] {
   color: var(--lab-danger);
@@ -3151,8 +3170,10 @@
   font-weight: var(--lab-w-semibold);
   cursor: pointer;
 }
-.lab-activity-focus:hover {
-  background: var(--accent, color-mix(in oklab, currentColor 6%, transparent));
+@media (hover: hover) and (pointer: fine) {
+  .lab-activity-focus:hover {
+    background: var(--accent, color-mix(in oklab, currentColor 6%, transparent));
+  }
 }
 .lab-activity-focus svg {
   width: 1rem;
@@ -3586,9 +3607,11 @@
   font-weight: var(--lab-w-medium);
   white-space: nowrap;
 }
-.lab-segment:hover:not([data-sel="true"]) {
-  background: color-mix(in oklab, var(--stage-fg) 6%, transparent);
-  color: var(--lab-fg);
+@media (hover: hover) and (pointer: fine) {
+  .lab-segment:hover:not([data-sel="true"]) {
+    background: color-mix(in oklab, var(--stage-fg) 6%, transparent);
+    color: var(--lab-fg);
+  }
 }
 .lab-segment[data-sel="true"] {
   background: var(--lab-surface);

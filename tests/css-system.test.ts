@@ -97,6 +97,40 @@ describe('css system', () => {
     expect(restated.map(([, sel]) => sel.trim())).toEqual([]);
   });
 
+  // A touch device keeps :hover on the last element tapped, so a hover that repaints a surface
+  // leaves that element looking active after the finger has moved on. On an answer list that is
+  // not cosmetic: the choice hover was an accent border over an accent-faint fill, the same thing
+  // PICKED looks like, so tapping A and moving to B left A still looking chosen. Most of these
+  // learners are on a phone, so it was the common case. Removing paint (`none`) is a reset and is
+  // always fine; adding it needs a real pointer.
+  it('keeps surface-painting hover behind a real pointer', () => {
+    const core = readFileSync(join(STYLES, 'core.css'), 'utf8');
+    const gated: Array<[number, number]> = [];
+    for (const open of core.matchAll(/@media \(hover: hover\)[^{]*\{/g)) {
+      let depth = 1;
+      let i = open.index + open[0].length;
+      while (i < core.length && depth > 0) {
+        if (core[i] === '{') depth += 1;
+        else if (core[i] === '}') depth -= 1;
+        i += 1;
+      }
+      gated.push([open.index, i]);
+    }
+    const SURFACE = ['background', 'background-color', 'box-shadow', 'border-color', 'border'];
+    // Split into declarations rather than matching the body: `\s*(?!none)` backtracks over the
+    // space and passes `box-shadow: none`, which is the one case that must NOT count.
+    const paints = (body: string): boolean =>
+      body.split(';').some((decl) => {
+        const [prop, ...rest] = decl.split(':');
+        return SURFACE.includes(prop.trim()) && rest.join(':').trim().replace(/!important/, '').trim() !== 'none';
+      });
+    const sticky = [...core.matchAll(/([^{}]*:hover[^{}]*)\{([^{}]*)\}/g)]
+      .filter((rule) => !gated.some(([from, to]) => rule.index >= from && rule.index < to))
+      .filter((rule) => paints(rule[2]))
+      .map((rule) => rule[1].trim().replace(/\s+/g, ' '));
+    expect(sticky).toEqual([]);
+  });
+
   it('exports the same tokens the CSS declares', () => {
     const tokens = JSON.parse(readFileSync(join(STYLES, '..', 'design-tokens.json'), 'utf8')) as Record<
       string,

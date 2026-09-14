@@ -337,7 +337,7 @@
           "value": 24,
           "unit": "px"
         },
-        "$description": "The one editorial size. Everything above is UI: a scale that stops at 24px spans 2.4x and\n     reads as a control panel with labels, however well spaced, because nothing on the page is\n     allowed to behave like a heading. This takes the range to 3.2x and is for ONE thing per lab,\n     the title a learner arrives at. Set it with --lab-lh-title and --lab-ls-tight: at this size\n     default leading is too loose and default tracking too wide."
+        "$description": "The one editorial size, for ONE thing per lab: the title. A scale stopping at 24px spans 2.4x\n     and reads as a control panel, because nothing is allowed to behave like a heading. Pair it\n     with --lab-lh-title and --lab-ls-tight."
       },
       "display": {
         "$type": "dimension",
