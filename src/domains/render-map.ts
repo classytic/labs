@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 
 export type LabRuntimeLoader = () => Promise<{ default: (attrs: any) => ReactNode }>;
 
-/** 294 labs, keyed by lab id. */
+/** 295 labs, keyed by lab id. */
 export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'apportion': () => import('./accounting/apportion/runtime.js'),
   'bank-reconciliation': () => import('./accounting/bank-reconciliation/runtime.js'),
@@ -156,6 +156,7 @@ export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'broken-tree': () => import('./math/broken-tree/runtime.js'),
   'circle-geometry': () => import('./math/circle-geometry/runtime.js'),
   'complex-plane': () => import('./math/complex-plane/runtime.js'),
+  'cone-frustum': () => import('./math/cone-frustum/runtime.js'),
   'conic': () => import('./math/conic/runtime.js'),
   'custom-scene': () => import('./math/custom-scene/runtime.js'),
   'derivation': () => import('./math/derivation/runtime.js'),
@@ -454,6 +455,7 @@ export const labTags: Record<string, string> = {
   'broken-tree': 'BrokenTreeLab',
   'circle-geometry': 'CircleLab',
   'complex-plane': 'ComplexPlane',
+  'cone-frustum': 'ConeFrustum',
   'conic': 'ConicLab',
   'custom-scene': 'CustomScene',
   'derivation': 'Derivation',
