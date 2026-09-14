@@ -50,6 +50,7 @@ import receiptTotals from '../math/receipt-totals/manifest.js';
 import sequencePredict from '../math/sequence-predict/manifest.js';
 import slideRule from '../math/slide-rule/manifest.js';
 import solidNet from '../math/solid-net/manifest.js';
+import solidSlice from '../math/solid-slice/manifest.js';
 import straightLine from '../math/straight-line/manifest.js';
 import systemSolve from '../math/system-solve/manifest.js';
 import taylorSeries from '../math/taylor-series/manifest.js';
@@ -58,4 +59,4 @@ import trigExplorer from '../math/trig-explorer/manifest.js';
 import trigSigns from '../math/trig-signs/manifest.js';
 import vertexParabola from '../math/vertex-parabola/manifest.js';
 
-export const blocks = [areaModel, areaRearrange, balanceAlgebra, bearings, boundsWindow, brokenTree, circleGeometry, complexPlane, conic, customScene, derivation, derivativeExplorer, differentialEquation, divisionWorkbench, domainRange, expressionOrder, fractionBar, functionMachine, fundamentalTheorem, geometryFoundations, geometryTransform, gradientDescent, graph, growingPattern, harmonicForm, identityProof, integralExplorer, interactiveProblem, iteration, limitExplorer, linearModel, linearSystem, linesInSpace, measurement, mysteryBucket, newtonMethod, numberLine, numberStructure, obliqueTriangle, partialFractions, percentBar, phasePortrait, polynomialSolver, radianWrap, rateMachine, ratioShare, receiptTotals, sequencePredict, slideRule, solidNet, straightLine, systemSolve, taylorSeries, triangleTrig, trigExplorer, trigSigns, vertexParabola].map(manifestToBlock);
+export const blocks = [areaModel, areaRearrange, balanceAlgebra, bearings, boundsWindow, brokenTree, circleGeometry, complexPlane, conic, customScene, derivation, derivativeExplorer, differentialEquation, divisionWorkbench, domainRange, expressionOrder, fractionBar, functionMachine, fundamentalTheorem, geometryFoundations, geometryTransform, gradientDescent, graph, growingPattern, harmonicForm, identityProof, integralExplorer, interactiveProblem, iteration, limitExplorer, linearModel, linearSystem, linesInSpace, measurement, mysteryBucket, newtonMethod, numberLine, numberStructure, obliqueTriangle, partialFractions, percentBar, phasePortrait, polynomialSolver, radianWrap, rateMachine, ratioShare, receiptTotals, sequencePredict, slideRule, solidNet, solidSlice, straightLine, systemSolve, taylorSeries, triangleTrig, trigExplorer, trigSigns, vertexParabola].map(manifestToBlock);

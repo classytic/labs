@@ -3099,6 +3099,22 @@ export const generatedManifestCatalog: LabManifestCatalogEntry[] = [
   },
   },
   {
+    key: 'solid-slice',
+    label: 'The hidden right triangle',
+    description: 'A cuboid or square-based pyramid the learner can turn, with the one right triangle a 3D question is actually about highlighted inside it. A second control carries that triangle out of the solid until it lies flat beside it, sides labelled. Three-dimensional trigonometry is ordinary trigonometry on a triangle nobody has drawn, so this draws it twice, in place and on the page, and shows every position in between.',
+    category: 'interactive',
+    void: true,
+    group: 'Math',
+    domain: 'math',
+    taxonomy: {
+    grades: ['9', '10', '11'],
+    outcomes: ['math', 'trigonometry', 'three-dimensions'],
+    durationMinutes: 9,
+    interaction: 'explorer',
+    authorability: 'simple',
+  },
+  },
+  {
     key: 'straight-line',
     label: 'Straight line (y = mx + c, parallel/⊥, intercepts)',
     description: 'Drag points/intercepts to build a line; covers gradient–intercept, two-point, intercept form, and parallel/perpendicular. Optional graded answer.',

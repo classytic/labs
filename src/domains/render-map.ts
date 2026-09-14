@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 
 export type LabRuntimeLoader = () => Promise<{ default: (attrs: any) => ReactNode }>;
 
-/** 284 labs, keyed by lab id. */
+/** 285 labs, keyed by lab id. */
 export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'apportion': () => import('./accounting/apportion/runtime.js'),
   'break-even': () => import('./accounting/break-even/runtime.js'),
@@ -195,6 +195,7 @@ export const labRuntimeLoaders: Record<string, LabRuntimeLoader> = {
   'sequence-predict': () => import('./math/sequence-predict/runtime.js'),
   'slide-rule': () => import('./math/slide-rule/runtime.js'),
   'solid-net': () => import('./math/solid-net/runtime.js'),
+  'solid-slice': () => import('./math/solid-slice/runtime.js'),
   'straight-line': () => import('./math/straight-line/runtime.js'),
   'system-solve': () => import('./math/system-solve/runtime.js'),
   'taylor-series': () => import('./math/taylor-series/runtime.js'),
@@ -483,6 +484,7 @@ export const labTags: Record<string, string> = {
   'sequence-predict': 'SequencePredict',
   'slide-rule': 'SlideRule',
   'solid-net': 'SolidNet',
+  'solid-slice': 'SolidSlice',
   'straight-line': 'StraightLine',
   'system-solve': 'SystemSolve',
   'taylor-series': 'TaylorSeries',
